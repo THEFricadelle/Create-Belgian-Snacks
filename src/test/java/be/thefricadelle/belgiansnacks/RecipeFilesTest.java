@@ -47,7 +47,11 @@ class RecipeFilesTest {
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise",
         "mixing/curry_ketchup", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
-        "pressing/fricadelle_paste");
+        "pressing/fricadelle_paste",
+        "frying/fricadelle");
+
+    // Recipe types this mod registers; every other folder is a Create type.
+    private static final Set<String> OWN_TYPES = Set.of("frying");
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
     private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds");
@@ -61,7 +65,8 @@ class RecipeFilesTest {
     void typeMatchesTheFolder() throws IOException {
         recipes().forEach((id, json) -> {
             String folder = id.substring(0, id.indexOf('/'));
-            assertEquals("create:" + folder, json.get("type").getAsString(), id + " type");
+            String namespace = OWN_TYPES.contains(folder) ? MOD_ID : "create";
+            assertEquals(namespace + ":" + folder, json.get("type").getAsString(), id + " type");
         });
     }
 

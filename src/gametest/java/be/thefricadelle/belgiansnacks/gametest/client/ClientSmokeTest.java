@@ -30,6 +30,12 @@ import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+
+import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
@@ -94,7 +100,8 @@ public final class ClientSmokeTest {
         "milling/dried_kelp",
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
-        "pressing/fricadelle_paste");
+        "pressing/fricadelle_paste",
+        "frying/fricadelle");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 
@@ -105,6 +112,7 @@ public final class ClientSmokeTest {
     private static int ticks;
     private static int wait;
     private static int failures;
+    private static BlockPos smokeFryer;
 
     private ClientSmokeTest() {
     }
@@ -170,6 +178,9 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("creative.check", 20, ClientSmokeTest::checkCreativeTab));
         STEPS.add(new Step("fluids.place", 10, ClientSmokeTest::placeFluids));
         STEPS.add(new Step("fluids.shot", 40, () -> screenshot("fluids-in-world")));
+        STEPS.add(new Step("fryer.place", 10, ClientSmokeTest::placeFryer));
+        STEPS.add(new Step("fryer.check", 60, ClientSmokeTest::checkFryer));
+        STEPS.add(new Step("fryer.shot", 10, () -> screenshot("fryer-in-world")));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));
         STEPS.add(new Step("jei.paste.shot", 30, () -> screenshot("jei-fricadelle-paste")));
@@ -187,6 +198,8 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.mince.shot", 30, () -> screenshot("jei-minced-beef")));
         STEPS.add(new Step("jei.spices", 10, () -> showOutput(BSItems.BELGIAN_SPICES.asStack())));
         STEPS.add(new Step("jei.spices.shot", 30, () -> screenshot("jei-belgian-spices")));
+        STEPS.add(new Step("jei.frying", 10, () -> showOutput(BSItems.FRICADELLE.asStack())));
+        STEPS.add(new Step("jei.frying.shot", 30, () -> screenshot("jei-frying")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 
@@ -303,6 +316,63 @@ public final class ClientSmokeTest {
         player.setYRot(180f);
         player.setXRot(35f);
         mc.options.hideGui = true;
+    }
+
+    // A fryer on a creative (never fading) burner sunk in the ground, filled and loaded, two blocks south
+    // of the player, who looks down into the vat.
+    private static void placeFryer() {
+        Minecraft mc = Minecraft.getInstance();
+        var server = mc.getSingleplayerServer();
+        BlockPos fryerPos = mc.player.blockPosition().south(2);
+        server.execute(() -> {
+            var level = server.overworld();
+            level.setBlockAndUpdate(fryerPos.below(), AllBlocks.BLAZE_BURNER.getDefaultState()
+                .setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+            if (level.getBlockEntity(fryerPos.below()) instanceof BlazeBurnerBlockEntity burner) {
+                burner.isCreative = true;
+            }
+            level.setBlockAndUpdate(fryerPos, BSBlocks.FRYER.getDefaultState());
+            if (level.getBlockEntity(fryerPos) instanceof FryerBlockEntity fryer) {
+                fryer.getTank().getCapability().fill(new FluidStack(BSFluids.FRYING_OIL.get().getSource(), 2000),
+                    net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
+            }
+        });
+        smokeFryer = fryerPos;
+        // Hover two blocks up, flying, so the camera looks down into the vat.
+        mc.player.getAbilities().flying = true;
+        mc.player.setPos(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ() - 0.5);
+        mc.player.setYRot(0f);
+        mc.player.setXRot(48f);
+        mc.options.hideGui = true;
+    }
+
+    private static void checkFryer() {
+        Minecraft mc = Minecraft.getInstance();
+        check("fryer.model", () -> {
+            var state = BSBlocks.FRYER.getDefaultState();
+            BakedModel model = mc.getBlockRenderer().getBlockModel(state);
+            require(model != mc.getModelManager().getMissingModel(), "fryer block model missing");
+            require(!isMissing(model.getParticleIcon().contents().name()), "fryer block texture missing");
+            return "vat model with textures";
+        });
+        check("fryer.running", () -> {
+            require(mc.level.getBlockEntity(smokeFryer) instanceof FryerBlockEntity, "no fryer block entity on the client");
+            FryerBlockEntity fryer = (FryerBlockEntity) mc.level.getBlockEntity(smokeFryer);
+            require(fryer.getTank().getPrimaryHandler().getFluidAmount() > 0, "client sees no fat");
+            require(fryer.status() == FryerBlockEntity.Status.FRYING, "client status is " + fryer.status());
+            require(fryer.getBasket().getCount() == 16, "client basket holds " + fryer.getBasket());
+            return "frying 16, synced to the client";
+        });
+        check("fryer.goggles", () -> {
+            FryerBlockEntity fryer = (FryerBlockEntity) mc.level.getBlockEntity(smokeFryer);
+            List<net.minecraft.network.chat.Component> lines = new ArrayList<>();
+            require(fryer.addToGoggleTooltip(lines, false), "goggles tooltip refused");
+            String text = String.join(" | ", lines.stream().map(net.minecraft.network.chat.Component::getString).toList());
+            require(lines.size() >= 4, "goggles lines: " + text);
+            require(!text.contains(BelgianSnacks.MOD_ID + "."), "untranslated goggles key: " + text);
+            return text;
+        });
     }
 
     private static void checkJei() {

@@ -1,0 +1,10 @@
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "heated",
+  "ingredients": [
+    { "item": "create_belgian_snacks:raw_ultimate_fricadelle" },
+    { "type": "neoforge:tag", "amount": 10, "tag": "create_belgian_snacks:frying_oils" }
+  ],
+  "processing_time": 20,
+  "results": [ { "id": "create_belgian_snacks:ultimate_fricadelle" } ]
+}

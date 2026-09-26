@@ -97,7 +97,8 @@ class ResourceConsistencyTest {
         Map<String, String> en = lang("en_us");
         Map<String, String> fr = lang("fr_fr");
         for (String id : itemModelIds()) {
-            String key = "item." + MOD_ID + "." + id;
+            // A block item is named under the block key.
+            String key = en.containsKey("block." + MOD_ID + "." + id) ? "block." + MOD_ID + "." + id : "item." + MOD_ID + "." + id;
             assertTrue(en.containsKey(key), "en_us name for " + id);
             assertTrue(fr.containsKey(key), "fr_fr name for " + id);
         }
@@ -106,13 +107,44 @@ class ResourceConsistencyTest {
     @Test
     void everyItemModelPointsToAnExistingTexture() throws IOException {
         for (String id : itemModelIds()) {
-            JsonObject textures = json(ITEM_MODELS.resolve(id + ".json")).getAsJsonObject("textures");
+            JsonObject textures = texturesOf(ITEM_MODELS.resolve(id + ".json"));
+            assertTrue(textures != null && !textures.entrySet().isEmpty(), id + " model has no texture");
             for (Map.Entry<String, JsonElement> layer : textures.entrySet()) {
                 String[] location = layer.getValue().getAsString().split(":", 2);
                 Path png = MAIN.resolve("assets/" + location[0] + "/textures/" + location[1] + ".png");
                 assertTrue(Files.isRegularFile(png), id + " references missing texture " + png);
             }
         }
+    }
+
+    @Test
+    void soundsHaveSubtitlesInBothLanguages() throws IOException {
+        JsonObject sounds = json(GENERATED.resolve("assets/" + MOD_ID + "/sounds.json"));
+        assertFalse(sounds.entrySet().isEmpty(), "no sound event defined");
+        Map<String, String> en = lang("en_us");
+        Map<String, String> fr = lang("fr_fr");
+        for (Map.Entry<String, JsonElement> event : sounds.entrySet()) {
+            JsonObject definition = event.getValue().getAsJsonObject();
+            assertTrue(definition.has("subtitle"), event.getKey() + " has no subtitle");
+            String subtitle = definition.get("subtitle").getAsString();
+            assertTrue(en.containsKey(subtitle) && fr.containsKey(subtitle), subtitle + " not translated in both languages");
+            assertFalse(definition.getAsJsonArray("sounds").isEmpty(), event.getKey() + " plays nothing");
+        }
+    }
+
+    @Test
+    void brokenFryerKeepsItsFat() throws IOException {
+        JsonObject table = json(GENERATED.resolve("data/" + MOD_ID + "/loot_table/blocks/fryer.json"));
+        boolean copies = false;
+        for (JsonElement function : table.getAsJsonArray("functions")) {
+            JsonObject f = function.getAsJsonObject();
+            if (f.get("function").getAsString().equals("minecraft:copy_components") && f.get("source").getAsString().equals("block_entity")) {
+                for (JsonElement included : f.getAsJsonArray("include")) {
+                    copies |= included.getAsString().equals(MOD_ID + ":fryer_fluid");
+                }
+            }
+        }
+        assertTrue(copies, "the fryer loot table must copy fryer_fluid from the block entity");
     }
 
     @Test
@@ -196,6 +228,19 @@ class ResourceConsistencyTest {
             }
             return ids;
         }
+    }
+
+    // Textures of a model, following parents in our namespace (a block item inherits its block model).
+    private static JsonObject texturesOf(Path model) throws IOException {
+        JsonObject json = json(model);
+        if (json.has("textures")) {
+            return json.getAsJsonObject("textures");
+        }
+        if (json.has("parent") && json.get("parent").getAsString().startsWith(MOD_ID + ":")) {
+            String parent = json.get("parent").getAsString().substring(MOD_ID.length() + 1);
+            return texturesOf(GENERATED.resolve("assets/" + MOD_ID + "/models/" + parent + ".json"));
+        }
+        return null;
     }
 
     private static JsonObject json(Path path) throws IOException {

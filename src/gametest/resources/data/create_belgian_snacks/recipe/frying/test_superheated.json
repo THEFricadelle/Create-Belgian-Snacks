@@ -1,0 +1,10 @@
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "superheated",
+  "ingredients": [
+    { "item": "minecraft:potato" },
+    { "type": "neoforge:tag", "amount": 10, "tag": "create_belgian_snacks:frying_oils" }
+  ],
+  "processing_time": 20,
+  "results": [ { "id": "minecraft:baked_potato" } ]
+}
