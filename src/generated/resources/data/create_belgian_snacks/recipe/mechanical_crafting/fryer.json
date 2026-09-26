@@ -1,0 +1,30 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "create:basin"
+    },
+    "C": {
+      "tag": "c:plates/copper"
+    },
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    }
+  },
+  "pattern": [
+    "CIC",
+    "TBP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:fryer"
+  }
+}

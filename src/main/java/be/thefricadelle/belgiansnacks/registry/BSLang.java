@@ -39,6 +39,7 @@ public final class BSLang {
         add(ID + ".recipe.frying", "Frying", "Friture");
         add(ID + ".recipe.frying.fat", "Fat per item", "Graisse par item");
         add("subtitles." + ID + ".fryer.sizzle", "Fryer sizzles", "La friteuse grésille");
+        add("subtitles." + ID + ".fricadelle.burp", "Satisfied burp", "Rot satisfait");
         add("config.jade.plugin_" + ID + ".fryer", "Fryer", "Friteuse");
     }
 

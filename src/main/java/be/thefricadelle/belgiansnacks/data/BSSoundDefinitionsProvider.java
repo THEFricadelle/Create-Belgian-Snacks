@@ -28,6 +28,9 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
         add(BSSoundEvents.FRYER_SIZZLE, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fryer.sizzle")
             .with(vanilla("liquid/lavapop"), vanilla("block/campfire/crackle1"), vanilla("block/campfire/crackle3")));
+        add(BSSoundEvents.FRICADELLE_BURP, SoundDefinition.definition()
+            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fricadelle.burp")
+            .with(vanilla("random/burp")));
     }
 
     private static SoundDefinition.Sound vanilla(String path) {

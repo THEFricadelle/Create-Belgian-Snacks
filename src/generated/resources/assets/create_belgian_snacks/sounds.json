@@ -1,4 +1,10 @@
 {
+  "fricadelle.burp": {
+    "sounds": [
+      "random/burp"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.fricadelle.burp"
+  },
   "fryer.sizzle": {
     "sounds": [
       "liquid/lavapop",
