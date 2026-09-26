@@ -12,7 +12,7 @@ Spécs du script :
 - PNG 16×16, fond transparent pour les items.
 - Forme simple par famille : hachis = tas granuleux ; pâte = boule ; fricadelle crue = bâtonnet rose ; fricadelle = bâtonnet brun doré ; seaux = teinte du fluide sur un seau générique **dessiné par le script**.
 - Couleur de base par item (table `ITEMS` du script), + 1 glyphe 3×5 en surimpression : une lettre pour les ingrédients (P, B, C, T, R, S), le chiffre du palier (1, 2, 3) pour les pâtes et les fricadelles.
-- État au M1 : les 16 items sont générés. Fluides (M2) et blocs (M3) : à ajouter à la même table.
+- État au M2 : 16 items, 4 fluides (`still` 16×16, `flow` 16×32 sur 2 frames + `.mcmeta`) et leurs 4 seaux (seau dessiné par le script, rempli de la couleur du fluide). Blocs (M3) : à ajouter.
 - THE_FRICADELLE : bâtonnet doré avec bord brillant (le glint est géré par l'item, pas la texture).
 - Fluides : `still` et `flow` 16×16 (le `flow` en 16×32 animé si possible, sinon statique) + fichier `.mcmeta`.
 - Blocs : 6 faces unies avec bordure, 2 couleurs distinctes pour la Friteuse (inox) et le Hachoir (laiton).

@@ -27,9 +27,12 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - **Accepté si** : tous les items ont une texture et un nom traduit dans les 2 langues ; aucun `missing texture` ; l'onglet « Create: Belgian Snacks » est visible dans le menu créatif.
 
 ### M2 — Recettes Create simples + fluides
-- [ ] Fluides `frying_oil`, `mayonnaise`, `curry_ketchup` + seaux
-- [ ] Recettes crushing / milling / mixing / compacting / pressing (datagen)
-- [ ] Recettes de secours avec conditions `tag_empty` / `mod_loaded`
+- [x] Fluides `frying_oil`, `melted_beef_tallow`, `mayonnaise`, `curry_ketchup` + seaux
+- [x] Recettes crushing / milling / mixing / compacting / pressing (datagen)
+- [x] Recettes de secours avec conditions `tag_empty` / `mod_loaded`
+- [x] Tags d'interopérabilité (haché, chapelure, huiles) avec Create: Food, Farmer's Delight et les mods d'huile du pack
+- [x] Tests : recettes chargées et conditions (sans FD), sorties et chances, bassins réels chauffés ou non, presse de bout en bout, fichiers de recettes (JUnit)
+- [ ] Affichage dans JEI (contrôle visuel) ; conditions **avec** Farmer's Delight chargé (couvert par JUnit sur les fichiers, pas en jeu)
 - **Accepté si** : dans JEI, toutes les recettes s'affichent ; testées avec **et** sans Farmer's Delight.
 
 ### M3 — Friteuse

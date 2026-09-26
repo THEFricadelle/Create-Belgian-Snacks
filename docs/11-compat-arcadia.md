@@ -79,7 +79,13 @@ Le mod pénalise la nourriture répétitive. Nos 3 fricadelles doivent être des
 Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse doit lire la chaleur **via l'API de Create** (pas en testant `instanceof BlazeBurnerBlock`), pour rester compatible. À tester dans l'environnement du pack.
 
 ### Polymorph
-Éviter les conflits de recettes (deux recettes avec les mêmes ingrédients). Au jalon M2, vérifier dans le pack que nos recettes de crushing (viandes) n'entrent pas en conflit avec des recettes existantes (Create: Food, Slice & Dice, KubeJS du pack). En cas de conflit : on retire la nôtre, pas celle du pack.
+Éviter les conflits de recettes (deux recettes avec les mêmes ingrédients). En cas de conflit : on retire la nôtre, pas celle du pack.
+
+Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
+- **Aucun** autre `create:crushing` sur bœuf, porc, poulet ou pain : nos recettes de broyage sont seules. Create: Food fait du haché à la **presse** (`createfood:ground_*`), autre machine, pas de conflit.
+- `create:compacting` sur `#c:seeds` : déjà **deux** recettes (`createaddition:seed_oil`, `createdieselgenerators:plant_oil`). Notre recette graines → huile est donc désactivée dans le pack (conditions `mod_loaded`).
+- Conventions du pack reprises dans nos tags : `c:ground_beef`, `c:ground_pork`, `c:ground_chicken` (Create: Food), `c:minced_beef` (FD), `c:bread_crumbs` (Create: Food), fluides `c:plantoil` (IE, C&A, Diesel) et `c:vegetable_oil` (Create: Food).
+- Pas de mayonnaise ni de ketchup dans le pack.
 
 ### Serveur
 - Pack lourd (464 mods) : FoodIndex calculé une fois par reload, jamais en tick. Log du temps de calcul.

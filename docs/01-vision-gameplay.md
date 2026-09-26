@@ -29,8 +29,8 @@ flowchart LR
   E -->|Friteuse + huile<br/>chauffée| F((Fricadelle))
 ```
 
-- Le bœuf broyé donne en bonus du **blanc de bœuf** (graisse) → fondu au Mixer chauffé → **huile de friture**. (Les vraies frites belges sont cuites au blanc de bœuf.)
-- Alternative végétale pour l'huile : Compacting de graines.
+- Le bœuf broyé donne en bonus du **blanc de bœuf** (graisse) → fondu au Mixer chauffé → **blanc de bœuf fondu**, la graisse des vraies frites belges. Paliers 1 et 2 : n'importe quelle huile convient (la nôtre, celles des autres mods, ou le blanc de bœuf fondu). Palier 3 : blanc de bœuf fondu **uniquement**.
+- Alternative végétale : compactage de graines en huile de friture (désactivé si un autre mod d'huile de graines est présent, voir `04`).
 
 ### Palier 2 — THE_Fricadelle
 
@@ -54,8 +54,8 @@ flowchart LR
 flowchart LR
   ALL[Chaque aliment unique du modpack<br/>vanilla + FD et ses addons + Create: Food + ... (Arcadia V2)] -->|tapis / funnels| HS[Hachoir Suprême<br/>mode ULTIME : 100 %]
   HS --> PA[Pâte absolue]
-  PA & T2[THE_Fricadelle] -->|Mixer<br/>super-chauffé| RU[THE_FRICADELLE crue]
-  RU -->|Friteuse<br/>super-chauffée| U((THE_FRICADELLE))
+  PA & T2[THE_Fricadelle] & BT[Blanc de bœuf fondu] -->|Mixer<br/>super-chauffé| RU[THE_FRICADELLE crue]
+  RU -->|Friteuse<br/>super-chauffée<br/>au blanc de bœuf| U((THE_FRICADELLE))
 ```
 
 - « Aliment » = tout item qui possède le data component `minecraft:food`, **plus** un tag d'ajouts manuels (ex. le gâteau, qui se mange mais n'est pas un item-nourriture), **moins** une blacklist (nos propres fricadelles, items créatifs uniquement, etc.). Détails : `03-architecture.md` § FoodIndex.

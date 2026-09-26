@@ -18,6 +18,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Tags** — `minced_meats`, `minced_meats/beef` (also accepts Farmer's Delight minced beef), `grinder/extra_foods` (cake), `grinder/blacklist` (our pastes and fricadelles, enchanted golden apple); fricadelles added to `c:foods/cooked_meat`.
 - **Tooltips** — Create-style summaries on the three fricadelles, in English and French.
 - **Placeholder textures** — `tools/gen_placeholders.py`, a standard-library generator that never overwrites an existing texture without `--force`.
+- **Fluids** — Frying oil, melted beef tallow, mayonnaise and curry ketchup, each with a placeable source and a bucket. The `frying_oils` fluid tag also accepts other mods' plant and vegetable oils.
+- **Create recipes** — Crushing (pork, beef with a chance of tallow, chicken, bread), milling (dried kelp into Belgian spices), mixing (fricadelle paste, melted tallow, mayonnaise, curry ketchup with a beetroot fallback), compacting (seeds into frying oil, only without another seed-oil mod) and pressing (paste into raw fricadelle), all generated with stable ids.
+- **Interoperability** — Recipes accept any mod's minced meat and bread crumbs through tags, and our items join the matching convention tags.
 - **Automated tests** — JUnit checks on generated resources (language parity, textures, tags, dependency metadata) and in-game GameTests on registration, food, tags and the creative tab. CI runs both and fails when generated resources are out of date.
 
 ### Ajouts
@@ -32,6 +35,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Tags** — `minced_meats`, `minced_meats/beef` (accepte aussi le bœuf haché de Farmer's Delight), `grinder/extra_foods` (gâteau), `grinder/blacklist` (nos pâtes et fricadelles, pomme d'or enchantée) ; fricadelles ajoutées à `c:foods/cooked_meat`.
 - **Infobulles** — Résumés au format Create sur les trois fricadelles, en anglais et en français.
 - **Textures provisoires** — `tools/gen_placeholders.py`, générateur en bibliothèque standard qui n'écrase jamais une texture existante sans `--force`.
+- **Fluides** — Huile de friture, blanc de bœuf fondu, mayonnaise et curry ketchup, chacun avec une source posable et un seau. Le tag fluide `frying_oils` accepte aussi les huiles végétales des autres mods.
+- **Recettes Create** — Broyage (porc, bœuf avec une chance de blanc de bœuf, poulet, pain), meule (algue séchée en épices belges), mélange (pâte à fricadelle, blanc de bœuf fondu, mayonnaise, curry ketchup avec secours à la betterave), compactage (graines en huile, seulement sans autre mod d'huile de graines) et presse (pâte en fricadelle crue), toutes générées avec des IDs stables.
+- **Interopérabilité** — Les recettes acceptent le haché et la chapelure de n'importe quel mod via des tags, et nos items rejoignent les tags de convention correspondants.
 - **Tests automatisés** — Contrôles JUnit des ressources générées (parité des langues, textures, tags, métadonnées de dépendances) et GameTests en jeu sur l'enregistrement, la nourriture, les tags et l'onglet créatif. La CI lance les deux et échoue si les ressources générées ne sont pas à jour.
 
 ---
