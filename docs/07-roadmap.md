@@ -42,7 +42,7 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Rendu (huile, items), particules, son
 - [x] Goggles, comparateur, plugin Jade
 - [x] Catégorie JEI
-- [x] Checklist `10-tests.md` automatisée (GameTests + test client) ; reste manuel : 2 clients sur un serveur dédié, et le scénario spark
+- [x] Checklist `10-tests.md` automatisée (GameTests + test client) ; 2 clients sur un serveur dédié automatisés (`runMultiplayerSmoke`) ; reste manuel : le scénario spark
 - **Accepté si** : la checklist Friteuse de `10-tests.md` passe, en solo et sur serveur dédié.
 
 ### M4 — Palier 1 bout à bout

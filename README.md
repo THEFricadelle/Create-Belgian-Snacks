@@ -47,7 +47,7 @@ Requires JDK 21.
 ```bash
 ./gradlew build              # jar in build/libs, runs the JUnit tests
 ./gradlew runGameTestServer  # in-game tests, headless
-./gradlew testAll            # everything, including the compat tests and a live client run
+./gradlew testAll            # everything, including the compat tests, a live client and two clients on a server
 ./gradlew runData            # regenerate src/generated/resources
 ./gradlew runClient          # development client
 ./gradlew runServer          # development dedicated server
@@ -116,7 +116,7 @@ Nécessite le JDK 21.
 ```bash
 ./gradlew build              # jar dans build/libs, lance les tests JUnit
 ./gradlew runGameTestServer  # tests en jeu, sans interface
-./gradlew testAll            # tout, y compris les tests de compat et un client réel
+./gradlew testAll            # tout, y compris les tests de compat, un client réel et deux clients sur un serveur
 ./gradlew runData            # régénère src/generated/resources
 ./gradlew runClient          # client de développement
 ./gradlew runServer          # serveur dédié de développement
