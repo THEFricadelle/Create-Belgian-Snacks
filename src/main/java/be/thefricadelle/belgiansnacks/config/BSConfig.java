@@ -43,8 +43,9 @@ public final class BSConfig {
 
         builder.push("grinder");
         GRINDER_BLACKLISTED_MODS = builder
-            .comment("Mod ids whose foods never count for the Supreme Grinder (their items leave the food index).")
-            .defineListAllowEmpty("blacklistedMods", List.of(), () -> "", o -> o instanceof String);
+            .comment("Mod ids whose foods never count for the Supreme Grinder (their items leave the food index).",
+                "Default: cosmeticarmoursmod, whose edible items are decorative (D8).")
+            .defineListAllowEmpty("blacklistedMods", List.of("cosmeticarmoursmod"), () -> "", o -> o instanceof String);
         GRINDER_BLACKLISTED_ITEMS = builder
             .comment("Item ids that never count as foods, on top of the create_belgian_snacks:grinder/blacklist tag.")
             .defineListAllowEmpty("blacklistedItems", List.of(), () -> "", o -> o instanceof String);

@@ -144,7 +144,8 @@ public final class ItemGameTests {
                 helper.assertTrue(stack.is(BSTags.GRINDER_BLACKLIST), BuiltInRegistries.ITEM.getKey(item) + " is food but not blacklisted");
             }
         }
-        helper.assertTrue(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE).is(BSTags.GRINDER_BLACKLIST), "enchanted golden apple blacklisted (D8)");
+        helper.assertFalse(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE).is(BSTags.GRINDER_BLACKLIST), "the enchanted golden apple counts (D8)");
+        helper.assertTrue(new ItemStack(Items.OMINOUS_BOTTLE).is(BSTags.GRINDER_BLACKLIST), "the ominous bottle is blacklisted (D8)");
         helper.assertFalse(new ItemStack(Items.BREAD).is(BSTags.GRINDER_BLACKLIST), "ordinary food must stay accepted");
         helper.succeed();
     }

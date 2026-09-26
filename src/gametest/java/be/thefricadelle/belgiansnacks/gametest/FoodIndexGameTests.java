@@ -54,7 +54,8 @@ public final class FoodIndexGameTests {
         helper.assertTrue(index.contains(id("minecraft:cake")), "cake comes from the extra tag");
         helper.assertTrue(index.sources().get(id("minecraft:cake")) == FoodIndexRules.Source.EXTRA, "cake source should be extra");
         helper.assertTrue(index.sources().get(id("minecraft:apple")) == FoodIndexRules.Source.FOOD, "apple source should be food");
-        for (String excluded : List.of("minecraft:enchanted_golden_apple", "create_belgian_snacks:fricadelle",
+        helper.assertTrue(index.contains(id("minecraft:enchanted_golden_apple")), "the enchanted golden apple counts (D8)");
+        for (String excluded : List.of("minecraft:ominous_bottle", "create_belgian_snacks:fricadelle",
             "create_belgian_snacks:the_fricadelle", "create_belgian_snacks:ultimate_fricadelle", "minecraft:stone")) {
             helper.assertFalse(index.contains(id(excluded)), excluded + " must not count");
         }

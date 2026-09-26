@@ -1,6 +1,14 @@
 {
   "values": [
-    "minecraft:enchanted_golden_apple",
+    "minecraft:ominous_bottle",
+    {
+      "id": "mynethersdelight:enchanted_golden_egg",
+      "required": false
+    },
+    {
+      "id": "artifacts:everlasting_beef",
+      "required": false
+    },
     "create_belgian_snacks:fricadelle_paste",
     "create_belgian_snacks:raw_fricadelle",
     "create_belgian_snacks:fricadelle",

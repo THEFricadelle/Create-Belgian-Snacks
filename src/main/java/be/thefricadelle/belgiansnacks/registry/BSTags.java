@@ -65,8 +65,12 @@ public final class BSTags {
             prov.addTag(MINCED_CHICKEN).addOptionalTag(C_GROUND_CHICKEN.location());
             prov.addTag(GRINDER_EXTRA_FOODS)
                 .add(Items.CAKE);
+            // D8: one-off or cosmetic items, not foods anyone farms. Optional, so harmless outside Arcadia.
+            // The enchanted golden apple stays in on purpose.
             prov.addTag(GRINDER_BLACKLIST)
-                .add(Items.ENCHANTED_GOLDEN_APPLE);
+                .add(Items.OMINOUS_BOTTLE)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("mynethersdelight", "enchanted_golden_egg"))
+                .addOptional(ResourceLocation.fromNamespaceAndPath("artifacts", "everlasting_beef"));
         });
     }
 }
