@@ -9,10 +9,8 @@ Namespace : `create_belgian_snacks` (abrégé `bs:` ci-dessous).
 | ID | EN | FR | Mangeable ? | Notes |
 |---|---|---|---|---|
 | `minced_pork` | Minced Pork | Hachis de porc | non | |
-| `minced_beef` | Minced Beef | Hachis de bœuf | non | ⚠️ FD a déjà `farmersdelight:minced_beef` (présent dans Arcadia) → voir D12 |
+| `minced_beef` | Minced Beef | Hachis de bœuf | non | Toujours enregistré (D12). Les recettes lisent `bs:minced_meats/beef` = le nôtre + `farmersdelight:minced_beef` (optionnel) |
 | `minced_chicken` | Minced Chicken | Hachis de poulet | non | |
-| `minced_mutton` | Minced Mutton | Hachis de mouton | non | |
-| `minced_rabbit` | Minced Rabbit | Hachis de lapin | non | |
 | `beef_tallow` | Beef Tallow | Blanc de bœuf | non | Sous-produit du bœuf |
 | `bread_crumbs` | Bread Crumbs | Chapelure | non | |
 | `belgian_spices` | Belgian Spices | Épices belges | non | |
@@ -49,6 +47,7 @@ Les noms des 3 fricadelles sont **identiques dans toutes les langues** (c'est un
 | Tag | Contenu |
 |---|---|
 | `bs:minced_meats` | tous nos hachis |
+| `bs:minced_meats/beef` | `minced_beef` + `farmersdelight:minced_beef` (optionnel), lu par les recettes à la place de l'item (D12) |
 | `bs:fryable_meats` ⚠️ | viandes acceptées par le broyage générique (voir ci-dessous) |
 | `bs:grinder/extra_foods` | `minecraft:cake` + ajouts manuels |
 | `bs:grinder/blacklist` | nos pâtes et fricadelles, `minecraft:enchanted_golden_apple` ⚠️, items debug |
@@ -62,11 +61,9 @@ Les noms des 3 fricadelles sont **identiques dans toutes les langues** (c'est un
 | 1 | Crushing Wheels | `minecraft:porkchop` | 2× `minced_pork` | |
 | 2 | Crushing Wheels | `minecraft:beef` | 2× `minced_beef` + 50 % `beef_tallow` | |
 | 3 | Crushing Wheels | `minecraft:chicken` | 2× `minced_chicken` | |
-| 4 | Crushing Wheels | `minecraft:mutton` | 2× `minced_mutton` | |
-| 5 | Crushing Wheels | `minecraft:rabbit` | 1× `minced_rabbit` | |
 | 5b | Crushing Wheels | viandes crues FD (tag `c:foods/raw_meat` hors vanilla) | selon le cas ⚠️ | Si FD présent : FD a déjà du bœuf haché (`minced_beef`) → **utiliser leur item via tag**, ne pas dupliquer |
 | 6 | Crushing Wheels | `minecraft:bread` | 3× `bread_crumbs` | |
-| 7 | Mixer (non chauffé) | 1 hachis porc + 1 bœuf + 1 poulet + 1 chapelure | 2× `fricadelle_paste` | ⚠️ exiger 3 viandes *différentes* quelconques ? (voir décisions) |
+| 7 | Mixer (non chauffé) | 1 hachis porc + 1 `#bs:minced_meats/beef` + 1 hachis poulet + 1 chapelure | 2× `fricadelle_paste` | 3 viandes fixes (D3) |
 | 8 | Mechanical Press | `fricadelle_paste` | `raw_fricadelle` | « extrusion » |
 | 9 | **Friteuse** (chauffée) | `raw_fricadelle` | `fricadelle` | 100 ticks, 10 mB d'huile |
 

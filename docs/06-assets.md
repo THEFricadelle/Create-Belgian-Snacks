@@ -6,12 +6,13 @@
 
 ## Placeholders
 
-Tant que les vraies textures ne sont pas faites, des placeholders sont générés par un script Python (Pillow) : `tools/gen_placeholders.py`.
+Tant que les vraies textures ne sont pas faites, des placeholders sont générés par un script Python **sans dépendance** (bibliothèque standard : encodeur PNG `zlib` + `struct`) : `python tools/gen_placeholders.py [--force]`. Pas de Pillow, pour ne rien ajouter à installer.
 
 Spécs du script :
 - PNG 16×16, fond transparent pour les items.
 - Forme simple par famille : hachis = tas granuleux ; pâte = boule ; fricadelle crue = bâtonnet rose ; fricadelle = bâtonnet brun doré ; seaux = teinte du fluide sur un seau générique **dessiné par le script**.
-- Couleur de base par item (table dans le script), + 1 lettre en surimpression pour identifier facilement en jeu (P, B, C…).
+- Couleur de base par item (table `ITEMS` du script), + 1 glyphe 3×5 en surimpression : une lettre pour les ingrédients (P, B, C, T, R, S), le chiffre du palier (1, 2, 3) pour les pâtes et les fricadelles.
+- État au M1 : les 16 items sont générés. Fluides (M2) et blocs (M3) : à ajouter à la même table.
 - THE_FRICADELLE : bâtonnet doré avec bord brillant (le glint est géré par l'item, pas la texture).
 - Fluides : `still` et `flow` 16×16 (le `flow` en 16×32 animé si possible, sinon statique) + fichier `.mcmeta`.
 - Blocs : 6 faces unies avec bordure, 2 couleurs distinctes pour la Friteuse (inox) et le Hachoir (laiton).
@@ -47,7 +48,9 @@ Les sous-titres ont une clé de traduction (`subtitles.create_belgian_snacks.*`)
 - `fr_fr` = fichier généré aussi (provider de lang séparé) ou fichier manuel dans `src/main/resources` si Registrate ne gère qu'une langue — à décider au jalon M1 selon ce qui est le plus simple.
 - Test : au jalon M1, vérifier qu'aucune clé brute (`item.create_belgian_snacks.xxx`) n'apparaît en jeu dans les deux langues.
 
-### Tooltips d'humour (proposition, à valider)
+### Tooltips d'humour (validés le 26/09/2026)
+
+Affichés au format Create (« Maintenir [Maj] »), clé `item.create_belgian_snacks.<id>.tooltip.summary`.
 
 | Item | FR | EN |
 |---|---|---|

@@ -18,12 +18,12 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - **Accepté si** : `runClient` ouvre un monde avec Create chargé ; `runServer` démarre.
   - Vanilla masque un onglet de catégorie sans item (`CreativeModeTab.shouldDisplay()`) : l'onglet est enregistré au M0 mais ne devient **visible qu'au M1**, avec les premiers items. Critère « onglet visible » reporté au M1.
 
-### M1 — Items de base + lang + placeholders
-- [ ] Tous les items non-machines de `04-contenu-et-recettes.md` (sans les recettes)
-- [ ] `BSFoods` avec valeurs **provisoires** pour les 3 fricadelles
-- [ ] `tools/gen_placeholders.py` + textures générées
-- [ ] Lang `en_us` + `fr_fr` complètes, tooltips
-- [ ] Tags `bs:` + ajouts aux tags `c:`
+### M1 — Items de base + lang + placeholders ✅ (26/09/2026)
+- [x] Tous les items non-machines de `04-contenu-et-recettes.md` (sans les recettes)
+- [x] `BSFoods` avec valeurs **provisoires** pour les 3 fricadelles
+- [x] `tools/gen_placeholders.py` + textures générées
+- [x] Lang `en_us` + `fr_fr` complètes, tooltips
+- [x] Tags `bs:` + ajouts aux tags `c:`
 - **Accepté si** : tous les items ont une texture et un nom traduit dans les 2 langues ; aucun `missing texture` ; l'onglet « Create: Belgian Snacks » est visible dans le menu créatif.
 
 ### M2 — Recettes Create simples + fluides

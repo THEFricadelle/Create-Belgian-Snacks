@@ -69,7 +69,7 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 - Bonus (plus tard) : schéma KubeJS pour `frying` si simple à faire.
 
 ### Farmer's Delight et ses addons
-- FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` : ⚠️ à décider (D12) → soit on le garde et on l'ajoute au même tag que celui de FD, soit on utilise celui de FD quand il est présent.
+- FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` (D12, décidé) : toujours enregistré ; les recettes lisent `create_belgian_snacks:minced_meats/beef`, qui contient le nôtre et celui de FD.
 - Vérifier au jalon M5 (export CSV) si un mod du pack fournit déjà **huile**, **mayonnaise** ou **ketchup** (Burger Mod, Cook's Collection, Create: Food…). Si oui : les accepter dans nos recettes via un tag `create_belgian_snacks:frying_oils` / sauces, pour éviter les doublons.
 
 ### Spice of Life: Onion
