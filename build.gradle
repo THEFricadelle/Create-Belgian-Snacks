@@ -94,6 +94,17 @@ neoForge {
             systemProperty 'create_belgian_snacks.clientSmoke', 'true'
         }
 
+        // The real Arcadia pack (copied into run/arcadia by tools/arcadia_export.py) exporting its food index.
+        arcadiaExport {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia')
+            jvmArgument '-Xmx10G'
+            systemProperty 'create_belgian_snacks.arcadiaExport', 'true'
+            // Create Numismatics parses this property as a URI: a bare Windows path makes every mod fail to construct.
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaExportLog4j2.xml').toURI().toString()
+        }
+
         // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
         serverSmoke {
             server()
