@@ -101,6 +101,7 @@ issue describing the problem instead. That is just as useful.
    ```bash
    ./gradlew build
    ./gradlew runGameTestServer
+   ./gradlew runGameTestServerCompat
    ./gradlew runData
    ./gradlew runServer
    ```
@@ -251,6 +252,7 @@ ouvrez plutôt une issue décrivant le problème. C'est tout aussi utile.
    ```bash
    ./gradlew build
    ./gradlew runGameTestServer
+   ./gradlew runGameTestServerCompat
    ./gradlew runData
    ./gradlew runServer
    ```
