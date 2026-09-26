@@ -88,7 +88,7 @@ aliments = { item ∈ registre ITEM | item.components().has(DataComponents.FOOD)
 
 - On travaille sur l'**ID d'item** (pas sur les variantes de composants : une seule potion suspecte, etc.).
 - Nos propres items produits par le Hachoir **doivent** être dans la blacklist (sinon boucle).
-- Le tri de la liste finale est alphabétique par `ResourceLocation` pour que l'affichage soit stable.
+- Le tri de la liste finale suit l'ID complet `namespace:path` (chaîne) : stable, et chaque mod reste groupé. Attention, l'ordre naturel de `ResourceLocation` compare le chemin avant le namespace ; ce n'est pas celui-là.
 
 ### Cycle de vie
 
@@ -101,6 +101,14 @@ aliments = { item ∈ registre ITEM | item.components().has(DataComponents.FOOD)
 - `/belgiansnacks foods count` → nombre d'aliments.
 - `/belgiansnacks foods export` → écrit `config/create_belgian_snacks/foods_export.csv` (id, modid, nutrition, saturation, source : food/extra). **Sert à décider du taux de THE_Fricadelle et de la blacklist.**
 - `/belgiansnacks grinder fill <pos> [percent]` → remplit un Hachoir (tests).
+
+### Implémentation (M5)
+
+- `content/food/FoodIndexRules` : logique pure (chaînes), testée en JUnit.
+- `content/food/FoodIndex` : instantané immuable par côté (serveur, client), `compute(mods, items)` réutilisable par les tests, `recompute(server)` qui journalise la durée et diffuse.
+- `content/food/FoodIndexEvents` : recalcul au `ServerStartedEvent`, au `TagsUpdatedEvent` côté serveur (`/reload`, KubeJS) et au rechargement de la config ; envoi au joueur à la connexion. Au démarrage, le premier passage (pendant le chargement des tags) tourne avec les valeurs par défaut de la config, qui n'est pas encore chargée ; le passage du `ServerStartedEvent` corrige.
+- `network/FoodIndexSyncPayload` + `BSNetwork` (protocole `1`) ; le client ne calcule jamais, il vide sa liste à la déconnexion (`client/BSClientEvents`).
+- `command/BSCommands` : `/belgiansnacks foods count|export` (op 2). `export` écrit aussi `has_recipe` : une recette connue produit-elle l'item ? C'est un indice pour la blacklist, pas une preuve (poissons pêchés, viandes de mobs, baies cueillies n'ont pas de recette).
 
 ### Logique pure testable
 
@@ -120,10 +128,10 @@ Toutes nos recettes ont un ID lisible et définitif, rangé par type : `create_b
 
 | Clé | Défaut provisoire | Rôle |
 |---|---|---|
-| `grinder.theFricadelleRatio` | `0.25` ⚠️ À DÉFINIR | Part des aliments nécessaire pour la Pâte d'exception |
+| `grinder.theFricadelleRatio` | `0.10` (D1) | Part des aliments nécessaire pour la Pâte d'exception (arrive au M6) |
 | `grinder.ultimateRatio` | `1.0` | Part pour la Pâte absolue (laisser à 1.0 sauf besoin serveur) |
 | `grinder.rejectDuplicates` | `true` | Recracher les doublons au lieu de les détruire |
-| `grinder.blacklistedMods` / `blacklistedItems` | `[]` | Exclusions |
+| `grinder.blacklistedMods` / `blacklistedItems` | `["cosmeticarmoursmod"]` / `[]` (M5) | Exclusions du FoodIndex, en plus du tag `grinder/blacklist` |
 | `grinder.minSpeed` / `stressImpact` | `64 rpm` / `16 SU/rpm` ⚠️ | Coût cinétique |
 | `fryer.tankCapacity` | `4000` mB | Capacité du réservoir de graisse (friteuses chargées après le changement) |
 | `fryer.speedMultiplier` | `1.0` | Divise chaque temps de friture |

@@ -51,10 +51,11 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Une usine de test automatisée : viande → fricadelle sans intervention (`ProductionLineGameTests`, 16 fricadelles)
 - **Accepté si** : une ligne entièrement automatique produit des fricadelles en continu.
 
-### M5 — FoodIndex
-- [ ] `FoodIndexRules` (logique pure) + tests JUnit
-- [ ] `FoodIndex` (recalcul au start/reload) + payload de sync
-- [ ] Commandes `/belgiansnacks foods count|export`
+### M5 — FoodIndex ✅ (27/09/2026)
+- [x] `FoodIndexRules` (logique pure) + tests JUnit
+- [x] `FoodIndex` (recalcul au start/reload) + payload de sync
+- [x] Commandes `/belgiansnacks foods count|export`
+- [x] Export sur le pack Arcadia complet (`tools/arcadia_export.py`) : `docs/data/`, D1 tranché (10 %)
 - **Accepté si** : `export` produit un CSV cohérent avec le modpack Arcadia complet. → **On s'en sert pour trancher le taux de THE_Fricadelle.**
 
 ### M6 — Hachoir Suprême

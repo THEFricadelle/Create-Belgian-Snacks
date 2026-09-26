@@ -91,15 +91,31 @@ Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
 - Pack lourd (464 mods) : FoodIndex calculé une fois par reload, jamais en tick. Log du temps de calcul.
 - Tester sur une copie du serveur Arcadia avant toute mise à jour.
 
-## Blacklist par défaut à préparer pour le pack
+## Le FoodIndex réel d'Arcadia 2.0.32 (export du 27/09/2026)
 
-À compléter avec le CSV d'export (M5), à valider en team (D8) :
-- Nos propres pâtes / fricadelles.
-- Aliments **créatifs ou non obtenables** en survie dans le pack (items désactivés par KubeJS, items cachés de JEI, loot unique de boss…).
-- Aliments issus des mods Arcadia maison (LootBox, Pets…) s'il y en a.
-- Variantes purement décoratives (si .3D Placeable Food ou d'autres enregistrent des items « posés » comestibles).
+Obtenu par `python tools/arcadia_export.py` : le pack complet (449 mods, sans Create/JEI/Jade/MezzConfig déjà fournis par le dev), ses scripts KubeJS, sa config, ses datapacks et son pack de ressources, lancés dans un client de dev qui crée un monde, exporte et quitte (environ 9 minutes). Données : `docs/data/arcadia-2.0.32-foods.csv` (une ligne par aliment) et `…-summary.txt`.
 
-Idée : une commande `/belgiansnacks foods export --missing-recipe` qui signale les aliments **sans aucune recette connue** (candidats probables à la blacklist).
+| | |
+|---|---|
+| Aliments comptés | **1804** (39 mods) |
+| Exclus | 22 : nos 3 fricadelles, les 16 objets de `cosmeticarmoursmod`, `minecraft:ominous_bottle`, `mynethersdelight:enchanted_golden_egg`, `artifacts:everlasting_beef` |
+| Palier 2 (10 %) | ≈ 180 aliments (arrondi fixé au M6) |
+| Palier 3 (100 %) | 1804 aliments |
+| Sans recette connue | 168 (indice seulement : poissons d'Aquaculture, viandes de mobs, baies de Twilight Forest s'obtiennent sans recette) |
+| Temps de calcul | 26 ms en régime établi, 57 ms au démarrage du monde |
+
+Répartition : Create: Food 909, Create Ice Creams 89, Cultural Delights 86, Farmer's Delight 77, My Nether's Delight 60, Ars Delight 51, End's Delight 47, Create Confectionery 46, Twilight Delight 46, Crabber's Delight 42, vanilla 42, puis 28 mods sous 40.
+
+Pour lancer le pack en dev, deux pièges trouvés : ne lire que les `modId` des blocs `[[mods]]` (les blocs de dépendances en contiennent aussi), et passer `log4j2.configurationFile` en URI `file:///` (Create Numismatics la lit comme une URI ; un chemin Windows fait échouer la construction de tous les mods).
+
+## Blacklist par défaut (D8, tranchée le 27/09/2026)
+
+- Nos fricadelles : toujours exclues par le code.
+- Mod `cosmeticarmoursmod` (objets décoratifs comestibles) : config `grinder.blacklistedMods`.
+- Objets uniques : `minecraft:ominous_bottle`, `mynethersdelight:enchanted_golden_egg`, `artifacts:everlasting_beef` : tag `create_belgian_snacks:grinder/blacklist` (entrées optionnelles).
+- **La pomme d'or enchantée compte.**
+
+La team du pack peut étendre la liste sans toucher au jar (tag via KubeJS, ou config). La colonne `has_recipe` de `foods export` repère les candidats : un aliment sans recette connue n'est pas forcément inobtenable, il faut vérifier au cas par cas.
 
 ## Intégration au pack
 Le mod est un projet perso de THEFricadelle : la team du pack **n'intervient pas dans le code**. Elle peut seulement l'ajuster de l'extérieur (KubeJS, tags, config serveur, éventuellement un chapitre FTB Quests « La Friterie »). D'où l'importance que tout soit réglable sans toucher au jar.
