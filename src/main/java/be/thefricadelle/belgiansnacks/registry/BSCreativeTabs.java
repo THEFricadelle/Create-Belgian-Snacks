@@ -15,7 +15,6 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -31,8 +30,7 @@ public final class BSCreativeTabs {
         () -> CreativeModeTab.builder()
             .title(Component.translatable(MAIN_TITLE))
             .withTabsBefore(AllCreativeModeTabs.PALETTES_CREATIVE_TAB.getKey())
-            // Placeholder icon until the fricadelle item exists (M1).
-            .icon(Items.COOKED_PORKCHOP::getDefaultInstance)
+            .icon(BSItems.FRICADELLE::asStack)
             .build());
 
     private BSCreativeTabs() {

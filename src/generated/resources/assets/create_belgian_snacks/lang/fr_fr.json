@@ -1,3 +1,22 @@
 {
+  "item.create_belgian_snacks.absolute_paste": "Pâte absolue",
+  "item.create_belgian_snacks.beef_tallow": "Blanc de bœuf",
+  "item.create_belgian_snacks.belgian_spices": "Épices belges",
+  "item.create_belgian_snacks.bread_crumbs": "Chapelure",
+  "item.create_belgian_snacks.exceptional_paste": "Pâte d'exception",
+  "item.create_belgian_snacks.fricadelle": "Fricadelle",
+  "item.create_belgian_snacks.fricadelle.tooltip.summary": "Personne ne sait vraiment ce qu'il y a dedans.",
+  "item.create_belgian_snacks.fricadelle_paste": "Pâte à fricadelle",
+  "item.create_belgian_snacks.incomplete_the_fricadelle": "THE_Fricadelle en cours",
+  "item.create_belgian_snacks.minced_beef": "Hachis de bœuf",
+  "item.create_belgian_snacks.minced_chicken": "Hachis de poulet",
+  "item.create_belgian_snacks.minced_pork": "Hachis de porc",
+  "item.create_belgian_snacks.raw_fricadelle": "Fricadelle crue",
+  "item.create_belgian_snacks.raw_the_fricadelle": "THE_Fricadelle crue",
+  "item.create_belgian_snacks.raw_ultimate_fricadelle": "THE_FRICADELLE crue",
+  "item.create_belgian_snacks.the_fricadelle": "THE_Fricadelle",
+  "item.create_belgian_snacks.the_fricadelle.tooltip.summary": "Avec une spéciale, s'il vous plaît.",
+  "item.create_belgian_snacks.ultimate_fricadelle": "THE_FRICADELLE",
+  "item.create_belgian_snacks.ultimate_fricadelle.tooltip.summary": "Elle contient littéralement tout.",
   "itemGroup.create_belgian_snacks.main": "Create: Belgian Snacks"
 }

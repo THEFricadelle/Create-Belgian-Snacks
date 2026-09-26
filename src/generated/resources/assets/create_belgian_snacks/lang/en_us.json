@@ -1,3 +1,22 @@
 {
+  "item.create_belgian_snacks.absolute_paste": "Absolute Paste",
+  "item.create_belgian_snacks.beef_tallow": "Beef Tallow",
+  "item.create_belgian_snacks.belgian_spices": "Belgian Spices",
+  "item.create_belgian_snacks.bread_crumbs": "Bread Crumbs",
+  "item.create_belgian_snacks.exceptional_paste": "Exceptional Paste",
+  "item.create_belgian_snacks.fricadelle": "Fricadelle",
+  "item.create_belgian_snacks.fricadelle.tooltip.summary": "Nobody really knows what's inside.",
+  "item.create_belgian_snacks.fricadelle_paste": "Fricadelle Paste",
+  "item.create_belgian_snacks.incomplete_the_fricadelle": "Incomplete THE_Fricadelle",
+  "item.create_belgian_snacks.minced_beef": "Minced Beef",
+  "item.create_belgian_snacks.minced_chicken": "Minced Chicken",
+  "item.create_belgian_snacks.minced_pork": "Minced Pork",
+  "item.create_belgian_snacks.raw_fricadelle": "Raw Fricadelle",
+  "item.create_belgian_snacks.raw_the_fricadelle": "Raw THE_Fricadelle",
+  "item.create_belgian_snacks.raw_ultimate_fricadelle": "Raw THE_FRICADELLE",
+  "item.create_belgian_snacks.the_fricadelle": "THE_Fricadelle",
+  "item.create_belgian_snacks.the_fricadelle.tooltip.summary": "Make it a spéciale, please.",
+  "item.create_belgian_snacks.ultimate_fricadelle": "THE_FRICADELLE",
+  "item.create_belgian_snacks.ultimate_fricadelle.tooltip.summary": "It literally contains everything.",
   "itemGroup.create_belgian_snacks.main": "Create: Belgian Snacks"
 }
