@@ -8,10 +8,10 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 | # | Question | Proposition provisoire | Décision |
 |---|---|---|---|
 | D1 | Quel **taux** d'aliments du modpack pour THE_Fricadelle ? | 25 % (config `grinder.theFricadelleRatio`). À fixer après un `/belgiansnacks foods export` sur le vrai modpack. | |
-| D2 | Le taux D1 : n'importe quels aliments, ou des **catégories imposées** (x viandes, x fruits, x plats…) ? | N'importe lesquels (plus simple) | |
+| D2 | Le taux D1 : n'importe quels aliments, ou des **catégories imposées** (x viandes, x fruits, x plats…) ? | N'importe lesquels (plus simple) | ✅ **N'importe lesquels** : X % de tous les aliments uniques du FoodIndex, sans catégories imposées (27/09/2026) |
 | D3 | Palier 1 : 3 viandes **fixes** (porc/bœuf/poulet) ou **3 hachis différents quelconques** ? | Fixes en v1 (recette Create standard), quelconques = type de recette custom | ✅ **Fixes** (porc, bœuf, poulet) ; hachis de mouton et de lapin retirés de la v1 (26/09/2026) |
-| D4 | Nombre de boucles de la Sequenced Assembly | 3 | |
-| D5 | Sequenced Assembly : 100 % de réussite, ou échecs possibles (sortie « pâte ratée ») ? | 100 % | |
+| D4 | Nombre de boucles de la Sequenced Assembly | 3 | ✅ **3 boucles** de la séquence épices → mayonnaise → curry ketchup → oignon → presse (27/09/2026) |
+| D5 | Sequenced Assembly : 100 % de réussite, ou échecs possibles (sortie « pâte ratée ») ? | 100 % | ✅ **100 %** de réussite, pas de pâte ratée (27/09/2026) |
 | D6 | Recette des épices belges | ? | Provisoire : **Meule**, 1 algue séchée → 1 épices + 25 % d'une 2e (26/09/2026) |
 | D7 | Secours si pas d'oignon / tomate (sans FD) | betterave | Provisoire : betterave pour le curry ketchup (`mixing/curry_ketchup_from_beetroot`) ; oignon au M7 |
 | D8 | Enchanted golden apple et autres items quasi introuvables : dans la liste ou blacklist ? | blacklist par défaut | |
@@ -23,6 +23,7 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 | D16 | Rôle du blanc de bœuf | — | ✅ **Fondu, il remplace l'huile pour THE_FRICADELLE** : fluide `melted_beef_tallow`, seule graisse du palier 3 (mixer super-chauffé et friture) ; utilisable aussi aux paliers 1 et 2 (26/09/2026) |
 | D18 | Friteuse : par lot ou item par item ? | — | ✅ **Par lot de 16** (`fryer.maxBatch`), sauf le palier 3 : tag `fryer/one_at_a_time`, un par un (26/09/2026) |
 | D19 | Friteuse cassée : huile perdue ou conservée ? | — | ✅ **Conservée** dans l'item (data component `fryer_fluid`) ; les items tombent (26/09/2026) |
+| D20 | Friture de THE_Fricadelle | — | ✅ **Chauffé, toute graisse `#frying_oils`**, 200 ticks, 25 mB par item, par lot ; le blanc de bœuf seul reste réservé au palier 3 (27/09/2026) |
 | D17 | Haché et chapelure des autres mods | — | ✅ **Interchangeables dans les deux sens** : nos recettes lisent `bs:minced_meats/*` et `#c:bread_crumbs` (qui incluent `c:ground_*`, `c:minced_beef`) ; nos items rejoignent ces tags `c:` (26/09/2026) |
 | D14 🖥️ | Spice of Life: Onion : impact sur l'équilibrage des fricadelles | à tester en jeu | |
 | D15 🖥️ | Create Heat JS : quelles sources de chaleur la Friteuse accepte | à tester en jeu | |

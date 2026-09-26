@@ -103,9 +103,9 @@ Le blanc de bœuf fondu est la graisse des vraies frites belges : il sert aux pa
      3. Spout : 100 mB `curry_ketchup`
      4. Deployer : oignon (`c:crops/onion`)
      5. Press
-   - Boucles : **3** ⚠️
-   - Résultat : `raw_the_fricadelle` (taux de réussite ⚠️ 100 % ? ou 80 % + « pâte ratée » en sortie de repli)
-3. **Friteuse** (chauffée) : `raw_the_fricadelle` → `the_fricadelle`, 200 ticks, 25 mB.
+   - Boucles : **3** (D4) : 3 épices, 300 mB de mayonnaise, 300 mB de curry ketchup et 3 oignons par THE_Fricadelle
+   - Résultat : `raw_the_fricadelle`, **100 %** de réussite (D5)
+3. **Friteuse** (chauffée) : `raw_the_fricadelle` → `the_fricadelle`, 200 ticks, 25 mB de n'importe quelle graisse `#frying_oils` par item, par lot de 16 (D20).
 
 ## Recettes — Palier 3 : THE_FRICADELLE
 
