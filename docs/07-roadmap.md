@@ -1,0 +1,83 @@
+# 07 — Roadmap
+
+Chaque jalon = une (ou quelques) session(s) de dev. Pour chaque jalon : **mode plan → implémentation → `./gradlew build` → `runServer` qui démarre sans crash → checklist ci-dessous → commit**.
+
+Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md`.
+
+---
+
+### M0 — Squelette ✅ (26/09/2026)
+- [x] MDK ModDevGradle 1.21.1 renommé (modid, package, classe `BelgianSnacks`)
+- [x] Versions NeoForge / Create / JEI / Jade relevées dans le manifest d'Arcadia V2 et reportées dans `gradle.properties`
+- [x] Dépendances Create / Ponder / Flywheel / Registrate + JEI + Jade
+- [x] `neoforge.mods.toml` : Create requis ; JEI, Jade, KubeJS, FD, S&D optionnels ; licence ARR
+- [x] Fichier `LICENSE` (ARR) + NOTICE, CONTRIBUTING, CONTRIBUTORS, en-têtes SPDX
+- [x] `CreateRegistrate` branché, onglet créatif vide
+- [x] Datagen configuré (`runData` produit `src/generated/resources`)
+- [x] CI GitHub Actions `./gradlew build`
+- **Accepté si** : `runClient` ouvre un monde avec Create chargé ; `runServer` démarre.
+  - Vanilla masque un onglet de catégorie sans item (`CreativeModeTab.shouldDisplay()`) : l'onglet est enregistré au M0 mais ne devient **visible qu'au M1**, avec les premiers items. Critère « onglet visible » reporté au M1.
+
+### M1 — Items de base + lang + placeholders
+- [ ] Tous les items non-machines de `04-contenu-et-recettes.md` (sans les recettes)
+- [ ] `BSFoods` avec valeurs **provisoires** pour les 3 fricadelles
+- [ ] `tools/gen_placeholders.py` + textures générées
+- [ ] Lang `en_us` + `fr_fr` complètes, tooltips
+- [ ] Tags `bs:` + ajouts aux tags `c:`
+- **Accepté si** : tous les items ont une texture et un nom traduit dans les 2 langues ; aucun `missing texture` ; l'onglet « Create: Belgian Snacks » est visible dans le menu créatif.
+
+### M2 — Recettes Create simples + fluides
+- [ ] Fluides `frying_oil`, `mayonnaise`, `curry_ketchup` + seaux
+- [ ] Recettes crushing / milling / mixing / compacting / pressing (datagen)
+- [ ] Recettes de secours avec conditions `tag_empty` / `mod_loaded`
+- **Accepté si** : dans JEI, toutes les recettes s'affichent ; testées avec **et** sans Farmer's Delight.
+
+### M3 — Friteuse
+- [ ] Bloc, BE, capabilities item/fluide, lecture de chaleur
+- [ ] Type de recette `frying` + serializer + datagen
+- [ ] Rendu (huile, items), particules, son
+- [ ] Goggles, comparateur, plugin Jade
+- [ ] Catégorie JEI
+- **Accepté si** : la checklist Friteuse de `10-tests.md` passe, en solo et sur serveur dédié.
+
+### M4 — Palier 1 bout à bout
+- [ ] Recette de craft de la Friteuse
+- [ ] Fricadelle mangeable (valeurs provisoires) + gag minimal (burp)
+- [ ] Une usine de test automatisée : viande → fricadelle sans intervention
+- **Accepté si** : une ligne entièrement automatique produit des fricadelles en continu.
+
+### M5 — FoodIndex
+- [ ] `FoodIndexRules` (logique pure) + tests JUnit
+- [ ] `FoodIndex` (recalcul au start/reload) + payload de sync
+- [ ] Commandes `/belgiansnacks foods count|export`
+- **Accepté si** : `export` produit un CSV cohérent avec le modpack Arcadia complet. → **On s'en sert pour trancher le taux de THE_Fricadelle.**
+
+### M6 — Hachoir Suprême
+- [ ] Bloc cinétique, BE, stress, modes THE_/ULTIME
+- [ ] Acceptation / refus (nouveau, doublon, non-aliment)
+- [ ] Progression persistée (+ conservée au cassage si validé)
+- [ ] Goggles + Jade + écran des manquants + payloads
+- [ ] Commande `/belgiansnacks grinder fill`
+- [ ] Catégorie JEI « virtuelle »
+- **Accepté si** : checklist Hachoir de `10-tests.md` OK, y compris retrait d'un mod entre deux sessions.
+
+### M6.5 — Test dans Arcadia V2
+- [ ] Jar installé dans une copie de l'instance Arcadia : démarrage sans crash, pas d'erreur de recette dans les logs
+- [ ] `foods export` sur le pack complet → CSV exporté
+- [ ] Test KubeJS : supprimer une de nos recettes et ajouter une recette `frying` par script
+- [ ] Vérifier conflits Polymorph et compat Create Heat JS
+- **Accepté si** : tout passe sur une copie du serveur Arcadia avec 2 joueurs.
+
+### M7 — Palier 2 : THE_Fricadelle 🔒 (taux, séquence)
+- [ ] Sequenced Assembly + recettes sauces/épices
+- [ ] Friture THE_Fricadelle
+
+### M8 — Palier 3 : THE_FRICADELLE 🔒 (effets)
+- [ ] Mixer super-chauffé + friture super-chauffée
+- [ ] Effets, gags, advancements définitifs
+
+### M9 — Finitions & publication
+- [ ] Scènes Ponder (Friteuse, Hachoir)
+- [ ] Recettes de craft des machines équilibrées
+- [ ] Vraies textures / modèles Blockbench
+- [ ] Page mod (Modrinth/CurseForge) — voir `09-licence-publication.md`

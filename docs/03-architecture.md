@@ -1,0 +1,134 @@
+# 03 — Architecture
+
+## Arborescence cible
+
+```
+src/main/java/be/thefricadelle/belgiansnacks/
+├── BelgianSnacks.java              # @Mod, MOD_ID, REGISTRATE, asResource()
+├── registry/
+│   ├── BSItems.java  BSBlocks.java  BSBlockEntities.java  BSFluids.java
+│   ├── BSRecipeTypes.java  BSSoundEvents.java  BSCreativeTabs.java
+│   ├── BSTags.java                 # tous les TagKey du mod
+│   └── BSFoods.java                # FoodProperties des 3 fricadelles (valeurs provisoires)
+├── content/
+│   ├── fryer/                      # Friteuse
+│   │   ├── FryerBlock.java  FryerBlockEntity.java
+│   │   ├── FryingRecipe.java  (+ serializer / params)
+│   │   └── FryerRenderer.java      # client
+│   ├── grinder/                    # Hachoir Suprême
+│   │   ├── SupremeGrinderBlock.java  SupremeGrinderBlockEntity.java
+│   │   ├── GrinderMode.java        # THE_ / ULTIMATE
+│   │   └── GrinderProgress.java    # set d'IDs consommés, (dé)sérialisation
+│   ├── food/
+│   │   ├── FoodIndex.java          # liste dynamique des aliments
+│   │   ├── FoodIndexRules.java     # logique pure de filtrage (testable en JUnit)
+│   │   └── FricadelleItem.java     # effets / gags à la consommation
+│   └── advancement/                # triggers custom si nécessaire
+├── network/                        # payloads (sync FoodIndex, progression hachoir)
+├── config/BSConfig.java            # ModConfigSpec serveur
+├── command/BSCommands.java         # /belgiansnacks ...
+├── compat/
+│   ├── jei/                        # catégories Friteuse + Hachoir (Arcadia utilise JEI)
+│   ├── jade/                       # infobulles Friteuse + Hachoir
+│   ├── kubejs/                     # (plus tard) schéma KubeJS pour frying
+│   └── ponder/                     # scènes Ponder (client)
+├── client/                         # tout le code client-only
+└── data/                           # datagen : recipes, models, lang, tags, advancements, loot
+```
+
+## Registres
+
+Utiliser `CreateRegistrate` (comme les autres addons Create 6) :
+
+```java
+public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
+```
+
+⚠️ Vérifier dans `../refs/Create` la façon actuelle d'enregistrer Registrate sur le mod bus (`REGISTRATE.registerEventListeners(modEventBus)`) et de définir l'onglet créatif par défaut.
+
+## Types de recettes custom
+
+| Type | ID | Base | Remarques |
+|---|---|---|---|
+| Friture | `create_belgian_snacks:frying` | Recette de traitement Create (`ProcessingRecipe` ou son équivalent Create 6) | 1 ingrédient item, 1+ résultats, `processing_time`, **`heat_requirement`** (none/heated/superheated, réutiliser l'enum de chaleur de Create), **`oil_consumption`** en mB |
+| Hachoir (affichage) | `create_belgian_snacks:grinding_goal` | Recette « virtuelle » | Sert uniquement à afficher le Hachoir dans JEI. La logique réelle est dans le BE (la liste n'est pas connue au datagen). |
+
+Toutes les autres étapes utilisent des types Create existants : `create:crushing`, `create:milling`, `create:mixing`, `create:compacting`, `create:pressing`, `create:filling`, `create:deploying`, `create:sequenced_assembly`.
+
+⚠️ En Create 6, les recettes utilisent des codecs et une classe de paramètres ; vérifier `ProcessingRecipeBuilder` / les `...RecipeGen` de Create dans les sources pour générer nos recettes en datagen proprement.
+
+## FoodIndex — la liste dynamique des aliments
+
+C'est le cœur de THE_FRICADELLE. Doit être **déterministe**, **identique client/serveur** et **bon marché**.
+
+### Définition d'un aliment
+
+```
+aliments = { item ∈ registre ITEM | item.components().has(DataComponents.FOOD) }
+         ∪ tag #create_belgian_snacks:grinder/extra_foods      (ex. minecraft:cake)
+         − tag #create_belgian_snacks:grinder/blacklist        (nos fricadelles, pâtes, items créatifs...)
+         − config grinder.blacklistedMods  (liste de modid)
+         − config grinder.blacklistedItems (liste d'IDs)
+```
+
+- On travaille sur l'**ID d'item** (pas sur les variantes de composants : une seule potion suspecte, etc.).
+- Nos propres items produits par le Hachoir **doivent** être dans la blacklist (sinon boucle).
+- Le tri de la liste finale est alphabétique par `ResourceLocation` pour que l'affichage soit stable.
+
+### Cycle de vie
+
+1. Recalcul au `ServerStartedEvent` et au `TagsUpdatedEvent` (côté serveur, reload `/reload`).
+2. Le serveur envoie au client un payload `FoodIndexSyncPayload` (liste d'IDs) à la connexion et après chaque recalcul. Le client **n'essaie pas** de recalculer seul (évite les divergences config/tags).
+3. Accès : `FoodIndex.get(level)` → vue immuable `List<ResourceLocation>` + `Set` pour le `contains`.
+
+### Commandes de debug (op level 2)
+
+- `/belgiansnacks foods count` → nombre d'aliments.
+- `/belgiansnacks foods export` → écrit `config/create_belgian_snacks/foods_export.csv` (id, modid, nutrition, saturation, source : food/extra). **Sert à décider du taux de THE_Fricadelle et de la blacklist.**
+- `/belgiansnacks grinder fill <pos> [percent]` → remplit un Hachoir (tests).
+
+### Logique pure testable
+
+`FoodIndexRules` prend en entrée des listes simples (IDs, flags food, tags, config) et renvoie la liste finale. Aucune dépendance au registre Minecraft → tests JUnit rapides.
+
+### IDs de recettes stables (KubeJS)
+
+Toutes nos recettes ont un ID lisible et définitif, rangé par type : `create_belgian_snacks:<type>/<résultat>` (ex. `create_belgian_snacks:crushing/beef`, `create_belgian_snacks:frying/fricadelle`). Ne jamais renommer un ID après une release : les scripts KubeJS du pack s'en servent.
+
+## Progression du Hachoir
+
+- Stockée dans le BlockEntity : `Set<ResourceLocation> consumed`, sérialisé en liste de strings.
+- Progression affichée = `|consumed ∩ FoodIndex| / |FoodIndex|` (l'intersection gère le cas où le modpack a perdu un mod).
+- Sync client : seulement `(count, total, mode)` via le mécanisme d'update du BE ; la liste des aliments **manquants** n'est envoyée qu'à la demande (goggles + sneak, ou écran d'inspection) pour éviter des paquets lourds.
+
+## Configuration serveur (`BSConfig`)
+
+| Clé | Défaut provisoire | Rôle |
+|---|---|---|
+| `grinder.theFricadelleRatio` | `0.25` ⚠️ À DÉFINIR | Part des aliments nécessaire pour la Pâte d'exception |
+| `grinder.ultimateRatio` | `1.0` | Part pour la Pâte absolue (laisser à 1.0 sauf besoin serveur) |
+| `grinder.rejectDuplicates` | `true` | Recracher les doublons au lieu de les détruire |
+| `grinder.blacklistedMods` / `blacklistedItems` | `[]` | Exclusions |
+| `grinder.minSpeed` / `stressImpact` | `64 rpm` / `16 SU/rpm` ⚠️ | Coût cinétique |
+| `fryer.oilPerItem` | `10` mB ⚠️ | Consommation |
+| `fryer.tankCapacity` | `4000` mB | |
+| `fryer.speedMultiplier` | `1.0` | |
+
+La config est côté **serveur** et synchronisée ; le client ne l'utilise que pour l'affichage.
+
+## Réseau
+
+| Payload | Sens | Contenu |
+|---|---|---|
+| `FoodIndexSyncPayload` | S→C | liste d'IDs |
+| `GrinderMissingRequestPayload` | C→S | position du BE |
+| `GrinderMissingResponsePayload` | S→C | liste des IDs manquants (paginée si > ~2000) |
+| `FricadelleGagPayload` | S→C | déclenche particules/son côté clients proches (si pas faisable en vanilla) |
+
+## Intégration Create
+
+- Friteuse : `SmartBlockEntity` + `SmartFluidTankBehaviour` (entrée huile via pipes), inventaire items exposé via capabilities NeoForge (`Capabilities.ItemHandler.BLOCK`, `Capabilities.FluidHandler.BLOCK`), lecture de la chaleur du bloc en dessous (Blaze Burner) comme le fait le Basin.
+- Hachoir : `KineticBlockEntity` (consomme du stress), accepte les items par funnel/tapis/entonnoir, sélection du mode via `ScrollOptionBehaviour` (la petite boîte de valeur Create), tooltip Goggles via `IHaveGoggleInformation`.
+- Ponder : une scène par machine (jalon M9).
+
+⚠️ Toutes ces classes Create sont à vérifier dans les sources 6.0.10 avant usage.
