@@ -78,6 +78,15 @@ public final class FryerGameTests {
         helper.succeed();
     }
 
+    @GameTest(template = TEMPLATE)
+    public static void theFryerIsCraftedOnAMechanicalCrafter(GameTestHelper helper) {
+        var recipe = helper.getLevel().getRecipeManager().byKey(BelgianSnacks.asResource("mechanical_crafting/fryer"))
+            .orElseThrow(() -> new AssertionError("mechanical_crafting/fryer is not loaded")).value();
+        helper.assertTrue(recipe.getType() == com.simibubi.create.AllRecipeTypes.MECHANICAL_CRAFTING.getType(), "crafted on a mechanical crafter");
+        helper.assertTrue(recipe.getResultItem(helper.getLevel().registryAccess()).is(BSBlocks.FRYER.asItem()), "makes the fryer");
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aBatchOfSixteenFriesTogether(GameTestHelper helper) {
         FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);

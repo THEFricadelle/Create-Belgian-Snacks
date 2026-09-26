@@ -101,7 +101,8 @@ public final class ClientSmokeTest {
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/fricadelle");
+        "frying/fricadelle",
+        "mechanical_crafting/fryer");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 
@@ -200,6 +201,8 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.spices.shot", 30, () -> screenshot("jei-belgian-spices")));
         STEPS.add(new Step("jei.frying", 10, () -> showOutput(BSItems.FRICADELLE.asStack())));
         STEPS.add(new Step("jei.frying.shot", 30, () -> screenshot("jei-frying")));
+        STEPS.add(new Step("jei.fryerCraft", 10, () -> showOutput(new ItemStack(BSBlocks.FRYER.get()))));
+        STEPS.add(new Step("jei.fryerCraft.shot", 30, () -> screenshot("jei-fryer-craft")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 

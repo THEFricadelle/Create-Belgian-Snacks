@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,13 +49,15 @@ class RecipeFilesTest {
         "mixing/curry_ketchup", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/fricadelle");
+        "frying/fricadelle",
+        "mechanical_crafting/fryer");
 
     // Recipe types this mod registers; every other folder is a Create type.
     private static final Set<String> OWN_TYPES = Set.of("frying");
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
-    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds");
+    // c:plates/copper is filled by Create, a required dependency.
+    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:plates/copper");
 
     @Test
     void recipeIdsAreExactlyTheExpectedOnes() throws IOException {
@@ -94,7 +97,8 @@ class RecipeFilesTest {
             Set<String> loadedGuards = modLoadedGuards(json);
             for (String ref : references(json)) {
                 String namespace = ref.substring(0, ref.indexOf(':'));
-                if (!namespace.equals("minecraft") && !namespace.equals(MOD_ID)) {
+                // Create is a required dependency: its items are always there.
+                if (!namespace.equals("minecraft") && !namespace.equals(MOD_ID) && !namespace.equals("create")) {
                     assertTrue(loadedGuards.contains(namespace), id + " uses " + ref + " without a mod_loaded condition");
                 }
             }
@@ -165,18 +169,13 @@ class RecipeFilesTest {
         return map;
     }
 
-    // Every "item", "id" or "fluid" string in ingredients and results.
+    // Every "item", "id" or "fluid" string in ingredients, results, a crafting key or its result.
     private static Set<String> references(JsonObject recipe) {
         Set<String> refs = new HashSet<>();
-        for (String key : List.of("ingredients", "results")) {
-            if (recipe.has(key)) {
-                for (JsonElement element : recipe.getAsJsonArray(key)) {
-                    JsonObject entry = element.getAsJsonObject();
-                    for (String field : List.of("item", "id", "fluid")) {
-                        if (entry.has(field)) {
-                            refs.add(entry.get(field).getAsString());
-                        }
-                    }
+        for (JsonObject entry : entries(recipe)) {
+            for (String field : List.of("item", "id", "fluid")) {
+                if (entry.has(field)) {
+                    refs.add(entry.get(field).getAsString());
                 }
             }
         }
@@ -185,14 +184,43 @@ class RecipeFilesTest {
 
     private static Set<String> itemTags(JsonObject recipe) {
         Set<String> tags = new HashSet<>();
-        for (JsonElement element : recipe.getAsJsonArray("ingredients")) {
-            JsonObject entry = element.getAsJsonObject();
+        for (JsonObject entry : entries(recipe)) {
             // Sized fluid ingredients also carry a "tag", but with "type": "neoforge:tag" and an amount.
             if (entry.has("tag") && !entry.has("amount")) {
                 tags.add(entry.get("tag").getAsString());
             }
         }
         return tags;
+    }
+
+    // Processing recipes list "ingredients"/"results"; crafting recipes use a "key" map and a "result".
+    private static List<JsonObject> entries(JsonObject recipe) {
+        List<JsonObject> entries = new ArrayList<>();
+        for (String key : List.of("ingredients", "results")) {
+            if (recipe.has(key)) {
+                recipe.getAsJsonArray(key).forEach(e -> entries.add(e.getAsJsonObject()));
+            }
+        }
+        if (recipe.has("key")) {
+            recipe.getAsJsonObject("key").entrySet().forEach(e -> entries.add(e.getValue().getAsJsonObject()));
+        }
+        if (recipe.has("result")) {
+            entries.add(recipe.getAsJsonObject("result"));
+        }
+        return entries;
+    }
+
+    @Test
+    void fryerIsCraftedOnAMechanicalCrafter() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("mechanical_crafting/fryer.json"));
+        assertEquals("create:mechanical_crafting", recipe.get("type").getAsString());
+        assertEquals(MOD_ID + ":fryer", recipe.getAsJsonObject("result").get("id").getAsString());
+        JsonObject key = recipe.getAsJsonObject("key");
+        assertEquals("create:basin", key.getAsJsonObject("B").get("item").getAsString());
+        assertEquals("create:fluid_tank", key.getAsJsonObject("T").get("item").getAsString());
+        assertEquals("create:precision_mechanism", key.getAsJsonObject("P").get("item").getAsString());
+        assertEquals("minecraft:iron_bars", key.getAsJsonObject("I").get("item").getAsString());
+        assertEquals("c:plates/copper", key.getAsJsonObject("C").get("tag").getAsString());
     }
 
     private static Set<String> modLoadedGuards(JsonObject recipe) {
