@@ -1,0 +1,27 @@
+/*
+ * Create: Belgian Snacks - Copyright (C) 2026 THEFricadelle. All rights reserved.
+ * SPDX-License-Identifier: LicenseRef-Create-Belgian-Snacks-ARR
+ *
+ * Proprietary, source-available software. Public visibility of this source
+ * grants no right to copy, reuse, redistribute, or create derivative works.
+ * See LICENSE and CONTRIBUTING.md at the repository root.
+ */
+
+package be.thefricadelle.belgiansnacks.compat.jade;
+
+import be.thefricadelle.belgiansnacks.content.fryer.FryerBlock;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
+
+/**
+ * Found by Jade's annotation scan, so it is only ever loaded when Jade is installed. Jade already
+ * shows the fat tank and the item slots from the capabilities; this adds the fryer's status line.
+ */
+@WailaPlugin
+public class BSJadePlugin implements IWailaPlugin {
+    @Override
+    public void registerClient(IWailaClientRegistration registration) {
+        registration.registerBlockComponent(FryerStatusProvider.INSTANCE, FryerBlock.class);
+    }
+}

@@ -1,8 +1,21 @@
 {
   "block.create_belgian_snacks.curry_ketchup": "Curry ketchup",
+  "block.create_belgian_snacks.fryer": "Friteuse",
   "block.create_belgian_snacks.frying_oil": "Huile de friture",
   "block.create_belgian_snacks.mayonnaise": "Mayonnaise",
   "block.create_belgian_snacks.melted_beef_tallow": "Blanc de bœuf fondu",
+  "config.jade.plugin_create_belgian_snacks.fryer": "Friteuse",
+  "create_belgian_snacks.fryer.heat.heated": "Chauffée",
+  "create_belgian_snacks.fryer.heat.none": "Non chauffée",
+  "create_belgian_snacks.fryer.heat.superheated": "Surchauffée",
+  "create_belgian_snacks.fryer.status.frying": "Friture : %s %%",
+  "create_belgian_snacks.fryer.status.idle": "Au repos",
+  "create_belgian_snacks.fryer.status.no_fat": "Pas assez de graisse",
+  "create_belgian_snacks.fryer.status.no_heat": "Pas assez chaud",
+  "create_belgian_snacks.fryer.status.no_recipe": "Rien à frire",
+  "create_belgian_snacks.fryer.status.output_full": "Sortie pleine",
+  "create_belgian_snacks.recipe.frying": "Friture",
+  "create_belgian_snacks.recipe.frying.fat": "Graisse par item",
   "fluid.create_belgian_snacks.curry_ketchup": "Curry ketchup",
   "fluid.create_belgian_snacks.frying_oil": "Huile de friture",
   "fluid.create_belgian_snacks.mayonnaise": "Mayonnaise",
@@ -30,5 +43,6 @@
   "item.create_belgian_snacks.the_fricadelle.tooltip.summary": "Avec une spéciale, s'il vous plaît.",
   "item.create_belgian_snacks.ultimate_fricadelle": "THE_FRICADELLE",
   "item.create_belgian_snacks.ultimate_fricadelle.tooltip.summary": "Elle contient littéralement tout.",
-  "itemGroup.create_belgian_snacks.main": "Create: Belgian Snacks"
+  "itemGroup.create_belgian_snacks.main": "Create: Belgian Snacks",
+  "subtitles.create_belgian_snacks.fryer.sizzle": "La friteuse grésille"
 }

@@ -1,8 +1,21 @@
 {
   "block.create_belgian_snacks.curry_ketchup": "dnɥɔʇǝʞ ʎɹɹnƆ",
+  "block.create_belgian_snacks.fryer": "ɹǝʎɹℲ",
   "block.create_belgian_snacks.frying_oil": "ןıO buıʎɹℲ",
   "block.create_belgian_snacks.mayonnaise": "ǝsıɐuuoʎɐW",
   "block.create_belgian_snacks.melted_beef_tallow": "ʍoןןɐ⟘ ɟǝǝᗺ pǝʇןǝW",
+  "config.jade.plugin_create_belgian_snacks.fryer": "ɹǝʎɹℲ",
+  "create_belgian_snacks.fryer.heat.heated": "pǝʇɐǝH",
+  "create_belgian_snacks.fryer.heat.none": "pǝʇɐǝɥ ʇoN",
+  "create_belgian_snacks.fryer.heat.superheated": "pǝʇɐǝɥɹǝdnS",
+  "create_belgian_snacks.fryer.status.frying": "%s%% :buıʎɹℲ",
+  "create_belgian_snacks.fryer.status.idle": "ǝןpI",
+  "create_belgian_snacks.fryer.status.no_fat": "ʇɐɟ ɥbnouǝ ʇoN",
+  "create_belgian_snacks.fryer.status.no_heat": "ʇɐǝɥ ǝɹoɯ spǝǝN",
+  "create_belgian_snacks.fryer.status.no_recipe": "ʎɹɟ oʇ buıɥʇoN",
+  "create_belgian_snacks.fryer.status.output_full": "ןןnɟ ʇndʇnO",
+  "create_belgian_snacks.recipe.frying": "buıʎɹℲ",
+  "create_belgian_snacks.recipe.frying.fat": "ɯǝʇı ɹǝd ʇɐℲ",
   "fluid.create_belgian_snacks.curry_ketchup": "dnɥɔʇǝʞ ʎɹɹnƆ",
   "fluid.create_belgian_snacks.frying_oil": "ןıO buıʎɹℲ",
   "fluid.create_belgian_snacks.mayonnaise": "ǝsıɐuuoʎɐW",
@@ -30,5 +43,6 @@
   "item.create_belgian_snacks.the_fricadelle.tooltip.summary": "˙ǝsɐǝןd 'ǝןɐıɔéds ɐ ʇı ǝʞɐW",
   "item.create_belgian_snacks.ultimate_fricadelle": "ƎꞀꞀƎᗡⱯƆIᴚℲ‾ƎH⟘",
   "item.create_belgian_snacks.ultimate_fricadelle.tooltip.summary": "˙buıɥʇʎɹǝʌǝ suıɐʇuoɔ ʎןןɐɹǝʇıן ʇI",
-  "itemGroup.create_belgian_snacks.main": "sʞɔɐuS uɐıbןǝᗺ :ǝʇɐǝɹƆ"
+  "itemGroup.create_belgian_snacks.main": "sʞɔɐuS uɐıbןǝᗺ :ǝʇɐǝɹƆ",
+  "subtitles.create_belgian_snacks.fryer.sizzle": "sǝןzzıs ɹǝʎɹℲ"
 }

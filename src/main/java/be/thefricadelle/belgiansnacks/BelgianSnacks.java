@@ -15,16 +15,25 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 
+import be.thefricadelle.belgiansnacks.config.BSConfig;
+import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
 import be.thefricadelle.belgiansnacks.data.BSDatagen;
+import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
+import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
+import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSLang;
+import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
+import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 
 @Mod(BelgianSnacks.MOD_ID)
 public class BelgianSnacks {
@@ -36,13 +45,21 @@ public class BelgianSnacks {
 
     public BelgianSnacks(IEventBus modEventBus, ModContainer modContainer) {
         REGISTRATE.registerEventListeners(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.SERVER, BSConfig.SPEC, MOD_ID + "-server.toml");
 
         // The default tab must be set before any item entry is created.
         BSCreativeTabs.register(modEventBus);
         BSTags.register();
         BSItems.register();
         BSFluids.register();
+        BSBlocks.register();
+        BSBlockEntities.register();
+        BSDataComponents.register(modEventBus);
+        BSSoundEvents.register(modEventBus);
+        BSRecipeTypes.register(modEventBus);
+        BSLang.register();
 
+        modEventBus.addListener(FryerBlockEntity::registerCapabilities);
         modEventBus.addListener(BSDatagen::gatherData);
     }
 

@@ -13,7 +13,9 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
+import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
+import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -53,6 +55,9 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.MELTED_BEEF_TALLOW, "Blanc de bœuf fondu", "Seau de blanc de bœuf fondu");
         fluid(BSFluids.MAYONNAISE, "Mayonnaise", "Seau de mayonnaise");
         fluid(BSFluids.CURRY_KETCHUP, "Curry ketchup", "Seau de curry ketchup");
+
+        add(BSBlocks.FRYER.get(), "Friteuse");
+        BSLang.ENTRIES.forEach((key, entry) -> add(key, entry.french()));
 
         add(BSItems.tooltipKey("fricadelle"), "Personne ne sait vraiment ce qu'il y a dedans.");
         add(BSItems.tooltipKey("the_fricadelle"), "Avec une spéciale, s'il vous plaît.");

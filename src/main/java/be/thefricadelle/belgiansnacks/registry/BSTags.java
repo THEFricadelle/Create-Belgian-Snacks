@@ -28,6 +28,8 @@ public final class BSTags {
     public static final TagKey<Item> MINCED_CHICKEN = item("minced_meats/chicken");
     public static final TagKey<Item> GRINDER_EXTRA_FOODS = item("grinder/extra_foods");
     public static final TagKey<Item> GRINDER_BLACKLIST = item("grinder/blacklist");
+    // Fried one per batch instead of a whole stack (tier 3).
+    public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
     // Convention tags shared with Create: Food and Farmer's Delight.
     public static final TagKey<Item> C_GROUND_PORK = common("ground_pork");

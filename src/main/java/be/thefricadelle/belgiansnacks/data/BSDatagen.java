@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 import be.thefricadelle.belgiansnacks.data.recipe.BSCompactingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSCrushingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSFryingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSMillingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSMixingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSPressingRecipeGen;
@@ -33,11 +34,13 @@ public final class BSDatagen {
 
         generator.addProvider(event.includeClient(), new BSFrenchLangProvider(output));
         generator.addProvider(event.includeClient(), new BSSpriteSourceProvider(output, registries, event.getExistingFileHelper()));
+        generator.addProvider(event.includeClient(), new BSSoundDefinitionsProvider(output, event.getExistingFileHelper()));
 
         generator.addProvider(event.includeServer(), new BSCrushingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSMillingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSMixingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSCompactingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSPressingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSFryingRecipeGen(output, registries));
     }
 }

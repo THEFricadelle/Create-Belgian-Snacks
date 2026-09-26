@@ -1,0 +1,10 @@
+{
+  "fryer.sizzle": {
+    "sounds": [
+      "liquid/lavapop",
+      "block/campfire/crackle1",
+      "block/campfire/crackle3"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.fryer.sizzle"
+  }
+}

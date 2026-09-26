@@ -54,7 +54,8 @@ public final class BSItems {
     // Tier 3: THE_FRICADELLE
     public static final ItemEntry<Item>
         ABSOLUTE_PASTE = ingredient("absolute_paste", "Absolute Paste").tag(BSTags.GRINDER_BLACKLIST).register(),
-        RAW_ULTIMATE_FRICADELLE = ingredient("raw_ultimate_fricadelle", "Raw THE_FRICADELLE").tag(BSTags.GRINDER_BLACKLIST).register(),
+        RAW_ULTIMATE_FRICADELLE = ingredient("raw_ultimate_fricadelle", "Raw THE_FRICADELLE")
+            .tag(BSTags.GRINDER_BLACKLIST, BSTags.FRYER_ONE_AT_A_TIME).register(),
         ULTIMATE_FRICADELLE = fricadelle("ultimate_fricadelle", "THE_FRICADELLE", BSFoods.ULTIMATE_FRICADELLE)
             .properties(p -> p.rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true))
             .register();

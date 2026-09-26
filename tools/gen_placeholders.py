@@ -7,7 +7,7 @@
 # See LICENSE and CONTRIBUTING.md at the repository root.
 """Generate 16x16 placeholder item textures, standard library only.
 
-Items, fluids (still, flow) and buckets. Existing files are never overwritten unless --force is given, so real textures
+Items, fluids (still, flow), buckets and block faces. Existing files are never overwritten unless --force is given, so real textures
 dropped in place are safe. Usage: python tools/gen_placeholders.py [--force]
 """
 
@@ -21,6 +21,7 @@ SIZE = 16
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ITEM_DIR = ROOT / "src/main/resources/assets/create_belgian_snacks/textures/item"
 FLUID_DIR = ROOT / "src/main/resources/assets/create_belgian_snacks/textures/fluid"
+BLOCK_DIR = ROOT / "src/main/resources/assets/create_belgian_snacks/textures/block"
 
 # id -> (shape, base colour, glyph). Digits mark the tier, letters the ingredient.
 ITEMS = {
@@ -48,6 +49,14 @@ FLUIDS = {
     "melted_beef_tallow": (0xFB, 0xFA, 0xF4),
     "mayonnaise": (0xF3, 0xEB, 0xC4),
     "curry_ketchup": (0xA8, 0x32, 0x1E),
+}
+
+# Block faces: "block/face" -> colour. Stainless steel for the fryer (docs/06).
+BLOCK_FACES = {
+    "fryer/side": (0xB4, 0xB8, 0xBC),
+    "fryer/top": (0xD0, 0xD4, 0xD8),
+    "fryer/bottom": (0x80, 0x84, 0x88),
+    "fryer/inner": (0x60, 0x64, 0x68),
 }
 
 # 3x5 bitmap glyphs, one string per row.
@@ -131,6 +140,17 @@ def render_fluid(colour, frame):
     return px
 
 
+def render_block_face(colour):
+    # Brushed-metal fill with a darker one-pixel border, so block edges read in game.
+    px = [[None] * SIZE for _ in range(SIZE)]
+    for y in range(SIZE):
+        for x in range(SIZE):
+            edge = x in (0, SIZE - 1) or y in (0, SIZE - 1)
+            factor = 0.7 if edge else 0.95 + 0.08 * noise(x // 2, y)
+            px[y][x] = shade(colour, factor) + (255,)
+    return px
+
+
 def render_bucket(colour):
     metal, dark = (0xB8, 0xB8, 0xC0), (0x50, 0x50, 0x58)
     px = [[None] * SIZE for _ in range(SIZE)]
@@ -179,6 +199,8 @@ def main():
         # Two stacked frames, animated by the .mcmeta written next to it.
         outputs[FLUID_DIR / f"{fluid_id}_flow.png"] = lambda c=colour: render_fluid(c, 0) + render_fluid(c, 1)
         outputs[ITEM_DIR / f"{fluid_id}_bucket.png"] = lambda c=colour: render_bucket(c)
+    for face, colour in BLOCK_FACES.items():
+        outputs[BLOCK_DIR / f"{face}.png"] = lambda c=colour: render_block_face(c)
 
     written = skipped = 0
     for path, draw in outputs.items():
