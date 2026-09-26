@@ -45,10 +45,11 @@ Planned for the first release:
 Requires JDK 21.
 
 ```bash
-./gradlew build        # jar in build/libs
-./gradlew runData      # regenerate src/generated/resources
-./gradlew runClient    # development client
-./gradlew runServer    # development dedicated server
+./gradlew build              # jar in build/libs, runs the JUnit tests
+./gradlew runGameTestServer  # in-game tests, headless
+./gradlew runData            # regenerate src/generated/resources
+./gradlew runClient          # development client
+./gradlew runServer          # development dedicated server
 ```
 
 ## License
@@ -112,10 +113,11 @@ Prévu pour la première version :
 Nécessite le JDK 21.
 
 ```bash
-./gradlew build        # jar dans build/libs
-./gradlew runData      # régénère src/generated/resources
-./gradlew runClient    # client de développement
-./gradlew runServer    # serveur dédié de développement
+./gradlew build              # jar dans build/libs, lance les tests JUnit
+./gradlew runGameTestServer  # tests en jeu, sans interface
+./gradlew runData            # régénère src/generated/resources
+./gradlew runClient          # client de développement
+./gradlew runServer          # serveur dédié de développement
 ```
 
 ## Licence

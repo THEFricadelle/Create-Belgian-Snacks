@@ -8,6 +8,24 @@
 | Jeu automatisé | NeoForge GameTest (`runGameTestServer`) | Friteuse (cuit / pause sans huile / pause sans chaleur), Hachoir (accepte nouveau, refuse doublon, produit à l'objectif). |
 | Manuel | checklists ci-dessous | Rendu, sons, Goggles, JEI, Jade, multi. |
 
+## Automatisé : état actuel
+
+Règle : tout ce qui peut être vérifié par la machine l'est. La checklist manuelle ne garde que le rendu, le son et le ressenti.
+
+| Commande | Où | Ce qu'elle garantit |
+|---|---|---|
+| `./gradlew test` (inclus dans `build`) | `src/test/java` | `ResourceConsistencyTest` : clés `en_us` = clés `fr_fr` ; aucune traduction vide ou brute ; noms des 3 fricadelles identiques dans les deux langues ; tooltip des 3 fricadelles dans les deux langues ; chaque modèle d'item a un nom et une texture existante ; chaque texture fait 16×16 et sert à un modèle ; chaque entrée de tag existe, ou est optionnelle si elle vient d'un autre mod ; `neoforge.mods.toml` garde Create requis et les compat optionnelles |
+| `./gradlew runGameTestServer` | `src/gametest/java` (hors du jar) | `ItemGameTests` : IDs d'items exactement ceux attendus (stabilité pour KubeJS) ; seules les fricadelles sont mangeables ; valeurs nutritives = `BSFoods` ; THE_FRICADELLE épique et brillante ; item de transition = `SequencedAssemblyItem` ; manger nourrit le joueur et consomme 1 item ; seule THE_FRICADELLE se mange rassasié ; tout aliment du mod est dans la blacklist du Hachoir ; tags résolus au runtime (`c:foods` compris) ; onglet créatif complet ; nom `en_us` pour chaque item |
+| CI (`.github/workflows/build.yml`) | GitHub Actions | `build` (+ JUnit), `runGameTestServer`, puis `runData` et échec si `src/generated` diffère de ce qui est commité |
+
+Les tests ont été contrôlés par mutation au M1 : texture supprimée → JUnit échoue ; `alwaysEdible()` retiré → GameTest échoue.
+
+Conventions :
+- GameTests : `@GameTestHolder(BelgianSnacks.MOD_ID)`, `@PrefixGameTestTemplate(false)`, structure `empty` (3×3×3 d'air, `src/gametest/resources/data/create_belgian_snacks/structure/empty.nbt`). Un test par contrat, message d'échec qui nomme l'item.
+- JUnit : aucune classe Minecraft chargée. Lecture des fichiers générés avec Gson 2.10.1 (même version que le jeu, `testImplementation` uniquement).
+- Le serveur GameTest ne construit pas les onglets créatifs : un test qui en a besoin appelle `CreativeModeTabs.tryRebuildTabContents` (sans risque, aucun client dans ce processus).
+- Chaque jalon ajoute ses tests : Friteuse et Hachoir (M3, M6) en GameTest avec structures dédiées, `FoodIndexRules` (M5) en JUnit.
+
 ## Environnements de test manuel
 
 1. **Minimal** : NeoForge + Create + JEI + Jade.

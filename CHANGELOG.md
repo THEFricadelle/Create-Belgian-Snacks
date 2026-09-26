@@ -18,6 +18,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Tags** — `minced_meats`, `minced_meats/beef` (also accepts Farmer's Delight minced beef), `grinder/extra_foods` (cake), `grinder/blacklist` (our pastes and fricadelles, enchanted golden apple); fricadelles added to `c:foods/cooked_meat`.
 - **Tooltips** — Create-style summaries on the three fricadelles, in English and French.
 - **Placeholder textures** — `tools/gen_placeholders.py`, a standard-library generator that never overwrites an existing texture without `--force`.
+- **Automated tests** — JUnit checks on generated resources (language parity, textures, tags, dependency metadata) and in-game GameTests on registration, food, tags and the creative tab. CI runs both and fails when generated resources are out of date.
 
 ### Ajouts
 
@@ -31,5 +32,6 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Tags** — `minced_meats`, `minced_meats/beef` (accepte aussi le bœuf haché de Farmer's Delight), `grinder/extra_foods` (gâteau), `grinder/blacklist` (nos pâtes et fricadelles, pomme d'or enchantée) ; fricadelles ajoutées à `c:foods/cooked_meat`.
 - **Infobulles** — Résumés au format Create sur les trois fricadelles, en anglais et en français.
 - **Textures provisoires** — `tools/gen_placeholders.py`, générateur en bibliothèque standard qui n'écrase jamais une texture existante sans `--force`.
+- **Tests automatisés** — Contrôles JUnit des ressources générées (parité des langues, textures, tags, métadonnées de dépendances) et GameTests en jeu sur l'enregistrement, la nourriture, les tags et l'onglet créatif. La CI lance les deux et échoue si les ressources générées ne sont pas à jour.
 
 ---
