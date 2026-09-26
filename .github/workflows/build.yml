@@ -22,4 +22,15 @@ jobs:
       # Also validates gradle-wrapper.jar against the published Gradle checksums.
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
 
+      # Compiles and runs the JUnit suite.
       - run: ./gradlew build --no-daemon
+
+      # Exits non-zero when a required GameTest fails.
+      - run: ./gradlew runGameTestServer --no-daemon
+
+      # Generated resources must match what datagen produces: catches hand edits and forgotten runData.
+      - run: ./gradlew runData --no-daemon
+      - name: Check generated resources are up to date
+        run: |
+          git diff --exit-code -- src/generated
+          test -z "$(git status --porcelain -- src/generated)"
