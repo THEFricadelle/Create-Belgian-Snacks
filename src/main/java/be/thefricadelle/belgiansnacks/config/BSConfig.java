@@ -9,6 +9,9 @@
 
 package be.thefricadelle.belgiansnacks.config;
 
+import java.util.List;
+import java.util.Set;
+
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 /**
@@ -21,6 +24,8 @@ public final class BSConfig {
     private static final ModConfigSpec.IntValue FRYER_TANK_CAPACITY;
     private static final ModConfigSpec.DoubleValue FRYER_SPEED_MULTIPLIER;
     private static final ModConfigSpec.IntValue FRYER_MAX_BATCH;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> GRINDER_BLACKLISTED_MODS;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> GRINDER_BLACKLISTED_ITEMS;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -35,6 +40,15 @@ public final class BSConfig {
             .comment("Items fried together in one batch. Items tagged create_belgian_snacks:fryer/one_at_a_time always fry alone.")
             .defineInRange("maxBatch", 16, 1, 64);
         builder.pop();
+
+        builder.push("grinder");
+        GRINDER_BLACKLISTED_MODS = builder
+            .comment("Mod ids whose foods never count for the Supreme Grinder (their items leave the food index).")
+            .defineListAllowEmpty("blacklistedMods", List.of(), () -> "", o -> o instanceof String);
+        GRINDER_BLACKLISTED_ITEMS = builder
+            .comment("Item ids that never count as foods, on top of the create_belgian_snacks:grinder/blacklist tag.")
+            .defineListAllowEmpty("blacklistedItems", List.of(), () -> "", o -> o instanceof String);
+        builder.pop();
         SPEC = builder.build();
     }
 
@@ -47,6 +61,14 @@ public final class BSConfig {
 
     public static double fryerSpeedMultiplier() {
         return SPEC.isLoaded() ? FRYER_SPEED_MULTIPLIER.get() : FRYER_SPEED_MULTIPLIER.getDefault();
+    }
+
+    public static Set<String> grinderBlacklistedMods() {
+        return Set.copyOf(SPEC.isLoaded() ? GRINDER_BLACKLISTED_MODS.get() : GRINDER_BLACKLISTED_MODS.getDefault());
+    }
+
+    public static Set<String> grinderBlacklistedItems() {
+        return Set.copyOf(SPEC.isLoaded() ? GRINDER_BLACKLISTED_ITEMS.get() : GRINDER_BLACKLISTED_ITEMS.getDefault());
     }
 
     public static int fryerMaxBatch() {

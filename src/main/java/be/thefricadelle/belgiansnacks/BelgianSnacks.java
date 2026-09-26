@@ -15,9 +15,12 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 
+import be.thefricadelle.belgiansnacks.command.BSCommands;
 import be.thefricadelle.belgiansnacks.config.BSConfig;
+import be.thefricadelle.belgiansnacks.content.food.FoodIndexEvents;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
 import be.thefricadelle.belgiansnacks.data.BSDatagen;
+import be.thefricadelle.belgiansnacks.network.BSNetwork;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
@@ -34,6 +37,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(BelgianSnacks.MOD_ID)
 public class BelgianSnacks {
@@ -60,6 +64,9 @@ public class BelgianSnacks {
         BSLang.register();
 
         modEventBus.addListener(FryerBlockEntity::registerCapabilities);
+        modEventBus.addListener(BSNetwork::register);
+        FoodIndexEvents.register(modEventBus);
+        NeoForge.EVENT_BUS.addListener(BSCommands::register);
         modEventBus.addListener(BSDatagen::gatherData);
     }
 
