@@ -100,6 +100,7 @@ issue describing the problem instead. That is just as useful.
 5. **Build and test**:
    ```bash
    ./gradlew build
+   ./gradlew runGameTestServer
    ./gradlew runData
    ./gradlew runServer
    ```
@@ -249,6 +250,7 @@ ouvrez plutôt une issue décrivant le problème. C'est tout aussi utile.
 5. **Compilez et testez** :
    ```bash
    ./gradlew build
+   ./gradlew runGameTestServer
    ./gradlew runData
    ./gradlew runServer
    ```
