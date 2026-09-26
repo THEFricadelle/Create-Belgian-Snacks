@@ -27,3 +27,10 @@
 **Root cause:** Since 1.19.3 the block atlas only scans `textures/block` and `textures/item`. Textures under `textures/fluid` must be declared in `assets/minecraft/atlases/blocks.json`. Server-side GameTests and resource JUnit checks cannot see the atlas.
 **Fix:** `BSSpriteSourceProvider` (datagen) declares each fluid texture as a single-file source, as Create does for its own fluids. JUnit now checks the generated atlas lists every fluid texture.
 **Prevention:** Any texture outside `block/` or `item/` needs an atlas source. Rendering-side facts are covered by the client smoke run, not by the server tests.
+
+## [2026-09-27 01:25] - Two-client smoke: client B stuck on the players check
+**Context:** `testAll` during M5.
+**Error:** Client B never passed `mp.twoPlayers`, waited 5 minutes, then crashed with an NPE on `Minecraft.getConnection()` when the server stopped. No report for B.
+**Root cause:** Race. Client A finished its steps and disconnected about 2 s after B joined, before B reached its players check. The fixed 100-tick delay before A's take assumed both clients joined at the same time. The step suppliers also assumed a live connection.
+**Fix:** Network handshake: B crouches once it has seen the batch, and A takes the output only after it sees that crouch through the server. The runner now fails with `runner.disconnected` and writes its report when the connection drops.
+**Prevention:** Never coordinate two clients with a timer. Use a signal that travels through the server.

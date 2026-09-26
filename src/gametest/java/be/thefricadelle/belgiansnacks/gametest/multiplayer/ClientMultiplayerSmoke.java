@@ -40,8 +40,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 /**
  * Client half of the two-client run (tools/mp_smoke.py). Both clients join the dedicated server and
- * check they see the same frying fryer and each other. Client A then takes the output with a real
- * right click sent over the network; client B checks it sees the output go. Each writes a report.
+ * check they see the same frying fryer and each other. Client B crouches once it has seen the full
+ * output; client A waits for that crouch, synced through the server, then takes the output with a
+ * real right click sent over the network, and client B checks it sees the output go. Each writes a
+ * report.
  * Inert unless {@code -Dcreate_belgian_snacks.mpSmoke=A} or {@code =B}.
  */
 @EventBusSubscriber(modid = BelgianSnacks.MOD_ID, value = Dist.CLIENT)
@@ -50,13 +52,14 @@ public final class ClientMultiplayerSmoke {
     private static final String ROLE = System.getProperty("create_belgian_snacks.mpSmoke", "");
     private static final boolean ENABLED = ROLE.equals("A") || ROLE.equals("B");
     private static final int TIMEOUT_TICKS = 20 * 60 * 5;
-    // Client A waits this long with both players online before taking, so B has seen the full output.
-    private static final int TAKE_DELAY_TICKS = 100;
+    // Settle time between B's crouch reaching A and A's right click.
+    private static final int TAKE_DELAY_TICKS = 10;
 
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
     private static boolean planned;
     private static boolean finished;
+    private static boolean joined;
     private static int ticks;
     private static int wait;
     private static int failures;
@@ -81,6 +84,13 @@ public final class ClientMultiplayerSmoke {
         if (ticks > TIMEOUT_TICKS) {
             Step stuck = STEPS.peek();
             fail("runner.timeout", "stuck waiting on " + (stuck == null ? "nothing" : stuck.name()));
+            finish();
+            return;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        if (joined && (mc.getConnection() == null || mc.level == null || mc.player == null)) {
+            Step stuck = STEPS.peek();
+            fail("runner.disconnected", "connection lost while waiting on " + (stuck == null ? "nothing" : stuck.name()));
             finish();
             return;
         }
@@ -111,7 +121,10 @@ public final class ClientMultiplayerSmoke {
     private static void plan() {
         Minecraft mc = Minecraft.getInstance();
         step("joined", 0, () -> mc.player != null && mc.level != null && mc.screen == null && mc.getConnection() != null,
-            () -> pass("mp.joined", "connected as " + mc.player.getName().getString()));
+            () -> {
+                joined = true;
+                pass("mp.joined", "connected as " + mc.player.getName().getString());
+            });
         step("fryer.found", 20, () -> findFryer() != null, () -> {
             fryerPos = findFryer();
             pass("mp.fryerSynced", "fryer block entity at " + fryerPos.toShortString());
@@ -133,6 +146,8 @@ public final class ClientMultiplayerSmoke {
         });
         step("shot", 10, () -> true, () -> screenshot("mp-" + ROLE.toLowerCase() + "-fryer"));
         if (ROLE.equals("A")) {
+            step("other.ready", 0, () -> otherPlayerCrouching(),
+                () -> pass("mp.handshake", "the other client's crouch arrived through the server"));
             step("take", TAKE_DELAY_TICKS, () -> true, () -> {
                 require(mc.player.getMainHandItem().isEmpty(), "client A does not have an empty hand");
                 BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(fryerPos), Direction.UP, fryerPos, false);
@@ -141,6 +156,8 @@ public final class ClientMultiplayerSmoke {
             step("take.received", 0, () -> mc.player.getInventory().countItem(BSItems.FRICADELLE.get()) >= 16,
                 () -> pass("mp.takeByHand", "right click over the network moved 16 fricadelles into the inventory"));
         } else {
+            // Tells A it may take the output: B has seen the batch and client A.
+            step("signal", 0, () -> true, () -> mc.options.keyShift.setDown(true));
             step("take.seen", 0, () -> fried() == 0,
                 () -> pass("mp.takeSeenByOther", "the output emptied by the other player is empty here too"));
         }
@@ -152,6 +169,11 @@ public final class ClientMultiplayerSmoke {
     }
 
     // ------------------------------------------------------------------ helpers
+
+    private static boolean otherPlayerCrouching() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level.players().stream().anyMatch(player -> player != mc.player && player.isShiftKeyDown());
+    }
 
     private static BlockPos findFryer() {
         Minecraft mc = Minecraft.getInstance();
