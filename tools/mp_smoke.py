@@ -114,6 +114,18 @@ def main():
         for line in lines:
             print("  ", line)
         ok &= bool(lines) and lines[-1].startswith("RESULT PASS")
+    # Every side must hold the very same food index: compare what each report says.
+    fingerprints = {}
+    for name, path in reports.items():
+        if path.is_file():
+            for line in path.read_text(encoding="utf-8").splitlines():
+                if "foodIndex - " in line:
+                    fingerprints[name] = line.split("foodIndex - ", 1)[1]
+    if len(set(fingerprints.values())) != 1 or len(fingerprints) != len(reports):
+        print("== food index differs between sides:", fingerprints)
+        ok = False
+    else:
+        print("== food index identical on every side:", next(iter(fingerprints.values())))
     print("Screenshots:", ", ".join(str(p / "screenshots") for p in CLIENT_DIRS.values()))
     print("MULTIPLAYER SMOKE", "PASS" if ok else "FAIL")
     return 0 if ok else 1

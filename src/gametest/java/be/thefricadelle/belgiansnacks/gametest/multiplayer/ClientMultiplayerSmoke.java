@@ -117,6 +117,11 @@ public final class ClientMultiplayerSmoke {
             pass("mp.fryerSynced", "fryer block entity at " + fryerPos.toShortString());
         });
         step("face.fryer", 10, () -> true, () -> lookAt(fryerPos));
+        step("foodIndex", 0, () -> be.thefricadelle.belgiansnacks.content.food.FoodIndex.client().size() > 0, () -> {
+            var index = be.thefricadelle.belgiansnacks.content.food.FoodIndex.client();
+            // tools/mp_smoke.py compares this fingerprint with the server's report.
+            pass("mp.foodIndex", index.size() + " foods, fingerprint " + index.fingerprint());
+        });
         step("players", 10, () -> mc.getConnection().getOnlinePlayers().size() >= 2 && mc.level.players().size() >= 2,
             () -> pass("mp.twoPlayers", mc.level.players().size() + " players in view, "
                 + mc.getConnection().getOnlinePlayers().size() + " in the tab list"));

@@ -87,6 +87,8 @@ public final class ServerMultiplayerSmoke {
         fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
         LOGGER.info("[mpsmoke] fryer placed at {}", fryerPos);
         REPORT.add("PASS server.setup - fryer at " + fryerPos.toShortString());
+        var index = be.thefricadelle.belgiansnacks.content.food.FoodIndex.server();
+        REPORT.add("PASS server.foodIndex - " + index.size() + " foods, fingerprint " + index.fingerprint());
     }
 
     @SubscribeEvent

@@ -257,6 +257,13 @@ public final class ClientSmokeTest {
             }
             return "3 fricadelles show the Create summary hint";
         });
+        check("foodIndex.synced", () -> {
+            var server = be.thefricadelle.belgiansnacks.content.food.FoodIndex.server();
+            var client = be.thefricadelle.belgiansnacks.content.food.FoodIndex.client();
+            require(client.size() > 0, "the client never received the food index");
+            require(client.ids().equals(server.ids()), "client holds " + client.size() + " foods, the server " + server.size());
+            return client.size() + " foods received, identical to the server's";
+        });
         check("lang.french", () -> {
             ClientLanguage fr = ClientLanguage.loadFrom(mc.getResourceManager(), List.of("en_us", "fr_fr"), false);
             ClientLanguage en = ClientLanguage.loadFrom(mc.getResourceManager(), List.of("en_us"), false);
