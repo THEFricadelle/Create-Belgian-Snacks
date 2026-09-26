@@ -1,0 +1,23 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/pork"
+    },
+    {
+      "tag": "create_belgian_snacks:minced_meats/beef"
+    },
+    {
+      "tag": "create_belgian_snacks:minced_meats/chicken"
+    },
+    {
+      "tag": "c:bread_crumbs"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:fricadelle_paste"
+    }
+  ]
+}

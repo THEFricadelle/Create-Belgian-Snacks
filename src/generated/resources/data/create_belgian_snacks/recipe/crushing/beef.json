@@ -1,0 +1,19 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "minecraft:beef"
+    }
+  ],
+  "processing_time": 150,
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:minced_beef"
+    },
+    {
+      "chance": 0.5,
+      "id": "create_belgian_snacks:beef_tallow"
+    }
+  ]
+}

@@ -1,7 +1,11 @@
 {
   "values": [
     {
-      "id": "farmersdelight:minced_beef",
+      "id": "#c:ground_beef",
+      "required": false
+    },
+    {
+      "id": "#c:minced_beef",
       "required": false
     },
     "create_belgian_snacks:minced_beef"

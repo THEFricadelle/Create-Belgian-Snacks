@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "#c:ground_chicken",
+      "required": false
+    },
+    "create_belgian_snacks:minced_chicken"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:beef_tallow"
+    },
+    {
+      "item": "create_belgian_snacks:beef_tallow"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_belgian_snacks:melted_beef_tallow"
+    }
+  ]
+}

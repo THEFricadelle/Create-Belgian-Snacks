@@ -9,6 +9,16 @@
 
 package be.thefricadelle.belgiansnacks.data;
 
+import java.util.concurrent.CompletableFuture;
+
+import be.thefricadelle.belgiansnacks.data.recipe.BSCompactingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSCrushingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSMillingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSMixingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSPressingRecipeGen;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public final class BSDatagen {
@@ -17,7 +27,16 @@ public final class BSDatagen {
 
     // Registrate owns en_us; fr_fr has its own provider since Registrate only generates one locale.
     public static void gatherData(GatherDataEvent event) {
-        event.getGenerator().addProvider(event.includeClient(),
-            new BSFrenchLangProvider(event.getGenerator().getPackOutput()));
+        DataGenerator generator = event.getGenerator();
+        PackOutput output = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> registries = event.getLookupProvider();
+
+        generator.addProvider(event.includeClient(), new BSFrenchLangProvider(output));
+
+        generator.addProvider(event.includeServer(), new BSCrushingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSMillingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSMixingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSCompactingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSPressingRecipeGen(output, registries));
     }
 }

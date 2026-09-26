@@ -25,11 +25,15 @@ import net.neoforged.neoforge.common.Tags;
 public final class BSItems {
     // Tier 1: Fricadelle
     public static final ItemEntry<Item>
-        MINCED_PORK = ingredient("minced_pork", "Minced Pork").tag(BSTags.MINCED_MEATS).register(),
-        MINCED_BEEF = ingredient("minced_beef", "Minced Beef").tag(BSTags.MINCED_MEATS, BSTags.MINCED_BEEF).register(),
-        MINCED_CHICKEN = ingredient("minced_chicken", "Minced Chicken").tag(BSTags.MINCED_MEATS).register(),
+        // Also in the convention tags so other mods' recipes accept ours.
+        MINCED_PORK = ingredient("minced_pork", "Minced Pork")
+            .tag(BSTags.MINCED_MEATS, BSTags.MINCED_PORK, BSTags.C_GROUND_PORK).register(),
+        MINCED_BEEF = ingredient("minced_beef", "Minced Beef")
+            .tag(BSTags.MINCED_MEATS, BSTags.MINCED_BEEF, BSTags.C_GROUND_BEEF, BSTags.C_MINCED_BEEF).register(),
+        MINCED_CHICKEN = ingredient("minced_chicken", "Minced Chicken")
+            .tag(BSTags.MINCED_MEATS, BSTags.MINCED_CHICKEN, BSTags.C_GROUND_CHICKEN).register(),
         BEEF_TALLOW = ingredient("beef_tallow", "Beef Tallow").register(),
-        BREAD_CRUMBS = ingredient("bread_crumbs", "Bread Crumbs").register(),
+        BREAD_CRUMBS = ingredient("bread_crumbs", "Bread Crumbs").tag(BSTags.C_BREAD_CRUMBS).register(),
         FRICADELLE_PASTE = ingredient("fricadelle_paste", "Fricadelle Paste").tag(BSTags.GRINDER_BLACKLIST).register(),
         RAW_FRICADELLE = ingredient("raw_fricadelle", "Raw Fricadelle").tag(BSTags.GRINDER_BLACKLIST).register(),
         FRICADELLE = fricadelle("fricadelle", "Fricadelle", BSFoods.FRICADELLE).register();

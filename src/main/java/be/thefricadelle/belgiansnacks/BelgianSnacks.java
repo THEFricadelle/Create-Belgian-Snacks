@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.item.ItemDescription;
 
 import be.thefricadelle.belgiansnacks.data.BSDatagen;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
+import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.createmod.catnip.lang.FontHelper;
@@ -40,6 +41,7 @@ public class BelgianSnacks {
         BSCreativeTabs.register(modEventBus);
         BSTags.register();
         BSItems.register();
+        BSFluids.register();
 
         modEventBus.addListener(BSDatagen::gatherData);
     }

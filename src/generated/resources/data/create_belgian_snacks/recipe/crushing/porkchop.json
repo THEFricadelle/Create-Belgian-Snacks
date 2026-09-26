@@ -1,0 +1,15 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "minecraft:porkchop"
+    }
+  ],
+  "processing_time": 150,
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:minced_pork"
+    }
+  ]
+}
