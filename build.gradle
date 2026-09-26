@@ -94,6 +94,29 @@ neoForge {
             systemProperty 'create_belgian_snacks.clientSmoke', 'true'
         }
 
+        // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
+        serverSmoke {
+            server()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/server')
+            programArgument '--nogui'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'server'
+        }
+        clientSmokeA {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/client-a')
+            programArguments.addAll '--username', 'SmokeA', '--quickPlayMultiplayer', 'localhost:25599'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'A'
+        }
+        clientSmokeB {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/client-b')
+            programArguments.addAll '--username', 'SmokeB', '--quickPlayMultiplayer', 'localhost:25599'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'B'
+        }
+
         data {
             data()
             gameDirectory = project.file('run/data')
@@ -231,11 +254,20 @@ tasks.configureEach { Task task ->
     }
 }
 
-// Everything automated, in order: unit tests, GameTests without then with compat mods, live client.
+// Dedicated server + two clients, launched side by side by the script (a Gradle build runs its
+// tasks one after another, so the three runs are separate Gradle invocations). Exits non-zero on FAIL.
+tasks.register('runMultiplayerSmoke', Exec) {
+    group = 'verification'
+    description = 'Two real clients on a real dedicated server (opens two windows).'
+    commandLine 'python', 'tools/mp_smoke.py'
+}
+
+// Everything automated, in order: unit tests, GameTests without then with compat mods, live client,
+// then two clients on a dedicated server.
 tasks.register('testAll') {
     group = 'verification'
-    description = 'Unit tests, GameTests (plain and with compat mods) and the client smoke run.'
-    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke'
+    description = 'Unit tests, GameTests (plain and with compat mods), the client smoke run and the two-client run.'
+    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke', 'runMultiplayerSmoke'
 }
 tasks.configureEach { Task task ->
     if (task.name == 'runGameTestServer') {
@@ -244,6 +276,8 @@ tasks.configureEach { Task task ->
         task.mustRunAfter 'runGameTestServer'
     } else if (task.name == 'runClientSmoke') {
         task.mustRunAfter 'runGameTestServerCompat'
+    } else if (task.name == 'runMultiplayerSmoke') {
+        task.mustRunAfter 'runClientSmoke'
     }
 }
 

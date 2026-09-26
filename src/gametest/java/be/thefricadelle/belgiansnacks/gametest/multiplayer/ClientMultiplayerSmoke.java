@@ -1,0 +1,229 @@
+/*
+ * Create: Belgian Snacks - Copyright (C) 2026 THEFricadelle. All rights reserved.
+ * SPDX-License-Identifier: LicenseRef-Create-Belgian-Snacks-ARR
+ *
+ * Proprietary, source-available software. Public visibility of this source
+ * grants no right to copy, reuse, redistribute, or create derivative works.
+ * See LICENSE and CONTRIBUTING.md at the repository root.
+ */
+
+package be.thefricadelle.belgiansnacks.gametest.multiplayer;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
+
+import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.registry.BSItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Screenshot;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+
+/**
+ * Client half of the two-client run (tools/mp_smoke.py). Both clients join the dedicated server and
+ * check they see the same frying fryer and each other. Client A then takes the output with a real
+ * right click sent over the network; client B checks it sees the output go. Each writes a report.
+ * Inert unless {@code -Dcreate_belgian_snacks.mpSmoke=A} or {@code =B}.
+ */
+@EventBusSubscriber(modid = BelgianSnacks.MOD_ID, value = Dist.CLIENT)
+public final class ClientMultiplayerSmoke {
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final String ROLE = System.getProperty("create_belgian_snacks.mpSmoke", "");
+    private static final boolean ENABLED = ROLE.equals("A") || ROLE.equals("B");
+    private static final int TIMEOUT_TICKS = 20 * 60 * 5;
+    // Client A waits this long with both players online before taking, so B has seen the full output.
+    private static final int TAKE_DELAY_TICKS = 100;
+
+    private static final List<String> REPORT = new ArrayList<>();
+    private static final Deque<Step> STEPS = new ArrayDeque<>();
+    private static boolean planned;
+    private static boolean finished;
+    private static int ticks;
+    private static int wait;
+    private static int failures;
+    private static BlockPos fryerPos;
+
+    private ClientMultiplayerSmoke() {
+    }
+
+    private record Step(String name, int delayTicks, BooleanSupplier ready, Runnable action) {
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        if (!ENABLED || finished) {
+            return;
+        }
+        if (!planned) {
+            plan();
+            planned = true;
+        }
+        ticks++;
+        if (ticks > TIMEOUT_TICKS) {
+            Step stuck = STEPS.peek();
+            fail("runner.timeout", "stuck waiting on " + (stuck == null ? "nothing" : stuck.name()));
+            finish();
+            return;
+        }
+        if (wait > 0) {
+            wait--;
+            return;
+        }
+        Step step = STEPS.peek();
+        if (step == null) {
+            finish();
+            return;
+        }
+        if (!step.ready().getAsBoolean()) {
+            return;
+        }
+        STEPS.poll();
+        LOGGER.info("[mpsmoke {}] {}", ROLE, step.name());
+        try {
+            step.action().run();
+        } catch (Throwable t) {
+            LOGGER.error("[mpsmoke {}] step {} threw", ROLE, step.name(), t);
+            fail(step.name(), "threw " + t);
+        }
+        Step next = STEPS.peek();
+        wait = next == null ? 0 : next.delayTicks();
+    }
+
+    private static void plan() {
+        Minecraft mc = Minecraft.getInstance();
+        step("joined", 0, () -> mc.player != null && mc.level != null && mc.screen == null && mc.getConnection() != null,
+            () -> pass("mp.joined", "connected as " + mc.player.getName().getString()));
+        step("fryer.found", 20, () -> findFryer() != null, () -> {
+            fryerPos = findFryer();
+            pass("mp.fryerSynced", "fryer block entity at " + fryerPos.toShortString());
+        });
+        step("face.fryer", 10, () -> true, () -> lookAt(fryerPos));
+        step("players", 10, () -> mc.getConnection().getOnlinePlayers().size() >= 2 && mc.level.players().size() >= 2,
+            () -> pass("mp.twoPlayers", mc.level.players().size() + " players in view, "
+                + mc.getConnection().getOnlinePlayers().size() + " in the tab list"));
+        step("batch.synced", 0, () -> fried() == 16, () -> {
+            FryerBlockEntity fryer = fryer();
+            require(fryer.getTank().getPrimaryHandler().getFluidAmount() == 2000 - 160,
+                "client sees " + fryer.getTank().getPrimaryHandler().getFluidAmount() + " mB, expected 1840");
+            pass("mp.batchSynced", "16 fricadelles and 1840 mB seen after the server fried the batch");
+        });
+        step("shot", 10, () -> true, () -> screenshot("mp-" + ROLE.toLowerCase() + "-fryer"));
+        if (ROLE.equals("A")) {
+            step("take", TAKE_DELAY_TICKS, () -> true, () -> {
+                require(mc.player.getMainHandItem().isEmpty(), "client A does not have an empty hand");
+                BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(fryerPos), Direction.UP, fryerPos, false);
+                mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND, hit);
+            });
+            step("take.received", 0, () -> mc.player.getInventory().countItem(BSItems.FRICADELLE.get()) >= 16,
+                () -> pass("mp.takeByHand", "right click over the network moved 16 fricadelles into the inventory"));
+        } else {
+            step("take.seen", 0, () -> fried() == 0,
+                () -> pass("mp.takeSeenByOther", "the output emptied by the other player is empty here too"));
+        }
+        step("seen.empty", 0, () -> fried() == 0, () -> pass("mp.outputSynced", "output empty on this client"));
+    }
+
+    private static void step(String name, int delay, BooleanSupplier ready, Runnable action) {
+        STEPS.add(new Step(name, delay, ready, action));
+    }
+
+    // ------------------------------------------------------------------ helpers
+
+    private static BlockPos findFryer() {
+        Minecraft mc = Minecraft.getInstance();
+        BlockPos origin = mc.player.blockPosition();
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-6, -3, -6), origin.offset(6, 3, 6))) {
+            if (mc.level.getBlockEntity(pos) instanceof FryerBlockEntity) {
+                return pos.immutable();
+            }
+        }
+        return null;
+    }
+
+    private static FryerBlockEntity fryer() {
+        return (FryerBlockEntity) Minecraft.getInstance().level.getBlockEntity(fryerPos);
+    }
+
+    private static int fried() {
+        FryerBlockEntity fryer = fryer();
+        if (fryer == null) {
+            return -1;
+        }
+        int total = 0;
+        for (int slot = 0; slot < fryer.getOutput().getSlots(); slot++) {
+            if (fryer.getOutput().getStackInSlot(slot).is(BSItems.FRICADELLE.get())) {
+                total += fryer.getOutput().getStackInSlot(slot).getCount();
+            }
+        }
+        return total;
+    }
+
+    private static void lookAt(BlockPos pos) {
+        var player = Minecraft.getInstance().player;
+        Vec3 eye = player.getEyePosition();
+        Vec3 target = Vec3.atCenterOf(pos);
+        double dx = target.x - eye.x;
+        double dy = target.y - eye.y;
+        double dz = target.z - eye.z;
+        player.setYRot((float) (Math.toDegrees(Math.atan2(dz, dx)) - 90));
+        player.setXRot((float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))));
+    }
+
+    private static void screenshot(String name) {
+        Minecraft mc = Minecraft.getInstance();
+        Screenshot.grab(mc.gameDirectory, "smoke-" + name + ".png", mc.getMainRenderTarget(),
+            message -> LOGGER.info("[mpsmoke {}] screenshot {}: {}", ROLE, name, message.getString()));
+    }
+
+    private static void require(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError(message);
+        }
+    }
+
+    private static void pass(String name, String detail) {
+        REPORT.add("PASS " + name + " - " + detail);
+        LOGGER.info("[mpsmoke {}] PASS {} - {}", ROLE, name, detail);
+    }
+
+    private static void fail(String name, String detail) {
+        failures++;
+        REPORT.add("FAIL " + name + " - " + detail);
+        LOGGER.error("[mpsmoke {}] FAIL {} - {}", ROLE, name, detail);
+    }
+
+    private static void finish() {
+        finished = true;
+        List<String> lines = new ArrayList<>(REPORT);
+        lines.add(failures == 0 ? "RESULT PASS " + REPORT.size() + " checks" : "RESULT FAIL " + failures + " of " + REPORT.size() + " checks failed");
+        try {
+            Files.write(FMLPaths.GAMEDIR.get().resolve("smoke-mp-report.txt"), lines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            LOGGER.error("[mpsmoke {}] could not write the report", ROLE, e);
+        }
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != null) {
+            mc.level.disconnect();
+        }
+        mc.stop();
+    }
+}
