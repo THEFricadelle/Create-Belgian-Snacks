@@ -54,3 +54,7 @@ publishing/*.local.*
 
 # Datagen cache
 src/generated/resources/.cache/
+
+# Python bytecode
+__pycache__/
+*.pyc
