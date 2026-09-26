@@ -23,7 +23,10 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -33,6 +36,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -43,32 +47,39 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 /**
  * Recipe contracts, checked against Create's own machines: recipes are looked up in the live
- * RecipeManager and basin recipes are matched against a real basin. The dev runtime has neither
- * Farmer's Delight nor the seed-oil mods, which fixes which conditional twins must be loaded.
- * Run with {@code ./gradlew runGameTestServer}.
+ * RecipeManager and basin recipes are matched against a real basin.
+ * <p>
+ * Runs twice: {@code runGameTestServer} without compat mods, {@code runGameTestServerCompat} with
+ * Farmer's Delight. Neither has a seed-oil mod. The expectations follow {@link #farmersDelight()}.
  */
 @GameTestHolder(BelgianSnacks.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class RecipeGameTests {
     private static final String TEMPLATE = "empty";
 
-    // Loaded in the dev runtime. mixing/curry_ketchup is deliberately absent: no tomato without Farmer's Delight.
-    private static final Set<String> LOADED_IN_DEV = Set.of(
+    // Loaded whatever the compat mods; the curry ketchup twins depend on Farmer's Delight.
+    private static final Set<String> ALWAYS_LOADED = Set.of(
         "crushing/porkchop", "crushing/beef", "crushing/chicken", "crushing/bread",
         "milling/dried_kelp",
-        "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise", "mixing/curry_ketchup_from_beetroot",
+        "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste");
+    private static final String TOMATO_KETCHUP = "mixing/curry_ketchup";
+    private static final String BEETROOT_KETCHUP = "mixing/curry_ketchup_from_beetroot";
 
     private RecipeGameTests() {
     }
 
     @GameTest(template = TEMPLATE)
     public static void conditionalRecipesFollowTheLoadedMods(GameTestHelper helper) {
-        for (String id : LOADED_IN_DEV) {
+        for (String id : ALWAYS_LOADED) {
             helper.assertTrue(find(helper, id) != null, id + " should be loaded");
         }
-        helper.assertTrue(find(helper, "mixing/curry_ketchup") == null, "tomato recipe must stay off while c:crops/tomato is empty");
+        boolean tomatoes = farmersDelight();
+        helper.assertTrue((find(helper, TOMATO_KETCHUP) != null) == tomatoes,
+            TOMATO_KETCHUP + (tomatoes ? " should be loaded with tomatoes" : " must stay off while c:crops/tomato is empty"));
+        helper.assertTrue((find(helper, BEETROOT_KETCHUP) != null) != tomatoes,
+            BEETROOT_KETCHUP + (tomatoes ? " must stay off when tomatoes exist" : " should be loaded as the fallback"));
         helper.succeed();
     }
 
@@ -123,9 +134,10 @@ public final class RecipeGameTests {
     @GameTest(template = TEMPLATE)
     public static void heatedRecipesNeedALitBlazeBurner(GameTestHelper helper) {
         List<ItemStack> tallow = List.of(BSItems.BEEF_TALLOW.asStack(2));
-        List<ItemStack> ketchup = List.of(new ItemStack(Items.BEETROOT), new ItemStack(Items.SUGAR), BSItems.BELGIAN_SPICES.asStack());
+        ItemStack base = farmersDelight() ? new ItemStack(item("farmersdelight", "tomato")) : new ItemStack(Items.BEETROOT);
+        List<ItemStack> ketchup = List.of(base, new ItemStack(Items.SUGAR), BSItems.BELGIAN_SPICES.asStack());
         Recipe<?> melting = recipe(helper, "mixing/melted_beef_tallow");
-        Recipe<?> curry = recipe(helper, "mixing/curry_ketchup_from_beetroot");
+        Recipe<?> curry = recipe(helper, farmersDelight() ? TOMATO_KETCHUP : BEETROOT_KETCHUP);
         helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, tallow, null), melting), "tallow must not melt cold");
         helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), true, tallow, null), melting), "tallow melts over a lit burner");
         helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 2), false, ketchup, null), curry), "curry ketchup must not cook cold");
@@ -140,6 +152,22 @@ public final class RecipeGameTests {
             "8 seeds compact into frying oil");
         helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), false, List.of(new ItemStack(Items.WHEAT_SEEDS, 7)), null), seeds),
             "7 seeds are not enough");
+        helper.succeed();
+    }
+
+    // Only meaningful in the compat run; without Farmer's Delight there is nothing to interoperate with.
+    @GameTest(template = TEMPLATE)
+    public static void farmersDelightMinceWorksInOurPaste(GameTestHelper helper) {
+        if (!farmersDelight()) {
+            helper.succeed();
+            return;
+        }
+        ItemStack theirBeef = new ItemStack(item("farmersdelight", "minced_beef"));
+        helper.assertTrue(theirBeef.is(BSTags.MINCED_BEEF), "farmersdelight:minced_beef not in minced_meats/beef");
+        helper.assertTrue(BSItems.MINCED_BEEF.asStack().is(BSTags.C_MINCED_BEEF), "our minced beef not in c:minced_beef");
+        BasinBlockEntity basin = basin(helper, new BlockPos(0, 1, 0), false,
+            List.of(BSItems.MINCED_PORK.asStack(), theirBeef, BSItems.MINCED_CHICKEN.asStack(), BSItems.BREAD_CRUMBS.asStack()), null);
+        helper.assertTrue(BasinRecipe.match(basin, recipe(helper, "mixing/fricadelle_paste")), "paste should accept Farmer's Delight minced beef");
         helper.succeed();
     }
 
@@ -183,6 +211,18 @@ public final class RecipeGameTests {
             helper.assertValueEqual(filled, fluid.getAmount(), "fluid accepted by the basin");
         }
         return helper.getBlockEntity(pos);
+    }
+
+    private static boolean farmersDelight() {
+        return ModList.get().isLoaded("farmersdelight");
+    }
+
+    private static Item item(String namespace, String path) {
+        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        if (item == Items.AIR) {
+            throw new AssertionError(namespace + ":" + path + " is not registered");
+        }
+        return item;
     }
 
     private static Recipe<?> find(GameTestHelper helper, String id) {

@@ -119,7 +119,11 @@ class RecipeFilesTest {
                 .map(n -> n.replace("_still.png", ""))
                 .toList();
             assertTrue(fluids.size() >= 4, "fluid textures found: " + fluids);
+            // The block atlas does not scan textures/fluid: without an explicit entry the fluid renders as missing.
+            String atlas = Files.readString(Path.of("src/generated/resources/assets/minecraft/atlases/blocks.json"), StandardCharsets.UTF_8);
             for (String fluid : fluids) {
+                assertTrue(atlas.contains("\"" + MOD_ID + ":fluid/" + fluid + "_still\""), fluid + " still texture not in the block atlas");
+                assertTrue(atlas.contains("\"" + MOD_ID + ":fluid/" + fluid + "_flow\""), fluid + " flow texture not in the block atlas");
                 assertTrue(Files.isRegularFile(FLUID_TEXTURES.resolve(fluid + "_flow.png")), fluid + " flow texture");
                 assertTrue(Files.isRegularFile(FLUID_TEXTURES.resolve(fluid + "_flow.png.mcmeta")), fluid + " flow animation");
                 assertTrue(Files.isRegularFile(ITEM_MODELS.resolve(fluid + "_bucket.json")), fluid + " bucket model");

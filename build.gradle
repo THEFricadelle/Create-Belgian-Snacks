@@ -23,10 +23,14 @@ sourceSets.main.resources {
 }
 
 // GameTests live in their own source set so they never ship in the release jar.
+// gametestCompat has no sources: it runs the same tests with the compat mods of Arcadia loaded.
 sourceSets {
     gametest {
         compileClasspath += sourceSets.main.output
         runtimeClasspath += sourceSets.main.output
+    }
+    gametestCompat {
+        runtimeClasspath += sourceSets.main.output + sourceSets.gametest.output
     }
 }
 
@@ -34,12 +38,15 @@ configurations {
     gametestImplementation.extendsFrom implementation
     gametestCompileOnly.extendsFrom compileOnly
     gametestRuntimeOnly.extendsFrom runtimeOnly
+    gametestCompatImplementation.extendsFrom gametestImplementation
+    gametestCompatRuntimeOnly.extendsFrom gametestRuntimeOnly
 }
 
 neoForge {
     version = project.neo_version
 
     addModdingDependenciesTo sourceSets.gametest
+    addModdingDependenciesTo sourceSets.gametestCompat
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
@@ -69,6 +76,22 @@ neoForge {
             type = 'gameTestServer'
             sourceSet = sourceSets.gametest
             gameDirectory = project.file('run/gametest')
+        }
+
+        // Same GameTests with Farmer's Delight loaded, the Arcadia configuration of the recipes.
+        gameTestServerCompat {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.gametestCompat
+            gameDirectory = project.file('run/gametest-compat')
+        }
+
+        // A real client driven by ClientSmokeTest: creates a world, checks models, lang, the creative
+        // tab and JEI, takes screenshots and quits. Needs a desktop session, it opens a window.
+        clientSmoke {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/clientsmoke')
+            systemProperty 'create_belgian_snacks.clientSmoke', 'true'
         }
 
         data {
@@ -121,6 +144,7 @@ repositories {
 configurations {
     runtimeClasspath.extendsFrom localRuntime
     gametestRuntimeClasspath.extendsFrom localRuntime
+    gametestCompatRuntimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
@@ -137,6 +161,10 @@ dependencies {
     localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     localRuntime("maven.modrinth:jade:${jade_version}+neoforge")
 
+    // Compat GameTests only, never on the main classpath. Same file as the one in Arcadia 2.0.32
+    // (sha1 27675ddf... matches Modrinth and the pack jar).
+    gametestCompatRuntimeOnly("maven.modrinth:farmers-delight:${farmers_delight_version}")
+
     // Same Gson the game ships; only used by the tests to read generated JSON.
     testImplementation('com.google.code.gson:gson:2.10.1')
     testImplementation(platform('org.junit:junit-bom:5.14.4'))
@@ -146,6 +174,76 @@ dependencies {
 
 tasks.named('test', Test).configure {
     useJUnitPlatform()
+}
+
+// ---------------------------------------------------------------------------
+// Client smoke run. A client exits 0 even when the checks failed, so the verdict comes from the
+// report it writes, never from the exit code. Only File objects are captured (configuration cache).
+// ---------------------------------------------------------------------------
+
+def clientSmokeDir = file('run/clientsmoke')
+
+tasks.register('verifyClientSmoke') {
+    group = 'verification'
+    description = 'Fails unless the client smoke run reported every check as passed.'
+    doLast {
+        File log = new File(clientSmokeDir, 'logs/latest.log')
+        if (!log.isFile()) {
+            throw new GradleException("No ${log}: the client did not start")
+        }
+        List<String> fatal = ['failed to load correctly', 'ModLoadingException', 'Missing textures in model', 'Unable to load model']
+        String text = log.getText('UTF-8')
+        List<String> found = fatal.findAll { text.contains(it) }
+        if (!found.isEmpty()) {
+            throw new GradleException("${log} contains ${found}")
+        }
+        File report = new File(clientSmokeDir, 'smoke-report.txt')
+        if (!report.isFile()) {
+            throw new GradleException("No ${report}: the client never finished the smoke run")
+        }
+        List<String> lines = report.readLines('UTF-8')
+        lines.each { logger.lifecycle(it) }
+        if (lines.isEmpty() || !lines.last().startsWith('RESULT PASS')) {
+            throw new GradleException("Client smoke run failed, see ${report}")
+        }
+        logger.lifecycle("Screenshots for review: ${new File(clientSmokeDir, 'screenshots')}")
+    }
+}
+
+tasks.configureEach { Task task ->
+    if (task.name == 'runClientSmoke') {
+        task.doFirst {
+            // Fresh world and no report or screenshot from a previous run.
+            new File(clientSmokeDir, 'saves').deleteDir()
+            new File(clientSmokeDir, 'screenshots').deleteDir()
+            new File(clientSmokeDir, 'smoke-report.txt').delete()
+            new File(clientSmokeDir, 'logs/latest.log').delete()
+            clientSmokeDir.mkdirs()
+            // Without these a first launch stops on the accessibility screen, and losing focus
+            // opens the pause menu over every screen under test.
+            new File(clientSmokeDir, 'options.txt').setText([
+                    'onboardAccessibility:false', 'pauseOnLostFocus:false', 'tutorialStep:none',
+                    'joinedFirstServer:true', 'skipMultiplayerWarning:true', 'soundCategory_master:0.0',
+                    'lang:en_us', 'guiScale:2'].join('\n'), 'UTF-8')
+        }
+        task.finalizedBy 'verifyClientSmoke'
+    }
+}
+
+// Everything automated, in order: unit tests, GameTests without then with compat mods, live client.
+tasks.register('testAll') {
+    group = 'verification'
+    description = 'Unit tests, GameTests (plain and with compat mods) and the client smoke run.'
+    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke'
+}
+tasks.configureEach { Task task ->
+    if (task.name == 'runGameTestServer') {
+        task.mustRunAfter 'build'
+    } else if (task.name == 'runGameTestServerCompat') {
+        task.mustRunAfter 'runGameTestServer'
+    } else if (task.name == 'runClientSmoke') {
+        task.mustRunAfter 'runGameTestServerCompat'
+    }
 }
 
 var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
