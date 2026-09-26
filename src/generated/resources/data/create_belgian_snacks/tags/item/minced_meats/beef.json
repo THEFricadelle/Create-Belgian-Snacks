@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "farmersdelight:minced_beef",
+      "required": false
+    },
+    {
       "id": "#c:ground_beef",
       "required": false
     },

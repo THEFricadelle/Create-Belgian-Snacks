@@ -55,7 +55,11 @@ public final class BSTags {
     public static void register() {
         BelgianSnacks.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, prov -> {
             prov.addTag(MINCED_PORK).addOptionalTag(C_GROUND_PORK.location());
-            prov.addTag(MINCED_BEEF).addOptionalTag(C_GROUND_BEEF.location()).addOptionalTag(C_MINCED_BEEF.location());
+            // Farmer's Delight does not tag its own minced beef as c:minced_beef (Create: Food does), so it is listed directly.
+            prov.addTag(MINCED_BEEF)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "minced_beef"))
+                .addOptionalTag(C_GROUND_BEEF.location())
+                .addOptionalTag(C_MINCED_BEEF.location());
             prov.addTag(MINCED_CHICKEN).addOptionalTag(C_GROUND_CHICKEN.location());
             prov.addTag(GRINDER_EXTRA_FOODS)
                 .add(Items.CAKE);

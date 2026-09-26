@@ -32,6 +32,7 @@ public final class BSDatagen {
         CompletableFuture<HolderLookup.Provider> registries = event.getLookupProvider();
 
         generator.addProvider(event.includeClient(), new BSFrenchLangProvider(output));
+        generator.addProvider(event.includeClient(), new BSSpriteSourceProvider(output, registries, event.getExistingFileHelper()));
 
         generator.addProvider(event.includeServer(), new BSCrushingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSMillingRecipeGen(output, registries));
