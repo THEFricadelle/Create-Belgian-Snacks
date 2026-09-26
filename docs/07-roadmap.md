@@ -45,10 +45,10 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Checklist `10-tests.md` automatisée (GameTests + test client) ; 2 clients sur un serveur dédié automatisés (`runMultiplayerSmoke`) ; reste manuel : le scénario spark
 - **Accepté si** : la checklist Friteuse de `10-tests.md` passe, en solo et sur serveur dédié.
 
-### M4 — Palier 1 bout à bout
-- [ ] Recette de craft de la Friteuse
-- [ ] Fricadelle mangeable (valeurs provisoires) + gag minimal (burp)
-- [ ] Une usine de test automatisée : viande → fricadelle sans intervention
+### M4 — Palier 1 bout à bout ✅ (27/09/2026)
+- [x] Recette de craft de la Friteuse (Mechanical Crafter, provisoire)
+- [x] Fricadelle mangeable (valeurs provisoires) + gag minimal (rot `fricadelle.burp`)
+- [x] Une usine de test automatisée : viande → fricadelle sans intervention (`ProductionLineGameTests`, 16 fricadelles)
 - **Accepté si** : une ligne entièrement automatique produit des fricadelles en continu.
 
 ### M5 — FoodIndex

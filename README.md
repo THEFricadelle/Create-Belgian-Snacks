@@ -10,7 +10,7 @@ A [Create](https://modrinth.com/mod/create) addon for Minecraft 1.21.1 (NeoForge
 | 2 | THE_Fricadelle | An exceptional paste fed with a share of every food in the modpack, a Sequenced Assembly line, then frying |
 | 3 | THE_FRICADELLE | Every single food of the modpack goes through the Supreme Grinder |
 
-The mod is in early development. Tier 1 ingredients, fluids, Create recipes and the Fryer are in; the Supreme Grinder and tiers 2 and 3 are not yet.
+The mod is in early development. Tier 1 is complete and automatable end to end (ingredients, fluids, Create recipes, the Fryer and its recipe); the Supreme Grinder and tiers 2 and 3 are not yet.
 
 ## Features
 
@@ -79,7 +79,7 @@ Un addon [Create](https://modrinth.com/mod/create) pour Minecraft 1.21.1 (NeoFor
 | 2 | THE_Fricadelle | Une pâte d'exception nourrie d'une part de tous les aliments du modpack, une chaîne Sequenced Assembly, puis friture |
 | 3 | THE_FRICADELLE | Chaque aliment du modpack passe dans le Hachoir Suprême |
 
-Le mod est en début de développement. Les ingrédients du palier 1, les fluides, les recettes Create et la Friteuse sont en place ; le Hachoir Suprême et les paliers 2 et 3 pas encore.
+Le mod est en début de développement. Le palier 1 est complet et automatisable de bout en bout (ingrédients, fluides, recettes Create, la Friteuse et sa recette) ; le Hachoir Suprême et les paliers 2 et 3 pas encore.
 
 ## Caractéristiques
 

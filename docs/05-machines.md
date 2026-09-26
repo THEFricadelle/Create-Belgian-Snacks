@@ -26,8 +26,13 @@ Plonger des items dans l'huile chaude. Seule machine qui exécute les recettes `
 
 Format des recettes de traitement Create 6 ; la graisse est l'ingrédient fluide, sa quantité s'entend **par item frit**. Exemple et détails : `03-architecture.md`. Palier 3 : l'ingrédient fluide sera `melted_beef_tallow` seul (D16).
 
-### Recette de craft (brouillon)
-Mechanical Crafter ou table : Basin + Fluid Tank + tôles de cuivre + grille (iron bars). ⚠️
+### Recette de craft (provisoire, D11)
+Mechanical Crafter, ID `create_belgian_snacks:mechanical_crafting/fryer` (remplaçable par KubeJS) :
+
+```
+C I C      C = #c:plates/copper   I = barreaux de fer   T = réservoir à fluide
+T B P      B = bassin             P = Precision Mechanism
+```
 
 ---
 

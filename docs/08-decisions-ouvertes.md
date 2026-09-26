@@ -17,7 +17,7 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 | D8 | Enchanted golden apple et autres items quasi introuvables : dans la liste ou blacklist ? | blacklist par défaut | |
 | D9 | Hachoir : vider la progression après production, ou ne consommer que le nécessaire ? | vider | |
 | D10 | Hachoir : progression conservée quand on casse le bloc ? | oui | |
-| D11 | Coûts des machines (recettes de craft, stress, vitesse min) | voir `05-machines.md` | |
+| D11 | Coûts des machines (recettes de craft, stress, vitesse min) | voir `05-machines.md` | Friteuse, provisoire : **Mechanical Crafter**, 2 plaques de cuivre + barreaux de fer + réservoir + bassin + Precision Mechanism (27/09/2026). Hachoir : au M6 |
 | D12 🖥️ | Garder notre `minced_beef` ou utiliser celui de Farmer's Delight (présent dans Arcadia) ? | utiliser un tag commun ; notre item seulement si FD absent | ✅ **Toujours enregistré** + tag `bs:minced_meats/beef` (le nôtre + celui de FD en optionnel). Enregistrement conditionnel écarté : il fait disparaître l'item des mondes existants (26/09/2026) |
 | D13 🖥️ | Réutiliser huile/mayo/ketchup d'autres mods du pack s'ils existent ? | oui, via tags | ✅ **Huiles** : tag fluide `bs:frying_oils` (notre huile, blanc de bœuf fondu, `#c:plantoil`, `#c:vegetable_oil`) ; notre recette graines → huile désactivée si Crafts & Additions ou Diesel Generators est chargé. **Mayo/ketchup** : aucun dans le pack, les nôtres restent (26/09/2026) |
 | D16 | Rôle du blanc de bœuf | — | ✅ **Fondu, il remplace l'huile pour THE_FRICADELLE** : fluide `melted_beef_tallow`, seule graisse du palier 3 (mixer super-chauffé et friture) ; utilisable aussi aux paliers 1 et 2 (26/09/2026) |
