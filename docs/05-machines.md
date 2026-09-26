@@ -12,28 +12,19 @@ Plonger des items dans l'huile chaude. Seule machine qui exécute les recettes `
 | Taille | 1 bloc, se pose **sur** un Blaze Burner (comme un Basin) |
 | Cinétique | **Aucune** (une friteuse ne tourne pas) |
 | Chaleur | Lue sur le bloc en dessous : aucune / chauffée / super-chauffée. Réutiliser l'enum et la lecture de chaleur de Create (cf. Basin). |
-| Huile | Réservoir interne `fryer.tankCapacity` (4000 mB). Accepte **uniquement** `frying_oil`. Remplissable par tuyau (toutes faces sauf dessous), seau, Spout. |
-| Items en entrée | 1 slot, pile max 16 ⚠️. Par funnel, tapis qui débouche dessus, entonnoir, clic droit. Refuse ce qui n'a pas de recette. |
-| Items en sortie | 1 slot (pile 64). Extraction par funnel/entonnoir sur les côtés ou dessous (comme le Basin : sortie vers un funnel/tapis adjacent si orienté). Clic droit main vide = récupérer. |
-| Traitement | Un lot à la fois (tout le stack d'entrée cuit ensemble ou item par item ⚠️). Durée = `processing_time` ÷ `speedMultiplier`. Consomme `oil_consumption` mB par item **au début** de la cuisson. |
-| Conditions d'arrêt | Pas assez d'huile, chaleur insuffisante, sortie pleine → la progression se met en pause (pas de perte). |
-| Rendu | Niveau d'huile visible, items qui « flottent » dedans, bulles/particules de fumée pendant la cuisson, grésillement en boucle (`bs:fryer.sizzle`). |
-| Goggles | Huile (mB / capacité), chaleur, recette en cours, progression %. |
+| Graisse | Réservoir interne `fryer.tankCapacity` (4000 mB). Accepte **uniquement** le tag `#frying_oils` (notre huile, le blanc de bœuf fondu, les huiles végétales des autres mods). Remplissable par tuyau, seau, Spout. |
+| Items en entrée | 1 slot, pile max `fryer.maxBatch` (16). Par funnel, tapis qui débouche dessus, clic droit. Refuse ce qui n'a pas de recette. |
+| Items en sortie | 2 slots (une recette peut avoir 2 résultats). Extraction par funnel ou trémie ; l'entrée n'est jamais extraite. Clic droit main vide = récupérer la sortie, puis l'entrée s'il n'y a plus de sortie. |
+| Traitement | **Par lot** (décidé) : toute la pile d'entrée cuit ensemble, jusqu'à `maxBatch` (16). Les items du tag `create_belgian_snacks:fryer/one_at_a_time` (THE_FRICADELLE crue) cuisent **un par un**. Durée = `processing_time` ÷ `speedMultiplier`. La graisse de tout le lot (quantité de la recette × nombre d'items) est payée **au démarrage**. |
+| Conditions d'arrêt | Un lot ne démarre que si chaleur, graisse (pour tout le lot) et place en sortie sont réunies. Chaleur perdue en cours de lot → pause, sans perte ni perte de progression. La graisse ne peut pas manquer en cours de lot (déjà payée). |
+| Rendu | Niveau de graisse visible, items qui flottent à la surface, bulles et fumée pendant la cuisson, grésillement toutes les 2 s (`create_belgian_snacks:fryer.sizzle`, sons vanilla en attendant). |
+| Goggles / Jade | Statut (friture + %, ou la raison du blocage : rien à frire, pas assez chaud, pas assez de graisse, sortie pleine), chaleur, réservoir (mB / capacité). |
+| Casser le bloc | Les items tombent ; la **graisse reste dans l'item** et revient à la pose. |
 | Comparateur | Signal = remplissage de la sortie. |
 
-### Recette `frying` (format visé)
+### Recette `frying`
 
-```jsonc
-{
-  "type": "create_belgian_snacks:frying",
-  "ingredients": [ { "item": "create_belgian_snacks:raw_fricadelle" } ],
-  "results":     [ { "id": "create_belgian_snacks:fricadelle", "count": 1 } ],
-  "processing_time": 100,
-  "heat_requirement": "heated",   // none | heated | superheated
-  "oil_consumption": 10
-}
-```
-Le format exact des champs `ingredients`/`results` doit **suivre celui des recettes de traitement Create 6** (vérifier dans les sources). Ce JSON est généré par datagen, pas écrit à la main.
+Format des recettes de traitement Create 6 ; la graisse est l'ingrédient fluide, sa quantité s'entend **par item frit**. Exemple et détails : `03-architecture.md`. Palier 3 : l'ingrédient fluide sera `melted_beef_tallow` seul (D16).
 
 ### Recette de craft (brouillon)
 Mechanical Crafter ou table : Basin + Fluid Tank + tôles de cuivre + grille (iron bars). ⚠️

@@ -50,12 +50,27 @@ public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID
 
 | Type | ID | Base | Remarques |
 |---|---|---|---|
-| Friture | `create_belgian_snacks:frying` | Recette de traitement Create (`ProcessingRecipe` ou son équivalent Create 6) | 1 ingrédient item, 1+ résultats, `processing_time`, **`heat_requirement`** (none/heated/superheated, réutiliser l'enum de chaleur de Create), **`oil_consumption`** en mB |
+| Friture | `create_belgian_snacks:frying` | `FryingRecipe extends StandardProcessingRecipe<SingleRecipeInput>`, enregistrée par l'enum `BSRecipeTypes` (même forme que `AllRecipeTypes` de Create) | 1 ingrédient item, 1-2 résultats (avec chances), `processing_time`, `heat_requirement` (none/heated/superheated), **1 ingrédient fluide = la graisse, quantité par item frit**. Format identique aux recettes de traitement Create, donc `event.custom` KubeJS sans schéma dédié |
 | Hachoir (affichage) | `create_belgian_snacks:grinding_goal` | Recette « virtuelle » | Sert uniquement à afficher le Hachoir dans JEI. La logique réelle est dans le BE (la liste n'est pas connue au datagen). |
 
 Toutes les autres étapes utilisent des types Create existants : `create:crushing`, `create:milling`, `create:mixing`, `create:compacting`, `create:pressing`, `create:filling`, `create:deploying`, `create:sequenced_assembly`.
 
-⚠️ En Create 6, les recettes utilisent des codecs et une classe de paramètres ; vérifier `ProcessingRecipeBuilder` / les `...RecipeGen` de Create dans les sources pour générer nos recettes en datagen proprement.
+Datagen : l'API publique `com.simibubi.create.api.data.recipe` (`CrushingRecipeGen`, `MixingRecipeGen`, …) ; pour `frying`, `BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>`. L'ID est préfixé par le type automatiquement (`frying/fricadelle`).
+
+Exemple généré :
+
+```json
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "heated",
+  "ingredients": [
+    { "item": "create_belgian_snacks:raw_fricadelle" },
+    { "type": "neoforge:tag", "amount": 10, "tag": "create_belgian_snacks:frying_oils" }
+  ],
+  "processing_time": 100,
+  "results": [ { "id": "create_belgian_snacks:fricadelle" } ]
+}
+```
 
 ## FoodIndex — la liste dynamique des aliments
 
@@ -110,11 +125,13 @@ Toutes nos recettes ont un ID lisible et définitif, rangé par type : `create_b
 | `grinder.rejectDuplicates` | `true` | Recracher les doublons au lieu de les détruire |
 | `grinder.blacklistedMods` / `blacklistedItems` | `[]` | Exclusions |
 | `grinder.minSpeed` / `stressImpact` | `64 rpm` / `16 SU/rpm` ⚠️ | Coût cinétique |
-| `fryer.oilPerItem` | `10` mB ⚠️ | Consommation |
-| `fryer.tankCapacity` | `4000` mB | |
-| `fryer.speedMultiplier` | `1.0` | |
+| `fryer.tankCapacity` | `4000` mB | Capacité du réservoir de graisse (friteuses chargées après le changement) |
+| `fryer.speedMultiplier` | `1.0` | Divise chaque temps de friture |
+| `fryer.maxBatch` | `16` | Items frits ensemble ; le tag `fryer/one_at_a_time` force 1 |
 
-La config est côté **serveur** et synchronisée ; le client ne l'utilise que pour l'affichage.
+La consommation de graisse n'est plus une config : c'est l'ingrédient fluide de chaque recette (modifiable par KubeJS).
+
+La config est côté **serveur** et synchronisée ; le client ne l'utilise que pour l'affichage. Implémentée dans `config/BSConfig` (M3 : section `fryer`) ; chaque getter retombe sur la valeur par défaut tant que la config du monde n'est pas chargée.
 
 ## Réseau
 
@@ -127,7 +144,15 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
 
 ## Intégration Create
 
-- Friteuse : `SmartBlockEntity` + `SmartFluidTankBehaviour` (entrée huile via pipes), inventaire items exposé via capabilities NeoForge (`Capabilities.ItemHandler.BLOCK`, `Capabilities.FluidHandler.BLOCK`), lecture de la chaleur du bloc en dessous (Blaze Burner) comme le fait le Basin.
+- Friteuse (M3) : `FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation`.
+  - `SmartFluidTankBehaviour.single` avec validateur `#frying_oils` ; `DirectBeltInputBehaviour` pour les tapis.
+  - Capability item combinée : slot 0 = entrée (insertion seule, recette requise), slots 1-2 = sortie (extraction seule). Une trémie ou un funnel ne prennent jamais l'entrée.
+  - Chaleur : `BasinBlockEntity.getHeatLevelOf(état dessous)` + `HeatCondition.testBlazeBurner`, l'API de Create (compatible avec les sources de chaleur qu'un autre mod y branche).
+  - Recette mise en cache par item et revalidée contre le `RecipeManager` (un `/reload` ne sert jamais une recette périmée) ; tentative de démarrage toutes les 10 ticks à l'arrêt, immédiate après un changement d'inventaire ou de graisse.
+  - Synchronisation client uniquement aux changements d'état ; le client estime la progression entre deux paquets. Le statut (graisse, chaleur, sortie) se calcule aussi côté client, pour les Goggles et Jade.
+  - Graisse conservée à la casse : `collectImplicitComponents` / `applyImplicitComponents` + `copy_components` dans la table de loot (data component `fryer_fluid`).
+  - Piège : `SmartBlockEntity` appelle `addBehaviours` depuis son constructeur, avant les initialiseurs de champs de la sous-classe ; un champ affecté là ne doit pas avoir d'initialiseur.
+  - Compat : `compat/jei` (catégorie `CreateRecipeCategory`, style Create), `compat/jade` (ligne de statut côté client ; Jade affiche déjà réservoir et slots via les capabilities).
 - Hachoir : `KineticBlockEntity` (consomme du stress), accepte les items par funnel/tapis/entonnoir, sélection du mode via `ScrollOptionBehaviour` (la petite boîte de valeur Create), tooltip Goggles via `IHaveGoggleInformation`.
 - Ponder : une scène par machine (jalon M9).
 

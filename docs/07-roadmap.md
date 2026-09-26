@@ -36,12 +36,13 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Testées **avec** et **sans** Farmer's Delight : `runGameTestServerCompat` / `runGameTestServer`
 - **Accepté si** : dans JEI, toutes les recettes s'affichent ; testées avec **et** sans Farmer's Delight.
 
-### M3 — Friteuse
-- [ ] Bloc, BE, capabilities item/fluide, lecture de chaleur
-- [ ] Type de recette `frying` + serializer + datagen
-- [ ] Rendu (huile, items), particules, son
-- [ ] Goggles, comparateur, plugin Jade
-- [ ] Catégorie JEI
+### M3 — Friteuse ✅ (26/09/2026)
+- [x] Bloc, BE, capabilities item/fluide, lecture de chaleur
+- [x] Type de recette `frying` + serializer + datagen
+- [x] Rendu (huile, items), particules, son
+- [x] Goggles, comparateur, plugin Jade
+- [x] Catégorie JEI
+- [x] Checklist `10-tests.md` automatisée (GameTests + test client) ; reste manuel : 2 clients sur un serveur dédié, et le scénario spark
 - **Accepté si** : la checklist Friteuse de `10-tests.md` passe, en solo et sur serveur dédié.
 
 ### M4 — Palier 1 bout à bout
