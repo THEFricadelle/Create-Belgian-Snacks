@@ -36,7 +36,7 @@ flowchart LR
 
 « Demande plus de choses ». Deux exigences :
 
-1. Une **Pâte d'exception**, produite par le Hachoir Suprême en mode *THE_* : il faut y avoir fait passer **un certain pourcentage** des aliments du modpack (⚠️ **taux À DÉFINIR ensemble**, configurable).
+1. Une **Pâte d'exception**, produite par le Hachoir Suprême en mode *THE_* : il faut y avoir fait passer **10 %** des aliments du modpack (D1, arrondi au-dessus, configurable).
 2. Une chaîne **Sequenced Assembly** « spéciale » : épices → mayonnaise → curry ketchup → oignons → presse, en boucles.
 
 ```mermaid
@@ -63,7 +63,7 @@ flowchart LR
 
 ## Ce qu'on obtient en mangeant
 
-Faim/saturation croissantes, effets de potion, gags (sons, particules, message), advancements. **Toutes les valeurs sont ⚠️ À DÉFINIR ensemble** — voir `08-decisions-ouvertes.md`. En attendant, le code utilise des valeurs provisoires centralisées dans une seule classe (`BSFoods`) pour être faciles à changer.
+Faim/saturation croissantes, effets de potion, gags (sons, particules, message), advancements. Tranché le 27/09/2026 : voir le tableau « Effets en mangeant » de `08-decisions-ouvertes.md`. Les valeurs vivent dans une seule classe (`BSFoods`) pour rester faciles à changer.
 
 ## Hors périmètre v1 (idées pour plus tard)
 

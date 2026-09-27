@@ -44,7 +44,7 @@ Utiliser `CreateRegistrate` (comme les autres addons Create 6) :
 public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 ```
 
-⚠️ Vérifier dans `../refs/Create` la façon actuelle d'enregistrer Registrate sur le mod bus (`REGISTRATE.registerEventListeners(modEventBus)`) et de définir l'onglet créatif par défaut.
+Vérifié dans `../refs/Create` (M0) : `REGISTRATE.registerEventListeners(modEventBus)` dans le constructeur du mod ; l'onglet créatif par défaut est fixé avant toute entrée d'item.
 
 ## Types de recettes custom
 
@@ -177,4 +177,15 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
   - `registry/BSTriggers.GRINDER_HALF` (`SimpleCriterionTrigger`), lancé par le Hachoir quand son compte augmente et atteint 50 % du total, pour les joueurs à 16 blocs. `registry/BSAdvancements` : l'onglet, généré par Registrate.
 - Ponder : une scène par machine (jalon M9).
 
-⚠️ Toutes ces classes Create sont à vérifier dans les sources 6.0.10 avant usage.
+Toutes ces classes ont été vérifiées dans les sources 6.0.10 au moment de leur usage (règle du `CLAUDE.md`).
+
+## Ponder (M9)
+
+- `client/ponder/BSPonderPlugin` : 5 scènes (Friteuse, Hachoir « collectionner » et « modes », lignes des paliers 2 et 3) et un tag ; ajouté à `PonderIndex` sur `FMLClientSetupEvent`, comme Create.
+- Le monde Ponder est côté client : aucune logique serveur n'y tourne. Les scènes montrent les états en modifiant le NBT des block entities (panier et sortie de la Friteuse), la jauge par blockstate, et les animations de Create (Deployer, Spout, Presse, items sur tapis).
+- Textes : tous dans `registry/BSPonderText` (anglais et français), sous les clés que Ponder lit (`<modid>.ponder.shared.<clé>`, `<modid>.ponder.<scène>.header`, `<modid>.ponder.tag.<tag>`) ; `BSLang` les écrit dans les deux fichiers de langue.
+- Schémas : `assets/create_belgian_snacks/ponder/*.nbt`, construits avec les vrais blocs de Create par `./gradlew runPonderSchematics` (`gametest/ponder/PonderSchematicsRun`) puis commités. Couche 0 = plaque de base.
+
+## Modèles faits main (M9)
+
+Un modèle Blockbench déposé dans `models/block/custom/` (`fryer`, `supreme_grinder`, `supreme_grinder_blades`) remplace le placeholder : le modèle généré du même bloc en devient l'enfant (`BSBlocks.handMade`), donc blockstates, modèles d'items, jauge et partial des lames ne changent pas. Contrat détaillé dans `06-assets.md`.

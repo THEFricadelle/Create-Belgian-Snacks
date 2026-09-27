@@ -82,8 +82,9 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Sequenced Assembly du palier 3 (remplace le Mixer) + friture super-chauffée au blanc de bœuf
 - [x] Effets, gags (dont le PNJ THEFricadelle), advancements
 
-### M9 — Finitions & publication
-- [ ] Scènes Ponder (Friteuse, Hachoir)
-- [ ] Recettes de craft des machines équilibrées
-- [ ] Vraies textures / modèles Blockbench
-- [ ] Page mod (Modrinth/CurseForge) — voir `09-licence-publication.md`
+### M9 — Finitions & publication (27/09/2026, textures en attente)
+- [x] Scènes Ponder (Friteuse, Hachoir, lignes des paliers 2 et 3) + tag
+- [x] Recettes de craft des machines (D11 clos : recette de la Friteuse validée)
+- [ ] Vraies textures / modèles Blockbench : **à faire par THEFricadelle** ; livrables, contrat et suivi (`tools/asset_status.py`) dans `06-assets.md`, code prêt à les prendre
+- [x] Page mod préparée (`docs/publication/`), README à jour, brouillon de release GitHub
+- **Reste avant publication** : textures, rapports spark, fusion de `dev` dans `main`, mise en ligne (par THEFricadelle) ; check-list dans `docs/publication/fiche.md`.

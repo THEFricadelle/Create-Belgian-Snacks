@@ -45,7 +45,7 @@ Collectionner **chaque aliment unique** du modpack. Produit la Pâte d'exception
 
 | Aspect | Spéc |
 |---|---|
-| Taille | 1 bloc ⚠️ (option 2×2 multibloc écartée pour la v1) |
+| Taille | 1 bloc (option 2×2 multibloc écartée pour la v1) |
 | Cinétique | **Oui.** Arbre par le dessus. Vitesse min `grinder.minSpeed` (64 rpm), impact `grinder.stressImpact` (8 SU/rpm, D11). Sous la vitesse min : n'accepte rien. |
 | Mode | `ScrollOptionBehaviour` (boîte de valeur Create, molette + clé) : **THE_** / **ULTIME**. Changer de mode **ne remet pas** la progression à zéro (le set d'aliments est partagé). |
 | Entrée | Par le haut et les côtés : funnel, tapis, entonnoir, Mechanical Arm, clic droit. Accepte **1 item à la fois**. |

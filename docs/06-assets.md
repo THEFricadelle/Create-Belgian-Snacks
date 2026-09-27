@@ -31,7 +31,33 @@ src/main/resources/assets/create_belgian_snacks/
 ├── sounds/  (ogg)
 └── sounds.json   # généré par datagen si possible
 ```
-Les modèles JSON d'items/blocs sont générés par datagen. Quand un modèle Blockbench arrive, il va dans `src/main/resources/assets/.../models/block/` et le datagen le référence au lieu d'en générer un.
+Les modèles JSON d'items/blocs sont générés par datagen. Un modèle Blockbench fait main va dans `models/block/custom/` (voir « Livrables » ci-dessous) : le datagen le prend à la place du sien.
+
+## Livrables Blockbench (M9, à faire par THEFricadelle)
+
+Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder, faite main, manquante) et les 3 modèles facultatifs. Un fichier fait main se reconnaît tout seul : il suffit qu'il diffère du placeholder. Après un dépôt : `./gradlew runData`, puis `./gradlew runClient` pour voir le résultat ; le test client vérifie qu'aucune texture ni aucun modèle ne manque.
+
+### Textures (même nom de fichier que le placeholder, on le remplace)
+
+| Fichiers | Taille | Remarques |
+|---|---|---|
+| `textures/item/<id>.png`, 17 items | 16×16, fond transparent | ids : ceux de `docs/04` ; les 3 fricadelles et leurs versions crues, les 3 pâtes, les 2 items de transition, hachis, suif, chapelure, épices |
+| `textures/item/<fluide>_bucket.png`, 4 seaux | 16×16 | frying_oil, melted_beef_tallow, mayonnaise, curry_ketchup |
+| `textures/fluid/<fluide>_still.png` | 16×16 (ou 16×N animé + `.mcmeta`) | la surface immobile |
+| `textures/fluid/<fluide>_flow.png` | 16×32, 2 frames, `.mcmeta` déjà présent | l'écoulement |
+| `textures/block/fryer/{side,top,bottom,inner}.png` | 16×16 | utilisées par le modèle généré ; un modèle fait main peut en utiliser d'autres |
+| `textures/block/supreme_grinder/{top,bottom,blade}.png` | 16×16 | |
+| `textures/block/supreme_grinder/side_0.png` … `side_4.png` | 16×16 | **la jauge** : la même face, remplie de 0 à 4 quarts. Les 5 fichiers sont obligatoires |
+
+### Modèles (facultatifs : sans eux, le modèle généré reste)
+
+| Fichier | Contrat |
+|---|---|
+| `models/block/custom/fryer.json` | Friteuse : une cuve ouverte (le rendu de la graisse et des items flottants est dessiné par le code entre y = 2 et y = 14, x/z de 2 à 14 ; laisser cet intérieur vide) |
+| `models/block/custom/supreme_grinder.json` | Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
+| `models/block/custom/supreme_grinder_blades.json` | Les lames seules. Le code les fait tourner autour de l'axe vertical passant par le centre du bloc (8, y, 8) : modéliser centré sur ce point |
+
+Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotation des lames et rendu de la graisse sont générés ou codés. Le PNJ THEFricadelle n'a besoin d'aucune texture (skin du compte, en ligne).
 
 ## Sons
 

@@ -7,20 +7,20 @@ A [Create](https://modrinth.com/mod/create) addon for Minecraft 1.21.1 (NeoForge
 | Tier | Item | Production |
 |---|---|---|
 | 1 | Fricadelle | Minced meats, bread crumbs, mixing, pressing, then frying |
-| 2 | THE_Fricadelle | An exceptional paste fed with a share of every food in the modpack, a Sequenced Assembly line, then frying |
-| 3 | THE_FRICADELLE | Every single food of the modpack goes through the Supreme Grinder |
+| 2 | THE_Fricadelle | The Supreme Grinder collects 10 % of every food in the modpack into an Exceptional Paste; a Sequenced Assembly line adds spices, mayonnaise, curry ketchup and onion; then frying |
+| 3 | THE_FRICADELLE | Every single food of the modpack goes into an Absolute Paste; a longer line with beef tallow; superheated frying in beef tallow only |
 
-The mod is in early development. Tier 1 is complete and automatable end to end (ingredients, fluids, Create recipes, the Fryer and its recipe); the Supreme Grinder and tiers 2 and 3 are not yet.
+All three tiers are playable and automatable end to end. The textures are still placeholders; the real ones come with the first public release.
 
 ## Features
 
-Planned for the first release:
-
-- Two machines: the **Fryer** (sits on a Blaze Burner, runs on frying oil) and the **Supreme Grinder** (kinetic, collects each unique food once).
+- Two machines: the **Fryer** (sits on a Blaze Burner, runs on any frying fat) and the **Supreme Grinder** (kinetic, collects each unique food once, two modes).
 - Everything else runs on native Create processing: crushing, milling, mixing, compacting, pressing, filling, deploying, sequenced assembly.
 - Fully automatable, no mandatory manual step.
 - The food list is computed from the running modpack, not hard-coded, and can be tuned through tags and server config.
 - Optional integrations: JEI categories, Jade tooltips, KubeJS-friendly recipe ids and tags, Farmer's Delight ingredients through `c:` tags.
+- Ponder scenes for both machines and both assembly lines, an advancement tab, and a visit from THEFricadelle to whoever eats THE_FRICADELLE.
+- English and French.
 
 ## Requirements
 
@@ -76,20 +76,20 @@ Un addon [Create](https://modrinth.com/mod/create) pour Minecraft 1.21.1 (NeoFor
 | Palier | Item | Production |
 |---|---|---|
 | 1 | Fricadelle | Viandes hachées, chapelure, mélange, presse, puis friture |
-| 2 | THE_Fricadelle | Une pâte d'exception nourrie d'une part de tous les aliments du modpack, une chaîne Sequenced Assembly, puis friture |
-| 3 | THE_FRICADELLE | Chaque aliment du modpack passe dans le Hachoir Suprême |
+| 2 | THE_Fricadelle | Le Hachoir Suprême rassemble 10 % de tous les aliments du modpack en une Pâte d'exception ; une chaîne Sequenced Assembly ajoute épices, mayonnaise, curry ketchup et oignon ; puis friture |
+| 3 | THE_FRICADELLE | Absolument tous les aliments du modpack dans une Pâte absolue ; une chaîne plus longue au blanc de bœuf ; friture super-chauffée au blanc de bœuf seulement |
 
-Le mod est en début de développement. Le palier 1 est complet et automatisable de bout en bout (ingrédients, fluides, recettes Create, la Friteuse et sa recette) ; le Hachoir Suprême et les paliers 2 et 3 pas encore.
+Les trois paliers sont jouables et automatisables de bout en bout. Les textures sont encore provisoires ; les vraies arrivent avec la première version publique.
 
 ## Caractéristiques
 
-Prévu pour la première version :
-
-- Deux machines : la **Friteuse** (posée sur un Blaze Burner, fonctionne à l'huile de friture) et le **Hachoir Suprême** (cinétique, collectionne chaque aliment unique une seule fois).
+- Deux machines : la **Friteuse** (posée sur un Blaze Burner, fonctionne avec n'importe quelle graisse de friture) et le **Hachoir Suprême** (cinétique, collectionne chaque aliment unique une seule fois, deux modes).
 - Tout le reste utilise les traitements natifs de Create : broyage, meule, mélange, compactage, presse, remplissage, deployer, sequenced assembly.
 - Entièrement automatisable, aucune étape manuelle obligatoire.
 - La liste des aliments est calculée à partir du modpack chargé, pas écrite en dur, et se règle par tags et config serveur.
 - Intégrations optionnelles : catégories JEI, infobulles Jade, IDs de recettes et tags adaptés à KubeJS, ingrédients de Farmer's Delight via les tags `c:`.
+- Scènes Ponder pour les deux machines et les deux chaînes d'assemblage, un onglet d'advancements, et une visite de THEFricadelle à qui mange THE_FRICADELLE.
+- Anglais et français.
 
 ## Prérequis
 
