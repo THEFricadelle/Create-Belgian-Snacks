@@ -169,6 +169,19 @@ public final class FryerGameTests {
         });
     }
 
+    // THE_FRICADELLE fries in melted beef tallow only, even on a seething burner.
+    @GameTest(template = TEMPLATE)
+    public static void ultimateFricadelleRefusesOil(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.SEETHING);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fryer.getItemCapability().insertItem(0, BSItems.RAW_ULTIMATE_FRICADELLE.asStack(), false);
+        helper.runAfterDelay(20, () -> {
+            helper.assertTrue(fryer.getBasket().isEmpty(), "THE_FRICADELLE started frying in oil");
+            helper.assertTrue(fryer.status() == FryerBlockEntity.Status.NO_FAT, "status: " + fryer.status());
+            helper.succeed();
+        });
+    }
+
     // Create's rules for its own conditions and levels, whatever a mod does to testBlazeBurner.
     @GameTest(template = TEMPLATE)
     public static void heatRulesAreCreates(GameTestHelper helper) {

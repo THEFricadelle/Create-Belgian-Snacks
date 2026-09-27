@@ -10,6 +10,7 @@
 package be.thefricadelle.belgiansnacks.gametest;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.simibubi.create.AllBlocks;
@@ -17,6 +18,7 @@ import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.content.kinetics.belt.item.BeltConnectorItem;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
@@ -43,71 +45,121 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.items.IItemHandler;
 
 /**
- * Tier 2 on real Create machines: an Exceptional Paste rides a belt under a deployer (spices), two
- * spouts (mayonnaise, curry ketchup), a deployer (onion, or beetroot without an onion mod) and a
- * press. The test only carries the unfinished item from the belt end back to its start, the loop a
- * player builds; after three loops the raw THE_Fricadelle goes into a fryer.
+ * Tiers 2 and 3 on real Create machines: the paste rides a belt under deployers, spouts and a press
+ * (Create looks for processing machines two blocks above a belt, spouts included). The test only
+ * carries the unfinished item from the belt end back to its start, the loop a player builds; after
+ * the last pass the raw fricadelle goes into a fryer on the right burner with the right fat.
  */
 @GameTestHolder(BelgianSnacks.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class TheFricadelleLineGameTests {
     private static final int SPEED = 64;
-    private static final int LOOPS = 3;
-    private static final int SAUCE = 1000;
-
-    // empty_large is 5 x 11 x 11; the belt runs towards +z. Create looks for processing machines two
-    // blocks above a belt (BeltInventory), spouts included.
+    private static final int STOCK = 64;
+    // A spout holds 1000 mB; a factory pipes sauce in, the test tops it up every tick and counts.
+    private static final int TANK = 1000;
+    // empty_large is 5 x 11 x 11; the belt runs towards +z from z = 1, stations from z = 2.
     private static final BlockPos BELT_START = new BlockPos(2, 2, 1);
-    private static final BlockPos BELT_END = new BlockPos(2, 2, 8);
-    private static final BlockPos SPICES = new BlockPos(2, 4, 2);
-    private static final BlockPos MAYONNAISE = new BlockPos(2, 4, 3);
-    private static final BlockPos CURRY = new BlockPos(2, 4, 4);
-    private static final BlockPos ONION = new BlockPos(2, 4, 5);
-    private static final BlockPos PRESS = new BlockPos(2, 4, 6);
-    private static final BlockPos FRYER = new BlockPos(4, 2, 9);
+    private static final int STATION_Y = 4;
+    private static final BlockPos FRYER = new BlockPos(4, 2, 10);
+
+    private enum Kind { SPICES, ONION, SAUCE, PRESS }
+
+    private record Station(Kind kind, Fluid sauce) {
+        static Station of(Kind kind) {
+            return new Station(kind, null);
+        }
+
+        static Station sauce(Fluid fluid) {
+            return new Station(Kind.SAUCE, fluid);
+        }
+    }
+
+    private record Line(Item paste, Item unfinished, Item raw, Item fried, int passes, int perStep, List<Station> stations,
+                        HeatLevel heat, Fluid fat, int fatUsed) {
+    }
 
     private TheFricadelleLineGameTests() {
     }
 
     @GameTest(template = "empty_large", timeoutTicks = 3600)
     public static void exceptionalPasteBecomesTheFricadelleOnRealMachines(GameTestHelper helper) {
+        run(helper, new Line(BSItems.EXCEPTIONAL_PASTE.get(), BSItems.INCOMPLETE_THE_FRICADELLE.get(), BSItems.RAW_THE_FRICADELLE.get(),
+            BSItems.THE_FRICADELLE.get(), 3, 100,
+            List.of(Station.of(Kind.SPICES), Station.sauce(BSFluids.MAYONNAISE.get().getSource()),
+                Station.sauce(BSFluids.CURRY_KETCHUP.get().getSource()), Station.of(Kind.ONION), Station.of(Kind.PRESS)),
+            HeatLevel.KINDLED, BSFluids.FRYING_OIL.get().getSource(), 25));
+    }
+
+    // Tier 3 (27/09/2026): beef tallow first, 250 mB servings, five passes, then a seething fryer in tallow.
+    @GameTest(template = "empty_large", timeoutTicks = 6000)
+    public static void absolutePasteBecomesTheUltimateFricadelleOnRealMachines(GameTestHelper helper) {
+        run(helper, new Line(BSItems.ABSOLUTE_PASTE.get(), BSItems.INCOMPLETE_ULTIMATE_FRICADELLE.get(), BSItems.RAW_ULTIMATE_FRICADELLE.get(),
+            BSItems.ULTIMATE_FRICADELLE.get(), 5, 250,
+            List.of(Station.sauce(BSFluids.MELTED_BEEF_TALLOW.get().getSource()), Station.of(Kind.SPICES),
+                Station.sauce(BSFluids.MAYONNAISE.get().getSource()), Station.sauce(BSFluids.CURRY_KETCHUP.get().getSource()),
+                Station.of(Kind.ONION), Station.of(Kind.PRESS)),
+            HeatLevel.SEETHING, BSFluids.MELTED_BEEF_TALLOW.get().getSource(), 250));
+    }
+
+    private static void run(GameTestHelper helper, Line line) {
         Item onion = onion();
-        build(helper, onion);
+        BlockPos beltEnd = BELT_START.south(line.stations().size() + 2);
+        build(helper, line, onion, beltEnd);
         FryerBlockEntity fryer = helper.getBlockEntity(FRYER);
         Set<String> reached = new LinkedHashSet<>();
-        int[] loopsSeen = {0};
+        int[] passes = {0};
+        int[] topUps = new int[line.stations().size()];
 
         // A belt takes items once its segments have ticked.
-        helper.runAfterDelay(10, () -> insert(helper, BELT_START, BSItems.EXCEPTIONAL_PASTE.asStack()));
+        helper.runAfterDelay(10, () -> insert(helper, BELT_START, new ItemStack(line.paste())));
 
         helper.onEachTick(() -> {
-            IItemHandler end = items(helper, BELT_END);
+            for (int i = 0; i < line.stations().size(); i++) {
+                Station station = line.stations().get(i);
+                if (station.kind() == Kind.SAUCE) {
+                    IFluidHandler tank = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(stationPos(i)), null);
+                    int missing = TANK - tank.getFluidInTank(0).getAmount();
+                    if (missing > 0) {
+                        topUps[i] += tank.fill(new FluidStack(station.sauce(), missing), IFluidHandler.FluidAction.EXECUTE);
+                    }
+                }
+            }
+            IItemHandler end = items(helper, beltEnd);
             ItemStack last = end == null ? ItemStack.EMPTY : end.getStackInSlot(0);
-            if (last.is(BSItems.INCOMPLETE_THE_FRICADELLE.get()) && loopsSeen[0] >= LOOPS) {
-                helper.fail("still unfinished after " + loopsSeen[0] + " passes: " + last.getComponentsPatch() + "; mayonnaise "
-                    + fluid(helper, MAYONNAISE) + ", curry " + fluid(helper, CURRY) + ", spices " + held(helper, SPICES)
-                    + ", onions " + held(helper, ONION));
-            } else if (last.is(BSItems.INCOMPLETE_THE_FRICADELLE.get())) {
+            if (last.is(line.unfinished()) && passes[0] >= line.passes()) {
+                helper.fail("still unfinished after " + passes[0] + " passes: " + last.getComponentsPatch() + "; stations " + stock(helper, line));
+            } else if (last.is(line.unfinished())) {
                 // Back to the start: what a looping belt does in a player's factory.
                 ItemStack moved = end.extractItem(0, 1, false);
-                loopsSeen[0]++;
-                reached.add("loop " + loopsSeen[0] + " done");
+                passes[0]++;
+                reached.add("pass " + passes[0] + " done");
                 insert(helper, BELT_START, moved);
-            } else if (last.is(BSItems.RAW_THE_FRICADELLE.get())) {
-                reached.add("raw THE_Fricadelle after " + (loopsSeen[0] + 1) + " passes");
+            } else if (last.is(line.raw())) {
+                reached.add("raw after " + (passes[0] + 1) + " passes");
                 fryer.getItemCapability().insertItem(0, end.extractItem(0, 1, false), false);
             }
         });
 
         helper.succeedWhen(() -> {
-            helper.assertTrue(fryer.getOutput().getStackInSlot(0).is(BSItems.THE_FRICADELLE.get()), "no THE_Fricadelle yet; stages: " + reached);
-            helper.assertValueEqual(loopsSeen[0] + 1, LOOPS, "passes along the line");
-            helper.assertValueEqual(fluid(helper, MAYONNAISE), SAUCE - 300, "mayonnaise used (3 x 100 mB)");
-            helper.assertValueEqual(fluid(helper, CURRY), SAUCE - 300, "curry ketchup used (3 x 100 mB)");
-            helper.assertValueEqual(held(helper, SPICES), 64 - LOOPS, "spices used");
-            helper.assertValueEqual(held(helper, ONION), 64 - LOOPS, BuiltInRegistries.ITEM.getKey(onion) + " used");
-            helper.assertValueEqual(fryer.getTank().getPrimaryHandler().getFluidAmount(), 1000 - 25, "fat for one THE_Fricadelle");
+            helper.assertTrue(fryer.getOutput().getStackInSlot(0).is(line.fried()), "not fried yet; stages: " + reached + "; fryer " + fryer.status());
+            helper.assertValueEqual(passes[0] + 1, line.passes(), "passes along the line");
+            for (int i = 0; i < line.stations().size(); i++) {
+                Station station = line.stations().get(i);
+                BlockPos pos = stationPos(i);
+                switch (station.kind()) {
+                    case SAUCE -> helper.assertValueEqual(topUps[i] + TANK - fluid(helper, pos), line.passes() * line.perStep(),
+                        BuiltInRegistries.FLUID.getKey(station.sauce()) + " used");
+                    case SPICES, ONION -> helper.assertValueEqual(held(helper, pos), STOCK - line.passes(), station.kind() + " used");
+                    default -> {
+                    }
+                }
+            }
+            helper.assertValueEqual(fryer.getTank().getPrimaryHandler().getFluidAmount(), 1000 - line.fatUsed(), "fat for one fricadelle");
         });
+    }
+
+    private static BlockPos stationPos(int index) {
+        return new BlockPos(2, STATION_Y, 2 + index);
     }
 
     private static Item onion() {
@@ -115,23 +167,28 @@ public final class TheFricadelleLineGameTests {
         return onions.isPresent() && onions.get().size() > 0 ? onions.get().get(0).value() : Items.BEETROOT;
     }
 
-    private static void build(GameTestHelper helper, Item onion) {
-        BeltConnectorItem.createBelts(helper.getLevel(), helper.absolutePos(BELT_START), helper.absolutePos(BELT_END));
+    private static void build(GameTestHelper helper, Line line, Item onion, BlockPos beltEnd) {
+        BeltConnectorItem.createBelts(helper.getLevel(), helper.absolutePos(BELT_START), helper.absolutePos(beltEnd));
         motor(helper, BELT_START.west(), Direction.EAST);
-
-        deployer(helper, SPICES, BSItems.BELGIAN_SPICES.asStack(64));
-        spout(helper, MAYONNAISE, BSFluids.MAYONNAISE.get().getSource());
-        spout(helper, CURRY, BSFluids.CURRY_KETCHUP.get().getSource());
-        deployer(helper, ONION, new ItemStack(onion, 64));
-        helper.setBlock(PRESS, AllBlocks.MECHANICAL_PRESS.getDefaultState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST));
-        motor(helper, PRESS.west(), Direction.EAST);
-
-        helper.setBlock(FRYER.below(), AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+        for (int i = 0; i < line.stations().size(); i++) {
+            Station station = line.stations().get(i);
+            BlockPos pos = stationPos(i);
+            switch (station.kind()) {
+                case SPICES -> deployer(helper, pos, BSItems.BELGIAN_SPICES.asStack(STOCK));
+                case ONION -> deployer(helper, pos, new ItemStack(onion, STOCK));
+                case SAUCE -> spout(helper, pos, station.sauce());
+                case PRESS -> {
+                    helper.setBlock(pos, AllBlocks.MECHANICAL_PRESS.getDefaultState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST));
+                    motor(helper, pos.west(), Direction.EAST);
+                }
+            }
+        }
+        helper.setBlock(FRYER.below(), AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, line.heat()));
         BlazeBurnerBlockEntity burner = helper.getBlockEntity(FRYER.below());
         burner.isCreative = true;
         helper.setBlock(FRYER, BSBlocks.FRYER.getDefaultState());
         FryerBlockEntity fryer = helper.getBlockEntity(FRYER);
-        fryer.getTank().getCapability().fill(new FluidStack(BSFluids.FRYING_OIL.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE);
+        fryer.getTank().getCapability().fill(new FluidStack(line.fat(), 1000), IFluidHandler.FluidAction.EXECUTE);
     }
 
     // Facing down with its shaft along x, turned by a motor on its west side, holding a full stack.
@@ -146,7 +203,7 @@ public final class TheFricadelleLineGameTests {
     private static void spout(GameTestHelper helper, BlockPos pos, Fluid sauce) {
         helper.setBlock(pos, AllBlocks.SPOUT.getDefaultState());
         IFluidHandler tank = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(pos), null);
-        helper.assertValueEqual(tank.fill(new FluidStack(sauce, SAUCE), IFluidHandler.FluidAction.EXECUTE), SAUCE, "sauce in the spout at " + pos);
+        helper.assertValueEqual(tank.fill(new FluidStack(sauce, TANK), IFluidHandler.FluidAction.EXECUTE), TANK, "sauce in the spout at " + pos);
     }
 
     private static void motor(GameTestHelper helper, BlockPos pos, Direction facing) {
@@ -170,5 +227,15 @@ public final class TheFricadelleLineGameTests {
 
     private static int held(GameTestHelper helper, BlockPos deployer) {
         return items(helper, deployer).getStackInSlot(0).getCount();
+    }
+
+    private static String stock(GameTestHelper helper, Line line) {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < line.stations().size(); i++) {
+            BlockPos pos = stationPos(i);
+            Kind kind = line.stations().get(i).kind();
+            text.append(kind).append('=').append(kind == Kind.SAUCE ? fluid(helper, pos) + " mB" : kind == Kind.PRESS ? "-" : held(helper, pos)).append(' ');
+        }
+        return text.toString().trim();
     }
 }

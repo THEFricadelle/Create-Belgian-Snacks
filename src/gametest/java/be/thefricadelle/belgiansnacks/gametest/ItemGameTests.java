@@ -55,7 +55,7 @@ public final class ItemGameTests {
         "raw_fricadelle", "fricadelle", "belgian_spices", "exceptional_paste", "incomplete_the_fricadelle",
         "raw_the_fricadelle", "the_fricadelle", "absolute_paste", "raw_ultimate_fricadelle", "ultimate_fricadelle",
         "frying_oil_bucket", "melted_beef_tallow_bucket", "mayonnaise_bucket", "curry_ketchup_bucket",
-        "fryer", "supreme_grinder");
+        "fryer", "supreme_grinder", "incomplete_ultimate_fricadelle");
 
     private ItemGameTests() {
     }

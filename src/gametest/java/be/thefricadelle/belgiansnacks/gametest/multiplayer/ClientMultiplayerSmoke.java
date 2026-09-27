@@ -164,6 +164,20 @@ public final class ClientMultiplayerSmoke {
             () -> pass("mp.grinderFeed", "right click over the network put the food in the grinder"));
         step("grinder.shared", 0, () -> grinder() != null && grinder().getCount() == 2,
             () -> pass("mp.grinderShared", "both players' foods counted here: 2 / " + grinder().getGoal()));
+        if (ROLE.equals("A")) {
+            // A real right click held until THE_FRICADELLE is eaten, then back to the empty first slot.
+            step("ultimate.select", 5, () -> mc.player.getInventory().getItem(1).is(BSItems.ULTIMATE_FRICADELLE.get()), () -> select(1));
+            step("ultimate.eat", 5, () -> true, () -> mc.options.keyUse.setDown(true));
+            step("ultimate.eaten", 0, () -> mc.player.getInventory().getItem(1).isEmpty(), () -> {
+                mc.options.keyUse.setDown(false);
+                select(0);
+                pass("mp.ultimateEaten", "THE_FRICADELLE eaten by holding right click");
+            });
+        }
+        // Both players see THEFricadelle appear and read the server's announcement.
+        step("visitor.seen", 0, () -> visitor() != null && CHAT.stream().anyMatch(line -> line.contains("ate THE_FRICADELLE"))
+            && CHAT.stream().anyMatch(line -> line.startsWith("<THEFricadelle> ")), () -> pass("mp.visitorSeen",
+            "THEFricadelle appeared saying \"" + visitor().getCustomName().getString() + "\"; chat: " + String.join(" | ", CHAT)));
         if (ROLE.equals("B")) {
             step("grinder.missing.ask", 0, () -> true, () -> PacketDistributor.sendToServer(new GrinderMissingRequestPayload(grinderPos)));
             step("grinder.missing", 0, () -> mc.screen instanceof GrinderMissingScreen, () -> {
@@ -203,6 +217,27 @@ public final class ClientMultiplayerSmoke {
     private static boolean otherPlayerCrouching() {
         Minecraft mc = Minecraft.getInstance();
         return mc.level.players().stream().anyMatch(player -> player != mc.player && player.isShiftKeyDown());
+    }
+
+    private static final List<String> CHAT = java.util.Collections.synchronizedList(new ArrayList<>());
+
+    @SubscribeEvent
+    public static void onSystemChat(net.neoforged.neoforge.client.event.ClientChatReceivedEvent.System event) {
+        if (ENABLED) {
+            CHAT.add(event.getMessage().getString());
+        }
+    }
+
+    private static be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc visitor() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level.getEntitiesOfClass(be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.class,
+            mc.player.getBoundingBox().inflate(16)).stream().findFirst().orElse(null);
+    }
+
+    private static void select(int slot) {
+        Minecraft mc = Minecraft.getInstance();
+        mc.player.getInventory().selected = slot;
+        mc.player.connection.send(new net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket(slot));
     }
 
     private static BlockPos findGrinder() {

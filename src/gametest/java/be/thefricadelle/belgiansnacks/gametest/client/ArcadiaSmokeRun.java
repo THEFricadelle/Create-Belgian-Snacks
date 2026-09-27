@@ -117,11 +117,12 @@ public final class ArcadiaSmokeRun {
         "crushing/porkchop", "crushing/beef", "crushing/chicken", "crushing/bread", "milling/dried_kelp",
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise", "pressing/fricadelle_paste",
         "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder", KUBEJS_RECIPE,
-        "frying/the_fricadelle", "sequenced_assembly/raw_the_fricadelle");
+        "frying/the_fricadelle", "sequenced_assembly/raw_the_fricadelle",
+        "frying/ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle");
     // Removed by the KubeJS test script; disabled because Create Crafts & Additions makes seed oil;
     // the beetroot fallback of tier 2, since Farmer's Delight brings onions.
     private static final Set<String> NEVER_LOADED = Set.of("frying/fricadelle", "compacting/frying_oil_from_seeds",
-        "sequenced_assembly/raw_the_fricadelle_from_beetroot");
+        "sequenced_assembly/raw_the_fricadelle_from_beetroot", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot");
     // Vanilla crafting-style types: the ones Polymorph arbitrates.
     private static final Set<RecipeType<?>> POLYMORPH_TYPES = Set.of(RecipeType.CRAFTING, RecipeType.SMELTING,
         RecipeType.BLASTING, RecipeType.SMOKING, RecipeType.CAMPFIRE_COOKING, RecipeType.STONECUTTING, RecipeType.SMITHING);

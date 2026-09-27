@@ -118,7 +118,8 @@ public final class ClientSmokeTest {
         "pressing/fricadelle_paste",
         "frying/fricadelle", "frying/the_fricadelle",
         "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
-        "sequenced_assembly/raw_the_fricadelle_from_beetroot");
+        "sequenced_assembly/raw_the_fricadelle_from_beetroot",
+        "frying/ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 
@@ -208,6 +209,20 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.missing.check", 0, () -> mc.screen instanceof GrinderMissingScreen, ClientSmokeTest::checkMissingScreen));
         STEPS.add(new Step("grinder.missing.shot", 20, () -> screenshot("grinder-missing")));
         STEPS.add(new Step("grinder.missing.close", 5, () -> mc.setScreen(null)));
+        // The player eats THE_FRICADELLE on the integrated server: every gag reaches this client.
+        STEPS.add(new Step("ultimate.eat", 10, ClientSmokeTest::eatUltimate));
+        STEPS.add(new Step("ultimate.check", 20, () -> visitor() != null, ClientSmokeTest::checkUltimate));
+        STEPS.add(new Step("ultimate.face", 5, () -> visitor() != null, () -> {
+            // Face the visitor for the screenshot, from where the player floats.
+            var npc = visitor();
+            var eye = mc.player.getEyePosition();
+            double dx = npc.getX() - eye.x;
+            double dy = npc.getEyeY() - eye.y;
+            double dz = npc.getZ() - eye.z;
+            mc.player.setYRot((float) Math.toDegrees(Math.atan2(dz, dx)) - 90f);
+            mc.player.setXRot((float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))));
+        }));
+        STEPS.add(new Step("ultimate.shot", 10, () -> screenshot("thefricadelle-visitor")));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));
         STEPS.add(new Step("jei.paste.shot", 30, () -> screenshot("jei-fricadelle-paste")));
@@ -233,6 +248,10 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.assembly.shot", 30, () -> screenshot("jei-raw-the-fricadelle")));
         STEPS.add(new Step("jei.theFrying", 10, () -> showOutput(BSItems.THE_FRICADELLE.asStack())));
         STEPS.add(new Step("jei.theFrying.shot", 30, () -> screenshot("jei-the-fricadelle")));
+        STEPS.add(new Step("jei.ultimateAssembly", 10, () -> showOutput(BSItems.RAW_ULTIMATE_FRICADELLE.asStack())));
+        STEPS.add(new Step("jei.ultimateAssembly.shot", 30, () -> screenshot("jei-raw-ultimate-fricadelle")));
+        STEPS.add(new Step("jei.ultimateFrying", 10, () -> showOutput(BSItems.ULTIMATE_FRICADELLE.asStack())));
+        STEPS.add(new Step("jei.ultimateFrying.shot", 30, () -> screenshot("jei-ultimate-fricadelle")));
         STEPS.add(new Step("jei.grinderCraft", 10, () -> showOutput(new ItemStack(BSBlocks.SUPREME_GRINDER.get()))));
         STEPS.add(new Step("jei.grinderCraft.shot", 30, () -> screenshot("jei-grinder-craft")));
         STEPS.add(new Step("jei.grinding", 10, () -> SmokeJeiPlugin.runtime.getRecipesGui().showTypes(List.of(GrindingGoalCategory.TYPE))));
@@ -497,6 +516,60 @@ public final class ClientSmokeTest {
             require(screen.missingCount() == expected, "lists " + screen.missingCount() + " foods, expected " + expected);
             require(screen.drawnPerFrame() > 0 && screen.drawnPerFrame() <= expected, "draws " + screen.drawnPerFrame() + " icons");
             return expected + " missing foods listed, " + screen.drawnPerFrame() + " icons drawn per frame";
+        });
+    }
+
+    private static final List<String> SYSTEM_CHAT = java.util.Collections.synchronizedList(new ArrayList<>());
+
+    @SubscribeEvent
+    public static void onSystemChat(net.neoforged.neoforge.client.event.ClientChatReceivedEvent.System event) {
+        if (ENABLED) {
+            SYSTEM_CHAT.add(event.getMessage().getString());
+        }
+    }
+
+    private static void eatUltimate() {
+        Minecraft mc = Minecraft.getInstance();
+        var server = mc.getSingleplayerServer();
+        java.util.UUID id = mc.player.getUUID();
+        SYSTEM_CHAT.clear();
+        mc.player.setYRot(0f);
+        mc.player.setXRot(10f);
+        server.execute(() -> {
+            var player = server.getPlayerList().getPlayer(id);
+            ItemStack food = BSItems.ULTIMATE_FRICADELLE.asStack();
+            food.getItem().finishUsingItem(food, player.serverLevel(), player);
+        });
+    }
+
+    private static be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc visitor() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level.getEntitiesOfClass(be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.class,
+            mc.player.getBoundingBox().inflate(5)).stream().findFirst().orElse(null);
+    }
+
+    private static void checkUltimate() {
+        Minecraft mc = Minecraft.getInstance();
+        check("ultimate.effects", () -> {
+            require(mc.player.hasEffect(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST), "no strength on the client");
+            require(mc.player.hasEffect(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE), "no fire resistance on the client");
+            return mc.player.getActiveEffects().size() + " effects synced to the client";
+        });
+        check("ultimate.chat", () -> {
+            String eaten = mc.player.getName().getString() + " ate THE_FRICADELLE";
+            require(SYSTEM_CHAT.stream().anyMatch(line -> line.startsWith(eaten)), "no server announcement in " + SYSTEM_CHAT);
+            require(SYSTEM_CHAT.stream().anyMatch(line -> line.startsWith("<THEFricadelle> ")), "the visitor said nothing in " + SYSTEM_CHAT);
+            return String.join(" | ", SYSTEM_CHAT);
+        });
+        check("ultimate.visitor", () -> {
+            var npc = visitor();
+            var renderer = mc.getEntityRenderDispatcher().getRenderer(npc);
+            require(renderer instanceof be.thefricadelle.belgiansnacks.client.TheFricadelleNpcRenderer, "rendered by " + renderer);
+            require(npc.isCustomNameVisible() && npc.getCustomName() != null, "no line above the head");
+            var skin = be.thefricadelle.belgiansnacks.client.NpcSkin.get();
+            require(skin != null && skin.texture() != null, "no skin");
+            return "\"" + npc.getCustomName().getString() + "\", " + (be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline()
+                ? "the THEFricadelle account's skin" : "default skin (the account's skin did not load)") + ", " + skin.model() + " model";
         });
     }
 

@@ -49,9 +49,10 @@ class RecipeFilesTest {
         "mixing/curry_ketchup", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/fricadelle", "frying/the_fricadelle",
+        "frying/fricadelle", "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
-        "sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_the_fricadelle_from_beetroot");
+        "sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_the_fricadelle_from_beetroot",
+        "sequenced_assembly/raw_ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot");
 
     // Recipe types this mod registers; every other folder is a Create type.
     private static final Set<String> OWN_TYPES = Set.of("frying");
@@ -280,10 +281,64 @@ class RecipeFilesTest {
         assertTrue(conditions(beetroot).contains("tag_empty c:crops/onion"), "the beetroot recipe is only for packs without onions");
     }
 
+    // Tier 3 (27/09/2026): beef tallow, spices, mayonnaise, curry ketchup, onion, press; five loops.
+    @Test
+    void ultimateFricadelleAssemblyIsTheDocumentedOne() throws IOException {
+        for (String variant : List.of("raw_ultimate_fricadelle", "raw_ultimate_fricadelle_from_beetroot")) {
+            JsonObject recipe = json(RECIPES.resolve("sequenced_assembly/" + variant + ".json"));
+            assertEquals(MOD_ID + ":absolute_paste", recipe.getAsJsonObject("ingredient").get("item").getAsString());
+            assertEquals(5, recipe.get("loops").getAsInt(), variant + " loops");
+            assertEquals(MOD_ID + ":incomplete_ultimate_fricadelle", recipe.getAsJsonObject("transitional_item").get("id").getAsString());
+            var results = recipe.getAsJsonArray("results");
+            assertEquals(1, results.size(), variant + ": a single, certain result");
+            assertEquals(MOD_ID + ":raw_ultimate_fricadelle", results.get(0).getAsJsonObject().get("id").getAsString());
+
+            var steps = recipe.getAsJsonArray("sequence");
+            List<String> types = new ArrayList<>();
+            steps.forEach(step -> types.add(step.getAsJsonObject().get("type").getAsString()));
+            assertEquals(List.of("create:filling", "create:deploying", "create:filling", "create:filling", "create:deploying", "create:pressing"),
+                types, variant);
+            String transition = MOD_ID + ":incomplete_ultimate_fricadelle";
+            assertEquals(MOD_ID + ":melted_beef_tallow", ingredient(steps, 0, transition).get("fluid").getAsString());
+            assertEquals(MOD_ID + ":belgian_spices", ingredient(steps, 1, transition).get("item").getAsString());
+            assertEquals(MOD_ID + ":mayonnaise", ingredient(steps, 2, transition).get("fluid").getAsString());
+            assertEquals(MOD_ID + ":curry_ketchup", ingredient(steps, 3, transition).get("fluid").getAsString());
+            for (int step : new int[] {0, 2, 3}) {
+                assertEquals(250, ingredient(steps, step, transition).get("amount").getAsInt(), variant + " step " + step);
+            }
+        }
+        JsonObject onion = json(RECIPES.resolve("sequenced_assembly/raw_ultimate_fricadelle.json"));
+        assertEquals("c:crops/onion", ingredient(onion.getAsJsonArray("sequence"), 4, MOD_ID + ":incomplete_ultimate_fricadelle")
+            .get("tag").getAsString());
+        assertTrue(conditions(onion).contains("not tag_empty c:crops/onion"));
+        JsonObject beetroot = json(RECIPES.resolve("sequenced_assembly/raw_ultimate_fricadelle_from_beetroot.json"));
+        assertEquals("minecraft:beetroot", ingredient(beetroot.getAsJsonArray("sequence"), 4, MOD_ID + ":incomplete_ultimate_fricadelle")
+            .get("item").getAsString());
+        assertTrue(conditions(beetroot).contains("tag_empty c:crops/onion"));
+    }
+
+    // Tier 3 frying: superheated, 30 s, 250 mB of melted beef tallow and nothing else.
+    @Test
+    void ultimateFricadelleFriesOnlyInBeefTallow() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("frying/ultimate_fricadelle.json"));
+        assertEquals("superheated", recipe.get("heat_requirement").getAsString());
+        assertEquals(600, recipe.get("processing_time").getAsInt());
+        var ingredients = recipe.getAsJsonArray("ingredients");
+        assertEquals(MOD_ID + ":raw_ultimate_fricadelle", ingredients.get(0).getAsJsonObject().get("item").getAsString());
+        JsonObject fat = ingredients.get(1).getAsJsonObject();
+        assertEquals(MOD_ID + ":melted_beef_tallow", fat.get("fluid").getAsString(), "a single fluid, not the frying_oils tag");
+        assertEquals(250, fat.get("amount").getAsInt());
+        assertEquals(MOD_ID + ":ultimate_fricadelle", recipe.getAsJsonArray("results").get(0).getAsJsonObject().get("id").getAsString());
+    }
+
     // The second ingredient of a step: the first is always the transitional item.
     private static JsonObject ingredient(com.google.gson.JsonArray steps, int step) {
+        return ingredient(steps, step, MOD_ID + ":incomplete_the_fricadelle");
+    }
+
+    private static JsonObject ingredient(com.google.gson.JsonArray steps, int step, String transition) {
         var ingredients = steps.get(step).getAsJsonObject().getAsJsonArray("ingredients");
-        assertEquals(MOD_ID + ":incomplete_the_fricadelle", ingredients.get(0).getAsJsonObject().get("item").getAsString(), "step " + step);
+        assertEquals(transition, ingredients.get(0).getAsJsonObject().get("item").getAsString(), "step " + step);
         return ingredients.get(1).getAsJsonObject();
     }
 
