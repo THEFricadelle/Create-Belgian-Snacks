@@ -10,7 +10,7 @@ A [Create](https://modrinth.com/mod/create) addon for Minecraft 1.21.1 (NeoForge
 | 2 | THE_Fricadelle | The Supreme Grinder collects 10 % of every food in the modpack into an Exceptional Paste; a Sequenced Assembly line adds spices, mayonnaise, curry ketchup and onion; then frying |
 | 3 | THE_FRICADELLE | Every single food of the modpack goes into an Absolute Paste; a longer line with beef tallow; superheated frying in beef tallow only |
 
-All three tiers are playable and automatable end to end. The textures are still placeholders; the real ones come with the first public release.
+All three tiers are playable and automatable end to end. The 41 original pixel-art textures cover foods, buckets, animated fluids and machine faces, with at most 16 colours each.
 
 ## Features
 
@@ -53,6 +53,10 @@ Requires JDK 21.
 ./gradlew runServer          # development dedicated server
 ```
 
+## Texture artwork
+
+The artwork follows [the texture brief](docs/12-prompts-textures.md). Run `python tools/draw_textures.py` with [Python 3](https://www.python.org/) (standard library only) to reproduce it and create `build/texture-preview.html` and `build/texture-preview.png`. Existing manual edits are preserved unless `--force` is explicitly supplied. Run `python tools/asset_status.py` to check the textures and `./gradlew runClientSmoke` to check them in game. PNGs live in `src/main/resources/assets/create_belgian_snacks/textures/`; flow animation metadata stays alongside them. Custom 3D block models remain a separate task.
+
 ## License
 
 All Rights Reserved. The source is public for reading, auditing and contributing, but the mod is not open-source. See [LICENSE](LICENSE) for the binding terms and [NOTICE.md](NOTICE.md) for a plain-language summary. Modpacks may include the official, unmodified file when they reference an official channel.
@@ -79,7 +83,7 @@ Un addon [Create](https://modrinth.com/mod/create) pour Minecraft 1.21.1 (NeoFor
 | 2 | THE_Fricadelle | Le Hachoir Suprême rassemble 10 % de tous les aliments du modpack en une Pâte d'exception ; une chaîne Sequenced Assembly ajoute épices, mayonnaise, curry ketchup et oignon ; puis friture |
 | 3 | THE_FRICADELLE | Absolument tous les aliments du modpack dans une Pâte absolue ; une chaîne plus longue au blanc de bœuf ; friture super-chauffée au blanc de bœuf seulement |
 
-Les trois paliers sont jouables et automatisables de bout en bout. Les textures sont encore provisoires ; les vraies arrivent avec la première version publique.
+Les trois paliers sont jouables et automatisables de bout en bout. Les 41 textures originales en pixel art couvrent aliments, seaux, fluides animés et faces des machines, avec au plus 16 couleurs chacune.
 
 ## Caractéristiques
 
@@ -121,6 +125,10 @@ Nécessite le JDK 21.
 ./gradlew runClient          # client de développement
 ./gradlew runServer          # serveur dédié de développement
 ```
+
+## Textures
+
+Les dessins suivent [le cahier des textures](docs/12-prompts-textures.md). Exécuter `python tools/draw_textures.py` avec [Python 3](https://www.python.org/) (bibliothèque standard uniquement) pour les reproduire et créer `build/texture-preview.html` et `build/texture-preview.png`. Les retouches manuelles existantes sont préservées sauf avec l'option explicite `--force`. Vérifier les textures avec `python tools/asset_status.py`, puis leur chargement en jeu avec `./gradlew runClientSmoke`. Les PNG se trouvent dans `src/main/resources/assets/create_belgian_snacks/textures/` ; les métadonnées d'animation des fluides restent à leurs côtés. Les modèles 3D personnalisés restent une tâche distincte.
 
 ## Licence
 

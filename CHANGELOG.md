@@ -8,6 +8,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ### Added
 
+- **Original texture artwork** — Replaced all 41 placeholder textures with original 16-colour pixel art: shared food and bucket silhouettes, two-frame fluid animations, steel fryer panels and five brass grinder gauge states. Added a reproducible standard-library drawing tool with manual-edit protection and a local preview gallery.
 - **Project skeleton** — ModDevGradle 2.0.147 project on Gradle 9.2.1, NeoForge 21.1.250, compiled against Create 6.0.10 (build 280, the one shipped in Arcadia V2 2.0.32) with Registrate, Ponder and Flywheel. JEI and Jade are loaded in the development runtime only.
 - **Creative tab** — `create_belgian_snacks:main`, placed after Create's tabs and used as Registrate's default tab. Its icon is the fricadelle.
 - **Data generation** — `runData` writes `src/generated/resources`; `en_us` comes from Registrate, `fr_fr` from a dedicated language provider.
@@ -38,6 +39,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ### Ajouts
 
+- **Textures originales** — Remplacement des 41 textures provisoires par du pixel art original limité à 16 couleurs : silhouettes communes des aliments et seaux, fluides animés sur deux images, panneaux en inox de la friteuse et cinq états de jauge du hachoir en laiton. Ajout d'un outil de dessin reproductible en bibliothèque standard, avec protection des retouches manuelles et galerie d'aperçu locale.
 - **Squelette du projet** — Projet ModDevGradle 2.0.147 sur Gradle 9.2.1, NeoForge 21.1.250, compilé contre Create 6.0.10 (build 280, celui livré dans Arcadia V2 2.0.32) avec Registrate, Ponder et Flywheel. JEI et Jade ne sont chargés que dans le runtime de développement.
 - **Onglet créatif** — `create_belgian_snacks:main`, placé après les onglets de Create et utilisé comme onglet par défaut de Registrate. Son icône est la fricadelle.
 - **Génération de données** — `runData` écrit `src/generated/resources` ; `en_us` vient de Registrate, `fr_fr` d'un fournisseur de langue dédié.

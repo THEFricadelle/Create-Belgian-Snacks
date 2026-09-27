@@ -76,3 +76,31 @@
 **Root cause:** The lookup used the display name THEFricadelle, which is a different, existing Minecraft account. The author's account is THE_Fricadelle. The test only checked that some skin loaded.
 **Fix:** `TheFricadelleNpc.SKIN_ACCOUNT = "THE_Fricadelle"` for the lookup (the display name stays THEFricadelle); the client test waits for the skin and requires the account Mojang answers with to be THE_Fricadelle.
 **Prevention:** When a feature relies on an external identity, assert on the identity itself, not on "something loaded".
+
+## [2026-09-27] — Texture generation blocked
+**Context:** Generating raw_fricadelle.png from docs/12-prompts-textures.md with the built-in image tool.
+**Error:** HTTP 400 moderation_blocked at output stage, category sexual; request ID fd2a2c4a-3d07-45d1-9a75-4c679635d459.
+**Root cause:** The service rejected the generated output for a food pixel-art request; the underlying classification reason is unavailable.
+**Fix:** No texture was produced or replaced. Reported the block; the CLI/API fallback requires explicit user selection.
+**Prevention:** Do not report generation as successful without a returned image.
+
+## [2026-09-27] — Incorrect texture import script path
+**Context:** Inspecting the texture import workflow.
+**Error:** Get-Content could not find tools/import_texture.py.
+**Root cause:** The script name was assumed instead of using the documented tools/pixelate.py path.
+**Fix:** Identified tools/pixelate.py in docs/12-prompts-textures.md.
+**Prevention:** Use script paths from the project documentation.
+
+## [2026-09-27] — Culinary texture retry blocked
+**Context:** Retrying raw_fricadelle.png after explicitly describing the Belgian food and cooking-game context.
+**Error:** HTTP 400 moderation_blocked at output stage, category sexual; request ID 809ad769-a1e0-4fee-96f0-9c85e50b7662.
+**Root cause:** The image service again classified its output as sexual despite the culinary request; the underlying reason is unavailable.
+**Fix:** Stopped further retries and reported that no image was returned.
+**Prevention:** Distinguish a service output rejection from the nature of the user's food request.
+
+## [2026-09-27 15:58] — Redirected client command reported a conflicting exit status
+**Context:** Running runClientSmoke through PowerShell with combined output redirected to build/texture-smoke.log.
+**Error:** The command runner returned exit code 1 although Gradle printed BUILD SUCCESSFUL and the smoke report ended with RESULT PASS 20 checks.
+**Root cause:** The shell/runner exit status disagreed with the task report; the precise shell cause was not established.
+**Fix:** Inspected the report and screenshots, then ran verifyClientSmoke directly to verify the current report independently.
+**Prevention:** Check both the named task report and the process result; re-run the verifier directly when redirected execution disagrees.
