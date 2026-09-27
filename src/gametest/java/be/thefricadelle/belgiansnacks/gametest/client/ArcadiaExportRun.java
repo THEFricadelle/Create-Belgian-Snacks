@@ -102,7 +102,7 @@ public final class ArcadiaExportRun {
     }
 
     // Per mod: foods, and how many no recipe produces (the blacklist candidates).
-    private static void writeSummary(Path csv) throws Exception {
+    static void writeSummary(Path csv) throws Exception {
         List<String> lines = Files.readAllLines(csv, StandardCharsets.UTF_8);
         Map<String, int[]> perMod = new TreeMap<>();
         int noRecipe = 0;

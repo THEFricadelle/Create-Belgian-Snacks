@@ -155,6 +155,33 @@ public final class FryerGameTests {
         });
     }
 
+    // Two recipes for carrots (frying/test_choice_*): superheated, which sorts first (its result is a
+    // baked potato), and heated (a golden carrot). On a kindled burner the fryer must pick the one it
+    // can run, as Create's basin does, not stall on the first one.
+    @GameTest(template = TEMPLATE)
+    public static void ofTwoRecipesTheOneTheHeatAllowsRuns(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fryer.getItemCapability().insertItem(0, new ItemStack(Items.CARROT), false);
+        helper.succeedWhen(() -> {
+            helper.assertValueEqual(count(fryer, new ItemStack(Items.GOLDEN_CARROT)), 1, "fried with the heated recipe");
+            helper.assertValueEqual(count(fryer, new ItemStack(Items.BAKED_POTATO)), 0, "the superheated recipe ran on a kindled burner");
+        });
+    }
+
+    // Create's rules for its own conditions and levels, whatever a mod does to testBlazeBurner.
+    @GameTest(template = TEMPLATE)
+    public static void heatRulesAreCreates(GameTestHelper helper) {
+        for (HeatLevel heat : List.of(HeatLevel.NONE, HeatLevel.SMOULDERING, HeatLevel.FADING, HeatLevel.KINDLED, HeatLevel.SEETHING)) {
+            boolean lit = heat != HeatLevel.NONE && heat != HeatLevel.SMOULDERING;
+            helper.assertTrue(FryerBlockEntity.heatAllows(HeatCondition.NONE, heat), "no heat needed, on " + heat);
+            helper.assertValueEqual(FryerBlockEntity.heatAllows(HeatCondition.HEATED, heat), lit, "heated, on " + heat);
+            helper.assertValueEqual(FryerBlockEntity.heatAllows(HeatCondition.SUPERHEATED, heat), heat == HeatLevel.SEETHING,
+                "superheated, on " + heat);
+        }
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE)
     public static void tallowOnlyRecipeRefusesOil(GameTestHelper helper) {
         FryerBlockEntity oil = fryerAt(helper, new BlockPos(0, 1, 0), HeatLevel.KINDLED);
@@ -242,6 +269,20 @@ public final class FryerGameTests {
         FryerBlockEntity placed = helper.getBlockEntity(again);
         placed.applyComponentsFromItemStack(fryerItem);
         helper.assertValueEqual(placed.getTank().getPrimaryHandler().getFluidAmount(), 500, "fat restored on placement");
+        helper.succeed();
+    }
+
+    // Every constant the running game has, including any a mod such as Create Heat JS adds.
+    @GameTest(template = TEMPLATE)
+    public static void everyHeatLevelHasAStatusLine(GameTestHelper helper) {
+        for (HeatLevel heat : HeatLevel.values()) {
+            helper.assertTrue(FryerBlockEntity.heatKey(heat).startsWith(BelgianSnacks.MOD_ID + ".fryer.heat."), "no line for " + heat);
+        }
+        helper.assertValueEqual(FryerBlockEntity.heatKey(HeatLevel.NONE), BelgianSnacks.MOD_ID + ".fryer.heat.none", "none");
+        helper.assertValueEqual(FryerBlockEntity.heatKey(HeatLevel.SMOULDERING), BelgianSnacks.MOD_ID + ".fryer.heat.none", "smouldering");
+        helper.assertValueEqual(FryerBlockEntity.heatKey(HeatLevel.FADING), BelgianSnacks.MOD_ID + ".fryer.heat.heated", "fading");
+        helper.assertValueEqual(FryerBlockEntity.heatKey(HeatLevel.KINDLED), BelgianSnacks.MOD_ID + ".fryer.heat.heated", "kindled");
+        helper.assertValueEqual(FryerBlockEntity.heatKey(HeatLevel.SEETHING), BelgianSnacks.MOD_ID + ".fryer.heat.superheated", "seething");
         helper.succeed();
     }
 

@@ -10,7 +10,7 @@
 Copies the pack's mods, KubeJS scripts and configs from the CurseForge instance (read only) into
 run/arcadia, leaving out every mod the dev runtime already provides, then runs arcadiaExport: a
 client that creates a world, exports the food index and quits. The CSV and a per-mod summary are
-copied into docs/data/. Opens a game window; expect several minutes and about 10 GB of memory.
+copied into docs/data/. Opens a game window; expect several minutes and about 8 GB of memory.
 Usage: python tools/arcadia_export.py [path to the instance]
 """
 
@@ -50,27 +50,28 @@ def mod_ids(jar):
     return ids
 
 
-def prepare(instance):
-    mods = GAME / "mods"
+def prepare(instance, game=GAME, left_out=DEV_MOD_IDS):
+    """Copies the pack into game, without the jars declaring one of the left_out mod ids."""
+    mods = game / "mods"
     shutil.rmtree(mods, ignore_errors=True)
-    shutil.rmtree(GAME / "saves", ignore_errors=True)
+    shutil.rmtree(game / "saves", ignore_errors=True)
     mods.mkdir(parents=True)
     kept = skipped = 0
     for jar in sorted((instance / "mods").glob("*.jar")):
         ids = mod_ids(jar)
-        if ids & DEV_MOD_IDS:
+        if ids & left_out:
             print("  left out (already in dev):", jar.name)
             skipped += 1
             continue
-        shutil.copy2(jar, mods / jar.name)
+        link_or_copy(jar, mods / jar.name)
         kept += 1
     # KubeJS edits tags and recipes; the pack also ships global datapacks and its own resource pack.
     for folder in ("kubejs", "config", "defaultconfigs", "datapacks", "resourcepacks", "moonlight-global-datapacks"):
-        shutil.rmtree(GAME / folder, ignore_errors=True)
+        shutil.rmtree(game / folder, ignore_errors=True)
         if (instance / folder).is_dir():
-            shutil.copytree(instance / folder, GAME / folder)
+            shutil.copytree(instance / folder, game / folder)
     for stale in ("arcadia-foods.csv", "arcadia-foods-summary.txt"):
-        (GAME / stale).unlink(missing_ok=True)
+        (game / stale).unlink(missing_ok=True)
     # The pack's own options (resource pack order included), with the automation settings on top.
     overrides = {"onboardAccessibility": "false", "pauseOnLostFocus": "false", "tutorialStep": "none",
                  "soundCategory_master": "0.0", "lang": "en_us", "renderDistance": "4"}
@@ -81,8 +82,16 @@ def prepare(instance):
             if line.split(":", 1)[0] not in overrides:
                 lines.append(line)
     lines += [f"{key}:{value}" for key, value in overrides.items()]
-    (GAME / "options.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (game / "options.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{kept} mods copied, {skipped} left out")
+
+
+def link_or_copy(source, target):
+    # A hard link costs no disk for the second and third copy of a 1 GB pack; copy across volumes.
+    try:
+        os.link(source, target)
+    except OSError:
+        shutil.copy2(source, target)
 
 
 def main():

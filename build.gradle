@@ -32,6 +32,9 @@ sourceSets {
     gametestCompat {
         runtimeClasspath += sourceSets.main.output + sourceSets.gametest.output
     }
+    // Empty on purpose: the arcadiaJar run loads the built jar and the pack's own jars, nothing from here.
+    packJar {
+    }
 }
 
 configurations {
@@ -47,6 +50,7 @@ neoForge {
 
     addModdingDependenciesTo sourceSets.gametest
     addModdingDependenciesTo sourceSets.gametestCompat
+    addModdingDependenciesTo sourceSets.packJar
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
@@ -99,10 +103,42 @@ neoForge {
             client()
             sourceSet = sourceSets.gametest
             gameDirectory = project.file('run/arcadia')
-            jvmArgument '-Xmx10G'
+            jvmArgument '-Xmx8G'
             systemProperty 'create_belgian_snacks.arcadiaExport', 'true'
             // Create Numismatics parses this property as a URI: a bare Windows path makes every mod fail to construct.
             systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaExportLog4j2.xml').toURI().toString()
+        }
+
+        // M6.5, driven by tools/arcadia_smoke.py: the pack in dev with ArcadiaSmokeRun. A hosts the world
+        // and opens it to LAN, B (its own copy of the pack) joins it.
+        arcadiaSmokeA {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaA'
+            systemProperty 'create_belgian_snacks.arcadiaSmoke', 'A'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaSmokeALog4j2.xml').toURI().toString()
+        }
+        arcadiaSmokeB {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia-b')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaB', '--quickPlayMultiplayer', 'localhost:25611'
+            systemProperty 'create_belgian_snacks.arcadiaSmoke', 'B'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaSmokeBLog4j2.xml').toURI().toString()
+        }
+        // The release jar as a player installs it: no class from this project, every mod the pack's own
+        // jar (Create included), ours from build/libs. Loads the world arcadiaSmokeA saved.
+        arcadiaJar {
+            client()
+            sourceSet = sourceSets.packJar
+            loadedMods = []
+            gameDirectory = project.file('run/arcadia-jar')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaJar', '--quickPlaySingleplayer', 'belgian-snacks-arcadia'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaJarLog4j2.xml').toURI().toString()
         }
 
         // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
