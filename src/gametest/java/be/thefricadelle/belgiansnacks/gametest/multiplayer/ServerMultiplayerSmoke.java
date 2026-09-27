@@ -14,23 +14,32 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,6 +63,7 @@ public final class ServerMultiplayerSmoke {
 
     private static final List<String> REPORT = new ArrayList<>();
     private static BlockPos fryerPos;
+    private static BlockPos grinderPos;
     private static int joined;
     private static int ticks;
     private static boolean done;
@@ -87,6 +97,14 @@ public final class ServerMultiplayerSmoke {
         fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
         LOGGER.info("[mpsmoke] fryer placed at {}", fryerPos);
         REPORT.add("PASS server.setup - fryer at " + fryerPos.toShortString());
+
+        // A running supreme grinder two blocks north of the fryer, within reach of both players.
+        grinderPos = fryerPos.north(2);
+        level.setBlockAndUpdate(grinderPos, BSBlocks.SUPREME_GRINDER.getDefaultState());
+        level.setBlockAndUpdate(grinderPos.above(), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+            .setValue(BlockStateProperties.FACING, Direction.DOWN));
+        ((CreativeMotorBlockEntity) level.getBlockEntity(grinderPos.above())).generatedSpeed.setValue(64);
+        REPORT.add("PASS server.grinderSetup - supreme grinder at " + grinderPos.toShortString());
         var index = be.thefricadelle.belgiansnacks.content.food.FoodIndex.server();
         REPORT.add("PASS server.foodIndex - " + index.size() + " foods, fingerprint " + index.fingerprint());
     }
@@ -99,6 +117,8 @@ public final class ServerMultiplayerSmoke {
             if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player && fryerPos != null) {
                 boolean a = player.getName().getString().endsWith("A");
                 player.teleportTo(fryerPos.getX() + (a ? -1.5 : 2.5), fryerPos.getY(), fryerPos.getZ() + 0.5);
+                // One food each for the grinder, a different one per player.
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(a ? Items.APPLE : Items.BREAD));
             }
             joined++;
             LOGGER.info("[mpsmoke] {} joined ({} so far)", event.getEntity().getName().getString(), joined);
@@ -125,6 +145,10 @@ public final class ServerMultiplayerSmoke {
             boolean emptied = fryer.getOutput().getStackInSlot(0).isEmpty() && fryer.getOutput().getStackInSlot(1).isEmpty();
             REPORT.add((emptied ? "PASS" : "FAIL") + " server.outputTaken - output " + (emptied ? "taken by a client" : "still holds "
                 + fryer.getOutput().getStackInSlot(0)));
+            SupremeGrinderBlockEntity grinder = (SupremeGrinderBlockEntity) server.overworld().getBlockEntity(grinderPos);
+            Set<ResourceLocation> expected = Set.of(ResourceLocation.parse("minecraft:apple"), ResourceLocation.parse("minecraft:bread"));
+            boolean fed = grinder.getConsumed().equals(expected);
+            REPORT.add((fed ? "PASS" : "FAIL") + " server.grinderFed - collection " + grinder.getConsumed() + " from both players");
         }
         boolean pass = REPORT.stream().noneMatch(line -> line.startsWith("FAIL"));
         REPORT.add(pass ? "RESULT PASS " + REPORT.size() + " checks" : "RESULT FAIL");

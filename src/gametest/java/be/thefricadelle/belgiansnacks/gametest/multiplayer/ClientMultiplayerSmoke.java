@@ -23,12 +23,17 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.client.GrinderMissingScreen;
+import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
+import be.thefricadelle.belgiansnacks.network.GrinderMissingRequestPayload;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -37,6 +42,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Client half of the two-client run (tools/mp_smoke.py). Both clients join the dedicated server and
@@ -64,6 +70,7 @@ public final class ClientMultiplayerSmoke {
     private static int wait;
     private static int failures;
     private static BlockPos fryerPos;
+    private static BlockPos grinderPos;
 
     private ClientMultiplayerSmoke() {
     }
@@ -145,6 +152,29 @@ public final class ClientMultiplayerSmoke {
             pass("mp.batchSynced", "16 fricadelles and 1840 mB seen after the server fried the batch");
         });
         step("shot", 10, () -> true, () -> screenshot("mp-" + ROLE.toLowerCase() + "-fryer"));
+        // Each player feeds the same grinder the food the server gave them (A an apple, B a bread).
+        step("grinder.found", 0, () -> findGrinder() != null, () -> grinderPos = findGrinder());
+        step("grinder.feed", 5, () -> true, () -> {
+            require(FoodIndex.client().contains(BuiltInRegistries.ITEM.getKey(mc.player.getMainHandItem().getItem())),
+                "no food in hand: " + mc.player.getMainHandItem());
+            mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND,
+                new BlockHitResult(Vec3.atCenterOf(grinderPos), Direction.UP, grinderPos, false));
+        });
+        step("grinder.fed", 0, () -> mc.player.getMainHandItem().isEmpty(),
+            () -> pass("mp.grinderFeed", "right click over the network put the food in the grinder"));
+        step("grinder.shared", 0, () -> grinder() != null && grinder().getCount() == 2,
+            () -> pass("mp.grinderShared", "both players' foods counted here: 2 / " + grinder().getGoal()));
+        if (ROLE.equals("B")) {
+            step("grinder.missing.ask", 0, () -> true, () -> PacketDistributor.sendToServer(new GrinderMissingRequestPayload(grinderPos)));
+            step("grinder.missing", 0, () -> mc.screen instanceof GrinderMissingScreen, () -> {
+                int expected = FoodIndex.client().size() - 2;
+                int listed = ((GrinderMissingScreen) mc.screen).missingCount();
+                require(listed == expected, "the screen lists " + listed + " missing foods, expected " + expected);
+                pass("mp.grinderMissing", listed + " missing foods sent by the dedicated server");
+            });
+            step("grinder.missing.shot", 10, () -> true, () -> screenshot("mp-b-grinder-missing"));
+            step("grinder.missing.close", 5, () -> true, () -> mc.setScreen(null));
+        }
         if (ROLE.equals("A")) {
             step("other.ready", 0, () -> otherPlayerCrouching(),
                 () -> pass("mp.handshake", "the other client's crouch arrived through the server"));
@@ -173,6 +203,21 @@ public final class ClientMultiplayerSmoke {
     private static boolean otherPlayerCrouching() {
         Minecraft mc = Minecraft.getInstance();
         return mc.level.players().stream().anyMatch(player -> player != mc.player && player.isShiftKeyDown());
+    }
+
+    private static BlockPos findGrinder() {
+        Minecraft mc = Minecraft.getInstance();
+        BlockPos origin = mc.player.blockPosition();
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-6, -3, -6), origin.offset(6, 3, 6))) {
+            if (mc.level.getBlockEntity(pos) instanceof SupremeGrinderBlockEntity) {
+                return pos.immutable();
+            }
+        }
+        return null;
+    }
+
+    private static SupremeGrinderBlockEntity grinder() {
+        return Minecraft.getInstance().level.getBlockEntity(grinderPos) instanceof SupremeGrinderBlockEntity grinder ? grinder : null;
     }
 
     private static BlockPos findFryer() {

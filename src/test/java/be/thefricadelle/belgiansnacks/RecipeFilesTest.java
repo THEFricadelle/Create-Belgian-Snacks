@@ -50,14 +50,15 @@ class RecipeFilesTest {
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
         "frying/fricadelle",
-        "mechanical_crafting/fryer");
+        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder");
 
     // Recipe types this mod registers; every other folder is a Create type.
     private static final Set<String> OWN_TYPES = Set.of("frying");
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
-    // c:plates/copper is filled by Create, a required dependency.
-    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:plates/copper");
+    // c:plates/copper and c:plates/brass are filled by Create, a required dependency.
+    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:plates/copper", "c:plates/brass",
+        "c:ingots/gold", "c:storage_blocks/iron");
 
     @Test
     void recipeIdsAreExactlyTheExpectedOnes() throws IOException {
@@ -221,6 +222,23 @@ class RecipeFilesTest {
         assertEquals("create:precision_mechanism", key.getAsJsonObject("P").get("item").getAsString());
         assertEquals("minecraft:iron_bars", key.getAsJsonObject("I").get("item").getAsString());
         assertEquals("c:plates/copper", key.getAsJsonObject("C").get("tag").getAsString());
+    }
+
+    @Test
+    void supremeGrinderIsCraftedOnAMechanicalCrafter() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("mechanical_crafting/supreme_grinder.json"));
+        assertEquals("create:mechanical_crafting", recipe.get("type").getAsString());
+        assertEquals(MOD_ID + ":supreme_grinder", recipe.getAsJsonObject("result").get("id").getAsString());
+        JsonObject key = recipe.getAsJsonObject("key");
+        assertEquals("create:crushing_wheel", key.getAsJsonObject("W").get("item").getAsString());
+        assertEquals("create:brass_casing", key.getAsJsonObject("C").get("item").getAsString());
+        assertEquals("create:precision_mechanism", key.getAsJsonObject("M").get("item").getAsString());
+        assertEquals("c:plates/brass", key.getAsJsonObject("S").get("tag").getAsString());
+        assertEquals("c:ingots/gold", key.getAsJsonObject("G").get("tag").getAsString());
+        assertEquals("c:storage_blocks/iron", key.getAsJsonObject("I").get("tag").getAsString());
+        // Two crushing wheels (D11).
+        assertEquals(2, String.join("", recipe.getAsJsonArray("pattern").asList().stream().map(e -> e.getAsString()).toList())
+            .chars().filter(c -> c == 'W').count());
     }
 
     private static Set<String> modLoadedGuards(JsonObject recipe) {

@@ -31,10 +31,21 @@ import com.tterrag.registrate.util.entry.FluidEntry;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 
+import be.thefricadelle.belgiansnacks.client.BSPartialModels;
+import be.thefricadelle.belgiansnacks.client.GrinderMissingScreen;
+import be.thefricadelle.belgiansnacks.compat.jei.GrindingGoalCategory;
+import be.thefricadelle.belgiansnacks.config.BSConfig;
+import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.content.grinder.GrinderMode;
+import be.thefricadelle.belgiansnacks.content.grinder.GrinderProgress;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlock;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
+import be.thefricadelle.belgiansnacks.network.GrinderMissingRequestPayload;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
@@ -52,8 +63,10 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.language.ClientLanguage;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -66,6 +79,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.WorldDataConfiguration;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.material.Fluid;
@@ -76,6 +90,7 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Drives a real client and writes a pass/fail report: what the dedicated-server GameTests cannot see.
@@ -102,7 +117,7 @@ public final class ClientSmokeTest {
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
         "frying/fricadelle",
-        "mechanical_crafting/fryer");
+        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 
@@ -114,6 +129,7 @@ public final class ClientSmokeTest {
     private static int wait;
     private static int failures;
     private static BlockPos smokeFryer;
+    private static BlockPos smokeGrinder;
 
     private ClientSmokeTest() {
     }
@@ -182,6 +198,15 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("fryer.place", 10, ClientSmokeTest::placeFryer));
         STEPS.add(new Step("fryer.check", 60, ClientSmokeTest::checkFryer));
         STEPS.add(new Step("fryer.shot", 10, () -> screenshot("fryer-in-world")));
+        STEPS.add(new Step("grinder.place", 10, ClientSmokeTest::placeGrinder));
+        // Two foods collected on the server, then synced: the client figures follow.
+        STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
+            ClientSmokeTest::checkGrinder));
+        STEPS.add(new Step("grinder.shot", 10, () -> screenshot("grinder-in-world")));
+        STEPS.add(new Step("grinder.missing.ask", 5, ClientSmokeTest::askMissing));
+        STEPS.add(new Step("grinder.missing.check", 0, () -> mc.screen instanceof GrinderMissingScreen, ClientSmokeTest::checkMissingScreen));
+        STEPS.add(new Step("grinder.missing.shot", 20, () -> screenshot("grinder-missing")));
+        STEPS.add(new Step("grinder.missing.close", 5, () -> mc.setScreen(null)));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));
         STEPS.add(new Step("jei.paste.shot", 30, () -> screenshot("jei-fricadelle-paste")));
@@ -203,6 +228,10 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.frying.shot", 30, () -> screenshot("jei-frying")));
         STEPS.add(new Step("jei.fryerCraft", 10, () -> showOutput(new ItemStack(BSBlocks.FRYER.get()))));
         STEPS.add(new Step("jei.fryerCraft.shot", 30, () -> screenshot("jei-fryer-craft")));
+        STEPS.add(new Step("jei.grinderCraft", 10, () -> showOutput(new ItemStack(BSBlocks.SUPREME_GRINDER.get()))));
+        STEPS.add(new Step("jei.grinderCraft.shot", 30, () -> screenshot("jei-grinder-craft")));
+        STEPS.add(new Step("jei.grinding", 10, () -> SmokeJeiPlugin.runtime.getRecipesGui().showTypes(List.of(GrindingGoalCategory.TYPE))));
+        STEPS.add(new Step("jei.grinding.shot", 30, () -> screenshot("jei-grinding-goal")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 
@@ -385,6 +414,87 @@ public final class ClientSmokeTest {
         });
     }
 
+    // A running grinder three blocks west of the fryer, with two foods already collected.
+    private static void placeGrinder() {
+        Minecraft mc = Minecraft.getInstance();
+        var server = mc.getSingleplayerServer();
+        BlockPos grinderPos = smokeFryer.west(3);
+        server.execute(() -> {
+            var level = server.overworld();
+            level.setBlockAndUpdate(grinderPos, BSBlocks.SUPREME_GRINDER.getDefaultState());
+            level.setBlockAndUpdate(grinderPos.above(), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(BlockStateProperties.FACING, Direction.DOWN));
+            if (level.getBlockEntity(grinderPos.above()) instanceof CreativeMotorBlockEntity motor) {
+                motor.generatedSpeed.setValue(64);
+            }
+            if (level.getBlockEntity(grinderPos) instanceof SupremeGrinderBlockEntity grinder) {
+                grinder.setConsumed(FoodIndex.server().ids().subList(0, 2));
+            }
+        });
+        smokeGrinder = grinderPos;
+        // Look west and down at it.
+        mc.player.setYRot(90f);
+        mc.player.setXRot(30f);
+    }
+
+    private static SupremeGrinderBlockEntity grinderOnClient() {
+        Minecraft mc = Minecraft.getInstance();
+        return smokeGrinder != null && mc.level.getBlockEntity(smokeGrinder) instanceof SupremeGrinderBlockEntity grinder ? grinder : null;
+    }
+
+    private static void checkGrinder() {
+        Minecraft mc = Minecraft.getInstance();
+        check("grinder.model", () -> {
+            BakedModel missing = mc.getModelManager().getMissingModel();
+            for (int fill = 0; fill <= 4; fill++) {
+                var state = BSBlocks.SUPREME_GRINDER.getDefaultState().setValue(SupremeGrinderBlock.FILL, fill);
+                BakedModel model = mc.getBlockRenderer().getBlockModel(state);
+                require(model != missing, "no model for fill " + fill);
+                require(!isMissing(model.getParticleIcon().contents().name()), "missing texture for fill " + fill);
+            }
+            BakedModel blades = BSPartialModels.GRINDER_BLADES.get();
+            require(blades != null && blades != missing, "blade partial model not loaded");
+            require(!isMissing(blades.getParticleIcon().contents().name()), "blade texture missing");
+            return "5 gauge models and the rotating blades";
+        });
+        check("grinder.synced", () -> {
+            SupremeGrinderBlockEntity grinder = grinderOnClient();
+            int total = FoodIndex.client().size();
+            int goal = GrinderProgress.goal(BSConfig.grinderTheFricadelleRatio(), total);
+            require(grinder.getTotal() == total && grinder.getGoal() == goal, "client sees " + grinder.getGoal() + " of " + grinder.getTotal());
+            require(grinder.getSamples().size() == 5, "client got " + grinder.getSamples().size() + " missing examples");
+            require(Math.abs(grinder.getSpeed()) == 64, "client sees " + grinder.getSpeed() + " RPM");
+            return "2 / " + goal + " of " + total + " foods, 5 examples, 64 RPM";
+        });
+        check("grinder.goggles", () -> {
+            List<Component> lines = new ArrayList<>();
+            require(grinderOnClient().addToGoggleTooltip(lines, false), "goggles tooltip refused");
+            String text = String.join(" | ", lines.stream().map(Component::getString).toList());
+            int goal = grinderOnClient().getGoal();
+            require(text.contains("2 / " + goal + " foods"), "no progress line: " + text);
+            require(text.contains("THE_Fricadelle (Exceptional Paste)"), "no mode line: " + text);
+            require(!text.contains(BelgianSnacks.MOD_ID + "."), "untranslated goggles key: " + text);
+            return text;
+        });
+    }
+
+    // The real path: the payload a sneaking player with goggles sends, answered by the server.
+    private static void askMissing() {
+        PacketDistributor.sendToServer(new GrinderMissingRequestPayload(smokeGrinder));
+    }
+
+    private static void checkMissingScreen() {
+        Minecraft mc = Minecraft.getInstance();
+        check("grinder.missingScreen", () -> {
+            GrinderMissingScreen screen = (GrinderMissingScreen) mc.screen;
+            int expected = FoodIndex.client().size() - 2;
+            require(screen.getPos().equals(smokeGrinder), "screen for " + screen.getPos());
+            require(screen.missingCount() == expected, "lists " + screen.missingCount() + " foods, expected " + expected);
+            require(screen.drawnPerFrame() > 0 && screen.drawnPerFrame() <= expected, "draws " + screen.drawnPerFrame() + " icons");
+            return expected + " missing foods listed, " + screen.drawnPerFrame() + " icons drawn per frame";
+        });
+    }
+
     private static void checkJei() {
         Minecraft.getInstance().options.hideGui = false;
         IJeiRuntime jei = SmokeJeiPlugin.runtime;
@@ -411,6 +521,11 @@ public final class ClientSmokeTest {
             require(missing.isEmpty(), "loaded but not shown in JEI: " + missing);
             require(!shown.contains("mixing/curry_ketchup"), "JEI shows the tomato recipe although it is disabled");
             return shown.size() + " recipes shown: " + shown;
+        });
+        check("jei.grinding", () -> {
+            List<GrinderMode> modes = jei.getRecipeManager().createRecipeLookup(GrindingGoalCategory.TYPE).get().toList();
+            require(modes.size() == 2, "grinding goal entries: " + modes);
+            return "grinding goal shown for " + modes;
         });
     }
 
