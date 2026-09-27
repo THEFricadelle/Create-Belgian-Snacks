@@ -211,7 +211,9 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.missing.close", 5, () -> mc.setScreen(null)));
         // The player eats THE_FRICADELLE on the integrated server: every gag reaches this client.
         STEPS.add(new Step("ultimate.eat", 10, ClientSmokeTest::eatUltimate));
-        STEPS.add(new Step("ultimate.check", 20, () -> visitor() != null, ClientSmokeTest::checkUltimate));
+        // Waits for the skin too: it comes from Mojang's services, a moment after the visitor appears.
+        STEPS.add(new Step("ultimate.check", 20, () -> visitor() != null && be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline(),
+            ClientSmokeTest::checkUltimate));
         STEPS.add(new Step("ultimate.face", 5, () -> visitor() != null, () -> {
             // Face the visitor for the screenshot, from where the player floats.
             var npc = visitor();
@@ -577,9 +579,11 @@ public final class ClientSmokeTest {
             require(renderer instanceof be.thefricadelle.belgiansnacks.client.TheFricadelleNpcRenderer, "rendered by " + renderer);
             require(npc.isCustomNameVisible() && npc.getCustomName() != null, "no line above the head");
             var skin = be.thefricadelle.belgiansnacks.client.NpcSkin.get();
-            require(skin != null && skin.texture() != null, "no skin");
-            return "\"" + npc.getCustomName().getString() + "\", " + (be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline()
-                ? "the THEFricadelle account's skin" : "default skin (the account's skin did not load)") + ", " + skin.model() + " model";
+            String account = be.thefricadelle.belgiansnacks.client.NpcSkin.account();
+            // The author's own account: a lookup by the display name found another player's skin once.
+            require("THE_Fricadelle".equals(account), "skin of account " + account + ", expected THE_Fricadelle");
+            require(skin.texture() != null, "no skin texture");
+            return "\"" + npc.getCustomName().getString() + "\", skin of the " + account + " account, " + skin.model() + " model";
         });
     }
 

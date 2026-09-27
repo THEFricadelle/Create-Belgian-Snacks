@@ -69,3 +69,10 @@
 **Root cause:** A LAN join lands anywhere within the spawn radius; the pack hands out a starter kit on join, which takes the hand.
 **Fix:** The host teleports the guest beside it on login and puts the food in the last hotbar slot; each client selects the slot holding its food.
 **Prevention:** In a real pack, never assume the spawn point or the held item of a joining player.
+
+## [2026-09-27 15:30] - THEFricadelle NPC wore another player's skin
+**Context:** M8 NPC, skin looked up online by the account name.
+**Error:** The NPC showed a stranger's skin; the client test reported "the THEFricadelle account's skin" and passed.
+**Root cause:** The lookup used the display name THEFricadelle, which is a different, existing Minecraft account. The author's account is THE_Fricadelle. The test only checked that some skin loaded.
+**Fix:** `TheFricadelleNpc.SKIN_ACCOUNT = "THE_Fricadelle"` for the lookup (the display name stays THEFricadelle); the client test waits for the skin and requires the account Mojang answers with to be THE_Fricadelle.
+**Prevention:** When a feature relies on an external identity, assert on the identity itself, not on "something loaded".

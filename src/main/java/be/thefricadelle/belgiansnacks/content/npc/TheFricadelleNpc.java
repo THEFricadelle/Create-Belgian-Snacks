@@ -37,8 +37,10 @@ import net.minecraft.world.phys.Vec3;
  * cannot outlive a restart; invulnerable, no collision, nothing to loot.
  */
 public class TheFricadelleNpc extends PathfinderMob {
-    /** The author's name, shown in chat; the client draws that account's skin. */
+    /** The author's name, shown in chat and above the head. */
     public static final String NAME = "THEFricadelle";
+    /** The author's Minecraft account, whose skin the client draws (not NAME: another player owns that one). */
+    public static final String SKIN_ACCOUNT = "THE_Fricadelle";
     public static final int LIFETIME_TICKS = 160;
     public static final int PHRASES = 5;
     private static final String PHRASE_KEY = BelgianSnacks.MOD_ID + ".npc.phrase.";

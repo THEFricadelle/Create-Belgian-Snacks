@@ -47,7 +47,7 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 
 Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement dessus plus tard ». Toutes les valeurs vivent dans `BSFoods`.
 
-**THEFricadelle en personne** : un PNJ apparaît à côté de celui qui mange THE_FRICADELLE dans un nuage de fumée, le regarde, applaudit, dit une phrase tirée au hasard parmi 5 (au-dessus de sa tête et dans le chat à 32 blocs), puis disparaît au bout de 8 s. Invulnérable, sans collision, sans loot, jamais sauvegardé. Son skin est **celui du compte Minecraft THEFricadelle**, chargé en ligne comme une tête de joueur (skin par défaut sans internet).
+**THEFricadelle en personne** : un PNJ apparaît à côté de celui qui mange THE_FRICADELLE dans un nuage de fumée, le regarde, applaudit, dit une phrase tirée au hasard parmi 5 (au-dessus de sa tête et dans le chat à 32 blocs), puis disparaît au bout de 8 s. Invulnérable, sans collision, sans loot, jamais sauvegardé. Son skin est **celui du compte Minecraft THE_Fricadelle** (le pseudo de l’auteur ; le nom affiché reste THEFricadelle), chargé en ligne comme une tête de joueur (skin par défaut sans internet).
 
 **Advancements** (onglet « Create: Belgian Snacks ») : hacher de la viande (racine) → « Friterie ouverte » (poser une Friteuse) → « Blanc de bœuf » (seau) et « Une fricadelle, une ! » → « Le Hachoir Suprême » (en poser un) → « Exceptionnelle » → « Avec une spéciale » ; et « À mi-chemin » (Hachoir à 50 % de tous les aliments, déclencheur maison) → « Absolue » (défi) → « J'ai tout mangé » (défi). « 100 fricadelles produites » écarté pour l'instant.
 
