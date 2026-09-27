@@ -20,6 +20,7 @@ Règle : tout ce qui peut être vérifié par la machine l'est. La checklist man
 | `./gradlew runClientSmoke` | `ClientSmokeTest` (source set `gametest`, client réel, fenêtre ouverte) | Modèles d'items et sprites de fluide ≠ texture manquante ; tooltip Create des 3 fricadelles ; noms `fr_fr` (différents de l'anglais sauf les marques) ; onglet créatif affiché et complet ; **JEI** liste nos items et affiche chaque recette chargée (et pas la recette tomate désactivée). Rapport `run/clientsmoke/smoke-report.txt`, validé par `verifyClientSmoke` ; captures dans `run/clientsmoke/screenshots/` (onglet, fluides posés, pages JEI) |
 | `./gradlew runMultiplayerSmoke` (= `python tools/mp_smoke.py`) | serveur dédié `serverSmoke` + 2 clients `clientSmokeA/B` (source set `gametest`, 2 fenêtres) | Le serveur pose une friteuse en marche au spawn et place les joueurs de part et d'autre. Chaque client : connexion, friteuse synchronisée, les 2 joueurs se voient (monde + tab), lot fini vu identique (16 fricadelles, 1840 mB). B s'accroupit ; A attend de voir cet accroupissement (relayé par le serveur, donc B a tout vérifié avant qu'A agisse), puis récupère la sortie par un **vrai clic droit envoyé au serveur** et la reçoit dans son inventaire ; B voit la sortie se vider. Chaque client échoue proprement (rapport écrit) si la connexion tombe. Le serveur s'arrête seul quand les 2 sont partis et vérifie la sortie. Rapports `run/mpsmoke/*/smoke-mp-*.txt`, captures par client |
 | `python tools/arcadia_export.py` (manuel, ~9 min, 10 Go) | pack Arcadia complet en dev (`arcadiaExport`) | Export réel du FoodIndex vers `docs/data/` ; à relancer à chaque mise à jour du pack |
+| `python tools/arcadia_smoke.py` (manuel, ~35 min, 2 × 8 Go) | pack Arcadia complet : client A, client B en LAN, jar de release | Checklist Arcadia ci-dessous ; rapports `run/arcadia*/arcadia-smoke-report.txt`, captures `run/arcadia/screenshots` |
 | `./gradlew testAll` | tout | `build` (JUnit) → GameTests → GameTests avec FD → client → deux clients |
 | CI (`.github/workflows/build.yml`) | GitHub Actions | `build` (+ JUnit), `runGameTestServer`, `runGameTestServerCompat`, puis `runData` et échec si `src/generated` diffère de ce qui est commité. Le client ne tourne pas en CI (pas d'affichage) : `testAll` en local avant chaque push de fonctionnalité |
 
@@ -96,11 +97,13 @@ Automatisée par `GrinderGameTests` (serveur), `GrinderProgressTest` (JUnit), `C
 - [ ] Aucun parcours du registre des items dans un `tick()`.
 
 ## Checklist Arcadia V2
-- [ ] Démarrage client + serveur sans crash ni erreur de recette `create_belgian_snacks` dans `latest.log`.
-- [ ] JEI : catégories Friture et Hachoir visibles, catalysts OK, pas d'item de transition dans la liste.
-- [ ] Jade : infos Friteuse / Hachoir affichées.
-- [ ] KubeJS : `event.remove({ id: 'create_belgian_snacks:frying/fricadelle' })` fonctionne ; `event.custom({ type: 'create_belgian_snacks:frying', ... })` fonctionne ; ajout d'un item au tag blacklist pris en compte après `/reload`.
-- [ ] Aucun conflit Polymorph sur nos recettes.
-- [ ] Friteuse chauffée par Blaze Burner **et** par les sources de chaleur ajoutées par Create Heat JS si le pack en utilise.
+Automatisée par `python tools/arcadia_smoke.py` (M6.5, voir `docs/11`), sauf mention contraire.
+- [x] Démarrage sans crash ni erreur de recette `create_belgian_snacks` : le jar de release avec les jars exacts du pack (phase jar), et le client de dev (`recipes.loaded`).
+- [x] JEI : catégories Friture et Hachoir, recette KubeJS affichée, recette supprimée absente (`jei.*`). `incomplete_the_fricadelle` **apparaît** dans la liste d'items : à trancher (le cacher ou non).
+- [ ] Jade : infos Friteuse / Hachoir affichées (manuel, capture à regarder).
+- [x] KubeJS : `event.remove` et `event.custom` de type `frying` (frite par une vraie Friteuse), ajout au tag blacklist pris en compte (`kubejs.*`).
+- [x] Aucun conflit Polymorph ni conflit de recette de même type (`recipes.polymorph`, `recipes.conflicts`).
+- [x] Friteuse chauffée par Blaze Burner dans le pack, règles de Create respectées malgré Create Heat JS (`heat.fryerRules`, `kubejs.fryingWorks`) ; toutes les constantes de chaleur du pack gérées (`heat.createHeatJs`). Pas de source de chaleur custom dans le pack aujourd'hui.
+- [x] 2 joueurs en LAN sur le pack complet : même index, Friteuse synchronisée, Hachoir partagé, liste des manquants (`lan.*`).
 - [ ] Spice of Life: Onion compte bien nos fricadelles.
 - [ ] Temps de calcul du FoodIndex (log) acceptable sur le pack complet.

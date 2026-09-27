@@ -76,10 +76,17 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 Le mod pénalise la nourriture répétitive. Nos 3 fricadelles doivent être des aliments normaux (composant `food`), donc elles seront comptées par SoL. Rien de spécial à coder, mais à garder en tête pour l'équilibrage (D-effets).
 
 ### Create Heat JS
-Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse doit lire la chaleur **via l'API de Create** (pas en testant `instanceof BlazeBurnerBlock`), pour rester compatible. À tester dans l'environnement du pack.
+Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse lit la chaleur **via l'API de Create** (`BasinBlockEntity.getHeatLevelOf`), pas en testant `instanceof BlazeBurnerBlock`.
+
+Testé dans le pack au M6.5 (0.0.6) :
+- Il **ajoute des constantes** aux enums `HeatLevel` et `HeatCondition` de Create (5 niveaux et 5 conditions dans le pack). Aucun `switch` exhaustif sur ces enums chez nous : une constante inconnue y lèverait une exception.
+- Il **réécrit `HeatCondition.testBlazeBurner`** avec sa propre table : « sans chaleur » y est refusé sur tout brûleur allumé, « chauffé » sur un brûleur `FADING`. Le bassin de Create y échappe (Heat JS le traite à part). La Friteuse applique donc les règles de Create pour les 3 conditions et 5 niveaux de Create, et ne passe par `testBlazeBurner` que pour ce que Heat JS ajoute.
+- Le pack n'enregistre aucune source de chaleur custom aujourd'hui. Si la team en ajoute, un niveau custom passera par la table de Heat JS.
 
 ### Polymorph
 Éviter les conflits de recettes (deux recettes avec les mêmes ingrédients). En cas de conflit : on retire la nôtre, pas celle du pack.
+
+Testé dans le pack au M6.5 : aucune de nos recettes n'est d'un type que Polymorph arbitre (établi, four, tailleur de pierre…) ; notre seul craft passe par le Mechanical Crafter. Aucune recette du pack, de même type, n'accepte les mêmes entrées que les nôtres (broyage, meule, mixer, compacteur, presse, friture, et grille des deux crafts testée contre toutes les recettes de craft et de Mechanical Crafter).
 
 Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
 - **Aucun** autre `create:crushing` sur bœuf, porc, poulet ou pain : nos recettes de broyage sont seules. Create: Food fait du haché à la **presse** (`createfood:ground_*`), autre machine, pas de conflit.
@@ -90,6 +97,18 @@ Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
 ### Serveur
 - Pack lourd (464 mods) : FoodIndex calculé une fois par reload, jamais en tick. Log du temps de calcul.
 - Tester sur une copie du serveur Arcadia avant toute mise à jour.
+
+## Test dans le pack (M6.5, 27/09/2026)
+
+`python tools/arcadia_smoke.py` (environ 35 minutes, deux fenêtres, 8 Go par client) : l'instance CurseForge est seulement lue ; tout se passe dans `run/arcadia`, `run/arcadia-b` et `run/arcadia-jar`. Trois phases :
+
+1. **Client A** (pack complet + notre mod en dev, `ArcadiaSmokeRun`) : crée un monde et vérifie les recettes, les modifications KubeJS, les conflits, Create Heat JS, le Hachoir, JEI et l'export, puis ouvre le monde en LAN.
+2. **Client B** rejoint en LAN : même index d'aliments (1803, même empreinte), Friteuse synchronisée, les deux joueurs nourrissent le même Hachoir par clic droit, B reçoit la liste des manquants.
+3. **Le jar de release** (`build/libs`) avec les jars exacts du pack, Create compris, sans aucune classe du projet : charge le monde de A, dont un datapack lance `belgiansnacks foods export`. Aucune erreur `create_belgian_snacks` dans le log, 1803 aliments exportés.
+
+Le script KubeJS de test (`tools/arcadia/zz_belgian_snacks_m65_test.js`, copié dans `run/` seulement) montre ce que la team peut faire sans toucher au jar : supprimer `create_belgian_snacks:frying/fricadelle`, ajouter une recette `create_belgian_snacks:frying` (pomme de terre vers pomme de terre cuite, frite par une vraie Friteuse), retirer un aliment du Hachoir par le tag `grinder/blacklist`.
+
+Trouvé et corrigé en chemin : la Friteuse prenait la première recette de l'item sans regarder la chaleur (bloquée si une variante demande plus de chaleur), et Create Heat JS change les règles de chaleur (voir plus haut). Dans le pack, `incomplete_the_fricadelle` apparaît dans la liste d'items de JEI (voir `docs/10`).
 
 ## Le FoodIndex réel d'Arcadia 2.0.32 (export du 27/09/2026)
 

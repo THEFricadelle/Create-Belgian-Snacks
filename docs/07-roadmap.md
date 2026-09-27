@@ -67,12 +67,12 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Catégorie JEI « virtuelle »
 - **Accepté si** : checklist Hachoir de `10-tests.md` OK, y compris retrait d'un mod entre deux sessions.
 
-### M6.5 — Test dans Arcadia V2
-- [ ] Jar installé dans une copie de l'instance Arcadia : démarrage sans crash, pas d'erreur de recette dans les logs
-- [ ] `foods export` sur le pack complet → CSV exporté
-- [ ] Test KubeJS : supprimer une de nos recettes et ajouter une recette `frying` par script
-- [ ] Vérifier conflits Polymorph et compat Create Heat JS
-- **Accepté si** : tout passe sur une copie du serveur Arcadia avec 2 joueurs.
+### M6.5 — Test dans Arcadia V2 ✅ (27/09/2026)
+- [x] Jar installé dans une copie de l'instance Arcadia : démarrage sans crash, pas d'erreur de recette dans les logs
+- [x] `foods export` sur le pack complet → CSV exporté
+- [x] Test KubeJS : supprimer une de nos recettes et ajouter une recette `frying` par script
+- [x] Vérifier conflits Polymorph et compat Create Heat JS
+- **Accepté si** : tout passe sur une copie du serveur Arcadia avec 2 joueurs. Décidé ensemble : 2 clients en LAN sur le pack complet (pas de server pack local) ; le serveur dédié reste couvert par `runMultiplayerSmoke` en dev. Détail : `docs/11`, section « Test dans le pack ».
 
 ### M7 — Palier 2 : THE_Fricadelle 🔒 (taux, séquence)
 - [ ] Sequenced Assembly + recettes sauces/épices
