@@ -12,6 +12,7 @@ package be.thefricadelle.belgiansnacks.registry;
 import java.util.function.Supplier;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.content.grinder.GrinderContents;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
@@ -25,6 +26,10 @@ public final class BSDataComponents {
     // The fat a broken fryer carries in its item, restored when it is placed again.
     public static final Supplier<DataComponentType<SimpleFluidContent>> FRYER_FLUID = REGISTER.registerComponentType("fryer_fluid",
         builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
+
+    // A broken supreme grinder's collection, restored when it is placed again (D10).
+    public static final Supplier<DataComponentType<GrinderContents>> GRINDER_CONTENTS = REGISTER.registerComponentType("grinder_contents",
+        builder -> builder.persistent(GrinderContents.CODEC).networkSynchronized(GrinderContents.STREAM_CODEC));
 
     private BSDataComponents() {
     }

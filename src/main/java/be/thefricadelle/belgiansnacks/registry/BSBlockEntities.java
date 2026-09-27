@@ -11,17 +11,28 @@ package be.thefricadelle.belgiansnacks.registry;
 
 import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 
+import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
+import be.thefricadelle.belgiansnacks.client.BSPartialModels;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerRenderer;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderRenderer;
 
 public final class BSBlockEntities {
-    // Registrate only touches the renderer supplier on the client.
+    // Registrate only touches the renderer and visual suppliers on the client.
     public static final BlockEntityEntry<FryerBlockEntity> FRYER = REGISTRATE
         .blockEntity("fryer", FryerBlockEntity::new)
         .validBlocks(BSBlocks.FRYER)
         .renderer(() -> FryerRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<SupremeGrinderBlockEntity> SUPREME_GRINDER = REGISTRATE
+        .blockEntity("supreme_grinder", SupremeGrinderBlockEntity::new)
+        .visual(() -> SingleAxisRotatingVisual.of(BSPartialModels.GRINDER_BLADES), false)
+        .validBlocks(BSBlocks.SUPREME_GRINDER)
+        .renderer(() -> SupremeGrinderRenderer::new)
         .register();
 
     private BSBlockEntities() {

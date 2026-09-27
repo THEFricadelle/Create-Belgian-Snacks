@@ -31,6 +31,12 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
         add(BSSoundEvents.FRICADELLE_BURP, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fricadelle.burp")
             .with(vanilla("random/burp")));
+        add(BSSoundEvents.GRINDER_GRIND, SoundDefinition.definition()
+            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.grind")
+            .with(vanilla("block/grindstone/grindstone1"), vanilla("block/grindstone/grindstone2"), vanilla("block/grindstone/grindstone3")));
+        add(BSSoundEvents.GRINDER_COMPLETE, SoundDefinition.definition()
+            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.complete")
+            .with(vanilla("random/levelup")));
     }
 
     private static SoundDefinition.Sound vanilla(String path) {

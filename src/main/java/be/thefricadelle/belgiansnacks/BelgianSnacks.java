@@ -19,6 +19,7 @@ import be.thefricadelle.belgiansnacks.command.BSCommands;
 import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndexEvents;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
 import be.thefricadelle.belgiansnacks.data.BSDatagen;
 import be.thefricadelle.belgiansnacks.network.BSNetwork;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
@@ -64,6 +65,7 @@ public class BelgianSnacks {
         BSLang.register();
 
         modEventBus.addListener(FryerBlockEntity::registerCapabilities);
+        modEventBus.addListener(SupremeGrinderBlockEntity::registerCapabilities);
         modEventBus.addListener(BSNetwork::register);
         FoodIndexEvents.register(modEventBus);
         NeoForge.EVENT_BUS.addListener(BSCommands::register);

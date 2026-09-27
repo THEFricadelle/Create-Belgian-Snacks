@@ -12,5 +12,19 @@
       "block/campfire/crackle3"
     ],
     "subtitle": "subtitles.create_belgian_snacks.fryer.sizzle"
+  },
+  "grinder.complete": {
+    "sounds": [
+      "random/levelup"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.grinder.complete"
+  },
+  "grinder.grind": {
+    "sounds": [
+      "block/grindstone/grindstone1",
+      "block/grindstone/grindstone2",
+      "block/grindstone/grindstone3"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.grinder.grind"
   }
 }

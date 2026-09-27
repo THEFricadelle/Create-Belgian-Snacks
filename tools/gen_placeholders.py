@@ -57,6 +57,10 @@ BLOCK_FACES = {
     "fryer/top": (0xD0, 0xD4, 0xD8),
     "fryer/bottom": (0x80, 0x84, 0x88),
     "fryer/inner": (0x60, 0x64, 0x68),
+    # Brass for the supreme grinder (docs/06); its sides carry the gauge, see GRINDER_GAUGE.
+    "supreme_grinder/top": (0xD8, 0xA8, 0x48),
+    "supreme_grinder/bottom": (0x90, 0x68, 0x28),
+    "supreme_grinder/blade": (0xC8, 0xCC, 0xD0),
 }
 
 # 3x5 bitmap glyphs, one string per row.
@@ -151,6 +155,22 @@ def render_block_face(colour):
     return px
 
 
+GRINDER_SIDE = (0xC0, 0x90, 0x38)
+
+
+def render_grinder_side(fill):
+    # Brass face with a vertical gauge in the middle: 4 segments, lit from the bottom up to fill.
+    px = render_block_face(GRINDER_SIDE)
+    for y in range(2, 14):
+        for x in range(6, 10):
+            px[y][x] = (0x30, 0x24, 0x10, 255)
+    for segment in range(fill):
+        for y in range(11 - 3 * segment, 14 - 3 * segment - 1):
+            for x in range(7, 9):
+                px[y][x] = (0x60, 0xD0, 0x50, 255)
+    return px
+
+
 def render_bucket(colour):
     metal, dark = (0xB8, 0xB8, 0xC0), (0x50, 0x50, 0x58)
     px = [[None] * SIZE for _ in range(SIZE)]
@@ -201,6 +221,8 @@ def main():
         outputs[ITEM_DIR / f"{fluid_id}_bucket.png"] = lambda c=colour: render_bucket(c)
     for face, colour in BLOCK_FACES.items():
         outputs[BLOCK_DIR / f"{face}.png"] = lambda c=colour: render_block_face(c)
+    for fill in range(5):
+        outputs[BLOCK_DIR / f"supreme_grinder/side_{fill}.png"] = lambda f=fill: render_grinder_side(f)
 
     written = skipped = 0
     for path, draw in outputs.items():

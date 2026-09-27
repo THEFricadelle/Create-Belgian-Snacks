@@ -9,11 +9,14 @@
 
 package be.thefricadelle.belgiansnacks.compat.jei;
 
+import java.util.List;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.fryer.FryingRecipe;
+import be.thefricadelle.belgiansnacks.content.grinder.GrinderMode;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
@@ -43,16 +46,18 @@ public class BSJEIPlugin implements IModPlugin {
             .doubleItemIcon(BSBlocks.FRYER.get(), BSItems.FRICADELLE.get())
             .emptyBackground(177, 100)
             .build(BelgianSnacks.asResource("frying"), FryingCategory::new);
-        registration.addRecipeCategories(frying);
+        registration.addRecipeCategories(frying, new GrindingGoalCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         frying.registerRecipes(registration);
+        registration.addRecipes(GrindingGoalCategory.TYPE, List.of(GrinderMode.values()));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         frying.registerCatalysts(registration);
+        registration.addRecipeCatalyst(BSBlocks.SUPREME_GRINDER.asStack(), GrindingGoalCategory.TYPE);
     }
 }

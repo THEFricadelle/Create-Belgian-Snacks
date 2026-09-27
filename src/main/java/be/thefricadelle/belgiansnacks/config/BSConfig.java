@@ -26,6 +26,11 @@ public final class BSConfig {
     private static final ModConfigSpec.IntValue FRYER_MAX_BATCH;
     private static final ModConfigSpec.ConfigValue<List<? extends String>> GRINDER_BLACKLISTED_MODS;
     private static final ModConfigSpec.ConfigValue<List<? extends String>> GRINDER_BLACKLISTED_ITEMS;
+    private static final ModConfigSpec.DoubleValue GRINDER_THE_FRICADELLE_RATIO;
+    private static final ModConfigSpec.DoubleValue GRINDER_ULTIMATE_RATIO;
+    private static final ModConfigSpec.BooleanValue GRINDER_REJECT_DUPLICATES;
+    private static final ModConfigSpec.IntValue GRINDER_MIN_SPEED;
+    private static final ModConfigSpec.DoubleValue GRINDER_STRESS_IMPACT;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -49,6 +54,22 @@ public final class BSConfig {
         GRINDER_BLACKLISTED_ITEMS = builder
             .comment("Item ids that never count as foods, on top of the create_belgian_snacks:grinder/blacklist tag.")
             .defineListAllowEmpty("blacklistedItems", List.of(), () -> "", o -> o instanceof String);
+        GRINDER_THE_FRICADELLE_RATIO = builder
+            .comment("Share of the food index the Supreme Grinder needs, in THE_ mode, for an Exceptional Paste (D1).",
+                "Rounded up: 0.10 of 1804 foods is 181.")
+            .defineInRange("theFricadelleRatio", 0.10, 0.0, 1.0);
+        GRINDER_ULTIMATE_RATIO = builder
+            .comment("Share of the food index needed, in ULTIMATE mode, for an Absolute Paste (D21). Keep 1.0 unless a server needs less.")
+            .defineInRange("ultimateRatio", 1.0, 0.0, 1.0);
+        GRINDER_REJECT_DUPLICATES = builder
+            .comment("true: a food already collected stays on the belt or in the funnel. false: it is destroyed.")
+            .define("rejectDuplicates", true);
+        GRINDER_MIN_SPEED = builder
+            .comment("Slowest rotation, in RPM, at which the Supreme Grinder takes foods (D11).")
+            .defineInRange("minSpeed", 64, 1, 256);
+        GRINDER_STRESS_IMPACT = builder
+            .comment("Stress impact per RPM (D11). 8 is a crushing wheel's.")
+            .defineInRange("stressImpact", 8.0, 0.0, 1024.0);
         builder.pop();
         SPEC = builder.build();
     }
@@ -70,6 +91,26 @@ public final class BSConfig {
 
     public static Set<String> grinderBlacklistedItems() {
         return Set.copyOf(SPEC.isLoaded() ? GRINDER_BLACKLISTED_ITEMS.get() : GRINDER_BLACKLISTED_ITEMS.getDefault());
+    }
+
+    public static double grinderTheFricadelleRatio() {
+        return SPEC.isLoaded() ? GRINDER_THE_FRICADELLE_RATIO.get() : GRINDER_THE_FRICADELLE_RATIO.getDefault();
+    }
+
+    public static double grinderUltimateRatio() {
+        return SPEC.isLoaded() ? GRINDER_ULTIMATE_RATIO.get() : GRINDER_ULTIMATE_RATIO.getDefault();
+    }
+
+    public static boolean grinderRejectDuplicates() {
+        return SPEC.isLoaded() ? GRINDER_REJECT_DUPLICATES.get() : GRINDER_REJECT_DUPLICATES.getDefault();
+    }
+
+    public static int grinderMinSpeed() {
+        return SPEC.isLoaded() ? GRINDER_MIN_SPEED.get() : GRINDER_MIN_SPEED.getDefault();
+    }
+
+    public static double grinderStressImpact() {
+        return SPEC.isLoaded() ? GRINDER_STRESS_IMPACT.get() : GRINDER_STRESS_IMPACT.getDefault();
     }
 
     public static int fryerMaxBatch() {

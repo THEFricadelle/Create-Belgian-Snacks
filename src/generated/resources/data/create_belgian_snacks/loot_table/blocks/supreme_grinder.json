@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:copy_components",
+      "include": [
+        "create_belgian_snacks:grinder_contents"
+      ],
+      "source": "block_entity"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:supreme_grinder"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "create_belgian_snacks:blocks/supreme_grinder"
+}

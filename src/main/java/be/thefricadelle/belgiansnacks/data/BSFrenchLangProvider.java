@@ -57,6 +57,7 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.CURRY_KETCHUP, "Curry ketchup", "Seau de curry ketchup");
 
         add(BSBlocks.FRYER.get(), "Friteuse");
+        add(BSBlocks.SUPREME_GRINDER.get(), "Hachoir Suprême");
         BSLang.ENTRIES.forEach((key, entry) -> add(key, entry.french()));
 
         add(BSItems.tooltipKey("fricadelle"), "Personne ne sait vraiment ce qu'il y a dedans.");

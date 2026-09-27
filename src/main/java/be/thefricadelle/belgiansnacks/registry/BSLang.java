@@ -45,6 +45,29 @@ public final class BSLang {
             "%s aliments (dont %s par le tag extra), %s exclus, calculés en %s ms");
         add(ID + ".command.foods.export", "Exported %s foods to %s", "%s aliments exportés dans %s");
         add(ID + ".command.foods.export_failed", "Food export failed: %s", "Échec de l'export des aliments : %s");
+        add(ID + ".grinder.mode", "Collecting for", "Collection pour");
+        add(ID + ".grinder.mode.the", "THE_Fricadelle (Exceptional Paste)", "THE_Fricadelle (Pâte d'exception)");
+        add(ID + ".grinder.mode.ultimate", "THE_FRICADELLE (Absolute Paste)", "THE_FRICADELLE (Pâte absolue)");
+        add(ID + ".grinder.goggles.mode", "Mode: %s", "Mode : %s");
+        add(ID + ".grinder.goggles.progress", "%s / %s foods (%s%%)", "%s / %s aliments (%s %%)");
+        add(ID + ".grinder.goggles.too_slow", "Needs at least %s RPM", "Il faut au moins %s tr/min");
+        add(ID + ".grinder.goggles.output_full", "Take the paste out", "Retirez la pâte");
+        add(ID + ".grinder.goggles.missing", "Still missing, for instance:", "Il manque encore, par exemple :");
+        add(ID + ".grinder.goggles.full_list", "Sneak + right click, empty hand: full list", "Accroupi + clic droit, main vide : liste complète");
+        add(ID + ".grinder.excess", "A THE_FRICADELLE attempt that fell short: %s extra foods went into the paste",
+            "Une tentative de THE_FRICADELLE ratée : %s aliments en trop sont partis dans la pâte");
+        add(ID + ".grinder.screen.title", "Supreme Grinder: missing foods", "Hachoir Suprême : aliments manquants");
+        add(ID + ".grinder.screen.count", "%s missing out of %s", "%s manquants sur %s");
+        add(ID + ".grinder.screen.none", "Nothing missing", "Il ne manque rien");
+        add(ID + ".recipe.grinding_goal", "Supreme Grinding", "Hachoir Suprême");
+        add(ID + ".recipe.grinding_goal.foods", "%s of %s foods (%s%%)", "%s aliments sur %s (%s %%)");
+        add(ID + ".recipe.grinding_goal.each", "Each food counts once", "Chaque aliment compte une fois");
+        add("subtitles." + ID + ".grinder.grind", "Grinder grinds", "Le hachoir broie");
+        add("subtitles." + ID + ".grinder.complete", "Grinder finishes a paste", "Le hachoir termine une pâte");
+        add("config.jade.plugin_" + ID + ".supreme_grinder", "Supreme Grinder", "Hachoir Suprême");
+        add(ID + ".command.grinder.filled", "Supreme grinder filled with %s of %s foods", "Hachoir suprême rempli avec %s aliments sur %s");
+        add(ID + ".command.grinder.cleared", "Supreme grinder emptied", "Hachoir suprême vidé");
+        add(ID + ".command.grinder.not_found", "No supreme grinder at %s", "Pas de hachoir suprême en %s");
     }
 
     private BSLang() {

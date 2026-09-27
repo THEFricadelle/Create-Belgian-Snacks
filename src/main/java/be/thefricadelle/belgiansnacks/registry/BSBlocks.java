@@ -11,17 +11,21 @@ package be.thefricadelle.belgiansnacks.registry;
 
 import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
+import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlock;
+import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 public final class BSBlocks {
@@ -40,7 +44,74 @@ public final class BSBlocks {
         .build()
         .register();
 
+    // D11: 8 SU/rpm (a crushing wheel's), read from the config so a server can change it.
+    public static final BlockEntry<SupremeGrinderBlock> SUPREME_GRINDER = REGISTRATE.block("supreme_grinder", SupremeGrinderBlock::new)
+        .initialProperties(SharedProperties::stone)
+        .properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+        .transform(TagGen.pickaxeOnly())
+        .lang("Supreme Grinder")
+        .onRegister(block -> BlockStressValues.IMPACTS.register(block, BSConfig::grinderStressImpact))
+        .blockstate((ctx, prov) -> {
+            grinderBlades(prov);
+            prov.getVariantBuilder(ctx.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(grinderModel(prov, state.getValue(SupremeGrinderBlock.FILL))).build());
+        })
+        // The collection stays in the dropped item (D10); the paste inside drops on its own.
+        .loot((tables, block) -> tables.add(block, tables.createSingleItemTable(block)
+            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                .include(BSDataComponents.GRINDER_CONTENTS.get()))))
+        .item()
+        .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/supreme_grinder/fill_0")))
+        .build()
+        .register();
+
     private BSBlocks() {
+    }
+
+    // Placeholder housing until a Blockbench model exists: a brass body with the gauge on its sides,
+    // and a rim around the blade pit on top. The blades are a separate, rotating partial model.
+    private static ModelFile grinderModel(RegistrateBlockstateProvider prov, int fill) {
+        String dir = "block/supreme_grinder/";
+        BlockModelBuilder model = prov.models().withExistingParent(dir + "fill_" + fill, "block/block")
+            .texture("side", prov.modLoc(dir + "side_" + fill))
+            .texture("top", prov.modLoc(dir + "top"))
+            .texture("bottom", prov.modLoc(dir + "bottom"))
+            .texture("particle", prov.modLoc(dir + "side_0"));
+        model.element().from(0, 0, 0).to(16, 12, 16).allFaces((direction, face) -> face
+            .texture(direction == Direction.DOWN ? "#bottom" : direction == Direction.UP ? "#top" : "#side")
+            .cullface(direction == Direction.UP ? null : direction)).end();
+        rim(model, 0, 0, 16, 2);
+        rim(model, 0, 14, 16, 16);
+        rim(model, 0, 2, 2, 14);
+        rim(model, 14, 2, 16, 14);
+        return model;
+    }
+
+    private static void rim(BlockModelBuilder model, float x1, float z1, float x2, float z2) {
+        model.element().from(x1, 12, z1).to(x2, 16, z2).allFaces((direction, face) -> face
+            .texture(direction.getAxis().isHorizontal() ? "#bottom" : "#top")
+            .cullface(isOuterRim(direction, x1, z1, x2, z2) ? direction : null)).end();
+    }
+
+    private static boolean isOuterRim(Direction direction, float x1, float z1, float x2, float z2) {
+        return switch (direction) {
+            case UP -> true;
+            case NORTH -> z1 == 0;
+            case SOUTH -> z2 == 16;
+            case WEST -> x1 == 0;
+            case EAST -> x2 == 16;
+            default -> false;
+        };
+    }
+
+    // Two crossed blades and the shaft stub that meets the shaft above.
+    private static void grinderBlades(RegistrateBlockstateProvider prov) {
+        BlockModelBuilder model = prov.models().withExistingParent("block/supreme_grinder/blades", "block/block")
+            .texture("blade", prov.modLoc("block/supreme_grinder/blade"))
+            .texture("particle", prov.modLoc("block/supreme_grinder/blade"));
+        model.element().from(2, 12.5f, 7).to(14, 14, 9).allFaces((direction, face) -> face.texture("#blade")).end();
+        model.element().from(7, 12.5f, 2).to(9, 14, 14).allFaces((direction, face) -> face.texture("#blade")).end();
+        model.element().from(6, 12, 6).to(10, 16, 10).allFaces((direction, face) -> face.texture("#blade")).end();
     }
 
     // Placeholder vat until a Blockbench model exists: a floor and four walls, open at the top.

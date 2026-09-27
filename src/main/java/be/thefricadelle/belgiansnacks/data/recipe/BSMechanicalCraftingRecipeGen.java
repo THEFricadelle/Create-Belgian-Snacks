@@ -22,6 +22,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 
 public class BSMechanicalCraftingRecipeGen extends MechanicalCraftingRecipeGen {
     // Provisional (D11): a vat (basin), a fat tank, copper walls and an iron basket, on a mechanical
@@ -34,6 +35,18 @@ public class BSMechanicalCraftingRecipeGen extends MechanicalCraftingRecipeGen {
         .key('P', AllItems.PRECISION_MECHANISM.get())
         .patternLine("CIC")
         .patternLine("TBP"));
+
+    // D11: two crushing wheels in a brass casing, costly but reachable once brass is automated.
+    GeneratedRecipe SUPREME_GRINDER = create(BSBlocks.SUPREME_GRINDER::get).recipe(b -> b
+        .key('S', ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "plates/brass")))
+        .key('M', AllItems.PRECISION_MECHANISM.get())
+        .key('W', AllBlocks.CRUSHING_WHEEL.get())
+        .key('C', AllBlocks.BRASS_CASING.get())
+        .key('G', Tags.Items.INGOTS_GOLD)
+        .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
+        .patternLine("SMS")
+        .patternLine("WCW")
+        .patternLine("GIG"));
 
     public BSMechanicalCraftingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

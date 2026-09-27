@@ -22,6 +22,8 @@ public final class BSSoundEvents {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> FRYER_SIZZLE = sound("fryer.sizzle");
     public static final DeferredHolder<SoundEvent, SoundEvent> FRICADELLE_BURP = sound("fricadelle.burp");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_GRIND = sound("grinder.grind");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_COMPLETE = sound("grinder.complete");
 
     private BSSoundEvents() {
     }
