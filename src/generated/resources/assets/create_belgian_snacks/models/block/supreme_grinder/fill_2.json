@@ -1,0 +1,6 @@
+{
+  "parent": "create_belgian_snacks:block/custom/supreme_grinder",
+  "textures": {
+    "side": "create_belgian_snacks:block/supreme_grinder/side_2"
+  }
+}

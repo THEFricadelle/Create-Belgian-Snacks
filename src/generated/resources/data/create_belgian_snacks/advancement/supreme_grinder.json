@@ -1,0 +1,34 @@
+{
+  "parent": "create_belgian_snacks:fricadelle",
+  "criteria": {
+    "supreme_grinder": {
+      "conditions": {
+        "location": [
+          {
+            "block": "create_belgian_snacks:supreme_grinder",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.supreme_grinder.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:supreme_grinder"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.supreme_grinder"
+    }
+  },
+  "requirements": [
+    [
+      "supreme_grinder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

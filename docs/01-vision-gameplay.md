@@ -29,14 +29,14 @@ flowchart LR
   E -->|Friteuse + huile<br/>chauffée| F((Fricadelle))
 ```
 
-- Le bœuf broyé donne en bonus du **blanc de bœuf** (graisse) → fondu au Mixer chauffé → **huile de friture**. (Les vraies frites belges sont cuites au blanc de bœuf.)
-- Alternative végétale pour l'huile : Compacting de graines.
+- Le bœuf broyé donne en bonus du **blanc de bœuf** (graisse) → fondu au Mixer chauffé → **blanc de bœuf fondu**, la graisse des vraies frites belges. Paliers 1 et 2 : n'importe quelle huile convient (la nôtre, celles des autres mods, ou le blanc de bœuf fondu). Palier 3 : blanc de bœuf fondu **uniquement**.
+- Alternative végétale : compactage de graines en huile de friture (désactivé si un autre mod d'huile de graines est présent, voir `04`).
 
 ### Palier 2 — THE_Fricadelle
 
 « Demande plus de choses ». Deux exigences :
 
-1. Une **Pâte d'exception**, produite par le Hachoir Suprême en mode *THE_* : il faut y avoir fait passer **un certain pourcentage** des aliments du modpack (⚠️ **taux À DÉFINIR ensemble**, configurable).
+1. Une **Pâte d'exception**, produite par le Hachoir Suprême en mode *THE_* : il faut y avoir fait passer **10 %** des aliments du modpack (D1, arrondi au-dessus, configurable).
 2. Une chaîne **Sequenced Assembly** « spéciale » : épices → mayonnaise → curry ketchup → oignons → presse, en boucles.
 
 ```mermaid
@@ -54,8 +54,8 @@ flowchart LR
 flowchart LR
   ALL[Chaque aliment unique du modpack<br/>vanilla + FD et ses addons + Create: Food + ... (Arcadia V2)] -->|tapis / funnels| HS[Hachoir Suprême<br/>mode ULTIME : 100 %]
   HS --> PA[Pâte absolue]
-  PA & T2[THE_Fricadelle] -->|Mixer<br/>super-chauffé| RU[THE_FRICADELLE crue]
-  RU -->|Friteuse<br/>super-chauffée| U((THE_FRICADELLE))
+  PA & T2[THE_Fricadelle] & BT[Blanc de bœuf fondu] -->|Mixer<br/>super-chauffé| RU[THE_FRICADELLE crue]
+  RU -->|Friteuse<br/>super-chauffée<br/>au blanc de bœuf| U((THE_FRICADELLE))
 ```
 
 - « Aliment » = tout item qui possède le data component `minecraft:food`, **plus** un tag d'ajouts manuels (ex. le gâteau, qui se mange mais n'est pas un item-nourriture), **moins** une blacklist (nos propres fricadelles, items créatifs uniquement, etc.). Détails : `03-architecture.md` § FoodIndex.
@@ -63,7 +63,7 @@ flowchart LR
 
 ## Ce qu'on obtient en mangeant
 
-Faim/saturation croissantes, effets de potion, gags (sons, particules, message), advancements. **Toutes les valeurs sont ⚠️ À DÉFINIR ensemble** — voir `08-decisions-ouvertes.md`. En attendant, le code utilise des valeurs provisoires centralisées dans une seule classe (`BSFoods`) pour être faciles à changer.
+Faim/saturation croissantes, effets de potion, gags (sons, particules, message), advancements. Tranché le 27/09/2026 : voir le tableau « Effets en mangeant » de `08-decisions-ouvertes.md`. Les valeurs vivent dans une seule classe (`BSFoods`) pour rester faciles à changer.
 
 ## Hors périmètre v1 (idées pour plus tard)
 

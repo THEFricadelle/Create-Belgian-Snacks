@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "minced": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#create_belgian_snacks:minced_meats"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/yellow_terracotta.png",
+    "description": {
+      "translate": "advancement.create_belgian_snacks.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:fricadelle"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.create_belgian_snacks.root"
+    }
+  },
+  "requirements": [
+    [
+      "minced"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

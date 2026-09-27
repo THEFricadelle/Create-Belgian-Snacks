@@ -1,0 +1,16 @@
+{
+  "values": [
+    "create_belgian_snacks:frying_oil",
+    "create_belgian_snacks:flowing_frying_oil",
+    "create_belgian_snacks:melted_beef_tallow",
+    "create_belgian_snacks:flowing_melted_beef_tallow",
+    {
+      "id": "#c:plantoil",
+      "required": false
+    },
+    {
+      "id": "#c:vegetable_oil",
+      "required": false
+    }
+  ]
+}

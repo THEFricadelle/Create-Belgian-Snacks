@@ -1,0 +1,32 @@
+{
+  "parent": "create_belgian_snacks:exceptional_paste",
+  "criteria": {
+    "the_fricadelle": {
+      "conditions": {
+        "item": {
+          "items": "create_belgian_snacks:the_fricadelle"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.the_fricadelle.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:the_fricadelle"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.the_fricadelle"
+    }
+  },
+  "requirements": [
+    [
+      "the_fricadelle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,446 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_slug
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+sourceSets.main.resources {
+    srcDir('src/generated/resources')
+    exclude('**/*.bbmodel')
+    exclude('.cache/**')
+}
+
+// GameTests live in their own source set so they never ship in the release jar.
+// gametestCompat has no sources: it runs the same tests with the compat mods of Arcadia loaded.
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+    gametestCompat {
+        runtimeClasspath += sourceSets.main.output + sourceSets.gametest.output
+    }
+    // Empty on purpose: the arcadiaJar run loads the built jar and the pack's own jars, nothing from here.
+    packJar {
+    }
+}
+
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestCompileOnly.extendsFrom compileOnly
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+    gametestCompatImplementation.extendsFrom gametestImplementation
+    gametestCompatRuntimeOnly.extendsFrom gametestRuntimeOnly
+}
+
+neoForge {
+    version = project.neo_version
+
+    addModdingDependenciesTo sourceSets.gametest
+    addModdingDependenciesTo sourceSets.gametestCompat
+    addModdingDependenciesTo sourceSets.packJar
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+
+        client {
+            client()
+        }
+
+        // Dedicated server: the only run that catches client classes leaking into common code.
+        server {
+            server()
+            gameDirectory = project.file('run/server')
+            programArgument '--nogui'
+        }
+
+        // Runs every GameTest headless and exits non-zero on a failure.
+        gameTestServer {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/gametest')
+        }
+
+        // Same GameTests with Farmer's Delight loaded, the Arcadia configuration of the recipes.
+        gameTestServerCompat {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.gametestCompat
+            gameDirectory = project.file('run/gametest-compat')
+        }
+
+        // A real client driven by ClientSmokeTest: creates a world, checks models, lang, the creative
+        // tab and JEI, takes screenshots and quits. Needs a desktop session, it opens a window.
+        clientSmoke {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/clientsmoke')
+            systemProperty 'create_belgian_snacks.clientSmoke', 'true'
+        }
+
+        // The real Arcadia pack (copied into run/arcadia by tools/arcadia_export.py) exporting its food index.
+        arcadiaExport {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia')
+            jvmArgument '-Xmx8G'
+            systemProperty 'create_belgian_snacks.arcadiaExport', 'true'
+            // Create Numismatics parses this property as a URI: a bare Windows path makes every mod fail to construct.
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaExportLog4j2.xml').toURI().toString()
+        }
+
+        // M6.5, driven by tools/arcadia_smoke.py: the pack in dev with ArcadiaSmokeRun. A hosts the world
+        // and opens it to LAN, B (its own copy of the pack) joins it.
+        arcadiaSmokeA {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaA'
+            systemProperty 'create_belgian_snacks.arcadiaSmoke', 'A'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaSmokeALog4j2.xml').toURI().toString()
+        }
+        arcadiaSmokeB {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/arcadia-b')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaB', '--quickPlayMultiplayer', 'localhost:25611'
+            systemProperty 'create_belgian_snacks.arcadiaSmoke', 'B'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaSmokeBLog4j2.xml').toURI().toString()
+        }
+        // The release jar as a player installs it: no class from this project, every mod the pack's own
+        // jar (Create included), ours from build/libs. Loads the world arcadiaSmokeA saved.
+        arcadiaJar {
+            client()
+            sourceSet = sourceSets.packJar
+            loadedMods = []
+            gameDirectory = project.file('run/arcadia-jar')
+            jvmArgument '-Xmx8G'
+            programArguments.addAll '--username', 'ArcadiaJar', '--quickPlaySingleplayer', 'belgian-snacks-arcadia'
+            systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaJarLog4j2.xml').toURI().toString()
+        }
+
+        // Builds the Ponder schematics with real blocks and writes them to src/main/resources, then stops.
+        ponderSchematics {
+            server()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/ponder')
+            programArgument '--nogui'
+            systemProperty 'create_belgian_snacks.ponderSchematics', project.file('src/main/resources/assets/create_belgian_snacks/ponder').absolutePath
+        }
+
+        // A showcase world with everything the mod adds, built on first launch and kept running
+        // (gametest/showcase/Showcase). Its world lives in run/showcase and is never reset.
+        showcase {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'play'
+        }
+        // The spark scenario of docs/10 in the showcase world (spark in run/showcase/mods, never in
+        // the build): profiles, heap summaries saved to files, then quits.
+        showcaseSpark {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'spark'
+        }
+        // The same in a fresh world: waits for every tier's fried fricadelle, films and quits.
+        showcaseCheck {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase-check')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'check'
+        }
+
+        // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
+        serverSmoke {
+            server()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/server')
+            programArgument '--nogui'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'server'
+        }
+        clientSmokeA {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/client-a')
+            programArguments.addAll '--username', 'SmokeA', '--quickPlayMultiplayer', 'localhost:25599'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'A'
+        }
+        clientSmokeB {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/mpsmoke/client-b')
+            programArguments.addAll '--username', 'SmokeB', '--quickPlayMultiplayer', 'localhost:25599'
+            systemProperty 'create_belgian_snacks.mpSmoke', 'B'
+        }
+
+        data {
+            data()
+            gameDirectory = project.file('run/data')
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath(),
+                    '--existing-mod', 'create'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+            sourceSet(sourceSets.gametest)
+        }
+    }
+}
+
+// Every third-party repository is restricted to the groups it actually serves, so an artefact
+// with the same coordinates on another repository can never shadow the real one.
+repositories {
+    exclusiveContent {
+        forRepository { maven { name = 'Create'; url = 'https://maven.createmod.net' } }
+        filter {
+            includeGroup 'com.simibubi.create'
+            includeGroup 'net.createmod.ponder'
+            includeGroup 'dev.engine-room.flywheel'
+        }
+    }
+    exclusiveContent {
+        forRepository { maven { name = 'Registrate'; url = 'https://maven.ithundxr.dev/snapshots' } }
+        filter { includeGroup 'com.tterrag.registrate' }
+    }
+    exclusiveContent {
+        forRepository { maven { name = 'BlameJared'; url = 'https://maven.blamejared.com' } }
+        filter {
+            includeGroup 'mezz.jei'
+            includeGroup 'net.mezzdev.config' // pulled by JEI 19.5x
+        }
+    }
+    exclusiveContent {
+        forRepository { maven { name = 'Modrinth'; url = 'https://api.modrinth.com/maven' } }
+        filter { includeGroup 'maven.modrinth' }
+    }
+    mavenCentral()
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+    gametestRuntimeClasspath.extendsFrom localRuntime
+    gametestCompatRuntimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // Create 6. The slim jar has no jar-in-jar, so its embedded libraries are declared explicitly.
+    // They are not re-embedded here: the Create jar installed next to ours already ships them.
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    // Optional integrations: API at compile time, full mod only in the dev runtime.
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    compileOnly("maven.modrinth:jade:${jade_version}+neoforge")
+    localRuntime("maven.modrinth:jade:${jade_version}+neoforge")
+
+    // Compat GameTests only, never on the main classpath. Same file as the one in Arcadia 2.0.32
+    // (sha1 27675ddf... matches Modrinth and the pack jar).
+    gametestCompatRuntimeOnly("maven.modrinth:farmers-delight:${farmers_delight_version}")
+
+    // Same Gson the game ships; only used by the tests to read generated JSON.
+    testImplementation('com.google.code.gson:gson:2.10.1')
+    testImplementation(platform('org.junit:junit-bom:5.14.4'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+}
+
+// ---------------------------------------------------------------------------
+// Client smoke run. A client exits 0 even when the checks failed, so the verdict comes from the
+// report it writes, never from the exit code. Only File objects are captured (configuration cache).
+// ---------------------------------------------------------------------------
+
+def clientSmokeDir = file('run/clientsmoke')
+
+tasks.register('verifyClientSmoke') {
+    group = 'verification'
+    description = 'Fails unless the client smoke run reported every check as passed.'
+    doLast {
+        File log = new File(clientSmokeDir, 'logs/latest.log')
+        if (!log.isFile()) {
+            throw new GradleException("No ${log}: the client did not start")
+        }
+        List<String> fatal = ['failed to load correctly', 'ModLoadingException', 'Missing textures in model', 'Unable to load model']
+        String text = log.getText('UTF-8')
+        List<String> found = fatal.findAll { text.contains(it) }
+        if (!found.isEmpty()) {
+            throw new GradleException("${log} contains ${found}")
+        }
+        File report = new File(clientSmokeDir, 'smoke-report.txt')
+        if (!report.isFile()) {
+            throw new GradleException("No ${report}: the client never finished the smoke run")
+        }
+        List<String> lines = report.readLines('UTF-8')
+        lines.each { logger.lifecycle(it) }
+        if (lines.isEmpty() || !lines.last().startsWith('RESULT PASS')) {
+            throw new GradleException("Client smoke run failed, see ${report}")
+        }
+        logger.lifecycle("Screenshots for review: ${new File(clientSmokeDir, 'screenshots')}")
+    }
+}
+
+tasks.configureEach { Task task ->
+    if (task.name == 'runClientSmoke') {
+        task.doFirst {
+            // Fresh world and no report or screenshot from a previous run.
+            new File(clientSmokeDir, 'saves').deleteDir()
+            new File(clientSmokeDir, 'screenshots').deleteDir()
+            new File(clientSmokeDir, 'smoke-report.txt').delete()
+            new File(clientSmokeDir, 'logs/latest.log').delete()
+            clientSmokeDir.mkdirs()
+            // Without these a first launch stops on the accessibility screen, and losing focus
+            // opens the pause menu over every screen under test.
+            new File(clientSmokeDir, 'options.txt').setText([
+                    'onboardAccessibility:false', 'pauseOnLostFocus:false', 'tutorialStep:none',
+                    'joinedFirstServer:true', 'skipMultiplayerWarning:true', 'soundCategory_master:0.0',
+                    'lang:en_us', 'guiScale:2'].join('\n'), 'UTF-8')
+        }
+        task.finalizedBy 'verifyClientSmoke'
+    }
+}
+
+def showcaseCheckDir = file('run/showcase-check')
+def showcaseOptions = file('run/showcase/options.txt')
+
+tasks.register('verifyShowcase') {
+    group = 'verification'
+    description = 'Fails unless the showcase check reported every tier as produced.'
+    doLast {
+        File report = new File(showcaseCheckDir, 'showcase-report.txt')
+        if (!report.isFile()) {
+            throw new GradleException("No ${report}: the showcase check never finished")
+        }
+        List<String> lines = report.readLines('UTF-8')
+        lines.each { logger.lifecycle(it) }
+        if (lines.isEmpty() || !lines.last().startsWith('RESULT PASS')) {
+            throw new GradleException("Showcase check failed, see ${report}")
+        }
+        logger.lifecycle("Screenshots for review: ${new File(showcaseCheckDir, 'screenshots')}")
+    }
+}
+
+tasks.configureEach { Task task ->
+    if (task.name == 'runShowcaseCheck') {
+        task.doFirst {
+            new File(showcaseCheckDir, 'saves').deleteDir()
+            new File(showcaseCheckDir, 'screenshots').deleteDir()
+            new File(showcaseCheckDir, 'showcase-report.txt').delete()
+            showcaseCheckDir.mkdirs()
+            new File(showcaseCheckDir, 'options.txt').setText([
+                    'onboardAccessibility:false', 'pauseOnLostFocus:false', 'tutorialStep:none',
+                    'soundCategory_master:0.0', 'lang:en_us', 'guiScale:2', 'renderDistance:8'].join('\n'), 'UTF-8')
+        }
+        task.finalizedBy 'verifyShowcase'
+    } else if (task.name == 'runShowcase') {
+        task.doFirst {
+            // First launch only: skip the accessibility screen and the tutorial; later launches keep
+            // whatever options were changed in game.
+            File options = showcaseOptions
+            if (!options.isFile()) {
+                options.parentFile.mkdirs()
+                options.setText(['onboardAccessibility:false', 'tutorialStep:none'].join('\n'), 'UTF-8')
+            }
+        }
+    }
+}
+
+// Dedicated server + two clients, launched side by side by the script (a Gradle build runs its
+// tasks one after another, so the three runs are separate Gradle invocations). Exits non-zero on FAIL.
+tasks.register('runMultiplayerSmoke', Exec) {
+    group = 'verification'
+    description = 'Two real clients on a real dedicated server (opens two windows).'
+    commandLine 'python', 'tools/mp_smoke.py'
+}
+
+// Everything automated, in order: unit tests, GameTests without then with compat mods, live client,
+// then two clients on a dedicated server.
+tasks.register('testAll') {
+    group = 'verification'
+    description = 'Unit tests, GameTests (plain and with compat mods), the client smoke run and the two-client run.'
+    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke', 'runMultiplayerSmoke'
+}
+tasks.configureEach { Task task ->
+    if (task.name == 'runGameTestServer') {
+        task.mustRunAfter 'build'
+    } else if (task.name == 'runGameTestServerCompat') {
+        task.mustRunAfter 'runGameTestServer'
+    } else if (task.name == 'runClientSmoke') {
+        task.mustRunAfter 'runGameTestServerCompat'
+    } else if (task.name == 'runMultiplayerSmoke') {
+        task.mustRunAfter 'runClientSmoke'
+    }
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            create_version_range   : create_version_range
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+// The license states that each release is governed by the text shipped with it,
+// so the licensing files travel inside the jar.
+tasks.named('jar', Jar).configure {
+    from(file('LICENSE')) { into 'META-INF' }
+    from(file('NOTICE.md')) { into 'META-INF' }
+    from(file('CONTRIBUTORS.md')) { into 'META-INF' }
+}

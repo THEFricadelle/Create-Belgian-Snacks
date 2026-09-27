@@ -1,0 +1,18 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:dried_kelp"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "chance": 0.25,
+      "id": "create_belgian_snacks:belgian_spices"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:fricadelle_paste"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_fricadelle"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "heated",
+  "ingredients": [
+    { "item": "minecraft:cod" },
+    { "type": "neoforge:single", "amount": 10, "fluid": "create_belgian_snacks:melted_beef_tallow" }
+  ],
+  "processing_time": 20,
+  "results": [ { "id": "minecraft:cooked_cod" } ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "fill=0": {
+      "model": "create_belgian_snacks:block/supreme_grinder/fill_0"
+    },
+    "fill=1": {
+      "model": "create_belgian_snacks:block/supreme_grinder/fill_1"
+    },
+    "fill=2": {
+      "model": "create_belgian_snacks:block/supreme_grinder/fill_2"
+    },
+    "fill=3": {
+      "model": "create_belgian_snacks:block/supreme_grinder/fill_3"
+    },
+    "fill=4": {
+      "model": "create_belgian_snacks:block/supreme_grinder/fill_4"
+    }
+  }
+}

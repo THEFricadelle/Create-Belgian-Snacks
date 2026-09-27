@@ -1,0 +1,31 @@
+{
+  "parent": "create_belgian_snacks:fryer",
+  "criteria": {
+    "fricadelle": {
+      "conditions": {
+        "item": {
+          "items": "create_belgian_snacks:fricadelle"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.fricadelle.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:fricadelle"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.fricadelle"
+    }
+  },
+  "requirements": [
+    [
+      "fricadelle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

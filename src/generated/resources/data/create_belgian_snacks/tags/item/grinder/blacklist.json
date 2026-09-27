@@ -1,0 +1,24 @@
+{
+  "values": [
+    "minecraft:ominous_bottle",
+    {
+      "id": "mynethersdelight:enchanted_golden_egg",
+      "required": false
+    },
+    {
+      "id": "artifacts:everlasting_beef",
+      "required": false
+    },
+    "create_belgian_snacks:fricadelle_paste",
+    "create_belgian_snacks:raw_fricadelle",
+    "create_belgian_snacks:fricadelle",
+    "create_belgian_snacks:exceptional_paste",
+    "create_belgian_snacks:raw_the_fricadelle",
+    "create_belgian_snacks:the_fricadelle",
+    "create_belgian_snacks:incomplete_the_fricadelle",
+    "create_belgian_snacks:absolute_paste",
+    "create_belgian_snacks:raw_ultimate_fricadelle",
+    "create_belgian_snacks:incomplete_ultimate_fricadelle",
+    "create_belgian_snacks:ultimate_fricadelle"
+  ]
+}

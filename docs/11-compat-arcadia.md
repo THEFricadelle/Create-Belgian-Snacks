@@ -69,31 +69,74 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 - Bonus (plus tard) : schéma KubeJS pour `frying` si simple à faire.
 
 ### Farmer's Delight et ses addons
-- FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` : ⚠️ à décider (D12) → soit on le garde et on l'ajoute au même tag que celui de FD, soit on utilise celui de FD quand il est présent.
+- FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` (D12, décidé) : toujours enregistré ; les recettes lisent `create_belgian_snacks:minced_meats/beef`, qui contient le nôtre et celui de FD.
 - Vérifier au jalon M5 (export CSV) si un mod du pack fournit déjà **huile**, **mayonnaise** ou **ketchup** (Burger Mod, Cook's Collection, Create: Food…). Si oui : les accepter dans nos recettes via un tag `create_belgian_snacks:frying_oils` / sauces, pour éviter les doublons.
 
 ### Spice of Life: Onion
 Le mod pénalise la nourriture répétitive. Nos 3 fricadelles doivent être des aliments normaux (composant `food`), donc elles seront comptées par SoL. Rien de spécial à coder, mais à garder en tête pour l'équilibrage (D-effets).
 
 ### Create Heat JS
-Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse doit lire la chaleur **via l'API de Create** (pas en testant `instanceof BlazeBurnerBlock`), pour rester compatible. À tester dans l'environnement du pack.
+Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse lit la chaleur **via l'API de Create** (`BasinBlockEntity.getHeatLevelOf`), pas en testant `instanceof BlazeBurnerBlock`.
+
+Testé dans le pack au M6.5 (0.0.6) :
+- Il **ajoute des constantes** aux enums `HeatLevel` et `HeatCondition` de Create (5 niveaux et 5 conditions dans le pack). Aucun `switch` exhaustif sur ces enums chez nous : une constante inconnue y lèverait une exception.
+- Il **réécrit `HeatCondition.testBlazeBurner`** avec sa propre table : « sans chaleur » y est refusé sur tout brûleur allumé, « chauffé » sur un brûleur `FADING`. Le bassin de Create y échappe (Heat JS le traite à part). La Friteuse applique donc les règles de Create pour les 3 conditions et 5 niveaux de Create, et ne passe par `testBlazeBurner` que pour ce que Heat JS ajoute.
+- Le pack n'enregistre aucune source de chaleur custom aujourd'hui. Si la team en ajoute, un niveau custom passera par la table de Heat JS.
 
 ### Polymorph
-Éviter les conflits de recettes (deux recettes avec les mêmes ingrédients). Au jalon M2, vérifier dans le pack que nos recettes de crushing (viandes) n'entrent pas en conflit avec des recettes existantes (Create: Food, Slice & Dice, KubeJS du pack). En cas de conflit : on retire la nôtre, pas celle du pack.
+Éviter les conflits de recettes (deux recettes avec les mêmes ingrédients). En cas de conflit : on retire la nôtre, pas celle du pack.
+
+Testé dans le pack au M6.5 : aucune de nos recettes n'est d'un type que Polymorph arbitre (établi, four, tailleur de pierre…) ; notre seul craft passe par le Mechanical Crafter. Aucune recette du pack, de même type, n'accepte les mêmes entrées que les nôtres (broyage, meule, mixer, compacteur, presse, friture, et grille des deux crafts testée contre toutes les recettes de craft et de Mechanical Crafter).
+
+Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
+- **Aucun** autre `create:crushing` sur bœuf, porc, poulet ou pain : nos recettes de broyage sont seules. Create: Food fait du haché à la **presse** (`createfood:ground_*`), autre machine, pas de conflit.
+- `create:compacting` sur `#c:seeds` : déjà **deux** recettes (`createaddition:seed_oil`, `createdieselgenerators:plant_oil`). Notre recette graines → huile est donc désactivée dans le pack (conditions `mod_loaded`).
+- Conventions du pack reprises dans nos tags : `c:ground_beef`, `c:ground_pork`, `c:ground_chicken` (Create: Food), `c:minced_beef` (FD), `c:bread_crumbs` (Create: Food), fluides `c:plantoil` (IE, C&A, Diesel) et `c:vegetable_oil` (Create: Food).
+- Pas de mayonnaise ni de ketchup dans le pack.
 
 ### Serveur
 - Pack lourd (464 mods) : FoodIndex calculé une fois par reload, jamais en tick. Log du temps de calcul.
 - Tester sur une copie du serveur Arcadia avant toute mise à jour.
 
-## Blacklist par défaut à préparer pour le pack
+## Test dans le pack (M6.5, 27/09/2026)
 
-À compléter avec le CSV d'export (M5), à valider en team (D8) :
-- Nos propres pâtes / fricadelles.
-- Aliments **créatifs ou non obtenables** en survie dans le pack (items désactivés par KubeJS, items cachés de JEI, loot unique de boss…).
-- Aliments issus des mods Arcadia maison (LootBox, Pets…) s'il y en a.
-- Variantes purement décoratives (si .3D Placeable Food ou d'autres enregistrent des items « posés » comestibles).
+`python tools/arcadia_smoke.py` (environ 35 minutes, deux fenêtres, 8 Go par client) : l'instance CurseForge est seulement lue ; tout se passe dans `run/arcadia`, `run/arcadia-b` et `run/arcadia-jar`. Trois phases :
 
-Idée : une commande `/belgiansnacks foods export --missing-recipe` qui signale les aliments **sans aucune recette connue** (candidats probables à la blacklist).
+1. **Client A** (pack complet + notre mod en dev, `ArcadiaSmokeRun`) : crée un monde et vérifie les recettes, les modifications KubeJS, les conflits, Create Heat JS, le Hachoir, JEI et l'export, puis ouvre le monde en LAN.
+2. **Client B** rejoint en LAN : même index d'aliments (1803, même empreinte), Friteuse synchronisée, les deux joueurs nourrissent le même Hachoir par clic droit, B reçoit la liste des manquants.
+3. **Le jar de release** (`build/libs`) avec les jars exacts du pack, Create compris, sans aucune classe du projet : charge le monde de A, dont un datapack lance `belgiansnacks foods export`. Aucune erreur `create_belgian_snacks` dans le log, 1803 aliments exportés.
+
+Le script KubeJS de test (`tools/arcadia/zz_belgian_snacks_m65_test.js`, copié dans `run/` seulement) montre ce que la team peut faire sans toucher au jar : supprimer `create_belgian_snacks:frying/fricadelle`, ajouter une recette `create_belgian_snacks:frying` (pomme de terre vers pomme de terre cuite, frite par une vraie Friteuse), retirer un aliment du Hachoir par le tag `grinder/blacklist`.
+
+Hors de notre mod, signalé par Crash Assistant pendant le test : `create_waystones_recipes` 3.0.1.b référence `com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeBuilder`, une classe de datagen de Create 5 absente de Create 6. Référence morte (jamais chargée en jeu, aucune erreur dans le log) : fausse alerte, mais à signaler à la team du pack si le mod reçoit une mise à jour. Crash Assistant analyse le log quand un jeu s'arrête anormalement, ce que fait le script en arrêtant le client du jar une fois l'export obtenu.
+
+Trouvé et corrigé en chemin : la Friteuse prenait la première recette de l'item sans regarder la chaleur (bloquée si une variante demande plus de chaleur), et Create Heat JS change les règles de chaleur (voir plus haut). Dans le pack, `incomplete_the_fricadelle` apparaît dans la liste d'items de JEI (voir `docs/10`).
+
+## Le FoodIndex réel d'Arcadia 2.0.32 (export du 27/09/2026)
+
+Obtenu par `python tools/arcadia_export.py` : le pack complet (449 mods, sans Create/JEI/Jade/MezzConfig déjà fournis par le dev), ses scripts KubeJS, sa config, ses datapacks et son pack de ressources, lancés dans un client de dev qui crée un monde, exporte et quitte (environ 9 minutes). Données : `docs/data/arcadia-2.0.32-foods.csv` (une ligne par aliment) et `…-summary.txt`.
+
+| | |
+|---|---|
+| Aliments comptés | **1804** (39 mods) |
+| Exclus | 22 : nos 3 fricadelles, les 16 objets de `cosmeticarmoursmod`, `minecraft:ominous_bottle`, `mynethersdelight:enchanted_golden_egg`, `artifacts:everlasting_beef` |
+| Palier 2 (10 %) | ≈ 180 aliments (arrondi fixé au M6) |
+| Palier 3 (100 %) | 1804 aliments |
+| Sans recette connue | 168 (indice seulement : poissons d'Aquaculture, viandes de mobs, baies de Twilight Forest s'obtiennent sans recette) |
+| Temps de calcul | 26 ms en régime établi, 57 ms au démarrage du monde |
+
+Répartition : Create: Food 909, Create Ice Creams 89, Cultural Delights 86, Farmer's Delight 77, My Nether's Delight 60, Ars Delight 51, End's Delight 47, Create Confectionery 46, Twilight Delight 46, Crabber's Delight 42, vanilla 42, puis 28 mods sous 40.
+
+Pour lancer le pack en dev, deux pièges trouvés : ne lire que les `modId` des blocs `[[mods]]` (les blocs de dépendances en contiennent aussi), et passer `log4j2.configurationFile` en URI `file:///` (Create Numismatics la lit comme une URI ; un chemin Windows fait échouer la construction de tous les mods).
+
+## Blacklist par défaut (D8, tranchée le 27/09/2026)
+
+- Nos fricadelles : toujours exclues par le code.
+- Mod `cosmeticarmoursmod` (objets décoratifs comestibles) : config `grinder.blacklistedMods`.
+- Objets uniques : `minecraft:ominous_bottle`, `mynethersdelight:enchanted_golden_egg`, `artifacts:everlasting_beef` : tag `create_belgian_snacks:grinder/blacklist` (entrées optionnelles).
+- **La pomme d'or enchantée compte.**
+
+La team du pack peut étendre la liste sans toucher au jar (tag via KubeJS, ou config). La colonne `has_recipe` de `foods export` repère les candidats : un aliment sans recette connue n'est pas forcément inobtenable, il faut vérifier au cas par cas.
 
 ## Intégration au pack
 Le mod est un projet perso de THEFricadelle : la team du pack **n'intervient pas dans le code**. Elle peut seulement l'ajuster de l'extérieur (KubeJS, tags, config serveur, éventuellement un chapitre FTB Quests « La Friterie »). D'où l'importance que tout soit réglable sans toucher au jar.

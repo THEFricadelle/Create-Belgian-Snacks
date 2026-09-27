@@ -1,0 +1,107 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:crops/onion"
+      }
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:exceptional_paste"
+  },
+  "loops": 3,
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_the_fricadelle"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_the_fricadelle"
+        },
+        {
+          "item": "create_belgian_snacks:belgian_spices"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_the_fricadelle"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 100,
+          "fluid": "create_belgian_snacks:mayonnaise"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_the_fricadelle"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 100,
+          "fluid": "create_belgian_snacks:curry_ketchup"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_the_fricadelle"
+        },
+        {
+          "tag": "c:crops/onion"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_the_fricadelle"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_the_fricadelle"
+  }
+}

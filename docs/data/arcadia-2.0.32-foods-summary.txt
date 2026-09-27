@@ -1,0 +1,45 @@
+foods 1804
+excluded 22
+without_recipe 168
+compute_ms_at_start 56.8
+compute_ms_steady 26.4
+mods 39
+mod createfood 909 61
+mod create_ice_creams 89 0
+mod culturaldelights 86 3
+mod farmersdelight 77 4
+mod mynethersdelight 60 10
+mod arsdelight 51 5
+mod ends_delight 47 9
+mod create_confectionery 46 0
+mod twilightdelight 46 4
+mod crabbersdelight 42 0
+mod minecraft 41 5
+mod burgermod 34 1
+mod twilightforest 34 10
+mod aquaculture 32 28
+mod oceansdelight 23 3
+mod aquaculturedelight 21 0
+mod endersdelight 20 3
+mod corn_delight 19 1
+mod trailandtales_delight 16 1
+mod barbequesdelight 14 1
+mod create_winery 14 0
+mod deep_aether 10 3
+mod refurbished_furniture 9 0
+mod aether 8 5
+mod cookscollection 8 0
+mod ars_nouveau 7 0
+mod occultism 7 4
+mod ecologics 6 3
+mod create 5 0
+mod dndesires 5 0
+mod deeperdarker 3 2
+mod dustydecorations 3 0
+mod solonion 3 0
+mod supplementaries 3 0
+mod artifacts 2 1
+mod createnuclear 1 0
+mod mcwholidays 1 0
+mod mowziesmobs 1 1
+mod twilight_additions 1 0

@@ -1,0 +1,19 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:eggs"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 100,
+      "tag": "create_belgian_snacks:frying_oils"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_belgian_snacks:mayonnaise"
+    }
+  ]
+}
