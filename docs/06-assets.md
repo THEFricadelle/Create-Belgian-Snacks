@@ -14,6 +14,8 @@ Spécs du script :
 - Couleur de base par item (table `ITEMS` du script), + 1 glyphe 3×5 en surimpression : une lettre pour les ingrédients (P, B, C, T, R, S), le chiffre du palier (1, 2, 3) pour les pâtes et les fricadelles.
 - État au M2 : 16 items, 4 fluides (`still` 16×16, `flow` 16×32 sur 2 frames + `.mcmeta`) et leurs 4 seaux (seau dessiné par le script, rempli de la couleur du fluide). Blocs (M3) : à ajouter.
 - THE_FRICADELLE : bâtonnet doré avec bord brillant (le glint est géré par l'item, pas la texture).
+- `incomplete_ultimate_fricadelle` : bâtonnet crème, glyphe 3 (placeholder).
+- PNJ THEFricadelle : **aucune texture livrée**. Le skin du compte Minecraft THEFricadelle est chargé en ligne au premier affichage (comme une tête de joueur), avec le modèle large ou fin qu'il déclare ; sans connexion, skin par défaut.
 - Fluides : `still` et `flow` 16×16 (le `flow` en 16×32 animé si possible, sinon statique) + fichier `.mcmeta`.
 - Blocs : 6 faces unies avec bordure, 2 couleurs distinctes pour la Friteuse (inox) et le Hachoir (laiton).
 - Le script **n'écrase jamais** un fichier existant sans `--force` (pour ne pas écraser les vraies textures).

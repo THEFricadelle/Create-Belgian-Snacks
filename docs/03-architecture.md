@@ -170,6 +170,11 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
   - Sync client : compte, objectif, total, mode et 5 exemples manquants ; jamais la collection. La liste complète passe par `GrinderMissingRequestPayload` (chunk chargé, joueur à moins de 8 blocs).
   - Jauge : propriété de blockstate `fill` 0 à 4 (5 modèles datagen), pas de rendu par tick. Lames : modèle partiel `block/supreme_grinder/blades`, visuel Flywheel `SingleAxisRotatingVisual`, `SupremeGrinderRenderer` en repli. Les partials sont chargés par le point d'entrée client `BelgianSnacksClient` (`@Mod(dist = CLIENT)`).
   - Les lignes Goggles de `KineticBlockEntity` passent par la police du client : elles ne s'appellent jamais côté serveur (un GameTest l'a montré).
+- Palier 3 (M8) :
+  - `content/food/UltimateFricadelleItem` : gags côté serveur (rot géant, feu d'artifice, message à tout le serveur par `PlayerList.broadcastSystemMessage`, apparition du PNJ). Les effets de potion sont dans `BSFoods` (`FoodProperties.Builder.effect`).
+  - `content/npc/TheFricadelleNpc` (`PathfinderMob`, sans IA, invulnérable, sans collision, 160 ticks de vie) ; type d'entité `noSave()`, donc jamais écrit dans un chunk. Sa phrase est son nom visible (synchronisé par l'entité), aucun paquet maison.
+  - `client/TheFricadelleNpcRenderer` + `ClappingPlayerModel` (modèle de joueur large ou fin, bras qui applaudissent) ; `client/NpcSkin` résout le skin une fois (`SkullBlockEntity.fetchGameProfile`, puis `SkinManager.getOrLoad`) et le garde.
+  - `registry/BSTriggers.GRINDER_HALF` (`SimpleCriterionTrigger`), lancé par le Hachoir quand son compte augmente et atteint 50 % du total, pour les joueurs à 16 blocs. `registry/BSAdvancements` : l'onglet, généré par Registrate.
 - Ponder : une scène par machine (jalon M9).
 
 ⚠️ Toutes ces classes Create sont à vérifier dans les sources 6.0.10 avant usage.

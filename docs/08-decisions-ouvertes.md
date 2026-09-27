@@ -32,20 +32,24 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 
 🖥️ = à trancher pendant les sessions de dev, au moment du jalon concerné.
 
-## Effets en mangeant (« on définira chaque point ensemble »)
+## Effets en mangeant (tranchés le 27/09/2026)
 
-| Aspect | Fricadelle | THE_Fricadelle | THE_FRICADELLE | Décision |
-|---|---|---|---|---|
-| Nutrition (demi-cuisses) | 6 ? | 10 ? | 20 ? | |
-| Saturation (modificateur) | 0.6 ? | 1.0 ? | 2.0 ? | |
-| Temps pour manger | normal ? | normal ? | long ? | |
-| Mangeable même rassasié | non | non | oui ? | |
-| Effets de potion | ? | ? | ? | |
-| Gag son | burp | ? | ? | |
-| Gag particules / message chat | ? | ? | message serveur global ? | |
-| Advancement | « Une fricadelle, une ! » ? | ? | « J'ai tout mangé » ? | |
+| Aspect | Fricadelle | THE_Fricadelle | THE_FRICADELLE |
+|---|---|---|---|
+| Nutrition (demi-cuisses) | 6 | 10 | 20 |
+| Saturation (modificateur) | 0.6 | 1.0 | 2.0 |
+| Temps pour manger | normal | normal | normal |
+| Mangeable même rassasié | non | non | oui |
+| Effets de potion | aucun | Régénération I 10 s, Absorption I 1 min | Régénération II 1 min, Absorption IV 3 min, Force II, Résistance II et Résistance au feu 5 min |
+| Gag son | rot | rot | rot géant (même son, pitch 0,4, volume 2) + feu d'artifice |
+| Gag particules / message | — | — | feu d'artifice ; message à tout le serveur ; **THEFricadelle en personne** (voir plus bas) |
+| Advancement | « Une fricadelle, une ! » | « Avec une spéciale » | « J'ai tout mangé » (défi) |
 
-Idées d'advancements à trier : première Friteuse, première huile au blanc de bœuf, 100 fricadelles produites, Hachoir à 50 %, THE_FRICADELLE mangée.
+Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement dessus plus tard ». Toutes les valeurs vivent dans `BSFoods`.
+
+**THEFricadelle en personne** : un PNJ apparaît à côté de celui qui mange THE_FRICADELLE dans un nuage de fumée, le regarde, applaudit, dit une phrase tirée au hasard parmi 5 (au-dessus de sa tête et dans le chat à 32 blocs), puis disparaît au bout de 8 s. Invulnérable, sans collision, sans loot, jamais sauvegardé. Son skin est **celui du compte Minecraft THEFricadelle**, chargé en ligne comme une tête de joueur (skin par défaut sans internet).
+
+**Advancements** (onglet « Create: Belgian Snacks ») : hacher de la viande (racine) → « Friterie ouverte » (poser une Friteuse) → « Blanc de bœuf » (seau) et « Une fricadelle, une ! » → « Le Hachoir Suprême » (en poser un) → « Exceptionnelle » → « Avec une spéciale » ; et « À mi-chemin » (Hachoir à 50 % de tous les aliments, déclencheur maison) → « Absolue » (défi) → « J'ai tout mangé » (défi). « 100 fricadelles produites » écarté pour l'instant.
 
 ## Technique / organisation
 

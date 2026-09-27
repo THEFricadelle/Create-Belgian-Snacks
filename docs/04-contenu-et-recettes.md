@@ -22,6 +22,7 @@ Namespace : `create_belgian_snacks` (abrégé `bs:` ci-dessous).
 | `raw_the_fricadelle` | Raw THE_Fricadelle | THE_Fricadelle crue | non | |
 | `the_fricadelle` | THE_Fricadelle | THE_Fricadelle | **oui** | Palier 2 |
 | `absolute_paste` | Absolute Paste | Pâte absolue | non | Sortie Hachoir mode ULTIME |
+| `incomplete_ultimate_fricadelle` | Incomplete THE_FRICADELLE | THE_FRICADELLE en cours | non | Item de transition (Sequenced Assembly du palier 3) |
 | `raw_ultimate_fricadelle` | Raw THE_FRICADELLE | THE_FRICADELLE crue | non | |
 | `ultimate_fricadelle` | THE_FRICADELLE | THE_FRICADELLE | **oui** | Palier 3, rareté EPIC, effet brillant |
 
@@ -110,8 +111,11 @@ Le blanc de bœuf fondu est la graisse des vraies frites belges : il sert aux pa
 ## Recettes — Palier 3 : THE_FRICADELLE
 
 1. **Hachoir Suprême**, mode *ULTIME* : 100 % des aliments du FoodIndex → 1× `absolute_paste`.
-2. Mixer **super-chauffé** : `absolute_paste` + `the_fricadelle` + 1000 mB `melted_beef_tallow` → `raw_ultimate_fricadelle`. ⚠️
-3. **Friteuse** **super-chauffée** : → `ultimate_fricadelle`, 600 ticks, 250 mB de `melted_beef_tallow` uniquement (aucune autre huile).
+2. **Sequenced Assembly** `sequenced_assembly/raw_ultimate_fricadelle` (décidée le 27/09/2026, remplace le Mixer et ne demande plus de THE_Fricadelle) :
+   - Entrée : `absolute_paste` — Item de transition : `incomplete_ultimate_fricadelle`
+   - Séquence : Spout 250 mB `melted_beef_tallow` → Deployer `belgian_spices` → Spout 250 mB `mayonnaise` → Spout 250 mB `curry_ketchup` → Deployer oignon (`c:crops/onion`, betterave sans aucun oignon : `…_from_beetroot`, D7) → Press
+   - Boucles : **5** : 1250 mB de chaque fluide, 5 épices et 5 oignons ; **100 %** de réussite
+3. **Friteuse** **super-chauffée** (`frying/ultimate_fricadelle`) : → `ultimate_fricadelle`, 600 ticks, 250 mB de `melted_beef_tallow` uniquement (aucune autre huile), une pièce à la fois.
 
 ## Dans Arcadia V2
 

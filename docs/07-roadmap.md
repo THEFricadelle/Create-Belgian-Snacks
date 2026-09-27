@@ -78,9 +78,9 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Sequenced Assembly (`sequenced_assembly/raw_the_fricadelle` + secours betterave) ; sauces et épices déjà livrées au M2
 - [x] Friture THE_Fricadelle (`frying/the_fricadelle`)
 
-### M8 — Palier 3 : THE_FRICADELLE 🔒 (effets)
-- [ ] Mixer super-chauffé + friture super-chauffée
-- [ ] Effets, gags, advancements définitifs
+### M8 — Palier 3 : THE_FRICADELLE ✅ (27/09/2026)
+- [x] Sequenced Assembly du palier 3 (remplace le Mixer) + friture super-chauffée au blanc de bœuf
+- [x] Effets, gags (dont le PNJ THEFricadelle), advancements
 
 ### M9 — Finitions & publication
 - [ ] Scènes Ponder (Friteuse, Hachoir)
