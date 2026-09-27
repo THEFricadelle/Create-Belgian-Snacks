@@ -18,6 +18,7 @@ import be.thefricadelle.belgiansnacks.data.recipe.BSMechanicalCraftingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSMillingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSMixingRecipeGen;
 import be.thefricadelle.belgiansnacks.data.recipe.BSPressingRecipeGen;
+import be.thefricadelle.belgiansnacks.data.recipe.BSSequencedAssemblyRecipeGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -44,5 +45,6 @@ public final class BSDatagen {
         generator.addProvider(event.includeServer(), new BSPressingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSFryingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSMechanicalCraftingRecipeGen(output, registries));
+        generator.addProvider(event.includeServer(), new BSSequencedAssemblyRecipeGen(output, registries));
     }
 }

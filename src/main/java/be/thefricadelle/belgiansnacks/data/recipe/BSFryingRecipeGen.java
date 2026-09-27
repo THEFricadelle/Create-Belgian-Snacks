@@ -32,6 +32,14 @@ public class BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>
         .duration(100)
         .requiresHeat(HeatCondition.HEATED));
 
+    // Tier 2 (D20): any frying fat, heated, twice as long and more fat than tier 1.
+    GeneratedRecipe THE_FRICADELLE = create("the_fricadelle", b -> b
+        .require(BSItems.RAW_THE_FRICADELLE.get())
+        .require(BSTags.FRYING_OILS, 25)
+        .output(BSItems.THE_FRICADELLE.get())
+        .duration(200)
+        .requiresHeat(HeatCondition.HEATED));
+
     public BSFryingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

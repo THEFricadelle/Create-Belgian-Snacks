@@ -38,6 +38,7 @@ public final class BSTags {
     public static final TagKey<Item> C_GROUND_CHICKEN = common("ground_chicken");
     public static final TagKey<Item> C_BREAD_CRUMBS = common("bread_crumbs");
     public static final TagKey<Item> C_TOMATOES = common("crops/tomato");
+    public static final TagKey<Item> C_ONIONS = common("crops/onion");
 
     // Any fat tiers 1 and 2 can fry in, including other mods' plant and vegetable oils (D13).
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
