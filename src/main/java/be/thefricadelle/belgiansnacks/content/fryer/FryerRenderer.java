@@ -36,7 +36,7 @@ public class FryerRenderer extends SmartBlockEntityRenderer<FryerBlockEntity> {
         float surface = fryer.fatSurface();
         FluidStack fat = fryer.getTank().getPrimaryHandler().getFluid();
         if (!fat.isEmpty()) {
-            NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fat, 2 / 16f, 2 / 16f, 2 / 16f, 14 / 16f, surface, 14 / 16f,
+            NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fat, 2 / 16f, 4 / 16f, 2 / 16f, 14 / 16f, surface, 14 / 16f,
                 buffer, ms, light, false, false);
         }
 

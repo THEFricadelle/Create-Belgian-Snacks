@@ -34,8 +34,8 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class FryerBlock extends Block implements IBE<FryerBlockEntity>, IWrenchable {
-    // An open vat: 2 px floor and walls.
-    private static final VoxelShape SHAPE = Shapes.join(Shapes.block(), Block.box(2, 2, 2, 14, 16, 14), BooleanOp.ONLY_FIRST);
+    // An open vat on feet: floor top at y = 4, 2 px walls. The feet stay inside the solid outline.
+    private static final VoxelShape SHAPE = Shapes.join(Shapes.block(), Block.box(2, 4, 2, 14, 16, 14), BooleanOp.ONLY_FIRST);
 
     public FryerBlock(Properties properties) {
         super(properties);

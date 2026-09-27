@@ -230,17 +230,24 @@ class ResourceConsistencyTest {
         }
     }
 
-    // Textures of a model, following parents in our namespace (a block item inherits its block model).
+    // Textures of a model, merged along its parents in our namespace (a block item inherits its block
+    // model; a generated model may be the child of a hand-made one in src/main/resources that it
+    // only overrides a texture of). The child's entries win, as in the game.
     private static JsonObject texturesOf(Path model) throws IOException {
         JsonObject json = json(model);
-        if (json.has("textures")) {
-            return json.getAsJsonObject("textures");
-        }
+        JsonObject textures = new JsonObject();
         if (json.has("parent") && json.get("parent").getAsString().startsWith(MOD_ID + ":")) {
-            String parent = json.get("parent").getAsString().substring(MOD_ID.length() + 1);
-            return texturesOf(GENERATED.resolve("assets/" + MOD_ID + "/models/" + parent + ".json"));
+            String parent = "assets/" + MOD_ID + "/models/" + json.get("parent").getAsString().substring(MOD_ID.length() + 1) + ".json";
+            Path generated = GENERATED.resolve(parent);
+            JsonObject inherited = texturesOf(Files.isRegularFile(generated) ? generated : MAIN.resolve(parent));
+            if (inherited != null) {
+                inherited.entrySet().forEach(e -> textures.add(e.getKey(), e.getValue()));
+            }
         }
-        return null;
+        if (json.has("textures")) {
+            json.getAsJsonObject("textures").entrySet().forEach(e -> textures.add(e.getKey(), e.getValue()));
+        }
+        return textures.size() == 0 ? null : textures;
     }
 
     private static JsonObject json(Path path) throws IOException {

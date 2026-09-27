@@ -205,6 +205,15 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
             ClientSmokeTest::checkGrinder));
         STEPS.add(new Step("grinder.shot", 10, () -> screenshot("grinder-in-world")));
+        // A grinder with nothing above it, seen from straight above: the blades in their pit.
+        STEPS.add(new Step("grinder.blades", 10, () -> {
+            var server = mc.getSingleplayerServer();
+            BlockPos open = smokeGrinder.south(3);
+            server.execute(() -> server.overworld().setBlockAndUpdate(open, BSBlocks.SUPREME_GRINDER.getDefaultState()));
+            mc.player.setPos(open.getX() + 0.5, open.getY() + 2.2, open.getZ() + 0.5);
+            mc.player.setXRot(90f);
+        }));
+        STEPS.add(new Step("grinder.blades.shot", 30, () -> screenshot("grinder-blades")));
         STEPS.add(new Step("grinder.missing.ask", 5, ClientSmokeTest::askMissing));
         STEPS.add(new Step("grinder.missing.check", 0, () -> mc.screen instanceof GrinderMissingScreen, ClientSmokeTest::checkMissingScreen));
         STEPS.add(new Step("grinder.missing.shot", 20, () -> screenshot("grinder-missing")));
