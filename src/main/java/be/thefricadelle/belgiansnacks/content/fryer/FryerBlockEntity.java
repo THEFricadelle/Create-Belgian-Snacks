@@ -30,6 +30,7 @@ import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
 import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
+import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -39,6 +40,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -61,6 +63,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * and keeps its progress; nothing is ever consumed without being fried.
  */
 public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+    private static final int SIZZLE_INTERVAL = 40;
     private static final int IDLE_RETRY_TICKS = 10;
     private static final int DEFAULT_DURATION = 100;
     // Not an EnumSet: Create Heat JS adds HeatLevel constants at runtime.
@@ -189,6 +192,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         }
         if (!hot) {
             return;
+        }
+        if (progress % SIZZLE_INTERVAL == 0) {
+            level.playSound(null, worldPosition, BSSoundEvents.FRYER_SIZZLE.get(), SoundSource.BLOCKS, 0.6f, 0.9f + level.random.nextFloat() * 0.2f);
         }
         if (++progress < duration) {
             return;

@@ -210,6 +210,9 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
             ClientSmokeTest::checkGrinder));
         STEPS.add(new Step("grinder.shot", 10, () -> screenshot("grinder-in-world")));
+        // A running grinder hums (played on this client every two seconds).
+        STEPS.add(new Step("grinder.hum", 0, () -> SOUNDS.contains(BelgianSnacks.MOD_ID + ":grinder.running"),
+            () -> check("grinder.hum", () -> "the running grinder hums")));
         // A grinder with nothing above it, seen from straight above: the blades over the mince, which
         // fills half the pit (half of every food, in ULTIMATE mode).
         STEPS.add(new Step("grinder.blades", 10, () -> {

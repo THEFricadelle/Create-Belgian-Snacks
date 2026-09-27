@@ -17,10 +17,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** Sound events: only THEFricadelle's recorded voice for now; sounds.json comes from datagen. */
+/** Sound events; sounds.json (datagen) maps them to vanilla sounds until real ones exist. */
 public final class BSSoundEvents {
     private static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(Registries.SOUND_EVENT, BelgianSnacks.MOD_ID);
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> FRYER_SIZZLE = sound("fryer.sizzle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_GRIND = sound("grinder.grind");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_COMPLETE = sound("grinder.complete");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_RUNNING = sound("grinder.running");
     /** THEFricadelle's voice, named after the line it says (npc.phrase.N) so its recording matches the text. */
     public static final DeferredHolder<SoundEvent, SoundEvent> NPC_VOICE = sound("npc.phrase." + TheFricadelleNpc.SPOKEN_PHRASE);
 

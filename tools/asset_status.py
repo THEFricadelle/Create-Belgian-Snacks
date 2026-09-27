@@ -29,9 +29,14 @@ OPTIONAL_MODELS = {
 }
 
 SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
-# Our own recordings, each one a sound event in BSSoundDefinitionsProvider (datagen fails without
-# them). Only the author's voice for now; the voice lines' text is in BSLang (npc.phrase.N).
+# Recordings the datagen picks up when present (BSSoundDefinitionsProvider.recordingOr); vanilla
+# sounds stand in until then. The visitor only says line 4 (TheFricadelleNpc.SPOKEN_PHRASE), whose
+# text is in BSLang (npc.phrase.4).
 SOUNDS_USED = {
+    "fryer/sizzle.ogg": "Fryer sizzling, played every 2 s while frying (about 2 s long)",
+    "grinder/grind.ogg": "Supreme Grinder taking a food (short, under 1 s)",
+    "grinder/complete.ogg": "Supreme Grinder finishing a paste (1 to 2 s)",
+    "grinder/running.ogg": "Supreme Grinder turning, played every 2 s while fast enough (about 2 s long)",
     "npc/phrase_4.ogg": "THEFricadelle's voice, line 4 (the visitor always says it)",
 }
 
@@ -136,12 +141,11 @@ def main():
     for file, what in OPTIONAL_MODELS.items():
         state = "present" if (MODELS / file).is_file() else "not yet"
         print(f"  {state:11} models/block/custom/{file}: {what}")
-    print("recorded sounds (required, datagen fails without them):")
+    print("recorded sounds (optional, vanilla sounds stand in):")
     for file, what in SOUNDS_USED.items():
         path = SOUNDS / file
         if not path.is_file():
-            state = "MISSING"
-            missing.append(f"sounds/{file}")
+            state = "not yet"
         else:
             problem = ogg_problem(path.read_bytes())
             state = "present" if problem is None else "to fix"

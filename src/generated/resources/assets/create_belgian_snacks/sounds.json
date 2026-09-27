@@ -1,4 +1,28 @@
 {
+  "fryer.sizzle": {
+    "sounds": [
+      "create_belgian_snacks:fryer/sizzle"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.fryer.sizzle"
+  },
+  "grinder.complete": {
+    "sounds": [
+      "create_belgian_snacks:grinder/complete"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.grinder.complete"
+  },
+  "grinder.grind": {
+    "sounds": [
+      "create_belgian_snacks:grinder/grind"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.grinder.grind"
+  },
+  "grinder.running": {
+    "sounds": [
+      "create_belgian_snacks:grinder/running"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.grinder.running"
+  },
   "npc.phrase.4": {
     "sounds": [
       "create_belgian_snacks:npc/phrase_4"

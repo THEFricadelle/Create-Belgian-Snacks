@@ -17,7 +17,7 @@ Plonger des items dans l'huile chaude. Seule machine qui exécute les recettes `
 | Items en sortie | 2 slots (une recette peut avoir 2 résultats). Extraction par funnel ou trémie ; l'entrée n'est jamais extraite. Clic droit main vide = récupérer la sortie, puis l'entrée s'il n'y a plus de sortie. |
 | Traitement | **Par lot** (décidé) : toute la pile d'entrée cuit ensemble, jusqu'à `maxBatch` (16). Les items du tag `create_belgian_snacks:fryer/one_at_a_time` (THE_FRICADELLE crue) cuisent **un par un**. Durée = `processing_time` ÷ `speedMultiplier`. La graisse de tout le lot (quantité de la recette × nombre d'items) est payée **au démarrage**. |
 | Conditions d'arrêt | Un lot ne démarre que si chaleur, graisse (pour tout le lot) et place en sortie sont réunies. Chaleur perdue en cours de lot → pause, sans perte ni perte de progression. La graisse ne peut pas manquer en cours de lot (déjà payée). |
-| Rendu | Niveau de graisse visible, items qui flottent à la surface, bulles et fumée pendant la cuisson ; muette en 1.0.0 (les sons viendront avec les prochaines fonctionnalités). |
+| Rendu | Niveau de graisse visible, items qui flottent à la surface, bulles et fumée pendant la cuisson, grésillement toutes les 2 s (`create_belgian_snacks:fryer.sizzle`, sons vanilla en attendant). |
 | Goggles / Jade | Statut (friture + %, ou la raison du blocage : rien à frire, pas assez chaud, pas assez de graisse, sortie pleine), chaleur, réservoir (mB / capacité). |
 | Casser le bloc | Les items tombent ; la **graisse reste dans l'item** et revient à la pose. |
 | Comparateur | Signal = remplissage de la sortie. |
@@ -49,7 +49,7 @@ Collectionner **chaque aliment unique** du modpack. Produit la Pâte d'exception
 | Cinétique | **Oui.** Arbre par le dessus. Vitesse min `grinder.minSpeed` (64 rpm), impact `grinder.stressImpact` (8 SU/rpm, D11). Sous la vitesse min : n'accepte rien. |
 | Mode | `ScrollOptionBehaviour` (boîte de valeur Create, molette + clé) : **THE_** / **ULTIME**. Changer de mode **ne remet pas** la progression à zéro (le set d'aliments est partagé). |
 | Entrée | Par le haut et les côtés : funnel, tapis, entonnoir, Mechanical Arm, clic droit. Accepte **1 item à la fois**. |
-| Si l'item est un aliment **nouveau** | Consommé (1 exemplaire), ajouté à `consumed`, particules d'item (muet en 1.0.0). |
+| Si l'item est un aliment **nouveau** | Consommé (1 exemplaire), ajouté à `consumed`, particules d'item + son de broyage. |
 | Si l'item est un **doublon** | Refusé (`rejectDuplicates=true`) : il n'entre pas (funnel/tapis bloque ou contourne). Sinon détruit. |
 | Si l'item n'est **pas un aliment** | Refusé. |
 | Quand l'objectif est atteint | Mode THE_ : dès que `|consumed ∩ index| ≥ ceil(ratio × |index|)` → produit 1 `exceptional_paste` dans le slot de sortie et **vide** `consumed` (D9, D22). Mode ULTIME : idem à 100 % → `absolute_paste`. Au-delà de l'objectif (passage d'ULTIME à THE_), tout part quand même : tentative de THE_FRICADELLE ratée, message aux joueurs à moins de 16 blocs. |

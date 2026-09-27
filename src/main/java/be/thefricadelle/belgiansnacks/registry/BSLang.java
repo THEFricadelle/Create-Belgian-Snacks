@@ -38,6 +38,7 @@ public final class BSLang {
         add(ID + ".fryer.heat.superheated", "Superheated", "Surchauffée");
         add(ID + ".recipe.frying", "Frying", "Friture");
         add(ID + ".recipe.frying.fat", "Fat per item", "Graisse par item");
+        add("subtitles." + ID + ".fryer.sizzle", "Fryer sizzles", "La friteuse grésille");
         add("config.jade.plugin_" + ID + ".fryer", "Fryer", "Friteuse");
         add(ID + ".command.foods.count", "%s foods (%s from the extra tag), %s excluded, computed in %s ms",
             "%s aliments (dont %s par le tag extra), %s exclus, calculés en %s ms");
@@ -60,6 +61,9 @@ public final class BSLang {
         add(ID + ".recipe.grinding_goal", "Supreme Grinding", "Hachoir Suprême");
         add(ID + ".recipe.grinding_goal.foods", "%s of %s foods (%s%%)", "%s aliments sur %s (%s %%)");
         add(ID + ".recipe.grinding_goal.each", "Each food counts once", "Chaque aliment compte une fois");
+        add("subtitles." + ID + ".grinder.grind", "Grinder grinds", "Le hachoir broie");
+        add("subtitles." + ID + ".grinder.complete", "Grinder finishes a paste", "Le hachoir termine une pâte");
+        add("subtitles." + ID + ".grinder.running", "Grinder whirs", "Le hachoir tourne");
         add("subtitles." + ID + ".npc.speaks", "THEFricadelle speaks", "THEFricadelle parle");
         add("config.jade.plugin_" + ID + ".supreme_grinder", "Supreme Grinder", "Hachoir Suprême");
         add(ID + ".command.grinder.filled", "Supreme grinder filled with %s of %s foods", "Hachoir suprême rempli avec %s aliments sur %s");
