@@ -73,6 +73,17 @@ Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create
 | `fricadelle.burp` | rot en mangeant (environ 1 s) | `fricadelle/burp.ogg` | rot du joueur |
 | `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | `npc/phrase_N.ogg` | grognement de villageois |
 
+**Provenance** (27/09/2026) : les quatre bruitages viennent de [BigSoundBank](https://bigsoundbank.com), sous licence CC0 (domaine public : aucun crédit requis, usage commercial permis). Découpés, fondus et normalisés (crête à -1,5 dB) avec ffmpeg :
+
+| Fichier | Source | Découpe |
+|---|---|---|
+| `fryer/sizzle.ogg` | [Frying bath #2](https://bigsoundbank.com/frying-bath-2-s2506.html) (bain de friture de churros) | 2,2 s à partir de 12 s, la friture stable |
+| `grinder/grind.ogg` | [Raw carrot crunched #1](https://bigsoundbank.com/raw-carrot-crunched-1-s1594.html) | un seul croc, 0,35 s à partir de 0,95 s |
+| `grinder/complete.ogg` | [Microwave Bell](https://bigsoundbank.com/microwave-bell-s1631.html) | 1,6 s, fin en fondu |
+| `fricadelle/burp.ogg` | [Burp #3](https://bigsoundbank.com/burp-3-s1709.html) | entier (0,44 s) |
+
+La voix du PNJ est enregistrée par l'auteur (`npc/phrase_4.ogg` le 27/09/2026).
+
 **Format** : tous en **Ogg Vorbis mono**. Un MP3 renommé ne se lit pas : `ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg`. `python tools/asset_status.py` liste ce qui est fait, et signale un fichier stéréo, un MP3 renommé ou un nom qu'aucun son n'utilise.
 
 **Voix du PNJ** : enregistrer chaque phrase dans `sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).

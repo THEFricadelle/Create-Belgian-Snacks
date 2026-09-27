@@ -1,29 +1,25 @@
 {
   "fricadelle.burp": {
     "sounds": [
-      "random/burp"
+      "create_belgian_snacks:fricadelle/burp"
     ],
     "subtitle": "subtitles.create_belgian_snacks.fricadelle.burp"
   },
   "fryer.sizzle": {
     "sounds": [
-      "liquid/lavapop",
-      "block/campfire/crackle1",
-      "block/campfire/crackle3"
+      "create_belgian_snacks:fryer/sizzle"
     ],
     "subtitle": "subtitles.create_belgian_snacks.fryer.sizzle"
   },
   "grinder.complete": {
     "sounds": [
-      "random/levelup"
+      "create_belgian_snacks:grinder/complete"
     ],
     "subtitle": "subtitles.create_belgian_snacks.grinder.complete"
   },
   "grinder.grind": {
     "sounds": [
-      "block/grindstone/grindstone1",
-      "block/grindstone/grindstone2",
-      "block/grindstone/grindstone3"
+      "create_belgian_snacks:grinder/grind"
     ],
     "subtitle": "subtitles.create_belgian_snacks.grinder.grind"
   },
@@ -53,7 +49,7 @@
   },
   "npc.phrase.4": {
     "sounds": [
-      "mob/villager/yes2"
+      "create_belgian_snacks:npc/phrase_4"
     ],
     "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
   }
