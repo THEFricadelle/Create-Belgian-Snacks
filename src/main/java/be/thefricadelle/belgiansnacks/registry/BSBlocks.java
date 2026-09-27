@@ -21,6 +21,7 @@ import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlock;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlock;
 import net.minecraft.core.Direction;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
@@ -65,13 +66,29 @@ public final class BSBlocks {
         .build()
         .register();
 
+    /**
+     * Hand-made models (Blockbench exports, docs/06) live in src/main/resources under this folder.
+     * When one exists, the generated model of the same block becomes its child, so blockstates,
+     * item models and the grinder's gauge keep working unchanged.
+     */
+    public static final String HANDMADE = "block/custom/";
+
     private BSBlocks() {
+    }
+
+    private static boolean handMade(RegistrateBlockstateProvider prov, String name) {
+        return prov.models().existingFileHelper.exists(prov.modLoc(HANDMADE + name), PackType.CLIENT_RESOURCES, ".json", "models");
     }
 
     // Placeholder housing until a Blockbench model exists: a brass body with the gauge on its sides,
     // and a rim around the blade pit on top. The blades are a separate, rotating partial model.
     private static ModelFile grinderModel(RegistrateBlockstateProvider prov, int fill) {
         String dir = "block/supreme_grinder/";
+        // A hand-made housing takes over; each gauge level only swaps its #side texture.
+        if (handMade(prov, "supreme_grinder")) {
+            return prov.models().withExistingParent(dir + "fill_" + fill, prov.modLoc(HANDMADE + "supreme_grinder"))
+                .texture("side", prov.modLoc(dir + "side_" + fill));
+        }
         BlockModelBuilder model = prov.models().withExistingParent(dir + "fill_" + fill, "block/block")
             .texture("side", prov.modLoc(dir + "side_" + fill))
             .texture("top", prov.modLoc(dir + "top"))
@@ -106,6 +123,11 @@ public final class BSBlocks {
 
     // Two crossed blades and the shaft stub that meets the shaft above.
     private static void grinderBlades(RegistrateBlockstateProvider prov) {
+        // Same path either way: the partial model and its Flywheel visual keep pointing at it.
+        if (handMade(prov, "supreme_grinder_blades")) {
+            prov.models().withExistingParent("block/supreme_grinder/blades", prov.modLoc(HANDMADE + "supreme_grinder_blades"));
+            return;
+        }
         BlockModelBuilder model = prov.models().withExistingParent("block/supreme_grinder/blades", "block/block")
             .texture("blade", prov.modLoc("block/supreme_grinder/blade"))
             .texture("particle", prov.modLoc("block/supreme_grinder/blade"));
@@ -116,6 +138,9 @@ public final class BSBlocks {
 
     // Placeholder vat until a Blockbench model exists: a floor and four walls, open at the top.
     private static ModelFile vatModel(RegistrateBlockstateProvider prov) {
+        if (handMade(prov, "fryer")) {
+            return prov.models().withExistingParent("block/fryer", prov.modLoc(HANDMADE + "fryer"));
+        }
         BlockModelBuilder model = prov.models().withExistingParent("block/fryer", "block/block")
             .texture("side", prov.modLoc("block/fryer/side"))
             .texture("top", prov.modLoc("block/fryer/top"))

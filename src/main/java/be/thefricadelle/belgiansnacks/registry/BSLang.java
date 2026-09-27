@@ -89,6 +89,11 @@ public final class BSLang {
         advancement("absolute_paste", "Absolute", "Get an Absolute Paste: every food of the pack in one paste",
             "Absolue", "Obtenir une Pâte absolue : tous les aliments du pack en une seule pâte");
         advancement("ultimate_fricadelle", "I Ate Everything", "Eat THE_FRICADELLE", "J'ai tout mangé", "Manger THE_FRICADELLE");
+        // Ponder: the keys it reads, both languages from one table.
+        BSPonderText.TITLES.forEach((scene, line) -> add(BSPonderText.titleKey(scene), line.english(), line.french()));
+        BSPonderText.LINES.forEach((key, line) -> add(BSPonderText.lineKey(key), line.english(), line.french()));
+        add(BSPonderText.tagKey(), "Create: Belgian Snacks", "Create: Belgian Snacks");
+        add(BSPonderText.tagKey() + ".description", "The friterie: its machines and its pastes", "La friterie : ses machines et ses pâtes");
     }
 
     private BSLang() {
