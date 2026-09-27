@@ -25,7 +25,7 @@ Tout ce qu'il faut remplir sur les deux plateformes. Le texte de la page est dan
 ## Fichier
 
 - `build/libs/create-belgian-snacks-<version>.jar` (le jar de release ; pas le `-sources`).
-- Version : **0.0.9** tant que tu ne demandes pas de changement de numéro. Canal conseillé pour une 0.x : **beta**.
+- Version : **0.9.0** tant que tu ne demandes pas de changement de numéro. Canal conseillé pour une 0.x : **beta**.
 - Notes de version : la section `[Unreleased]` du `CHANGELOG.md` (à fermer au passage à une vraie version).
 
 ## Terrain de démonstration

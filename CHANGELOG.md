@@ -8,7 +8,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ---
 
-## [0.0.9] - 2026-09-27
+## [0.9.0] - 2026-09-27
 
 ### Added
 
