@@ -10,6 +10,7 @@
 package be.thefricadelle.belgiansnacks.content.fryer;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -17,6 +18,7 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -39,7 +41,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -65,6 +66,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     private static final int SIZZLE_INTERVAL = 40;
     private static final int IDLE_RETRY_TICKS = 10;
     private static final int DEFAULT_DURATION = 100;
+    // Not an EnumSet: Create Heat JS adds HeatLevel constants at runtime.
+    private static final Set<HeatLevel> CREATE_HEAT_LEVELS =
+        Set.of(HeatLevel.NONE, HeatLevel.SMOULDERING, HeatLevel.FADING, HeatLevel.KINDLED, HeatLevel.SEETHING);
 
     public enum Status {
         IDLE, FRYING, NO_RECIPE, NO_HEAT, NO_FAT, OUTPUT_FULL;
@@ -110,11 +114,6 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     private int duration;
     private boolean paused;
     private int retry;
-
-    @Nullable
-    private Item cachedItem;
-    @Nullable
-    private RecipeHolder<FryingRecipe> cachedRecipe;
 
     public FryerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -288,7 +287,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
 
     private boolean heatAllows(FryingRecipe recipe) {
-        return recipe.getRequiredHeat().testBlazeBurner(heatBelow());
+        return heatAllows(recipe.getRequiredHeat(), heatBelow());
     }
 
     public HeatLevel heatBelow() {
@@ -315,20 +314,49 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         return true;
     }
 
+    /**
+     * Like Create's basin: of the frying recipes for this item, the first the heat below allows, else
+     * the first one (its heat is what the status reports). Not cached: a pack has a handful of frying
+     * recipes, and one a /reload or a KubeJS script adds must apply at once.
+     */
     @Nullable
     RecipeHolder<FryingRecipe> findRecipe(ItemStack stack) {
         if (level == null || stack.isEmpty()) {
             return null;
         }
-        var manager = level.getRecipeManager();
-        // Cached per item; revalidated against the manager so a /reload never serves a stale recipe.
-        if (stack.getItem() == cachedItem && (cachedRecipe == null || manager.byKey(cachedRecipe.id()).orElse(null) == cachedRecipe)) {
-            return cachedRecipe;
+        List<RecipeHolder<FryingRecipe>> matching = level.getRecipeManager()
+            .getRecipesFor(BSRecipeTypes.FRYING.<SingleRecipeInput, FryingRecipe>getType(), new SingleRecipeInput(stack), level);
+        if (matching.isEmpty()) {
+            return null;
         }
-        cachedItem = stack.getItem();
-        cachedRecipe = manager.getRecipeFor(BSRecipeTypes.FRYING.<SingleRecipeInput, FryingRecipe>getType(), new SingleRecipeInput(stack), level)
-            .orElse(null);
-        return cachedRecipe;
+        HeatLevel heat = heatBelow();
+        for (RecipeHolder<FryingRecipe> holder : matching) {
+            if (heatAllows(holder.value().getRequiredHeat(), heat)) {
+                return holder;
+            }
+        }
+        return matching.get(0);
+    }
+
+    /**
+     * Create's rules for Create's own conditions and levels: no heat needed always fries, heated needs
+     * a lit burner, superheated a seething one. Create Heat JS (in Arcadia) rewrites testBlazeBurner so
+     * that "no heat" fails on any lit burner and "heated" on a fading one; the conditions and levels it
+     * adds still go through it.
+     */
+    public static boolean heatAllows(HeatCondition need, HeatLevel heat) {
+        if (CREATE_HEAT_LEVELS.contains(heat)) {
+            if (need == HeatCondition.NONE) {
+                return true;
+            }
+            if (need == HeatCondition.HEATED) {
+                return heat.isAtLeast(HeatLevel.FADING);
+            }
+            if (need == HeatCondition.SUPERHEATED) {
+                return heat == HeatLevel.SEETHING;
+            }
+        }
+        return need.testBlazeBurner(heat);
     }
 
     @Nullable
@@ -460,11 +488,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
 
     public static String heatKey(HeatLevel heat) {
-        String level = switch (heat) {
-            case NONE, SMOULDERING -> "none";
-            case FADING, KINDLED -> "heated";
-            case SEETHING -> "superheated";
-        };
+        // No switch: Create Heat JS (in Arcadia) adds HeatLevel constants, which an exhaustive switch
+        // would reject with a MatchException. Ordered comparisons, as Create itself does, place them.
+        String level = heat.isAtLeast(HeatLevel.SEETHING) ? "superheated" : heat.isAtLeast(HeatLevel.FADING) ? "heated" : "none";
         return BelgianSnacks.MOD_ID + ".fryer.heat." + level;
     }
 
