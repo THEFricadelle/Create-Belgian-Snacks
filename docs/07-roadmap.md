@@ -47,7 +47,7 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 
 ### M4 — Palier 1 bout à bout ✅ (27/09/2026)
 - [x] Recette de craft de la Friteuse (Mechanical Crafter, provisoire)
-- [x] Fricadelle mangeable (valeurs provisoires) + gag minimal (rot `fricadelle.burp`)
+- [x] Fricadelle mangeable (valeurs provisoires) + gag minimal (rot `fricadelle.burp`, retiré le 27/09/2026)
 - [x] Une usine de test automatisée : viande → fricadelle sans intervention (`ProductionLineGameTests`, 16 fricadelles)
 - **Accepté si** : une ligne entièrement automatique produit des fricadelles en continu.
 

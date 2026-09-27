@@ -41,7 +41,7 @@ Quand une décision est prise, remplir la colonne « Décision » + la date, pui
 | Temps pour manger | normal | normal | normal |
 | Mangeable même rassasié | non | non | oui |
 | Effets de potion | aucun | Régénération I 10 s, Absorption I 1 min | Régénération II 1 min, Absorption IV 3 min, Force II, Résistance II et Résistance au feu 5 min |
-| Gag son | rot | rot | rot géant (même son, pitch 0,4, volume 2) + feu d'artifice |
+| Gag son | — | — | feu d'artifice (le rot des trois paliers est retiré le 27/09/2026) |
 | Gag particules / message | — | — | feu d'artifice ; message à tout le serveur ; **THEFricadelle en personne** (voir plus bas) |
 | Advancement | « Une fricadelle, une ! » | « Avec une spéciale » | « J'ai tout mangé » (défi) |
 

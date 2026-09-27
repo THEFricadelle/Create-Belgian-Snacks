@@ -1,10 +1,4 @@
 {
-  "fricadelle.burp": {
-    "sounds": [
-      "create_belgian_snacks:fricadelle/burp"
-    ],
-    "subtitle": "subtitles.create_belgian_snacks.fricadelle.burp"
-  },
   "fryer.sizzle": {
     "sounds": [
       "create_belgian_snacks:fryer/sizzle"

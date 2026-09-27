@@ -32,9 +32,6 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
         add(BSSoundEvents.FRYER_SIZZLE, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fryer.sizzle")
             .with(recordingOr("fryer/sizzle", vanilla("liquid/lavapop"), vanilla("block/campfire/crackle1"), vanilla("block/campfire/crackle3"))));
-        add(BSSoundEvents.FRICADELLE_BURP, SoundDefinition.definition()
-            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fricadelle.burp")
-            .with(recordingOr("fricadelle/burp", vanilla("random/burp"))));
         add(BSSoundEvents.GRINDER_GRIND, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.grind")
             .with(recordingOr("grinder/grind", vanilla("block/grindstone/grindstone1"), vanilla("block/grindstone/grindstone2"),

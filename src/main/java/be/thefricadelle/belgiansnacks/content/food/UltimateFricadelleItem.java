@@ -24,8 +24,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
- * THE_FRICADELLE: whoever eats it is announced to the whole server, fireworks go off, the burp
- * shakes the walls, and THEFricadelle comes to congratulate them (decided on 27/09/2026).
+ * THE_FRICADELLE: whoever eats it is announced to the whole server (unless its operators turned it
+ * off), fireworks go off, and THEFricadelle comes to congratulate them (decided on 27/09/2026).
  */
 public class UltimateFricadelleItem extends FricadelleItem {
     public UltimateFricadelleItem(Properties properties) {
@@ -34,7 +34,6 @@ public class UltimateFricadelleItem extends FricadelleItem {
 
     @Override
     protected void eaten(ServerLevel level, LivingEntity eater) {
-        burp(level, eater, 2.0f, 0.4f);
         level.sendParticles(ParticleTypes.FIREWORK, eater.getX(), eater.getY() + 1.2, eater.getZ(), 60, 0.8, 0.8, 0.8, 0.15);
         level.playSound(null, eater.getX(), eater.getY(), eater.getZ(), SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.PLAYERS, 1.5f, 1.0f);
         level.playSound(null, eater.getX(), eater.getY(), eater.getZ(), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 1.5f, 1.0f);

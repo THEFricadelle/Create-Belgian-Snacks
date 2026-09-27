@@ -9,17 +9,15 @@
 
 package be.thefricadelle.belgiansnacks.content.food;
 
-import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
- * A fricadelle: eaten like any food, then a satisfied burp everyone nearby hears. Effects, messages
- * and advancements are still open (docs/08) and will hook in here.
+ * A fricadelle: eaten like any food; its effects come from BSFoods, and THE_FRICADELLE hooks its gags
+ * into {@link #eaten}. (The burp was removed on 27/09/2026.)
  */
 public class FricadelleItem extends Item {
     public FricadelleItem(Properties properties) {
@@ -35,13 +33,7 @@ public class FricadelleItem extends Item {
         return left;
     }
 
-    /** Server side, once the fricadelle is eaten: the burp every tier shares. */
+    /** Server side, once the fricadelle is eaten: nothing more for tiers 1 and 2 (THE_FRICADELLE adds its gags). */
     protected void eaten(ServerLevel level, LivingEntity eater) {
-        burp(level, eater, 1.0f, 0.7f + level.random.nextFloat() * 0.1f);
-    }
-
-    protected static void burp(ServerLevel level, LivingEntity eater, float volume, float pitch) {
-        // Null player: sent to every nearby player, the eater included.
-        level.playSound(null, eater.getX(), eater.getY(), eater.getZ(), BSSoundEvents.FRICADELLE_BURP.get(), SoundSource.PLAYERS, volume, pitch);
     }
 }

@@ -36,7 +36,6 @@ OPTIONAL_SOUNDS = {
     "grinder/grind.ogg": "Supreme Grinder taking a food (short, under 1 s)",
     "grinder/complete.ogg": "Supreme Grinder finishing a paste (1 to 2 s)",
     "grinder/running.ogg": "Supreme Grinder turning, played every 2 s while fast enough (about 2 s long)",
-    "fricadelle/burp.ogg": "Burp after eating a fricadelle (about 1 s)",
     **{f"npc/phrase_{i}.ogg": f"THEFricadelle's voice line {i}" for i in range(5)},
 }
 
