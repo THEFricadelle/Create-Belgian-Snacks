@@ -74,9 +74,9 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Vérifier conflits Polymorph et compat Create Heat JS
 - **Accepté si** : tout passe sur une copie du serveur Arcadia avec 2 joueurs. Décidé ensemble : 2 clients en LAN sur le pack complet (pas de server pack local) ; le serveur dédié reste couvert par `runMultiplayerSmoke` en dev. Détail : `docs/11`, section « Test dans le pack ».
 
-### M7 — Palier 2 : THE_Fricadelle 🔒 (taux, séquence)
-- [ ] Sequenced Assembly + recettes sauces/épices
-- [ ] Friture THE_Fricadelle
+### M7 — Palier 2 : THE_Fricadelle ✅ (27/09/2026)
+- [x] Sequenced Assembly (`sequenced_assembly/raw_the_fricadelle` + secours betterave) ; sauces et épices déjà livrées au M2
+- [x] Friture THE_Fricadelle (`frying/the_fricadelle`)
 
 ### M8 — Palier 3 : THE_FRICADELLE 🔒 (effets)
 - [ ] Mixer super-chauffé + friture super-chauffée

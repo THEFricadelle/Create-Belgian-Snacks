@@ -90,7 +90,7 @@ Le blanc de bœuf fondu est la graisse des vraies frites belges : il sert aux pa
 | `mixing/mayonnaise` : Mixer | 1 œuf (`c:eggs`) + 100 mB `#bs:frying_oils` | 250 mB `mayonnaise` | toute huile ou le blanc de bœuf fondu |
 | `mixing/curry_ketchup` : Mixer **chauffé** | 1 tomate (`c:crops/tomato`) + 1 sucre + 1 `belgian_spices` | 250 mB `curry_ketchup` | condition : tag tomate non vide |
 | `mixing/curry_ketchup_from_beetroot` : Mixer **chauffé** | 1 betterave + 1 sucre + 1 `belgian_spices` | 250 mB `curry_ketchup` | secours si tag tomate vide (D7, provisoire) |
-| — | oignons : tag `c:crops/onion` | — | si tag vide → **betterave** ⚠️ en secours |
+| — | oignons : tag `c:crops/onion` | — | si tag vide → **betterave** en secours (D7) |
 
 ### Chaîne
 
@@ -101,7 +101,7 @@ Le blanc de bœuf fondu est la graisse des vraies frites belges : il sert aux pa
      1. Deployer : `belgian_spices`
      2. Spout : 100 mB `mayonnaise`
      3. Spout : 100 mB `curry_ketchup`
-     4. Deployer : oignon (`c:crops/onion`)
+     4. Deployer : oignon (`c:crops/onion`) ; sans aucun oignon, betterave (variante `sequenced_assembly/raw_the_fricadelle_from_beetroot`, D7)
      5. Press
    - Boucles : **3** (D4) : 3 épices, 300 mB de mayonnaise, 300 mB de curry ketchup et 3 oignons par THE_Fricadelle
    - Résultat : `raw_the_fricadelle`, **100 %** de réussite (D5)
