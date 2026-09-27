@@ -14,7 +14,7 @@
 
 ## 2. Git Workflow
 
-Use the existing `dev` branch conventions; use `feat/`, `fix/` or `hotfix/` branches for isolated work. Do not invent staging or release branches. Conventional commits, no co-author trailers. Never push without explicit confirmation, stating branch, commit and files first. Keep version 0.1.0 until a version change is requested. Preserve unrelated local changes.
+Use the existing `dev` branch conventions; use `feat/`, `fix/` or `hotfix/` branches for isolated work. Do not invent staging or release branches. Conventional commits, no co-author trailers. Never push without explicit confirmation, stating branch, commit and files first. Keep version 0.0.9 until a version change is requested. Preserve unrelated local changes.
 
 ## 3. Code Conventions
 
