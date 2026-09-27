@@ -104,3 +104,17 @@
 **Root cause:** The shell/runner exit status disagreed with the task report; the precise shell cause was not established.
 **Fix:** Inspected the report and screenshots, then ran verifyClientSmoke directly to verify the current report independently.
 **Prevention:** Check both the named task report and the process result; re-run the verifier directly when redirected execution disagrees.
+
+## [2026-09-27 16:28] - Running visitor frozen in the GameTest world
+**Context:** THEFricadelle now spawns up to 8 blocks ahead of the eater and runs to them.
+**Error:** GameTest timed out with the visitor still in phase RUN: it never ticked.
+**Root cause:** The spawn spot lay in a chunk that was loaded but not entity-ticking (outside the test's forced chunks); the same can happen at the edge of a real player's simulation distance.
+**Fix:** The spawn spot must pass `ServerLevel.isPositionEntityTicking`; the test forces the chunks around the eater and waits for them to load.
+**Prevention:** Any entity placed away from its trigger must be placed where entities tick.
+
+## [2026-09-27 16:35] - Multiplayer smoke took the fryer output early
+**Context:** Client A eats THE_FRICADELLE by holding right click while facing the fryer.
+**Error:** `client A holds 16 create_belgian_snacks:fricadelle` before the take step.
+**Root cause:** The held click repeats once after the last bite, with the hand just emptied, and takes the batch. The visitor used to spawn between the player and the fryer and absorbed that click.
+**Fix:** Client A looks at the sky while eating and turns back to the fryer before the take step.
+**Prevention:** A held key in a scripted client must never point at an interactive block when its purpose ends.

@@ -65,7 +65,8 @@ final class FryerScenes {
 
         Selection belt = util.select().fromTo(0, 1, 2, 1, 2, 2).add(util.select().position(0, 2, 3));
         scene.world().showSection(belt, Direction.EAST);
-        scene.world().setKineticSpeed(util.select().fromTo(0, 2, 2, 1, 2, 3), 32);
+        // Negative: on a belt along x, that runs east, towards the fryer.
+        scene.world().setKineticSpeed(util.select().fromTo(0, 2, 2, 1, 2, 3), -32);
         scene.idle(10);
         scene.world().createItemOnBelt(util.grid().at(0, 2, 2), Direction.WEST, BSItems.RAW_FRICADELLE.asStack(16));
         say(scene, "fryer.input", 50, util.vector().topOf(util.grid().at(0, 2, 2)));

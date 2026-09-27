@@ -166,7 +166,12 @@ public final class ClientMultiplayerSmoke {
             () -> pass("mp.grinderShared", "both players' foods counted here: 2 / " + grinder().getGoal()));
         if (ROLE.equals("A")) {
             // A real right click held until THE_FRICADELLE is eaten, then back to the empty first slot.
-            step("ultimate.select", 5, () -> mc.player.getInventory().getItem(1).is(BSItems.ULTIMATE_FRICADELLE.get()), () -> select(1));
+            // Looking at the sky: the held click repeats once after the last bite, and on the fryer it
+            // would take the batch with the hand just emptied.
+            step("ultimate.select", 5, () -> mc.player.getInventory().getItem(1).is(BSItems.ULTIMATE_FRICADELLE.get()), () -> {
+                mc.player.setXRot(-90f);
+                select(1);
+            });
             step("ultimate.eat", 5, () -> true, () -> mc.options.keyUse.setDown(true));
             step("ultimate.eaten", 0, () -> mc.player.getInventory().getItem(1).isEmpty(), () -> {
                 mc.options.keyUse.setDown(false);
@@ -174,8 +179,9 @@ public final class ClientMultiplayerSmoke {
                 pass("mp.ultimateEaten", "THE_FRICADELLE eaten by holding right click");
             });
         }
-        // Both players see THEFricadelle appear and read the server's announcement.
-        step("visitor.seen", 0, () -> visitor() != null && CHAT.stream().anyMatch(line -> line.contains("ate THE_FRICADELLE"))
+        // Both players see THEFricadelle run up and say its line, and read the server's announcement.
+        step("visitor.seen", 0, () -> visitor() != null
+            && visitor().getPhase() != be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.RUN && CHAT.stream().anyMatch(line -> line.contains("ate THE_FRICADELLE"))
             && CHAT.stream().anyMatch(line -> line.startsWith("<THEFricadelle> ")), () -> pass("mp.visitorSeen",
             "THEFricadelle appeared saying \"" + visitor().getCustomName().getString() + "\"; chat: " + String.join(" | ", CHAT)));
         if (ROLE.equals("B")) {
@@ -192,8 +198,9 @@ public final class ClientMultiplayerSmoke {
         if (ROLE.equals("A")) {
             step("other.ready", 0, () -> otherPlayerCrouching(),
                 () -> pass("mp.handshake", "the other client's crouch arrived through the server"));
+            step("face.fryer.again", 0, () -> true, () -> lookAt(fryerPos));
             step("take", TAKE_DELAY_TICKS, () -> true, () -> {
-                require(mc.player.getMainHandItem().isEmpty(), "client A does not have an empty hand");
+                require(mc.player.getMainHandItem().isEmpty(), "client A holds " + mc.player.getMainHandItem() + " in slot " + mc.player.getInventory().selected);
                 BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(fryerPos), Direction.UP, fryerPos, false);
                 mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND, hit);
             });

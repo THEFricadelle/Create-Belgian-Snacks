@@ -62,6 +62,7 @@ BLOCK_FACES = {
     "supreme_grinder/top": (0xD8, 0xA8, 0x48),
     "supreme_grinder/bottom": (0x90, 0x68, 0x28),
     "supreme_grinder/blade": (0xC8, 0xCC, 0xD0),
+    "supreme_grinder/mince": (0xB0, 0x70, 0x58),
 }
 
 # 3x5 bitmap glyphs, one string per row.

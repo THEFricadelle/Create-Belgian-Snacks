@@ -30,7 +30,8 @@ public final class BSBlockEntities {
 
     public static final BlockEntityEntry<SupremeGrinderBlockEntity> SUPREME_GRINDER = REGISTRATE
         .blockEntity("supreme_grinder", SupremeGrinderBlockEntity::new)
-        .visual(() -> SingleAxisRotatingVisual.of(BSPartialModels.GRINDER_BLADES), false)
+        // Rendered normally too: the renderer draws the mince, the visual spins the blades.
+        .visual(() -> SingleAxisRotatingVisual.of(BSPartialModels.GRINDER_BLADES), true)
         .validBlocks(BSBlocks.SUPREME_GRINDER)
         .renderer(() -> SupremeGrinderRenderer::new)
         .register();

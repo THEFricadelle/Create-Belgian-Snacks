@@ -261,6 +261,19 @@ public final class FryerGameTests {
         helper.succeed();
     }
 
+    // A first bucket already fills the vat deep; a full tank reaches just under the rim.
+    @GameTest(template = TEMPLATE)
+    public static void theFatSurfaceStartsDeepAndRisesToTheRim(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, null);
+        helper.assertValueEqual(fryer.fatSurface(), 4 / 16f, "empty: the vat floor");
+        int capacity = fryer.getTank().getPrimaryHandler().getCapacity();
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        helper.assertTrue(Math.abs(fryer.fatSurface() - (9 / 16f + 6 / 16f * 1000 / capacity)) < 1.0E-6f, "one bucket: " + fryer.fatSurface());
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), capacity - 1000);
+        helper.assertValueEqual(fryer.fatSurface(), 15 / 16f, "full");
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE)
     public static void breakingKeepsTheFatAndDropsTheItems(GameTestHelper helper) {
         FryerBlockEntity fryer = fryer(helper, null);

@@ -205,35 +205,53 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
             ClientSmokeTest::checkGrinder));
         STEPS.add(new Step("grinder.shot", 10, () -> screenshot("grinder-in-world")));
-        // A grinder with nothing above it, seen from straight above: the blades in their pit.
+        // A grinder with nothing above it, seen from straight above: the blades over the mince, which
+        // fills half the pit (half of every food, in ULTIMATE mode).
         STEPS.add(new Step("grinder.blades", 10, () -> {
             var server = mc.getSingleplayerServer();
             BlockPos open = smokeGrinder.south(3);
-            server.execute(() -> server.overworld().setBlockAndUpdate(open, BSBlocks.SUPREME_GRINDER.getDefaultState()));
+            server.execute(() -> {
+                server.overworld().setBlockAndUpdate(open, BSBlocks.SUPREME_GRINDER.getDefaultState());
+                if (server.overworld().getBlockEntity(open) instanceof SupremeGrinderBlockEntity grinder) {
+                    var ids = be.thefricadelle.belgiansnacks.content.food.FoodIndex.server().ids();
+                    grinder.setMode(be.thefricadelle.belgiansnacks.content.grinder.GrinderMode.ULTIMATE);
+                    grinder.setConsumed(ids.subList(0, ids.size() / 2));
+                }
+            });
             mc.player.setPos(open.getX() + 0.5, open.getY() + 2.2, open.getZ() + 0.5);
             mc.player.setXRot(90f);
         }));
-        STEPS.add(new Step("grinder.blades.shot", 30, () -> screenshot("grinder-blades")));
+        STEPS.add(new Step("grinder.blades.shot", 30, () -> {
+            check("grinder.mince", () -> {
+                var grinder = (SupremeGrinderBlockEntity) mc.level.getBlockEntity(smokeGrinder.south(3));
+                require(Math.abs(grinder.minceLevel() - 0.5f) < 0.05f, "mince level " + grinder.minceLevel() + " on the client");
+                return "the pit is " + Math.round(grinder.minceLevel() * 100) + "% full on the client";
+            });
+            screenshot("grinder-blades");
+        }));
         STEPS.add(new Step("grinder.missing.ask", 5, ClientSmokeTest::askMissing));
         STEPS.add(new Step("grinder.missing.check", 0, () -> mc.screen instanceof GrinderMissingScreen, ClientSmokeTest::checkMissingScreen));
         STEPS.add(new Step("grinder.missing.shot", 20, () -> screenshot("grinder-missing")));
         STEPS.add(new Step("grinder.missing.close", 5, () -> mc.setScreen(null)));
         // The player eats THE_FRICADELLE on the integrated server: every gag reaches this client.
         STEPS.add(new Step("ultimate.eat", 10, ClientSmokeTest::eatUltimate));
+        // The visitor runs in from a few blocks ahead.
+        STEPS.add(new Step("ultimate.run.shot", 4, () -> visitor() != null && visitor().getPhase() == be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.RUN,
+            () -> screenshot("thefricadelle-running")));
         // Waits for the skin too: it comes from Mojang's services, a moment after the visitor appears.
-        STEPS.add(new Step("ultimate.check", 20, () -> visitor() != null && be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline(),
-            ClientSmokeTest::checkUltimate));
-        STEPS.add(new Step("ultimate.face", 5, () -> visitor() != null, () -> {
-            // Face the visitor for the screenshot, from where the player floats.
-            var npc = visitor();
-            var eye = mc.player.getEyePosition();
-            double dx = npc.getX() - eye.x;
-            double dy = npc.getEyeY() - eye.y;
-            double dz = npc.getZ() - eye.z;
-            mc.player.setYRot((float) Math.toDegrees(Math.atan2(dz, dx)) - 90f);
-            mc.player.setXRot((float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))));
-        }));
+        STEPS.add(new Step("ultimate.check", 5, () -> visitor() != null && visitor().getPhase() == be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.TALK
+            && be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline(), ClientSmokeTest::checkUltimate));
+        STEPS.add(new Step("ultimate.face", 5, () -> visitor() != null, ClientSmokeTest::faceVisitor));
         STEPS.add(new Step("ultimate.shot", 10, () -> screenshot("thefricadelle-visitor")));
+        // Then it takes off: follow it up for the screenshot.
+        STEPS.add(new Step("ultimate.launch", 8, () -> visitor() != null && visitor().getPhase() == be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.LAUNCH,
+            ClientSmokeTest::faceVisitor));
+        STEPS.add(new Step("ultimate.launch.shot", 8, () -> {
+            faceVisitor();
+            screenshot("thefricadelle-takeoff");
+        }));
+        STEPS.add(new Step("ultimate.gone", 0, () -> visitor() == null, () -> check("ultimate.takeoff",
+            () -> "the visitor took off and burst")));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));
         STEPS.add(new Step("jei.paste.shot", 30, () -> screenshot("jei-fricadelle-paste")));
@@ -566,7 +584,22 @@ public final class ClientSmokeTest {
     private static be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc visitor() {
         Minecraft mc = Minecraft.getInstance();
         return mc.level.getEntitiesOfClass(be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.class,
-            mc.player.getBoundingBox().inflate(5)).stream().findFirst().orElse(null);
+            mc.player.getBoundingBox().inflate(40)).stream().findFirst().orElse(null);
+    }
+
+    // Face the visitor, from where the player floats.
+    private static void faceVisitor() {
+        Minecraft mc = Minecraft.getInstance();
+        var npc = visitor();
+        if (npc == null) {
+            return;
+        }
+        var eye = mc.player.getEyePosition();
+        double dx = npc.getX() - eye.x;
+        double dy = npc.getEyeY() - eye.y;
+        double dz = npc.getZ() - eye.z;
+        mc.player.setYRot((float) Math.toDegrees(Math.atan2(dz, dx)) - 90f);
+        mc.player.setXRot((float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))));
     }
 
     private static void checkUltimate() {

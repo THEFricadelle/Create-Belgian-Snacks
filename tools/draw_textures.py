@@ -200,6 +200,19 @@ def blocks():
         for x in range(16):
             blade[y][x] = colour('ECF4F2' if x < 2 else 'C4D5D9' if x < 5 else '91A5AE' if x < 12 else '586D79')
     out['supreme_grinder/blade'] = blade
+    # The minced food filling the pit, seen from above: meat grains with flecks of every food.
+    mince = canvas(colour('A5624E'))
+    for y in range(16):
+        for x in range(16):
+            grain = (x * 7 + y * 13 + (x * y) % 5) % 9
+            if grain < 2:
+                mince[y][x] = colour('D08F73')
+            elif grain == 4:
+                mince[y][x] = colour('7A3F35')
+    for value, points in [('F2D6B8', [(3, 2), (11, 6), (6, 13)]), ('6E9443', [(8, 3), (2, 9), (13, 12)]),
+                          ('E5B94C', [(12, 1), (5, 7), (10, 14)]), ('B8342B', [(14, 4), (7, 10)])]:
+        dots(mince, points, value)
+    out['supreme_grinder/mince'] = mince
     return out
 
 
@@ -261,7 +274,7 @@ def preview(outputs):
         '<title>Belgian Snacks textures</title><style>body{background:#202830;color:#eee;font:14px system-ui}'
         'main{display:flex;flex-wrap:wrap}figure{width:180px;margin:12px;overflow-wrap:anywhere}'
         'img{width:128px;image-rendering:pixelated;background:repeating-conic-gradient(#37434d 0% 25%,#2c363e 0% 50%) 0/16px 16px}'
-        '</style><h1>Create: Belgian Snacks</h1><p>41 textures / 41 textures — THEFricadelle</p><main>'
+        '</style><h1>Create: Belgian Snacks</h1><p>' + str(len(entries)) + ' textures — THEFricadelle</p><main>'
         + ''.join(cards) + '</main></html>', encoding='utf-8')
 
 

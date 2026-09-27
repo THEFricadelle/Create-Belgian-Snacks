@@ -409,8 +409,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     public float fatSurface() {
         var handler = tank.getPrimaryHandler();
         float fill = handler.getCapacity() == 0 ? 0 : handler.getFluidAmount() / (float) handler.getCapacity();
-        // The vat floor is at y = 4 (the fryer stands on feet), the fat rises to y = 15.
-        return 4 / 16f + 11 / 16f * Math.min(1f, fill);
+        // Any fat at all fills the vat to y = 9 (a deep fryer is never a puddle), full reaches y = 15.
+        // Empty, the surface is the vat floor (y = 4, the fryer stands on feet).
+        return fill <= 0 ? 4 / 16f : 9 / 16f + 6 / 16f * Math.min(1f, fill);
     }
 
     public int comparatorSignal() {

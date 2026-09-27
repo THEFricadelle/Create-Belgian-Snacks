@@ -88,22 +88,53 @@ public final class EatingGameTests {
 
     // ------------------------------------------------------------------ THE_FRICADELLE's visitor
 
-    @GameTest(template = TEMPLATE, timeoutTicks = 300)
-    public static void theFricadelleComesToCongratulateAndLeaves(GameTestHelper helper) {
-        ServerPlayer player = eat(helper, BSItems.ULTIMATE_FRICADELLE.asStack());
-        List<TheFricadelleNpc> visitors = helper.getLevel().getEntitiesOfClass(TheFricadelleNpc.class, player.getBoundingBox().inflate(4));
-        helper.assertValueEqual(visitors.size(), 1, "visitors beside the eater");
-        TheFricadelleNpc npc = visitors.get(0);
-        helper.assertTrue(player.getUUID().equals(npc.getTargetPlayerId()), "the visitor looks at someone else");
-        helper.assertTrue(npc.isCustomNameVisible(), "the line is not shown above the head");
-        helper.assertTrue(npc.getCustomName() != null && npc.getCustomName().getContents() instanceof TranslatableContents line
-            && line.getKey().startsWith(BelgianSnacks.MOD_ID + ".npc.phrase."), "not one of the lines: " + npc.getCustomName());
-        helper.assertFalse(BSEntities.THE_FRICADELLE_NPC.get().canSerialize(), "the visitor could be saved with the chunk");
-        helper.assertFalse(npc.hurt(helper.getLevel().damageSources().playerAttack(player), 100), "the visitor took damage");
-        helper.assertFalse(npc.isPushable(), "the visitor can be pushed");
-        helper.runAfterDelay(TheFricadelleNpc.LIFETIME_TICKS + 5, () -> {
-            helper.assertTrue(npc.isRemoved(), "the visitor stayed past " + TheFricadelleNpc.LIFETIME_TICKS + " ticks");
-            helper.succeed();
+    // It runs up from a few blocks ahead, stops beside the eater to say its line, then takes off and
+    // bursts in the sky, all within its lifetime (the timeout).
+    @GameTest(template = TEMPLATE, timeoutTicks = TheFricadelleNpc.LIFETIME_TICKS + 30)
+    public static void theFricadelleRunsUpCongratulatesAndTakesOff(GameTestHelper helper) {
+        // Entities tick around the eater, as they do around a real player (simulation distance).
+        var level = helper.getLevel();
+        net.minecraft.world.level.ChunkPos centre = new net.minecraft.world.level.ChunkPos(helper.absolutePos(BlockPos.ZERO));
+        List<net.minecraft.world.level.ChunkPos> forced = new java.util.ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                var chunk = new net.minecraft.world.level.ChunkPos(centre.x + dx, centre.z + dz);
+                if (level.setChunkForced(chunk.x, chunk.z, true)) {
+                    forced.add(chunk);
+                }
+            }
+        }
+        // The forced chunks load first.
+        helper.runAfterDelay(20, () -> {
+            ServerPlayer player = eat(helper, BSItems.ULTIMATE_FRICADELLE.asStack());
+            List<TheFricadelleNpc> visitors = helper.getLevel().getEntitiesOfClass(TheFricadelleNpc.class,
+                player.getBoundingBox().inflate(TheFricadelleNpc.RUN_DISTANCE + 2));
+            helper.assertValueEqual(visitors.size(), 1, "visitors around the eater");
+            TheFricadelleNpc npc = visitors.get(0);
+            helper.assertTrue(player.getUUID().equals(npc.getTargetPlayerId()), "the visitor runs to someone else");
+            helper.assertValueEqual(npc.getPhase(), TheFricadelleNpc.Phase.RUN, "phase when it appears");
+            helper.assertTrue(npc.distanceTo(player) > 3, "the visitor starts beside the eater: nothing to run");
+            helper.assertValueEqual(npc.getCustomName().getString(), TheFricadelleNpc.NAME, "the name above the head while running");
+            helper.assertFalse(BSEntities.THE_FRICADELLE_NPC.get().canSerialize(), "the visitor could be saved with the chunk");
+            helper.assertFalse(npc.hurt(helper.getLevel().damageSources().playerAttack(player), 100), "the visitor took damage");
+            helper.assertFalse(npc.isPushable(), "the visitor can be pushed");
+            double[] talkedAt = new double[1];
+            helper.startSequence()
+                .thenWaitUntil(() -> helper.assertValueEqual(npc.getPhase(), TheFricadelleNpc.Phase.TALK, "phase"))
+                .thenExecute(() -> {
+                    double dx = npc.getX() - player.getX();
+                    double dz = npc.getZ() - player.getZ();
+                    helper.assertTrue(Math.sqrt(dx * dx + dz * dz) <= TheFricadelleNpc.ARRIVED + 0.5, "talks from " + npc.distanceTo(player) + " blocks");
+                    helper.assertTrue(npc.isCustomNameVisible(), "the line is not shown above the head");
+                    helper.assertTrue(npc.getCustomName() != null && npc.getCustomName().getContents() instanceof TranslatableContents line
+                        && line.getKey().startsWith(BelgianSnacks.MOD_ID + ".npc.phrase."), "not one of the lines: " + npc.getCustomName());
+                    talkedAt[0] = npc.getY();
+                })
+                .thenWaitUntil(() -> helper.assertValueEqual(npc.getPhase(), TheFricadelleNpc.Phase.LAUNCH, "phase"))
+                .thenWaitUntil(() -> helper.assertTrue(npc.getY() > talkedAt[0] + 10, "still at " + (npc.getY() - talkedAt[0]) + " blocks up"))
+                .thenWaitUntil(() -> helper.assertTrue(npc.isRemoved(), "the visitor is still flying"))
+                .thenExecute(() -> forced.forEach(chunk -> level.setChunkForced(chunk.x, chunk.z, false)))
+                .thenSucceed();
         });
     }
 

@@ -103,7 +103,8 @@ final class GrinderScenes {
 
     private static void showBelt(CreateSceneBuilder scene, SceneBuildingUtil util) {
         scene.world().showSection(util.select().fromTo(0, 1, 2, 1, 2, 2).add(util.select().position(0, 2, 3)), Direction.EAST);
-        scene.world().setKineticSpeed(util.select().fromTo(0, 2, 2, 1, 2, 3), 32);
+        // Negative: on a belt along x, that runs east, towards the grinder.
+        scene.world().setKineticSpeed(util.select().fromTo(0, 2, 2, 1, 2, 3), -32);
         scene.idle(10);
     }
 

@@ -26,7 +26,7 @@ Spécs du script :
 src/main/resources/assets/create_belgian_snacks/
 ├── textures/item/<id>.png
 ├── textures/block/fryer/{side,top,bottom,inner}.png
-├── textures/block/supreme_grinder/{side_0..side_4,top,bottom,blade}.png   (side_N : jauge à N quarts)
+├── textures/block/supreme_grinder/{side_0..side_4,top,bottom,blade,mince}.png   (side_N : jauge à N quarts)
 ├── textures/fluid/<fluid>_{still,flow}.png (+ .mcmeta)
 ├── sounds/  (ogg)
 └── sounds.json   # généré par datagen si possible
@@ -48,15 +48,15 @@ Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder
 | `textures/fluid/<fluide>_still.png` | 16×16 (ou 16×N animé + `.mcmeta`) | la surface immobile |
 | `textures/fluid/<fluide>_flow.png` | 16×32, 2 frames, `.mcmeta` déjà présent | l'écoulement |
 | `textures/block/fryer/{side,top,bottom,inner}.png` | 16×16 | utilisées par le modèle généré ; un modèle fait main peut en utiliser d'autres |
-| `textures/block/supreme_grinder/{top,bottom,blade}.png` | 16×16 | |
+| `textures/block/supreme_grinder/{top,bottom,blade,mince}.png` | 16×16 | `mince` : le hachis vu de dessus, qui se répète sans couture |
 | `textures/block/supreme_grinder/side_0.png` … `side_4.png` | 16×16 | **la jauge** : la même face, remplie de 0 à 4 quarts. Les 5 fichiers sont obligatoires |
 
 ### Modèles (facultatifs : sans eux, le modèle généré reste)
 
 | Fichier | Contrat |
 |---|---|
-| `models/block/custom/fryer.json` | Friteuse : une cuve ouverte sur quatre pieds (fond de cuve à y = 4). Le code dessine la graisse et les items flottants entre y = 4 et y = 15, x/z de 2 à 14 : laisser cet intérieur vide. Livré le 27/09/2026 |
-| `models/block/custom/supreme_grinder.json` | (Livré le 27/09/2026 : quatre parois pleine hauteur autour du puits, la jauge sur les quatre faces.) Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
+| `models/block/custom/fryer.json` | Friteuse : une cuve ouverte sur quatre pieds (fond de cuve à y = 4). Le code dessine la graisse et les items flottants, x/z de 2 à 14 : dès la première goutte la graisse monte à y = 9, puis jusqu'à y = 15 cuve pleine. Laisser cet intérieur vide. Livré le 27/09/2026 |
+| `models/block/custom/supreme_grinder.json` | (Livré le 27/09/2026 : quatre parois pleine hauteur autour d'une fosse profonde, fond à y = 2, la jauge sur les quatre faces.) Le code dessine le hachis (`supreme_grinder/mince`) dans la fosse, x/z de 2 à 14, de y = 2 à y = 11,5 selon la progression vers l'objectif : laisser la fosse vide sous les lames. Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
 | `models/block/custom/supreme_grinder_blades.json` | Les lames seules. Le code les fait tourner autour de l'axe vertical passant par le centre du bloc (8, y, 8) : modéliser centré sur ce point. Livré le 27/09/2026 : deux lames opposées et courbées (3 segments chacune, tournés de 0, 22,5 et 45°) sur un moyeu |
 
 Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotation des lames et rendu de la graisse sont générés ou codés. Le PNJ THEFricadelle n'a besoin d'aucune texture (skin du compte, en ligne).

@@ -1,6 +1,6 @@
 # 12 — Prompts pour générer les textures
 
-Pour générer les 41 textures du mod avec un assistant d'image (GPT Astra dans VS Code). Les modèles 3D viendront ensuite, sur Blockbench (`06-assets.md`, « Livrables »).
+Pour générer les 42 textures du mod avec un assistant d'image (GPT Astra dans VS Code). Les modèles 3D viendront ensuite, sur Blockbench (`06-assets.md`, « Livrables »).
 
 ## Mode d'emploi
 
@@ -119,9 +119,10 @@ Surface liquide vue de dessus, qui se répète sans couture. Le `flow` est une a
 | `top.png` | 16x16 top face: brass plate with a dark round opening in the centre (the grinding pit, where a shaft comes in), a ring of bolts around it. |
 | `bottom.png` | 16x16 bottom and outer rim: darker aged brass and iron plate, bolts at the corners. |
 | `blade.png` | 16x16 texture for the grinder blades: polished steel, a bright sharp edge along one side, a darker spine. |
+| `mince.png` | Seamless tileable 16x16 top view of minced food filling the grinder pit: reddish-brown meat grains with small flecks of many foods (cream, green, yellow, red), fully opaque. |
 
 ## Après les textures
 
-- `python tools/asset_status.py` doit afficher 41 textures « hand-made » et aucune ligne « to fix ».
+- `python tools/asset_status.py` doit afficher 42 textures « hand-made » et aucune ligne « to fix ».
 - Les textures `_flow` gardent leur fichier `.mcmeta` (déjà en place) : ne pas le supprimer.
 - Commit : `feat: hand-made textures` (les placeholders ne reviennent jamais : `gen_placeholders.py` n'écrase rien sans `--force`).

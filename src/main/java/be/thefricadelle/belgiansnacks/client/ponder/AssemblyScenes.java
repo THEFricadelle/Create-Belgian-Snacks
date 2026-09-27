@@ -74,6 +74,8 @@ final class AssemblyScenes {
             scene.idle(4);
         }
         scene.world().setKineticSpeed(util.select().everywhere(), 32);
+        // Negative on the belt and its shaft: along x, that runs east, down the line.
+        scene.world().setKineticSpeed(util.select().fromTo(0, 1, 3, last, 1, 3).add(util.select().position(0, 1, 4)), -32);
         scene.idle(10);
 
         BlockPos start = util.grid().at(0, 1, 3);

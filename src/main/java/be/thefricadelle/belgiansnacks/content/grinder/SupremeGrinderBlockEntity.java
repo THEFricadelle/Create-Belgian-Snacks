@@ -297,6 +297,18 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
         return goal == 0 ? 0 : Math.round(15f * Math.min(count, goal) / goal);
     }
 
+    /**
+     * How full the pit looks, 0 to 1: the progress towards the goal, or the gauge's block state where
+     * no goal is known (a Ponder scene sets only the state).
+     */
+    public float minceLevel() {
+        if (goal > 0) {
+            return Math.min(1f, count / (float) goal);
+        }
+        BlockState state = getBlockState();
+        return state.hasProperty(SupremeGrinderBlock.FILL) ? state.getValue(SupremeGrinderBlock.FILL) / 4f : 0;
+    }
+
     private void updateGauge() {
         int fill = goal == 0 ? 0 : Math.min(4, count * 4 / goal);
         BlockState state = getBlockState();

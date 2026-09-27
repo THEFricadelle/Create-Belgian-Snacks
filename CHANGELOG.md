@@ -9,6 +9,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 ### Added
 
 - **Original texture artwork** — Replaced all 41 placeholder textures with original 16-colour pixel art: shared food and bucket silhouettes, two-frame fluid animations, steel fryer panels and five brass grinder gauge states. Added a reproducible standard-library drawing tool with manual-edit protection and a local preview gallery.
+- **Machine models** — Hand-made fryer (an open vat on four feet) and Supreme Grinder (a deep pit under two opposed, curved blades). The grinder pit fills with mince as the collection nears its goal (a 42nd texture), and the fryer fat stands deep from the first bucket, rising to the rim when full.
+- **THEFricadelle takes off** — The visitor now runs up to the eater from a few blocks ahead, says its line, then shoots up like a rocket and bursts into fireworks (particles and sounds only, nothing is broken or hurt).
+- **Ponder belts** — Belts in the Fryer, Supreme Grinder and assembly line scenes now run towards the machines.
 - **Project skeleton** — ModDevGradle 2.0.147 project on Gradle 9.2.1, NeoForge 21.1.250, compiled against Create 6.0.10 (build 280, the one shipped in Arcadia V2 2.0.32) with Registrate, Ponder and Flywheel. JEI and Jade are loaded in the development runtime only.
 - **Creative tab** — `create_belgian_snacks:main`, placed after Create's tabs and used as Registrate's default tab. Its icon is the fricadelle.
 - **Data generation** — `runData` writes `src/generated/resources`; `en_us` comes from Registrate, `fr_fr` from a dedicated language provider.
@@ -40,6 +43,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 ### Ajouts
 
 - **Textures originales** — Remplacement des 41 textures provisoires par du pixel art original limité à 16 couleurs : silhouettes communes des aliments et seaux, fluides animés sur deux images, panneaux en inox de la friteuse et cinq états de jauge du hachoir en laiton. Ajout d'un outil de dessin reproductible en bibliothèque standard, avec protection des retouches manuelles et galerie d'aperçu locale.
+- **Modèles des machines** — Friteuse faite main (une cuve ouverte sur quatre pieds) et Hachoir Suprême (une fosse profonde sous deux lames opposées et courbées). La fosse du hachoir se remplit de hachis à mesure que la collection approche de l'objectif (une 42e texture), et la graisse de la friteuse est profonde dès le premier seau, jusqu'au bord cuve pleine.
+- **THEFricadelle s'envole** — Le visiteur rejoint désormais le mangeur en courant depuis quelques blocs, dit sa phrase, puis décolle comme une fusée et éclate en feu d'artifice (particules et sons seulement, rien n'est cassé ni blessé).
+- **Tapis des Ponder** — Les tapis des scènes de la Friteuse, du Hachoir Suprême et des lignes d'assemblage avancent maintenant vers les machines.
 - **Squelette du projet** — Projet ModDevGradle 2.0.147 sur Gradle 9.2.1, NeoForge 21.1.250, compilé contre Create 6.0.10 (build 280, celui livré dans Arcadia V2 2.0.32) avec Registrate, Ponder et Flywheel. JEI et Jade ne sont chargés que dans le runtime de développement.
 - **Onglet créatif** — `create_belgian_snacks:main`, placé après les onglets de Create et utilisé comme onglet par défaut de Registrate. Son icône est la fricadelle.
 - **Génération de données** — `runData` écrit `src/generated/resources` ; `en_us` vient de Registrate, `fr_fr` d'un fournisseur de langue dédié.

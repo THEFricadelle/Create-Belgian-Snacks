@@ -276,6 +276,9 @@ public final class GrinderGameTests {
             .thenWaitUntil(() -> helper.assertValueEqual(level.getBlockState(absolute).getValue(SupremeGrinderBlock.FILL), 2, "gauge"))
             .thenExecute(() -> helper.assertValueEqual(level.getBlockState(absolute).getAnalogOutputSignal(level, absolute),
                 Math.round(15f * half / index.size()), "comparator"))
+            // The mince in the pit follows the progress itself, not the four steps of the gauge.
+            .thenExecute(() -> helper.assertTrue(Math.abs(grinder.minceLevel() - half / (float) index.size()) < 1.0E-6f,
+                "mince level " + grinder.minceLevel()))
             .thenSucceed();
     }
 
