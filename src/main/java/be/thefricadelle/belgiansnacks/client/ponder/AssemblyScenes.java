@@ -37,6 +37,8 @@ import net.minecraft.world.item.ItemStack;
 final class AssemblyScenes {
     private enum Station { SPOUT, DEPLOYER, PRESS }
 
+    private static final int BLOCK_TICKS = 15;
+
     private record Step(Station station, String line) {
     }
 
@@ -78,18 +80,19 @@ final class AssemblyScenes {
         scene.world().setKineticSpeed(util.select().fromTo(0, 1, 3, last, 1, 3).add(util.select().position(0, 1, 4)), -32);
         scene.idle(10);
 
+        // One item rides the whole line: it moves one block, stops under the next station while the
+        // machine works, then moves on, as Create's own belt scenes do.
         BlockPos start = util.grid().at(0, 1, 3);
-        ElementLink<BeltItemElement> item = scene.world().createItemOnBelt(start, Direction.WEST, new ItemStack(paste));
+        // Dropped from above, the item starts at the centre of its segment: each block it moves then
+        // stops it right under the next station.
+        ElementLink<BeltItemElement> item = scene.world().createItemOnBelt(start, Direction.UP, new ItemStack(paste));
+        scene.world().stallBeltItem(item, true);
         say(scene, intro, 50, util.vector().topOf(start));
-        scene.world().removeItemsFromBelt(start);
-        scene.world().removeItemsFromBelt(start.east());
 
         for (int i = 0; i < steps.size(); i++) {
             Step step = steps.get(i);
-            BlockPos belt = util.grid().at(i + 1, 1, 3);
+            advance(scene, item);
             BlockPos machine = util.grid().at(i + 1, 3, 3);
-            item = scene.world().createItemOnBelt(belt, Direction.UP, new ItemStack(i == 0 ? paste : unfinished));
-            scene.world().stallBeltItem(item, true);
             work(scene, util, step.station(), machine);
             scene.world().changeBeltItemTo(item, new ItemStack(unfinished));
             if (step.line() != null) {
@@ -97,14 +100,20 @@ final class AssemblyScenes {
             } else {
                 scene.idle(10);
             }
-            scene.world().removeItemsFromBelt(belt);
         }
 
         BlockPos end = util.grid().at(last, 1, 3);
-        item = scene.world().createItemOnBelt(end, Direction.UP, new ItemStack(raw));
-        scene.world().stallBeltItem(item, true);
+        advance(scene, item);
+        scene.world().changeBeltItemTo(item, new ItemStack(raw));
         scene.effects().indicateSuccess(end);
         say(scene, loops, 70, util.vector().topOf(end), PonderPalette.GREEN);
+    }
+
+    // One block down the belt at 32 RPM (a belt moves speed / 480 blocks per tick), then stop.
+    private static void advance(CreateSceneBuilder scene, ElementLink<BeltItemElement> item) {
+        scene.world().stallBeltItem(item, false);
+        scene.idle(BLOCK_TICKS);
+        scene.world().stallBeltItem(item, true);
     }
 
     private static void work(CreateSceneBuilder scene, SceneBuildingUtil util, Station station, BlockPos machine) {
@@ -123,6 +132,12 @@ final class AssemblyScenes {
             case PRESS -> {
                 scene.world().modifyBlockEntity(machine, MechanicalPressBlockEntity.class, press -> press.getPressingBehaviour().start(Mode.BELT));
                 scene.idle(30);
+                // Only a server ends a pressing cycle; in the Ponder world the press would stay running and
+                // hold the item under it for good.
+                scene.world().modifyBlockEntity(machine, MechanicalPressBlockEntity.class, press -> {
+                    press.getPressingBehaviour().running = false;
+                    press.getPressingBehaviour().runningTicks = 0;
+                });
             }
         }
     }

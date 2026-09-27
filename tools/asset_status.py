@@ -40,10 +40,12 @@ MAX_COLOURS = 48
 def ogg_problem(data):
     """None for a mono Ogg Vorbis file, the reason otherwise (a stereo sound is not positional in game)."""
     if data[:4] != b"OggS":
+        if data[:3] == b"ID3" or data[:2] in (b"\xff\xfb", b"\xff\xf3", b"\xff\xf2"):
+            return "an MP3 renamed to .ogg; convert it: ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg"
         return "not an Ogg file"
     segments = data[26]
     packet = data[27 + segments:]
-    if packet[:7] != b"vorbis":
+    if packet[:7] != b"\x01vorbis":
         return "not Vorbis (export as Ogg Vorbis)"
     channels = packet[11]
     return None if channels == 1 else f"{channels} channels, must be mono"
@@ -144,6 +146,15 @@ def main():
                 broken.append(f"sounds/{file}: {problem}")
                 what += f" ({problem})"
         print(f"  {state:11} sounds/{file}: {what}")
+    for path in sorted((SOUNDS / "npc").glob("*")) if (SOUNDS / "npc").is_dir() else []:
+        name = path.relative_to(SOUNDS).as_posix()
+        if name not in OPTIONAL_SOUNDS:
+            reason = "no line uses it (phrase_0 to phrase_4)"
+            problem = ogg_problem(path.read_bytes())
+            if problem:
+                reason += f"; {problem}"
+            broken.append(f"sounds/{name}: {reason}")
+            print(f"  {'unused':11} sounds/{name}: {reason}")
     return 1 if missing or broken else 0
 
 

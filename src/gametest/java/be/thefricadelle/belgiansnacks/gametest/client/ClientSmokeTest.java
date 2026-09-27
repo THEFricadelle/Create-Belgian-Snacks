@@ -161,6 +161,7 @@ public final class ClientSmokeTest {
             planned = true;
         }
         ticks++;
+        sampleRide();
         if (ticks > TIMEOUT_TICKS) {
             Step stuck = STEPS.peek();
             fail("runner.timeout", "stuck waiting on " + (stuck == null ? "nothing" : stuck.name()));
@@ -303,12 +304,14 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("ponder.grinder.belt", 0, () -> ponderBeltItems() > 0 || ponderEnded(), () -> checkPonderBelt("grinder")));
         STEPS.add(new Step("ponder.grinder.belt.shot", 3, () -> screenshot("ponder-grinder-belt")));
         STEPS.add(new Step("ponder.grinder.shot", 60, () -> screenshot("ponder-supreme-grinder")));
-        STEPS.add(new Step("ponder.line2", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.EXCEPTIONAL_PASTE.asStack()))));
+        STEPS.add(new Step("ponder.line2", 5, () -> openLine(BSItems.EXCEPTIONAL_PASTE.asStack())));
         STEPS.add(new Step("ponder.line2.belt", 0, () -> ponderBeltItems() > 0 || ponderEnded(), () -> checkPonderBelt("line2")));
         STEPS.add(new Step("ponder.line2.belt.shot", 3, () -> screenshot("ponder-line2-belt")));
         STEPS.add(new Step("ponder.line2.shot", 200, () -> screenshot("ponder-the-fricadelle-line")));
-        STEPS.add(new Step("ponder.line3", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.ABSOLUTE_PASTE.asStack()))));
+        STEPS.add(new Step("ponder.line2.ride", 0, ClientSmokeTest::ponderEnded, () -> checkRide("line2")));
+        STEPS.add(new Step("ponder.line3", 5, () -> openLine(BSItems.ABSOLUTE_PASTE.asStack())));
         STEPS.add(new Step("ponder.line3.shot", 120, () -> screenshot("ponder-ultimate-fricadelle-line")));
+        STEPS.add(new Step("ponder.line3.ride", 0, ClientSmokeTest::ponderEnded, () -> checkRide("line3")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 
@@ -659,6 +662,67 @@ public final class ClientSmokeTest {
             }
         }
         return items;
+    }
+
+    // The most items seen at once on an assembly line's belt, and the farthest one got, since it opened.
+    private static int rideMaxItems;
+    private static float rideMaxPosition;
+    private static int rideLength;
+    private static boolean rideWatching;
+    private static String rideLast = "";
+    private static final StringBuilder rideTrace = new StringBuilder();
+    private static final java.util.SortedSet<Float> rideStops = new java.util.TreeSet<>();
+
+    private static void openLine(ItemStack paste) {
+        rideMaxItems = 0;
+        rideMaxPosition = 0;
+        rideLength = 0;
+        rideWatching = true;
+        rideTrace.setLength(0);
+        rideStops.clear();
+        Minecraft.getInstance().setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(paste));
+    }
+
+    private static void sampleRide() {
+        if (!rideWatching || !(Minecraft.getInstance().screen instanceof net.createmod.ponder.foundation.ui.PonderUI ui)) {
+            return;
+        }
+        var world = ui.getActiveScene().getWorld();
+        int items = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(0, 0, 0, 9, 5, 9)) {
+            if (world.getBlockEntity(pos) instanceof com.simibubi.create.content.kinetics.belt.BeltBlockEntity belt && belt.isController()) {
+                rideLength = belt.beltLength;
+                for (var stack : belt.getInventory().getTransportedItems()) {
+                    items++;
+                    rideMaxPosition = Math.max(rideMaxPosition, stack.beltPosition);
+                    String state = String.format("%.1f%s", stack.beltPosition, stack.locked ? "L" : "");
+                    if (stack.locked) {
+                        rideStops.add(Math.round(stack.beltPosition * 10) / 10f);
+                    }
+                    if (!state.equals(rideLast)) {
+                        rideLast = state;
+                        rideTrace.append(ui.getActiveScene().getCurrentTime()).append(':').append(state).append(' ');
+                    }
+                }
+            }
+        }
+        rideMaxItems = Math.max(rideMaxItems, items);
+    }
+
+    // One item rides the line from end to end: never a copy, never past the last segment.
+    private static void checkRide(String scene) {
+        rideWatching = false;
+        check("ponder.ride." + scene, () -> {
+            require(rideMaxItems == 1, rideMaxItems + " items on the belt at once");
+            require(rideMaxPosition > rideLength - 1 && rideMaxPosition < rideLength, "the item got to " + rideMaxPosition + " on a belt of " + rideLength + "; " + rideTrace);
+            // It waits at the start, under each station, and at the end: every segment's centre.
+            java.util.SortedSet<Float> expected = new java.util.TreeSet<>();
+            for (int segment = 0; segment < rideLength; segment++) {
+                expected.add(segment + 0.5f);
+            }
+            require(rideStops.equals(expected), "stopped at " + rideStops + ", expected " + expected + "; " + rideTrace);
+            return "one item, stopped at " + rideStops + " on a belt of " + rideLength;
+        });
     }
 
     private static boolean ponderEnded() {

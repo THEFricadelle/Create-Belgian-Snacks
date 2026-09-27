@@ -125,3 +125,10 @@
 **Root cause:** A belt links to its controller on its first server tick (`BeltBlock.initBelt`). `PonderSchematicsRun` saved the schematic in the tick the belts were placed, so no segment had a controller; the Ponder world is client side and never initialises them. Only the controller carries and renders belt items.
 **Fix:** Call `BeltBlock.initBelt` after `createBelts`, and rewrite each segment's `Controller` relative to the schematic origin before saving. The client smoke checks an item rides a belt in three scenes.
 **Prevention:** Blocks that link up on their first tick must be initialised before a structure is exported; world positions inside block entity NBT must be made relative.
+
+## [2026-09-27 17:20] - Assembly Ponder: paste ran past the line and appeared twice
+**Context:** The tier 2 and 3 line scenes put a moving paste on the belt, then a stalled copy under each station.
+**Error:** The moving paste kept going down the line while the copies appeared: two items, one too far.
+**Root cause:** The intro item was never stalled nor removed in time. Riding a single item instead then stopped one segment short: inserted from the west it starts at 0.1, not at the segment centre, and the first deployer held it at its centre, shifting every stop.
+**Fix:** One item, inserted from above (centre of the first segment), moved one block per 15 ticks at 32 RPM and stalled under each station. The press is set back to idle after its stroke, since only a server ends a pressing cycle. The client smoke samples the belt every tick: one item at most, stops at every segment centre.
+**Prevention:** Belt items in Ponder scenes start at a segment centre and move by whole blocks; check real machine behaviours that may hold them.
