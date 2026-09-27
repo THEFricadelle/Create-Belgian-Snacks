@@ -39,6 +39,7 @@ ITEMS = {
     "raw_the_fricadelle": ("stick", (0xF0, 0xA8, 0x90), "2"),
     "the_fricadelle": ("stick", (0xB8, 0x70, 0x20), "2"),
     "absolute_paste": ("ball", (0xE8, 0xC8, 0x40), "3"),
+    "incomplete_ultimate_fricadelle": ("stick", (0xF0, 0xD8, 0xA0), "3"),
     "raw_ultimate_fricadelle": ("stick", (0xF8, 0xC8, 0xA8), "3"),
     "ultimate_fricadelle": ("shiny_stick", (0xE0, 0xA8, 0x20), "3"),
 }
