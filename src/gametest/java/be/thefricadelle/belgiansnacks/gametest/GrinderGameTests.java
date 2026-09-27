@@ -57,14 +57,17 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 /**
  * Supreme Grinder (docs/05, checklist in docs/10). The grinder sits at (1,1,1) under a creative
- * motor. Tests that change the server config run in their own batch, after the others, so they
- * never race a test that reads the same setting.
+ * motor. Each test that changes the server config runs in a batch of its own, so it never races a
+ * test that reads the same setting.
  */
 @GameTestHolder(BelgianSnacks.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class GrinderGameTests {
     private static final String TEMPLATE = "empty";
-    private static final String CONFIG_BATCH = "grinder_config";
+    // One batch each: batches run one after the other, tests within a batch at the same time, and
+    // these two change settings the other one reads (the index without minecraft has no apple).
+    private static final String DUPLICATES_BATCH = "grinder_config_duplicates";
+    private static final String INDEX_BATCH = "grinder_config_index";
     private static final BlockPos GRINDER = new BlockPos(1, 1, 1);
     private static final BlockPos MOTOR = GRINDER.above();
 
@@ -366,7 +369,7 @@ public final class GrinderGameTests {
 
     // ------------------------------------------------------------------ config (own batch)
 
-    @GameTest(template = TEMPLATE, batch = CONFIG_BATCH)
+    @GameTest(template = TEMPLATE, batch = DUPLICATES_BATCH)
     public static void duplicatesAreDestroyedWhenNotRejected(GameTestHelper helper) {
         SupremeGrinderBlockEntity grinder = running(helper);
         helper.startSequence()
@@ -387,7 +390,7 @@ public final class GrinderGameTests {
 
     // What a pack losing a food mod between two sessions looks like to a grinder: its foods leave the
     // index, the collection keeps them, the count drops, and comes back with the mod.
-    @GameTest(template = TEMPLATE, batch = CONFIG_BATCH)
+    @GameTest(template = TEMPLATE, batch = INDEX_BATCH)
     public static void aFoodModLeavingAndComingBack(GameTestHelper helper) {
         SupremeGrinderBlockEntity grinder = running(helper);
         grinder.setConsumed(List.of(id("minecraft:apple"), id("minecraft:bread"), id("minecraft:cake")));

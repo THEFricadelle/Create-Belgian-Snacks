@@ -49,8 +49,9 @@ class RecipeFilesTest {
         "mixing/curry_ketchup", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/fricadelle",
-        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder");
+        "frying/fricadelle", "frying/the_fricadelle",
+        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
+        "sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_the_fricadelle_from_beetroot");
 
     // Recipe types this mod registers; every other folder is a Create type.
     private static final Set<String> OWN_TYPES = Set.of("frying");
@@ -194,9 +195,16 @@ class RecipeFilesTest {
         return tags;
     }
 
-    // Processing recipes list "ingredients"/"results"; crafting recipes use a "key" map and a "result".
+    // Processing recipes list "ingredients"/"results"; crafting recipes use a "key" map and a "result";
+    // a sequenced assembly has one "ingredient" and its steps, each a processing recipe, in "sequence".
     private static List<JsonObject> entries(JsonObject recipe) {
         List<JsonObject> entries = new ArrayList<>();
+        if (recipe.has("ingredient")) {
+            entries.add(recipe.getAsJsonObject("ingredient"));
+        }
+        if (recipe.has("sequence")) {
+            recipe.getAsJsonArray("sequence").forEach(step -> entries.addAll(entries(step.getAsJsonObject())));
+        }
         for (String key : List.of("ingredients", "results")) {
             if (recipe.has(key)) {
                 recipe.getAsJsonArray(key).forEach(e -> entries.add(e.getAsJsonObject()));
@@ -239,6 +247,58 @@ class RecipeFilesTest {
         // Two crushing wheels (D11).
         assertEquals(2, String.join("", recipe.getAsJsonArray("pattern").asList().stream().map(e -> e.getAsString()).toList())
             .chars().filter(c -> c == 'W').count());
+    }
+
+    // Tier 2 (D4, D5, D7): spices, mayonnaise, curry ketchup, onion, press; three loops; never fails.
+    @Test
+    void theFricadelleAssemblyIsTheDocumentedOne() throws IOException {
+        for (String variant : List.of("raw_the_fricadelle", "raw_the_fricadelle_from_beetroot")) {
+            JsonObject recipe = json(RECIPES.resolve("sequenced_assembly/" + variant + ".json"));
+            assertEquals("create:sequenced_assembly", recipe.get("type").getAsString());
+            assertEquals(MOD_ID + ":exceptional_paste", recipe.getAsJsonObject("ingredient").get("item").getAsString());
+            assertEquals(3, recipe.get("loops").getAsInt(), variant + " loops");
+            assertEquals(MOD_ID + ":incomplete_the_fricadelle", recipe.getAsJsonObject("transitional_item").get("id").getAsString());
+            var results = recipe.getAsJsonArray("results");
+            assertEquals(1, results.size(), variant + ": a single, certain result");
+            assertEquals(MOD_ID + ":raw_the_fricadelle", results.get(0).getAsJsonObject().get("id").getAsString());
+
+            var steps = recipe.getAsJsonArray("sequence");
+            List<String> types = new ArrayList<>();
+            steps.forEach(step -> types.add(step.getAsJsonObject().get("type").getAsString()));
+            assertEquals(List.of("create:deploying", "create:filling", "create:filling", "create:deploying", "create:pressing"), types, variant);
+            assertEquals(MOD_ID + ":belgian_spices", ingredient(steps, 0).get("item").getAsString());
+            assertEquals(MOD_ID + ":mayonnaise", ingredient(steps, 1).get("fluid").getAsString());
+            assertEquals(100, ingredient(steps, 1).get("amount").getAsInt(), "mayonnaise per step");
+            assertEquals(MOD_ID + ":curry_ketchup", ingredient(steps, 2).get("fluid").getAsString());
+            assertEquals(100, ingredient(steps, 2).get("amount").getAsInt(), "curry ketchup per step");
+        }
+        JsonObject onion = json(RECIPES.resolve("sequenced_assembly/raw_the_fricadelle.json"));
+        assertEquals("c:crops/onion", ingredient(onion.getAsJsonArray("sequence"), 3).get("tag").getAsString());
+        assertTrue(conditions(onion).contains("not tag_empty c:crops/onion"), "the onion recipe needs onions");
+        JsonObject beetroot = json(RECIPES.resolve("sequenced_assembly/raw_the_fricadelle_from_beetroot.json"));
+        assertEquals("minecraft:beetroot", ingredient(beetroot.getAsJsonArray("sequence"), 3).get("item").getAsString());
+        assertTrue(conditions(beetroot).contains("tag_empty c:crops/onion"), "the beetroot recipe is only for packs without onions");
+    }
+
+    // The second ingredient of a step: the first is always the transitional item.
+    private static JsonObject ingredient(com.google.gson.JsonArray steps, int step) {
+        var ingredients = steps.get(step).getAsJsonObject().getAsJsonArray("ingredients");
+        assertEquals(MOD_ID + ":incomplete_the_fricadelle", ingredients.get(0).getAsJsonObject().get("item").getAsString(), "step " + step);
+        return ingredients.get(1).getAsJsonObject();
+    }
+
+    // D20: heated, any frying fat, 25 mB a raw THE_Fricadelle, 200 ticks.
+    @Test
+    void theFricadelleFriesWithAnyFat() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("frying/the_fricadelle.json"));
+        assertEquals(MOD_ID + ":frying", recipe.get("type").getAsString());
+        assertEquals("heated", recipe.get("heat_requirement").getAsString());
+        assertEquals(200, recipe.get("processing_time").getAsInt());
+        var ingredients = recipe.getAsJsonArray("ingredients");
+        assertEquals(MOD_ID + ":raw_the_fricadelle", ingredients.get(0).getAsJsonObject().get("item").getAsString());
+        assertEquals(MOD_ID + ":frying_oils", ingredients.get(1).getAsJsonObject().get("tag").getAsString());
+        assertEquals(25, ingredients.get(1).getAsJsonObject().get("amount").getAsInt());
+        assertEquals(MOD_ID + ":the_fricadelle", recipe.getAsJsonArray("results").get(0).getAsJsonObject().get("id").getAsString());
     }
 
     private static Set<String> modLoadedGuards(JsonObject recipe) {

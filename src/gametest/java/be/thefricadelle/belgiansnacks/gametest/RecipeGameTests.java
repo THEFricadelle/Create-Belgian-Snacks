@@ -63,7 +63,10 @@ public final class RecipeGameTests {
         "milling/dried_kelp",
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise",
         "compacting/frying_oil_from_seeds",
-        "pressing/fricadelle_paste");
+        "pressing/fricadelle_paste",
+        "frying/the_fricadelle");
+    private static final String ONION_ASSEMBLY = "sequenced_assembly/raw_the_fricadelle";
+    private static final String BEETROOT_ASSEMBLY = "sequenced_assembly/raw_the_fricadelle_from_beetroot";
     private static final String TOMATO_KETCHUP = "mixing/curry_ketchup";
     private static final String BEETROOT_KETCHUP = "mixing/curry_ketchup_from_beetroot";
 
@@ -80,6 +83,12 @@ public final class RecipeGameTests {
             TOMATO_KETCHUP + (tomatoes ? " should be loaded with tomatoes" : " must stay off while c:crops/tomato is empty"));
         helper.assertTrue((find(helper, BEETROOT_KETCHUP) != null) != tomatoes,
             BEETROOT_KETCHUP + (tomatoes ? " must stay off when tomatoes exist" : " should be loaded as the fallback"));
+        // Farmer's Delight also brings the onions of tier 2 (D7).
+        boolean onions = farmersDelight();
+        helper.assertTrue((find(helper, ONION_ASSEMBLY) != null) == onions,
+            ONION_ASSEMBLY + (onions ? " should be loaded with onions" : " must stay off while c:crops/onion is empty"));
+        helper.assertTrue((find(helper, BEETROOT_ASSEMBLY) != null) != onions,
+            BEETROOT_ASSEMBLY + (onions ? " must stay off when onions exist" : " should be loaded as the fallback"));
         helper.succeed();
     }
 

@@ -116,8 +116,9 @@ public final class ClientSmokeTest {
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise", "mixing/curry_ketchup_from_beetroot",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/fricadelle",
-        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder");
+        "frying/fricadelle", "frying/the_fricadelle",
+        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
+        "sequenced_assembly/raw_the_fricadelle_from_beetroot");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 
@@ -228,6 +229,10 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.frying.shot", 30, () -> screenshot("jei-frying")));
         STEPS.add(new Step("jei.fryerCraft", 10, () -> showOutput(new ItemStack(BSBlocks.FRYER.get()))));
         STEPS.add(new Step("jei.fryerCraft.shot", 30, () -> screenshot("jei-fryer-craft")));
+        STEPS.add(new Step("jei.assembly", 10, () -> showOutput(BSItems.RAW_THE_FRICADELLE.asStack())));
+        STEPS.add(new Step("jei.assembly.shot", 30, () -> screenshot("jei-raw-the-fricadelle")));
+        STEPS.add(new Step("jei.theFrying", 10, () -> showOutput(BSItems.THE_FRICADELLE.asStack())));
+        STEPS.add(new Step("jei.theFrying.shot", 30, () -> screenshot("jei-the-fricadelle")));
         STEPS.add(new Step("jei.grinderCraft", 10, () -> showOutput(new ItemStack(BSBlocks.SUPREME_GRINDER.get()))));
         STEPS.add(new Step("jei.grinderCraft.shot", 30, () -> screenshot("jei-grinder-craft")));
         STEPS.add(new Step("jei.grinding", 10, () -> SmokeJeiPlugin.runtime.getRecipesGui().showTypes(List.of(GrindingGoalCategory.TYPE))));
