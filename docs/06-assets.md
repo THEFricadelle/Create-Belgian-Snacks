@@ -35,6 +35,8 @@ Les modèles JSON d'items/blocs sont générés par datagen. Un modèle Blockben
 
 ## Livrables Blockbench (M9, à faire par THEFricadelle)
 
+Pour générer les textures avec un assistant d'image : prompts prêts dans `12-prompts-textures.md`, avec `tools/pixelate.py` pour ramener une grande image générée à 16×16.
+
 Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder, faite main, manquante) et les 3 modèles facultatifs. Un fichier fait main se reconnaît tout seul : il suffit qu'il diffère du placeholder. Après un dépôt : `./gradlew runData`, puis `./gradlew runClient` pour voir le résultat ; le test client vérifie qu'aucune texture ni aucun modèle ne manque.
 
 ### Textures (même nom de fichier que le placeholder, on le remplace)

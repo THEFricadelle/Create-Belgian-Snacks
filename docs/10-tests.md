@@ -22,7 +22,8 @@ Règle : tout ce qui peut être vérifié par la machine l'est. La checklist man
 | `python tools/arcadia_export.py` (manuel, ~9 min, 10 Go) | pack Arcadia complet en dev (`arcadiaExport`) | Export réel du FoodIndex vers `docs/data/` ; à relancer à chaque mise à jour du pack |
 | `python tools/arcadia_smoke.py` (manuel, ~35 min, 2 × 8 Go) | pack Arcadia complet : client A, client B en LAN, jar de release | Checklist Arcadia ci-dessous ; rapports `run/arcadia*/arcadia-smoke-report.txt`, captures `run/arcadia/screenshots` |
 | `./gradlew runPonderSchematics` (outil, pas un test) | serveur `ponderSchematics` | Reconstruit les 4 schémas Ponder avec les vrais blocs et les écrit dans `src/main/resources` |
-| `python tools/asset_status.py` (outil) | textures et modèles | Placeholder, fait main ou manquant, pour chaque fichier attendu |
+| `python tools/asset_status.py` (outil) | textures et modèles | Placeholder, fait main ou manquant, pour chaque fichier attendu ; pour les textures faites main : taille, format RGBA, pixels semi-transparents, nombre de couleurs |
+| `python tools/pixelate.py` (outil) | une image générée | Réduction sans lissage à 16×16 (ou 16×32), fond magenta rendu transparent |
 | `./gradlew testAll` | tout | `build` (JUnit) → GameTests → GameTests avec FD → client → deux clients |
 | CI (`.github/workflows/build.yml`) | GitHub Actions | `build` (+ JUnit), `runGameTestServer`, `runGameTestServerCompat`, puis `runData` et échec si `src/generated` diffère de ce qui est commité. Le client ne tourne pas en CI (pas d'affichage) : `testAll` en local avant chaque push de fonctionnalité |
 

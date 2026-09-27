@@ -13,7 +13,9 @@ hand-made block models (docs/06) are listed apart. Usage: python tools/asset_sta
 """
 
 import pathlib
+import struct
 import sys
+import zlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import gen_placeholders as gen  # noqa: E402
@@ -27,26 +29,93 @@ OPTIONAL_MODELS = {
 }
 
 
+MAX_COLOURS = 48
+
+
+def decode_png(data):
+    """Width, height and RGBA rows of an 8-bit RGBA, non-interlaced PNG; a reason string otherwise."""
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        return "not a PNG"
+    pos, idat, header = 8, b"", None
+    while pos < len(data):
+        length, kind = struct.unpack(">I4s", data[pos:pos + 8])
+        body = data[pos + 8:pos + 8 + length]
+        if kind == b"IHDR":
+            header = struct.unpack(">IIBBBBB", body)
+        elif kind == b"IDAT":
+            idat += body
+        pos += 12 + length
+    width, height, depth, colour, _, _, interlace = header
+    if depth != 8 or colour != 6 or interlace:
+        return f"must be 8-bit RGBA, non-interlaced (bit depth {depth}, colour type {colour})"
+    raw, stride, rows, prev = zlib.decompress(idat), width * 4, [], bytearray(width * 4)
+    for y in range(height):
+        kind, line = raw[y * (stride + 1)], bytearray(raw[y * (stride + 1) + 1:(y + 1) * (stride + 1)])
+        for i in range(stride):
+            a = line[i - 4] if i >= 4 else 0
+            b = prev[i]
+            c = prev[i - 4] if i >= 4 else 0
+            if kind == 1:
+                line[i] = (line[i] + a) & 255
+            elif kind == 2:
+                line[i] = (line[i] + b) & 255
+            elif kind == 3:
+                line[i] = (line[i] + (a + b) // 2) & 255
+            elif kind == 4:
+                pa, pb, pc = abs(b - c), abs(a - c), abs(a + b - 2 * c)
+                line[i] = (line[i] + (a if pa <= pb and pa <= pc else b if pb <= pc else c)) & 255
+        rows.append(bytes(line))
+        prev = line
+    return width, height, rows
+
+
+def problems(path, expected):
+    """What makes a hand-made texture unusable: size, format, soft edges, too many colours."""
+    decoded = decode_png(path.read_bytes())
+    if isinstance(decoded, str):
+        return [decoded]
+    width, height, rows = decoded
+    found = []
+    if (width, height) != expected:
+        found.append(f"size {width}x{height}, expected {expected[0]}x{expected[1]}")
+    pixels = [row[i:i + 4] for row in rows for i in range(0, len(row), 4)]
+    alphas = {p[3] for p in pixels}
+    if not alphas <= {0, 255}:
+        found.append("half-transparent pixels (pixel art needs each pixel fully opaque or fully clear)")
+    colours = {p for p in pixels if p[3] == 255}
+    if len(colours) > MAX_COLOURS:
+        found.append(f"{len(colours)} colours, over {MAX_COLOURS}: blurred or not pixel art")
+    return found
+
+
 def main():
-    placeholder, handmade, missing = [], [], []
+    placeholder, handmade, missing, broken = [], [], [], []
     for path, draw in sorted(gen.planned().items()):
         name = path.relative_to(gen.ROOT / "src/main/resources/assets/create_belgian_snacks/textures").as_posix()
         if not path.is_file():
             missing.append(name)
-        elif path.read_bytes() == gen.png_bytes(draw()):
+            continue
+        pixels = draw()
+        if path.read_bytes() == gen.png_bytes(pixels):
             placeholder.append(name)
-        else:
-            handmade.append(name)
+            continue
+        handmade.append(name)
+        for problem in problems(path, (len(pixels[0]), len(pixels))):
+            broken.append(f"{name}: {problem}")
     total = len(placeholder) + len(handmade) + len(missing)
     print(f"textures: {len(handmade)} hand-made, {len(placeholder)} placeholders, {len(missing)} missing, of {total}")
     for label, names in (("missing", missing), ("placeholder", placeholder), ("hand-made", handmade)):
         for name in names:
             print(f"  {label:11} {name}")
+    if broken:
+        print("hand-made textures to fix:")
+        for line in broken:
+            print("  " + line)
     print("hand-made block models (optional, the generated ones stand in):")
     for file, what in OPTIONAL_MODELS.items():
         state = "present" if (MODELS / file).is_file() else "not yet"
         print(f"  {state:11} models/block/custom/{file}: {what}")
-    return 1 if missing else 0
+    return 1 if missing or broken else 0
 
 
 if __name__ == "__main__":
