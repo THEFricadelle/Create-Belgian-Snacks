@@ -8,6 +8,26 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ---
 
+## [1.0.0] - 2026-09-28
+
+### Changed
+
+- **One voice, no other mod sound** — THEFricadelle always says the line its author recorded, "The friterie is proud of you.", in the author's own voice; the other four lines stay in the language files for later. It is the only sound of the mod's own: the Fryer and the Supreme Grinder are silent until new sounds come with the next features. The vanilla sounds of the visitor and of THE_FRICADELLE (chorus fruit, rocket, explosion, fireworks) are unchanged.
+
+### Removed
+
+- **Machine sounds** — The fryer sizzle, the grinder crunch, hum and paste bell, their recordings and their subtitles.
+
+### Modifications
+
+- **Une voix, aucun autre son du mod** — THEFricadelle dit toujours la phrase que son auteur a enregistrée, « La friterie est fière de toi. », avec la voix de l'auteur ; les quatre autres phrases restent dans les fichiers de langue pour plus tard. C'est le seul son propre au mod : la Friteuse et le Hachoir Suprême sont muets jusqu'à l'arrivée de nouveaux sons avec les prochaines fonctionnalités. Les sons vanilla du visiteur et de THE_FRICADELLE (fruit de chorus, fusée, explosion, feu d'artifice) ne changent pas.
+
+### Suppressions
+
+- **Sons des machines** — Le grésillement de la friteuse, le croc, le ronronnement et la sonnerie de pâte du hachoir, leurs enregistrements et leurs sous-titres.
+
+---
+
 ## [0.9.0] - 2026-09-27
 
 ### Added
