@@ -329,6 +329,7 @@ tasks.configureEach { Task task ->
 }
 
 def showcaseCheckDir = file('run/showcase-check')
+def showcaseOptions = file('run/showcase/options.txt')
 
 tasks.register('verifyShowcase') {
     group = 'verification'
@@ -363,7 +364,7 @@ tasks.configureEach { Task task ->
         task.doFirst {
             // First launch only: skip the accessibility screen and the tutorial; later launches keep
             // whatever options were changed in game.
-            File options = file('run/showcase/options.txt')
+            File options = showcaseOptions
             if (!options.isFile()) {
                 options.parentFile.mkdirs()
                 options.setText(['onboardAccessibility:false', 'tutorialStep:none'].join('\n'), 'UTF-8')
