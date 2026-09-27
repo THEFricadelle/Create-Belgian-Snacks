@@ -38,6 +38,7 @@ final class AssemblyScenes {
     private enum Station { SPOUT, DEPLOYER, PRESS }
 
     private static final int BLOCK_TICKS = 15;
+    private static final int PRESS_STROKE_TICKS = 62;
 
     private record Step(Station station, String line) {
     }
@@ -56,8 +57,9 @@ final class AssemblyScenes {
     static void ultimateFricadelle(SceneBuilder builder, SceneBuildingUtil util) {
         line(builder, util, "ultimate_fricadelle_line", 8, "line3.intro", BSItems.ABSOLUTE_PASTE.get(),
             BSItems.INCOMPLETE_ULTIMATE_FRICADELLE.get(), BSItems.RAW_ULTIMATE_FRICADELLE.get(),
-            List.of(new Step(Station.SPOUT, "line3.tallow"), new Step(Station.DEPLOYER, null), new Step(Station.SPOUT, null),
-                new Step(Station.SPOUT, null), new Step(Station.DEPLOYER, null), new Step(Station.PRESS, "line3.servings")),
+            List.of(new Step(Station.SPOUT, "line3.tallow"), new Step(Station.DEPLOYER, "line3.spices"),
+                new Step(Station.SPOUT, "line3.mayonnaise"), new Step(Station.SPOUT, "line3.curry"),
+                new Step(Station.DEPLOYER, "line3.onion"), new Step(Station.PRESS, "line3.press")),
             "line3.loops");
     }
 
@@ -95,11 +97,7 @@ final class AssemblyScenes {
             BlockPos machine = util.grid().at(i + 1, 3, 3);
             work(scene, util, step.station(), machine);
             scene.world().changeBeltItemTo(item, new ItemStack(unfinished));
-            if (step.line() != null) {
-                say(scene, step.line(), 50, util.vector().blockSurface(machine, Direction.NORTH));
-            } else {
-                scene.idle(10);
-            }
+            say(scene, step.line(), 50, util.vector().blockSurface(machine, Direction.NORTH));
         }
 
         BlockPos end = util.grid().at(last, 1, 3);
@@ -131,7 +129,9 @@ final class AssemblyScenes {
             }
             case PRESS -> {
                 scene.world().modifyBlockEntity(machine, MechanicalPressBlockEntity.class, press -> press.getPressingBehaviour().start(Mode.BELT));
-                scene.idle(30);
+                // The whole stroke, down and back up: a cycle at 32 RPM (Create's PressingBehaviour.CYCLE of 240
+                // at 4 per tick).
+                scene.idle(PRESS_STROKE_TICKS);
                 // Only a server ends a pressing cycle; in the Ponder world the press would stay running and
                 // hold the item under it for good.
                 scene.world().modifyBlockEntity(machine, MechanicalPressBlockEntity.class, press -> {

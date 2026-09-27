@@ -669,6 +669,7 @@ public final class ClientSmokeTest {
     private static float rideMaxPosition;
     private static int rideLength;
     private static boolean rideWatching;
+    private static int ridePressTicks;
     private static String rideLast = "";
     private static final StringBuilder rideTrace = new StringBuilder();
     private static final java.util.SortedSet<Float> rideStops = new java.util.TreeSet<>();
@@ -680,6 +681,7 @@ public final class ClientSmokeTest {
         rideWatching = true;
         rideTrace.setLength(0);
         rideStops.clear();
+        ridePressTicks = 0;
         Minecraft.getInstance().setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(paste));
     }
 
@@ -690,6 +692,10 @@ public final class ClientSmokeTest {
         var world = ui.getActiveScene().getWorld();
         int items = 0;
         for (BlockPos pos : BlockPos.betweenClosed(0, 0, 0, 9, 5, 9)) {
+            if (world.getBlockEntity(pos) instanceof com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity press
+                && press.getPressingBehaviour().running) {
+                ridePressTicks = Math.max(ridePressTicks, press.getPressingBehaviour().runningTicks);
+            }
             if (world.getBlockEntity(pos) instanceof com.simibubi.create.content.kinetics.belt.BeltBlockEntity belt && belt.isController()) {
                 rideLength = belt.beltLength;
                 for (var stack : belt.getInventory().getTransportedItems()) {
@@ -721,7 +727,10 @@ public final class ClientSmokeTest {
                 expected.add(segment + 0.5f);
             }
             require(rideStops.equals(expected), "stopped at " + rideStops + ", expected " + expected + "; " + rideTrace);
-            return "one item, stopped at " + rideStops + " on a belt of " + rideLength;
+            // The press goes down and all the way back up before the item moves on.
+            require(ridePressTicks >= com.simibubi.create.content.kinetics.press.PressingBehaviour.CYCLE,
+                "the press stroke stopped at " + ridePressTicks + " of " + com.simibubi.create.content.kinetics.press.PressingBehaviour.CYCLE);
+            return "one item, stopped at " + rideStops + " on a belt of " + rideLength + ", full press stroke";
         });
     }
 

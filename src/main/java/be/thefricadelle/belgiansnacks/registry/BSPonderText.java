@@ -77,9 +77,14 @@ public final class BSPonderText {
         title("ultimate_fricadelle_line", "Assembling THE_FRICADELLE", "Assembler THE_FRICADELLE");
         line("line3.intro", "The Absolute Paste becomes a raw THE_FRICADELLE on the same kind of line",
             "La Pâte absolue devient une THE_FRICADELLE crue sur le même genre de ligne");
-        line("line3.tallow", "It starts with 250 mB of melted beef tallow", "Elle commence par 250 mB de blanc de bœuf fondu");
-        line("line3.servings", "Then spices, 250 mB of mayonnaise, 250 mB of curry ketchup, an onion and the press",
-            "Puis épices, 250 mB de mayonnaise, 250 mB de curry ketchup, un oignon et la presse");
+        line("line3.tallow", "A Spout starts it with 250 mB of melted beef tallow",
+            "Un Spout commence par 250 mB de blanc de bœuf fondu");
+        line("line3.spices", "A Deployer adds Belgian spices", "Un Deployer ajoute des épices belges");
+        line("line3.mayonnaise", "A Spout adds 250 mB of mayonnaise", "Un Spout ajoute 250 mB de mayonnaise");
+        line("line3.curry", "A Spout adds 250 mB of curry ketchup", "Un Spout ajoute 250 mB de curry ketchup");
+        line("line3.onion", "A Deployer adds an onion (a beetroot in packs without onions)",
+            "Un Deployer ajoute un oignon (une betterave dans les packs sans oignons)");
+        line("line3.press", "A Press shapes it", "Une Presse lui donne sa forme");
         line("line3.loops", "Five times round, then fry it superheated, in melted beef tallow only",
             "Cinq tours, puis friture super-chauffée, au blanc de bœuf fondu uniquement");
     }
