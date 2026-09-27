@@ -10,9 +10,17 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ## [1.0.0] - 2026-09-28
 
+### Added
+
+- **Mod logo** — The mod list shows THE_FRICADELLE as the mod's logo, with links to the source and the issue tracker.
+
 ### Changed
 
 - **The visitor's recorded line** — THEFricadelle now always says the line its author recorded, "The friterie is proud of you.", in the author's own voice, instead of a random line voiced by a villager's grunt. The other four lines stay in the language files for later.
+
+### Ajouts
+
+- **Logo du mod** — La liste des mods affiche THE_FRICADELLE comme logo du mod, avec les liens vers les sources et le suivi des problèmes.
 
 ### Modifications
 

@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
+issueTrackerURL="https://github.com/THEFricadelle/Create-Belgian-Snacks/issues"
 
 [[mods]]
 modId="${mod_id}"
@@ -8,6 +9,9 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
 description='''${mod_description}'''
+logoFile="create_belgian_snacks.png"
+logoBlur=false
+displayURL="https://github.com/THEFricadelle/Create-Belgian-Snacks"
 
 [[dependencies.${mod_id}]]
     modId="neoforge"

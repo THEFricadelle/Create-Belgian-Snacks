@@ -11,6 +11,7 @@ package be.thefricadelle.belgiansnacks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -201,6 +202,18 @@ class ResourceConsistencyTest {
         for (String optional : List.of("jei", "jade", "kubejs", "farmersdelight", "sliceanddice")) {
             assertEquals("optional", types.get(optional), optional + " must stay an optional dependency");
         }
+    }
+
+    @Test
+    void modsTomlLogoIsShippedSquare() throws IOException {
+        String toml = Files.readString(Path.of("src/main/templates/META-INF/neoforge.mods.toml"), StandardCharsets.UTF_8);
+        String logo = field(toml.split("\\[\\[dependencies\\.")[0], "logoFile");
+        assertNotNull(logo, "no logoFile in neoforge.mods.toml");
+        byte[] png = Files.readAllBytes(Path.of("src/main/resources", logo));
+        var header = java.nio.ByteBuffer.wrap(png, 16, 8);
+        int width = header.getInt();
+        int height = header.getInt();
+        assertEquals(width, height, logo + " must be square");
     }
 
     private static String field(String block, String name) {
