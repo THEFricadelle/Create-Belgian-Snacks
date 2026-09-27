@@ -34,3 +34,17 @@
 **Root cause:** Race. Client A finished its steps and disconnected about 2 s after B joined, before B reached its players check. The fixed 100-tick delay before A's take assumed both clients joined at the same time. The step suppliers also assumed a live connection.
 **Fix:** Network handshake: B crouches once it has seen the batch, and A takes the output only after it sees that crouch through the server. The runner now fails with `runner.disconnected` and writes its report when the connection drops.
 **Prevention:** Never coordinate two clients with a timer. Use a signal that travels through the server.
+
+## [2026-09-27 02:07] - Goggle tooltip of a kinetic block entity crashes a dedicated server
+**Context:** M6, a GameTest called `SupremeGrinderBlockEntity.addToGoggleTooltip` to check the lines.
+**Error:** `RuntimeException: Attempted to load class net/minecraft/client/Minecraft for invalid dist DEDICATED_SERVER`, from `LangBuilder.forGoggles` inside `KineticBlockEntity.addToGoggleTooltip`.
+**Root cause:** Create's goggle lines measure text with the client font. The method sits on a common class but is client-only in practice.
+**Fix:** The GameTest checks the synced figures (count, goal, total, examples); the goggle lines are checked by `ClientSmokeTest`.
+**Prevention:** Never call `addToGoggleTooltip` (or anything using Create's `LangBuilder.forGoggles`) from server code or a server GameTest.
+
+## [2026-09-27 02:12] - Mutation checks reported every mutation as caught, without running a test
+**Context:** M6, a Python script injected bugs into the grinder and ran the GameTests through `subprocess.run("./gradlew ...", shell=True)`.
+**Error:** Every run exited 1 and no test name was found in the output.
+**Root cause:** On Windows `shell=True` uses `cmd`, where `./gradlew` does not exist: the "failure" was the shell, not a test. Re-running with `gradlew.bat` also failed to report, so the check moved to a bash loop.
+**Fix:** A bash loop (`perl -0pi` per mutation, `./gradlew runGameTestServer`, grep of `<test> failed at`), which also reports mutations that did not apply and compile errors separately. 8 of 8 mutations caught after one missing test was added.
+**Prevention:** A mutation run only counts when it names the test that failed; an exit code alone proves nothing.

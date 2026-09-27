@@ -128,11 +128,11 @@ Toutes nos recettes ont un ID lisible et définitif, rangé par type : `create_b
 
 | Clé | Défaut provisoire | Rôle |
 |---|---|---|
-| `grinder.theFricadelleRatio` | `0.10` (D1) | Part des aliments nécessaire pour la Pâte d'exception (arrive au M6) |
-| `grinder.ultimateRatio` | `1.0` | Part pour la Pâte absolue (laisser à 1.0 sauf besoin serveur) |
-| `grinder.rejectDuplicates` | `true` | Recracher les doublons au lieu de les détruire |
+| `grinder.theFricadelleRatio` | `0.10` (D1) | Part des aliments nécessaire pour la Pâte d'exception, arrondie au-dessus (D22) |
+| `grinder.ultimateRatio` | `1.0` (D21) | Part pour la Pâte absolue (laisser à 1.0 sauf besoin serveur) |
+| `grinder.rejectDuplicates` | `true` | Laisser les doublons sur le tapis ou dans le funnel au lieu de les détruire |
 | `grinder.blacklistedMods` / `blacklistedItems` | `["cosmeticarmoursmod"]` / `[]` (M5) | Exclusions du FoodIndex, en plus du tag `grinder/blacklist` |
-| `grinder.minSpeed` / `stressImpact` | `64 rpm` / `16 SU/rpm` ⚠️ | Coût cinétique |
+| `grinder.minSpeed` / `stressImpact` | `64 rpm` / `8 SU/rpm` (D11) | Coût cinétique ; l'impact est lu à chaque calcul du réseau (`BlockStressValues.IMPACTS`) |
 | `fryer.tankCapacity` | `4000` mB | Capacité du réservoir de graisse (friteuses chargées après le changement) |
 | `fryer.speedMultiplier` | `1.0` | Divise chaque temps de friture |
 | `fryer.maxBatch` | `16` | Items frits ensemble ; le tag `fryer/one_at_a_time` force 1 |
@@ -147,7 +147,7 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
 |---|---|---|
 | `FoodIndexSyncPayload` | S→C | liste d'IDs |
 | `GrinderMissingRequestPayload` | C→S | position du BE |
-| `GrinderMissingResponsePayload` | S→C | liste des IDs manquants (paginée si > ~2000) |
+| `GrinderMissingResponsePayload` | S→C | position, IDs manquants et total. Environ 55 Ko pour 1800 aliments, loin de la limite de 1 Mo : pas de pagination, liste plafonnée à 20 000 IDs |
 | `FricadelleGagPayload` | S→C | déclenche particules/son côté clients proches (si pas faisable en vanilla) |
 
 ## Intégration Create
@@ -161,7 +161,15 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
   - Graisse conservée à la casse : `collectImplicitComponents` / `applyImplicitComponents` + `copy_components` dans la table de loot (data component `fryer_fluid`).
   - Piège : `SmartBlockEntity` appelle `addBehaviours` depuis son constructeur, avant les initialiseurs de champs de la sous-classe ; un champ affecté là ne doit pas avoir d'initialiseur.
   - Compat : `compat/jei` (catégorie `CreateRecipeCategory`, style Create), `compat/jade` (ligne de statut côté client ; Jade affiche déjà réservoir et slots via les capabilities).
-- Hachoir : `KineticBlockEntity` (consomme du stress), accepte les items par funnel/tapis/entonnoir, sélection du mode via `ScrollOptionBehaviour` (la petite boîte de valeur Create), tooltip Goggles via `IHaveGoggleInformation`.
+- Hachoir (M6) : `SupremeGrinderBlockEntity extends KineticBlockEntity`, arbre par le haut (`hasShaftTowards(UP)`, axe Y).
+  - Stress : `BlockStressValues.IMPACTS.register(bloc, BSConfig::grinderStressImpact)` ; `CStress.setImpact` n'accepte que les blocs de Create.
+  - Mode : `ScrollOptionBehaviour<GrinderMode>` sur les 4 côtés, icônes `AllIcons` de Create (référencées, pas copiées).
+  - Entrée : capability item (slot 0 insertion d'un exemplaire à la fois, toujours vide ; slot 1 la pâte, extraction seule) et `DirectBeltInputBehaviour`. Refuser = rendre la pile intacte, donc le tapis ou le funnel attend.
+  - Logique pure dans `GrinderProgress` (décision, objectif, intersection), testée en JUnit.
+  - Le compte n'est recalculé que quand l'instantané du FoodIndex change (comparaison d'identité) ou quand la collection change ; un tick ordinaire ne fait qu'un calcul d'objectif.
+  - Sync client : compte, objectif, total, mode et 5 exemples manquants ; jamais la collection. La liste complète passe par `GrinderMissingRequestPayload` (chunk chargé, joueur à moins de 8 blocs).
+  - Jauge : propriété de blockstate `fill` 0 à 4 (5 modèles datagen), pas de rendu par tick. Lames : modèle partiel `block/supreme_grinder/blades`, visuel Flywheel `SingleAxisRotatingVisual`, `SupremeGrinderRenderer` en repli. Les partials sont chargés par le point d'entrée client `BelgianSnacksClient` (`@Mod(dist = CLIENT)`).
+  - Les lignes Goggles de `KineticBlockEntity` passent par la police du client : elles ne s'appellent jamais côté serveur (un GameTest l'a montré).
 - Ponder : une scène par machine (jalon M9).
 
 ⚠️ Toutes ces classes Create sont à vérifier dans les sources 6.0.10 avant usage.

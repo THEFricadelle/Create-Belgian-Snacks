@@ -58,13 +58,13 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [x] Export sur le pack Arcadia complet (`tools/arcadia_export.py`) : `docs/data/`, D1 tranché (10 %)
 - **Accepté si** : `export` produit un CSV cohérent avec le modpack Arcadia complet. → **On s'en sert pour trancher le taux de THE_Fricadelle.**
 
-### M6 — Hachoir Suprême
-- [ ] Bloc cinétique, BE, stress, modes THE_/ULTIME
-- [ ] Acceptation / refus (nouveau, doublon, non-aliment)
-- [ ] Progression persistée (+ conservée au cassage si validé)
-- [ ] Goggles + Jade + écran des manquants + payloads
-- [ ] Commande `/belgiansnacks grinder fill`
-- [ ] Catégorie JEI « virtuelle »
+### M6 — Hachoir Suprême ✅ (27/09/2026)
+- [x] Bloc cinétique, BE, stress, modes THE_/ULTIME
+- [x] Acceptation / refus (nouveau, doublon, non-aliment)
+- [x] Progression persistée (+ conservée au cassage, D10)
+- [x] Goggles + Jade + écran des manquants + payloads
+- [x] Commande `/belgiansnacks grinder fill` (+ `clear`)
+- [x] Catégorie JEI « virtuelle »
 - **Accepté si** : checklist Hachoir de `10-tests.md` OK, y compris retrait d'un mod entre deux sessions.
 
 ### M6.5 — Test dans Arcadia V2

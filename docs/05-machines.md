@@ -46,23 +46,29 @@ Collectionner **chaque aliment unique** du modpack. Produit la Pâte d'exception
 | Aspect | Spéc |
 |---|---|
 | Taille | 1 bloc ⚠️ (option 2×2 multibloc écartée pour la v1) |
-| Cinétique | **Oui.** Arbre par le dessus. Vitesse min `grinder.minSpeed` (64 rpm), impact `grinder.stressImpact`. Sous la vitesse min : n'accepte rien. |
+| Cinétique | **Oui.** Arbre par le dessus. Vitesse min `grinder.minSpeed` (64 rpm), impact `grinder.stressImpact` (8 SU/rpm, D11). Sous la vitesse min : n'accepte rien. |
 | Mode | `ScrollOptionBehaviour` (boîte de valeur Create, molette + clé) : **THE_** / **ULTIME**. Changer de mode **ne remet pas** la progression à zéro (le set d'aliments est partagé). |
 | Entrée | Par le haut et les côtés : funnel, tapis, entonnoir, Mechanical Arm, clic droit. Accepte **1 item à la fois**. |
 | Si l'item est un aliment **nouveau** | Consommé (1 exemplaire), ajouté à `consumed`, particules d'item + son de broyage. |
 | Si l'item est un **doublon** | Refusé (`rejectDuplicates=true`) : il n'entre pas (funnel/tapis bloque ou contourne). Sinon détruit. |
 | Si l'item n'est **pas un aliment** | Refusé. |
-| Quand l'objectif est atteint | Mode THE_ : dès que `|consumed ∩ index| ≥ ratio × |index|` → produit 1 `exceptional_paste` dans le slot de sortie et **vide** `consumed`. Mode ULTIME : idem à 100 % → `absolute_paste`. |
-| Sortie | 1 slot, extraction par funnel/entonnoir dessous. |
+| Quand l'objectif est atteint | Mode THE_ : dès que `|consumed ∩ index| ≥ ceil(ratio × |index|)` → produit 1 `exceptional_paste` dans le slot de sortie et **vide** `consumed` (D9, D22). Mode ULTIME : idem à 100 % → `absolute_paste`. Au-delà de l'objectif (passage d'ULTIME à THE_), tout part quand même : tentative de THE_FRICADELLE ratée, message aux joueurs à moins de 16 blocs. |
+| Sortie | 1 slot, extraction par funnel/entonnoir dessous. Tant qu'elle est pleine, le Hachoir n'accepte rien. Comparateur : 0 à 15 selon la progression. |
 | Goggles | Mode, `count / objectif` (ex. `312 / 1 184`), %, 5 aliments manquants aléatoires en exemple ; en sneak : bouton/indication pour ouvrir la liste complète. |
-| Casser le bloc | ⚠️ La progression est-elle conservée dans l'item (data component) ? Proposition : **oui**, pour éviter les drames sur serveur. |
-| Rendu | Lames qui tournent (instance Flywheel ou rendu simple), jauge de remplissage sur une face. |
+| Casser le bloc | **Conservée** (D10) : collection et mode dans l'item (data component `grinder_contents`), restaurés à la pose. La pâte en sortie tombe au sol. |
+| Rendu | Lames qui tournent (visuel Flywheel `SingleAxisRotatingVisual`, renderer en repli), jauge de remplissage en 4 segments sur les 4 côtés (propriété de blockstate `fill`, aucun rendu par tick). |
 
 ### Pourquoi « vider » au lieu de soustraire ?
 Pour la v1, c'est le plus lisible : on remplit, on obtient la pâte, on recommence. Alternative à discuter : le mode THE_ ne consomme **que** les aliments nécessaires et garde le reste.
 
 ### Recette de craft (brouillon)
-Mechanical Crafter : Crushing Wheel ×2 + Brass Casing + Precision Mechanism + ... ⚠️ Doit coûter cher.
+Mechanical Crafter 3×3 (D11), ID `create_belgian_snacks:mechanical_crafting/supreme_grinder` :
+
+```
+S M S    S plaque de laiton (c:plates/brass), M Precision Mechanism
+W C W    W Crushing Wheel, C Brass Casing
+G I G    G lingot d'or, I bloc de fer
+```
 
 ### Écran de liste des manquants (v1 simple)
 Pas de GUI d'inventaire. Un écran lecture seule (client) listant les items manquants sous forme d'icônes, ouvert en sneak-clic droit avec les Goggles. Données fournies par `GrinderMissingResponsePayload`.

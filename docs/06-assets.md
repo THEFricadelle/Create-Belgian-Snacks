@@ -24,7 +24,7 @@ Spécs du script :
 src/main/resources/assets/create_belgian_snacks/
 ├── textures/item/<id>.png
 ├── textures/block/fryer/{side,top,bottom,inner}.png
-├── textures/block/supreme_grinder/{side,top,bottom,blade}.png
+├── textures/block/supreme_grinder/{side_0..side_4,top,bottom,blade}.png   (side_N : jauge à N quarts)
 ├── textures/fluid/<fluid>_{still,flow}.png (+ .mcmeta)
 ├── sounds/  (ogg)
 └── sounds.json   # généré par datagen si possible
