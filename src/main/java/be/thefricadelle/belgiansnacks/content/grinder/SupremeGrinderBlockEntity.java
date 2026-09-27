@@ -29,7 +29,6 @@ import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
 import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
-import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -46,13 +45,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -64,7 +59,6 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * the figures and a few missing examples, never the collection itself.
  */
 public class SupremeGrinderBlockEntity extends KineticBlockEntity {
-    private static final int RUNNING_SOUND_INTERVAL = 40;
     private static final int MISSING_SAMPLES = 5;
     private static final int HALFWAY_RANGE = 16;
 
@@ -175,7 +169,6 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
         consumed.clear();
         recount = true;
         setChanged();
-        level.playSound(null, worldPosition, BSSoundEvents.GRINDER_COMPLETE.get(), SoundSource.BLOCKS, 1f, 1f);
         if (level instanceof ServerLevel server) {
             server.sendParticles(ParticleTypes.HAPPY_VILLAGER, worldPosition.getX() + 0.5, worldPosition.getY() + 1.1,
                 worldPosition.getZ() + 0.5, 12, 0.3, 0.2, 0.3, 0);
@@ -218,27 +211,11 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
         return stack.copyWithCount(stack.getCount() - 1);
     }
 
-    /**
-     * The motor's hum while the grinder turns fast enough to take foods: a two-second recording played
-     * every two seconds, higher as it turns faster. Client side only, so nothing crosses the network.
-     */
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void tickAudio() {
-        super.tickAudio();
-        if (level == null || !isFastEnough() || level.getGameTime() % RUNNING_SOUND_INTERVAL != 0) {
-            return;
-        }
-        float pitch = Mth.clamp(0.6f + Math.abs(getSpeed()) / 512f, 0.6f, 1f);
-        level.playLocalSound(worldPosition, BSSoundEvents.GRINDER_RUNNING.get(), SoundSource.BLOCKS, 0.35f, pitch, false);
-    }
-
     public boolean isFastEnough() {
         return Math.abs(getSpeed()) >= BSConfig.grinderMinSpeed();
     }
 
     private void grindEffects(ItemStack stack) {
-        level.playSound(null, worldPosition, BSSoundEvents.GRINDER_GRIND.get(), SoundSource.BLOCKS, 0.5f, 0.9f + level.random.nextFloat() * 0.2f);
         if (level instanceof ServerLevel server) {
             server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack.copyWithCount(1)), worldPosition.getX() + 0.5,
                 worldPosition.getY() + 1.0, worldPosition.getZ() + 0.5, 8, 0.2, 0.1, 0.2, 0.05);

@@ -136,9 +136,5 @@
   "item.create_belgian_snacks.ultimate_fricadelle": "THE_FRICADELLE",
   "item.create_belgian_snacks.ultimate_fricadelle.tooltip.summary": "It literally contains everything.",
   "itemGroup.create_belgian_snacks.main": "Create: Belgian Snacks",
-  "subtitles.create_belgian_snacks.fryer.sizzle": "Fryer sizzles",
-  "subtitles.create_belgian_snacks.grinder.complete": "Grinder finishes a paste",
-  "subtitles.create_belgian_snacks.grinder.grind": "Grinder grinds",
-  "subtitles.create_belgian_snacks.grinder.running": "Grinder whirs",
   "subtitles.create_belgian_snacks.npc.speaks": "THEFricadelle speaks"
 }

@@ -129,7 +129,8 @@ public final class EatingGameTests {
                     helper.assertTrue(Math.sqrt(dx * dx + dz * dz) <= TheFricadelleNpc.ARRIVED + 0.5, "talks from " + npc.distanceTo(player) + " blocks");
                     helper.assertTrue(npc.isCustomNameVisible(), "the line is not shown above the head");
                     helper.assertTrue(npc.getCustomName() != null && npc.getCustomName().getContents() instanceof TranslatableContents line
-                        && line.getKey().startsWith(BelgianSnacks.MOD_ID + ".npc.phrase."), "not one of the lines: " + npc.getCustomName());
+                        && line.getKey().equals(BelgianSnacks.MOD_ID + ".npc.phrase." + TheFricadelleNpc.SPOKEN_PHRASE),
+                        "not the recorded line: " + npc.getCustomName());
                     talkedAt[0] = npc.getY();
                 })
                 .thenWaitUntil(() -> helper.assertValueEqual(npc.getPhase(), TheFricadelleNpc.Phase.LAUNCH, "phase"))

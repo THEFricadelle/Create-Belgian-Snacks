@@ -63,30 +63,17 @@ Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotat
 
 ## Sons
 
-Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create_belgian_snacks/sounds/` dès que le fichier existe (après `./gradlew runData`), le son vanilla de la dernière colonne en attendant.
+En 1.0.0, le mod ne joue qu'**un seul son à lui** : la voix de l'auteur (décidé le 28/09/2026). La Friteuse et le Hachoir Suprême sont muets ; les sons arriveront avec les prochaines fonctionnalités.
 
-| ID | Usage | Fichier à déposer | En attendant |
-|---|---|---|---|
-| `fryer.sizzle` | toutes les 2 s pendant la friture (environ 2 s) | `fryer/sizzle.ogg` | lave, feu de camp |
-| `grinder.grind` | aliment accepté (court, moins d'1 s) | `grinder/grind.ogg` | meule |
-| `grinder.complete` | pâte terminée (1 à 2 s) | `grinder/complete.ogg` | niveau gagné |
-| `grinder.running` | toutes les 2 s tant que le hachoir tourne assez vite, plus aigu quand il tourne plus vite (environ 2 s, joué côté client) | `grinder/running.ogg` | wagonnet |
-| `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | `npc/phrase_N.ogg` | grognement de villageois |
-
-**Provenance** (27/09/2026) : les quatre bruitages viennent de [BigSoundBank](https://bigsoundbank.com), sous licence CC0 (domaine public : aucun crédit requis, usage commercial permis). Découpés, fondus et normalisés (crête à -1,5 dB) avec ffmpeg :
-
-| Fichier | Source | Découpe |
+| ID | Usage | Fichier |
 |---|---|---|
-| `fryer/sizzle.ogg` | [Frying bath #2](https://bigsoundbank.com/frying-bath-2-s2506.html) (bain de friture de churros) | 2,2 s à partir de 12 s, la friture stable |
-| `grinder/grind.ogg` | [Raw carrot crunched #1](https://bigsoundbank.com/raw-carrot-crunched-1-s1594.html) | un seul croc, 0,35 s à partir de 0,95 s |
-| `grinder/complete.ogg` | [Microwave Bell](https://bigsoundbank.com/microwave-bell-s1631.html) | 1,6 s, fin en fondu |
-| `grinder/running.ogg` | [Electric hand mixer #1](https://bigsoundbank.com/electric-hand-mixer-1-s1752.html) (batteur dans une pâte à crêpes) | 2,2 s à partir de 3 s, joué plus grave (hauteur 0,6 à 1 selon la vitesse) |
+| `npc.phrase.4` | voix de THEFricadelle, qui dit toujours la phrase 4 « La friterie est fière de toi. » (texte dans `BSLang`) | `npc/phrase_4.ogg`, enregistré par l'auteur le 27/09/2026 |
 
-La voix du PNJ est enregistrée par l'auteur (`npc/phrase_4.ogg` le 27/09/2026).
+Les textes des phrases 0 à 3 restent dans `BSLang` pour plus tard, sans voix et jamais dites. Les bruitages CC0 de BigSoundBank de la 0.9.0 (friture, croc, cloche, moteur ; sources dans l'historique git de ce fichier) sont retirés du jar.
 
-**Format** : tous en **Ogg Vorbis mono**. Un MP3 renommé ne se lit pas : `ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg`. `python tools/asset_status.py` liste ce qui est fait, et signale un fichier stéréo, un MP3 renommé ou un nom qu'aucun son n'utilise.
+**Ajouter un son** : déposer le fichier dans `src/main/resources/assets/create_belgian_snacks/sounds/`, déclarer l'événement dans `BSSoundEvents`, sa définition dans `BSSoundDefinitionsProvider` (le datagen échoue si le fichier manque), son sous-titre dans `BSLang`, son nom dans `tools/asset_status.py`, puis `./gradlew runData`.
 
-**Voix du PNJ** : enregistrer chaque phrase dans `sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
+**Format** : **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Un MP3 renommé ne se lit pas : `ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg`. `python tools/asset_status.py` vérifie les sons attendus, et signale un fichier manquant, stéréo, un MP3 renommé ou un nom qu'aucun son n'utilise.
 
 Sons vanilla joués par le PNJ, référencés et non copiés : fruit de chorus à l'apparition, lancement de fusée au décollage, explosion et feu d'artifice quand il éclate.
 
