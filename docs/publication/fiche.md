@@ -28,7 +28,22 @@ Tout ce qu'il faut remplir sur les deux plateformes. Le texte de la page est dan
 - Version : **0.1.0** tant que tu ne demandes pas de changement de numéro. Canal conseillé pour une 0.x : **beta**.
 - Notes de version : la section `[Unreleased]` du `CHANGELOG.md` (à fermer au passage à une vraie version).
 
-## Captures pour la galerie (une fois les vraies textures faites)
+## Terrain de démonstration
+
+`./gradlew runShowcase` ouvre un monde plat (créatif, toujours midi, sans mobs) construit au premier lancement dans `run/showcase` :
+
+| Où (depuis l'apparition, face au sud) | Quoi |
+|---|---|
+| Devant toi | Panneau d'accueil, rappel Ponder, comptoir avec tous les items du mod dans des cadres |
+| À droite (ouest) | Les 4 fluides en bassins ; la ligne du palier 1 (coffre de viandes, roues de concassage, mixer, presse, Friteuse, coffre de sortie) |
+| Au milieu | Un coffre de THE_FRICADELLE : en manger une fait venir THEFricadelle |
+| À gauche (est) | Palier 2 : coffre d'aliments, Hachoir Suprême en mode THE_, ligne de Sequenced Assembly (3 tours à la suite), Friteuse. Palier 3 : pareil en mode ULTIME, 5 tours, Friteuse super-chauffée au blanc de bœuf |
+
+Tout tourne seul : les stocks (viandes, aliments, sauces, épices, graisse) sont remis à niveau chaque seconde, et les coffres de sortie sont vidés avant d'être pleins. Les noms d'items sur les panneaux suivent la langue du jeu. Le monde est gardé d'un lancement à l'autre ; supprimer `run/showcase/saves/belgian-snacks-showcase` pour le reconstruire. Réservé au développement : le code est dans le source set `gametest`, jamais dans le jar.
+
+`./gradlew runShowcaseCheck` le construit dans un monde neuf, attend la fricadelle de chaque palier dans son coffre de sortie (27/09/2026 : palier 2 en 31 s, palier 1 en 57 s, palier 3 en 86 s), prend 5 captures (`run/showcase-check/screenshots`) et se ferme.
+
+## Captures pour la galerie
 
 1. Une ligne complète du palier 1 : broyage, mixer, presse, Friteuse sur son Blaze Burner.
 2. Le Hachoir Suprême nourri par un tapis, Goggles en main (compte et objectif visibles).
@@ -37,7 +52,7 @@ Tout ce qu'il faut remplir sur les deux plateformes. Le texte de la page est dan
 5. THEFricadelle qui applaudit après la THE_FRICADELLE (feu d'artifice).
 6. Le Ponder de la Friteuse.
 
-Les captures des tests (`run/clientsmoke/screenshots`) montrent les cadrages ; elles ont encore les placeholders.
+Le terrain de démonstration a de quoi faire les captures 1 à 3 et 5 ; les captures des tests (`run/clientsmoke/screenshots`) montrent les cadrages de JEI et Ponder.
 
 ## Avant de cliquer sur « publier »
 

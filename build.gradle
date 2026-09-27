@@ -150,6 +150,24 @@ neoForge {
             systemProperty 'create_belgian_snacks.ponderSchematics', project.file('src/main/resources/assets/create_belgian_snacks/ponder').absolutePath
         }
 
+        // A showcase world with everything the mod adds, built on first launch and kept running
+        // (gametest/showcase/Showcase). Its world lives in run/showcase and is never reset.
+        showcase {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'play'
+        }
+        // The same in a fresh world: waits for every tier's fried fricadelle, films and quits.
+        showcaseCheck {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase-check')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'check'
+        }
+
         // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
         serverSmoke {
             server()
@@ -307,6 +325,50 @@ tasks.configureEach { Task task ->
                     'lang:en_us', 'guiScale:2'].join('\n'), 'UTF-8')
         }
         task.finalizedBy 'verifyClientSmoke'
+    }
+}
+
+def showcaseCheckDir = file('run/showcase-check')
+
+tasks.register('verifyShowcase') {
+    group = 'verification'
+    description = 'Fails unless the showcase check reported every tier as produced.'
+    doLast {
+        File report = new File(showcaseCheckDir, 'showcase-report.txt')
+        if (!report.isFile()) {
+            throw new GradleException("No ${report}: the showcase check never finished")
+        }
+        List<String> lines = report.readLines('UTF-8')
+        lines.each { logger.lifecycle(it) }
+        if (lines.isEmpty() || !lines.last().startsWith('RESULT PASS')) {
+            throw new GradleException("Showcase check failed, see ${report}")
+        }
+        logger.lifecycle("Screenshots for review: ${new File(showcaseCheckDir, 'screenshots')}")
+    }
+}
+
+tasks.configureEach { Task task ->
+    if (task.name == 'runShowcaseCheck') {
+        task.doFirst {
+            new File(showcaseCheckDir, 'saves').deleteDir()
+            new File(showcaseCheckDir, 'screenshots').deleteDir()
+            new File(showcaseCheckDir, 'showcase-report.txt').delete()
+            showcaseCheckDir.mkdirs()
+            new File(showcaseCheckDir, 'options.txt').setText([
+                    'onboardAccessibility:false', 'pauseOnLostFocus:false', 'tutorialStep:none',
+                    'soundCategory_master:0.0', 'lang:en_us', 'guiScale:2', 'renderDistance:8'].join('\n'), 'UTF-8')
+        }
+        task.finalizedBy 'verifyShowcase'
+    } else if (task.name == 'runShowcase') {
+        task.doFirst {
+            // First launch only: skip the accessibility screen and the tutorial; later launches keep
+            // whatever options were changed in game.
+            File options = file('run/showcase/options.txt')
+            if (!options.isFile()) {
+                options.parentFile.mkdirs()
+                options.setText(['onboardAccessibility:false', 'tutorialStep:none'].join('\n'), 'UTF-8')
+            }
+        }
     }
 }
 
