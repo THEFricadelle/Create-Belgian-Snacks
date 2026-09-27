@@ -133,6 +133,7 @@ Toutes nos recettes ont un ID lisible et définitif, rangé par type : `create_b
 | `grinder.rejectDuplicates` | `true` | Laisser les doublons sur le tapis ou dans le funnel au lieu de les détruire |
 | `grinder.blacklistedMods` / `blacklistedItems` | `["cosmeticarmoursmod"]` / `[]` (M5) | Exclusions du FoodIndex, en plus du tag `grinder/blacklist` |
 | `grinder.minSpeed` / `stressImpact` | `64 rpm` / `8 SU/rpm` (D11) | Coût cinétique ; l'impact est lu à chaque calcul du réseau (`BlockStressValues.IMPACTS`) |
+| `ultimate.announceInChat` | `true` | Annonce à tout le serveur, dans le chat, quand quelqu'un mange THE_FRICADELLE. Les opérateurs le changent aussi en jeu : `/belgiansnacks announce true\|false` (écrit dans le fichier de config, pris en compte tout de suite). Le rot, le feu d'artifice et le PNJ restent |
 | `fryer.tankCapacity` | `4000` mB | Capacité du réservoir de graisse (friteuses chargées après le changement) |
 | `fryer.speedMultiplier` | `1.0` | Divise chaque temps de friture |
 | `fryer.maxBatch` | `16` | Items frits ensemble ; le tag `fryer/one_at_a_time` force 1 |

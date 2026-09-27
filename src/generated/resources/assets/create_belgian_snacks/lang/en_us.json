@@ -27,6 +27,8 @@
   "block.create_belgian_snacks.supreme_grinder": "Supreme Grinder",
   "config.jade.plugin_create_belgian_snacks.fryer": "Fryer",
   "config.jade.plugin_create_belgian_snacks.supreme_grinder": "Supreme Grinder",
+  "create_belgian_snacks.command.announce.off": "Eating THE_FRICADELLE is no longer announced in chat",
+  "create_belgian_snacks.command.announce.on": "Eating THE_FRICADELLE is announced in chat",
   "create_belgian_snacks.command.foods.count": "%s foods (%s from the extra tag), %s excluded, computed in %s ms",
   "create_belgian_snacks.command.foods.export": "Exported %s foods to %s",
   "create_belgian_snacks.command.foods.export_failed": "Food export failed: %s",

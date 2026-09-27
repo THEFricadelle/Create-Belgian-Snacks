@@ -29,9 +29,15 @@ OPTIONAL_MODELS = {
 }
 
 SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
-# Recorded voice lines the datagen picks up when present (BSSoundDefinitionsProvider); a vanilla
-# sound stands in until then. The text of each line is in BSLang (npc.phrase.N).
-OPTIONAL_SOUNDS = {f"npc/phrase_{i}.ogg": f"THEFricadelle's voice line {i}" for i in range(5)}
+# Recordings the datagen picks up when present (BSSoundDefinitionsProvider.recordingOr); vanilla
+# sounds stand in until then. The voice lines' text is in BSLang (npc.phrase.N).
+OPTIONAL_SOUNDS = {
+    "fryer/sizzle.ogg": "Fryer sizzling, played every 2 s while frying (about 2 s long)",
+    "grinder/grind.ogg": "Supreme Grinder taking a food (short, under 1 s)",
+    "grinder/complete.ogg": "Supreme Grinder finishing a paste (1 to 2 s)",
+    "fricadelle/burp.ogg": "Burp after eating a fricadelle (about 1 s)",
+    **{f"npc/phrase_{i}.ogg": f"THEFricadelle's voice line {i}" for i in range(5)},
+}
 
 
 MAX_COLOURS = 48
@@ -146,10 +152,10 @@ def main():
                 broken.append(f"sounds/{file}: {problem}")
                 what += f" ({problem})"
         print(f"  {state:11} sounds/{file}: {what}")
-    for path in sorted((SOUNDS / "npc").glob("*")) if (SOUNDS / "npc").is_dir() else []:
+    for path in sorted(p for p in SOUNDS.rglob("*") if p.is_file()) if SOUNDS.is_dir() else []:
         name = path.relative_to(SOUNDS).as_posix()
         if name not in OPTIONAL_SOUNDS:
-            reason = "no line uses it (phrase_0 to phrase_4)"
+            reason = "no sound uses this name (see the list above)"
             problem = ogg_problem(path.read_bytes())
             if problem:
                 reason += f"; {problem}"

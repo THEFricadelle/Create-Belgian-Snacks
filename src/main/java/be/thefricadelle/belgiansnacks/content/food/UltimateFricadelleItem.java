@@ -9,7 +9,10 @@
 
 package be.thefricadelle.belgiansnacks.content.food;
 
+import org.jetbrains.annotations.Nullable;
+
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -36,9 +39,19 @@ public class UltimateFricadelleItem extends FricadelleItem {
         level.playSound(null, eater.getX(), eater.getY(), eater.getZ(), SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.PLAYERS, 1.5f, 1.0f);
         level.playSound(null, eater.getX(), eater.getY(), eater.getZ(), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 1.5f, 1.0f);
         if (eater instanceof ServerPlayer player) {
-            level.getServer().getPlayerList().broadcastSystemMessage(
-                Component.translatable(BelgianSnacks.MOD_ID + ".ultimate.eaten", player.getDisplayName()).withStyle(ChatFormatting.GOLD), false);
+            Component line = announcement(player);
+            if (line != null) {
+                level.getServer().getPlayerList().broadcastSystemMessage(line, false);
+            }
             TheFricadelleNpc.appear(level, player);
         }
+    }
+
+    /** The line told to the whole server, or null when its operators turned it off (BSConfig). */
+    @Nullable
+    public static Component announcement(ServerPlayer player) {
+        return BSConfig.announceUltimate()
+            ? Component.translatable(BelgianSnacks.MOD_ID + ".ultimate.eaten", player.getDisplayName()).withStyle(ChatFormatting.GOLD)
+            : null;
     }
 }

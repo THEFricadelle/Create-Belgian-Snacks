@@ -63,15 +63,19 @@ Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotat
 
 ## Sons
 
-| ID | Usage | Placeholder |
-|---|---|---|
-| `fryer.sizzle` | boucle pendant la friture | son vanilla réutilisé (ex. feu de camp / lave) via `sounds.json` |
-| `grinder.grind` | aliment accepté | son vanilla (meule) |
-| `grinder.complete` | objectif atteint | son vanilla (niveau) |
-| `fricadelle.burp` | gag en mangeant | `minecraft:entity.player.burp` |
-| `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | grognement de villageois ; remplacé par `sounds/npc/phrase_N.ogg` dès que le fichier existe |
+Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create_belgian_snacks/sounds/` dès que le fichier existe (après `./gradlew runData`), le son vanilla de la dernière colonne en attendant.
 
-**Voix du PNJ** : enregistrer chaque phrase dans `src/main/resources/assets/create_belgian_snacks/sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
+| ID | Usage | Fichier à déposer | En attendant |
+|---|---|---|---|
+| `fryer.sizzle` | toutes les 2 s pendant la friture (environ 2 s) | `fryer/sizzle.ogg` | lave, feu de camp |
+| `grinder.grind` | aliment accepté (court, moins d'1 s) | `grinder/grind.ogg` | meule |
+| `grinder.complete` | pâte terminée (1 à 2 s) | `grinder/complete.ogg` | niveau gagné |
+| `fricadelle.burp` | rot en mangeant (environ 1 s) | `fricadelle/burp.ogg` | rot du joueur |
+| `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | `npc/phrase_N.ogg` | grognement de villageois |
+
+**Format** : tous en **Ogg Vorbis mono**. Un MP3 renommé ne se lit pas : `ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg`. `python tools/asset_status.py` liste ce qui est fait, et signale un fichier stéréo, un MP3 renommé ou un nom qu'aucun son n'utilise.
+
+**Voix du PNJ** : enregistrer chaque phrase dans `sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
 
 Sons vanilla joués par le PNJ, référencés et non copiés : fruit de chorus à l'apparition, lancement de fusée au décollage, explosion et feu d'artifice quand il éclate.
 

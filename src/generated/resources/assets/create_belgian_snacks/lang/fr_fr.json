@@ -27,6 +27,8 @@
   "block.create_belgian_snacks.supreme_grinder": "Hachoir Suprême",
   "config.jade.plugin_create_belgian_snacks.fryer": "Friteuse",
   "config.jade.plugin_create_belgian_snacks.supreme_grinder": "Hachoir Suprême",
+  "create_belgian_snacks.command.announce.off": "Manger THE_FRICADELLE n'est plus annoncé dans le chat",
+  "create_belgian_snacks.command.announce.on": "Manger THE_FRICADELLE est annoncé dans le chat",
   "create_belgian_snacks.command.foods.count": "%s aliments (dont %s par le tag extra), %s exclus, calculés en %s ms",
   "create_belgian_snacks.command.foods.export": "%s aliments exportés dans %s",
   "create_belgian_snacks.command.foods.export_failed": "Échec de l'export des aliments : %s",

@@ -18,7 +18,9 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
+import be.thefricadelle.belgiansnacks.content.food.UltimateFricadelleItem;
 import be.thefricadelle.belgiansnacks.content.grinder.GrinderMode;
 import be.thefricadelle.belgiansnacks.content.grinder.GrinderProgress;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
@@ -138,6 +140,25 @@ public final class EatingGameTests {
         });
     }
 
+    // Server operators can silence the chat line, in game or in the server config; the rest of the gag stays.
+    @GameTest(template = TEMPLATE, batch = "ultimate_announce")
+    public static void operatorsCanTurnOffTheChatAnnouncement(GameTestHelper helper) {
+        ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "eater"));
+        boolean before = BSConfig.announceUltimate();
+        try {
+            helper.assertTrue(BSConfig.announceUltimate(), "announced by default");
+            helper.assertTrue(UltimateFricadelleItem.announcement(player) != null, "no line while announcing");
+            command(helper, "belgiansnacks announce false");
+            helper.assertFalse(BSConfig.announceUltimate(), "the command did not turn it off");
+            helper.assertTrue(UltimateFricadelleItem.announcement(player) == null, "a line while turned off");
+            command(helper, "belgiansnacks announce true");
+            helper.assertTrue(UltimateFricadelleItem.announcement(player) != null, "the command did not turn it back on");
+        } finally {
+            BSConfig.setAnnounceUltimate(before);
+        }
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE)
     public static void theVisitorHasFiveLinesOneCountingTheFoods(GameTestHelper helper) {
         for (int i = 0; i < TheFricadelleNpc.PHRASES; i++) {
@@ -195,6 +216,11 @@ public final class EatingGameTests {
 
     // A fake player: it eats, gets effects and is congratulated, without logging in (the mods of the
     // dev runtime would try to send it their login payloads).
+    private static void command(GameTestHelper helper, String command) {
+        var server = helper.getLevel().getServer();
+        server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withLevel(helper.getLevel()).withSuppressedOutput(), command);
+    }
+
     private static ServerPlayer eat(GameTestHelper helper, ItemStack food) {
         ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "eater"));
         player.removeAllEffects();

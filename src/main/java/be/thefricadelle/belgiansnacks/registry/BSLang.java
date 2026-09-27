@@ -68,6 +68,9 @@ public final class BSLang {
         add("config.jade.plugin_" + ID + ".supreme_grinder", "Supreme Grinder", "Hachoir Suprême");
         add(ID + ".command.grinder.filled", "Supreme grinder filled with %s of %s foods", "Hachoir suprême rempli avec %s aliments sur %s");
         add(ID + ".command.grinder.cleared", "Supreme grinder emptied", "Hachoir suprême vidé");
+        add(ID + ".command.announce.on", "Eating THE_FRICADELLE is announced in chat", "Manger THE_FRICADELLE est annoncé dans le chat");
+        add(ID + ".command.announce.off", "Eating THE_FRICADELLE is no longer announced in chat",
+            "Manger THE_FRICADELLE n'est plus annoncé dans le chat");
         add(ID + ".command.grinder.not_found", "No supreme grinder at %s", "Pas de hachoir suprême en %s");
         add(ID + ".ultimate.eaten", "%s ate THE_FRICADELLE. It literally contained everything.",
             "%s a mangé THE_FRICADELLE. Elle contenait littéralement tout.");

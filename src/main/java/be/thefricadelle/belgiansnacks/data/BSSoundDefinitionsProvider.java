@@ -18,7 +18,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 
-/** sounds.json: our events point at vanilla sounds until real recordings exist (docs/06). */
+/** sounds.json: each event plays our recording once it exists, vanilla sounds until then (docs/06). */
 public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
     private final ExistingFileHelper helper;
 
@@ -31,25 +31,32 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
     public void registerSounds() {
         add(BSSoundEvents.FRYER_SIZZLE, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fryer.sizzle")
-            .with(vanilla("liquid/lavapop"), vanilla("block/campfire/crackle1"), vanilla("block/campfire/crackle3")));
+            .with(recordingOr("fryer/sizzle", vanilla("liquid/lavapop"), vanilla("block/campfire/crackle1"), vanilla("block/campfire/crackle3"))));
         add(BSSoundEvents.FRICADELLE_BURP, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".fricadelle.burp")
-            .with(vanilla("random/burp")));
+            .with(recordingOr("fricadelle/burp", vanilla("random/burp"))));
         add(BSSoundEvents.GRINDER_GRIND, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.grind")
-            .with(vanilla("block/grindstone/grindstone1"), vanilla("block/grindstone/grindstone2"), vanilla("block/grindstone/grindstone3")));
+            .with(recordingOr("grinder/grind", vanilla("block/grindstone/grindstone1"), vanilla("block/grindstone/grindstone2"),
+                vanilla("block/grindstone/grindstone3"))));
         add(BSSoundEvents.GRINDER_COMPLETE, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.complete")
-            .with(vanilla("random/levelup")));
-        // A recording at sounds/npc/phrase_N.ogg (mono Ogg Vorbis) replaces the villager's grunt.
+            .with(recordingOr("grinder/complete", vanilla("random/levelup"))));
+        // THEFricadelle's voice: a villager's grunt until the author records the line.
         for (int i = 0; i < BSSoundEvents.NPC_PHRASES.size(); i++) {
-            ResourceLocation recording = BelgianSnacks.asResource("npc/phrase_" + i);
             add(BSSoundEvents.NPC_PHRASES.get(i), SoundDefinition.definition()
                 .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".npc.speaks")
-                .with(helper.exists(recording, PackType.CLIENT_RESOURCES, ".ogg", "sounds")
-                    ? SoundDefinition.Sound.sound(recording, SoundDefinition.SoundType.SOUND)
-                    : vanilla("mob/villager/yes" + (i % 3 + 1))));
+                .with(recordingOr("npc/phrase_" + i, vanilla("mob/villager/yes" + (i % 3 + 1)))));
         }
+    }
+
+    // A recording of ours at sounds/<path>.ogg (mono Ogg Vorbis, tools/asset_status.py checks it)
+    // replaces the vanilla stand-ins as soon as it exists.
+    private SoundDefinition.Sound[] recordingOr(String path, SoundDefinition.Sound... standIns) {
+        ResourceLocation recording = BelgianSnacks.asResource(path);
+        return helper.exists(recording, PackType.CLIENT_RESOURCES, ".ogg", "sounds")
+            ? new SoundDefinition.Sound[] {SoundDefinition.Sound.sound(recording, SoundDefinition.SoundType.SOUND)}
+            : standIns;
     }
 
     private static SoundDefinition.Sound vanilla(String path) {

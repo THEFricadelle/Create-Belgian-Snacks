@@ -21,6 +21,7 @@ import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -28,6 +29,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndexRules;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
@@ -51,6 +53,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 public final class BSCommands {
     private static final String KEY = BelgianSnacks.MOD_ID + ".command.foods.";
     private static final String GRINDER_KEY = BelgianSnacks.MOD_ID + ".command.grinder.";
+    private static final String ANNOUNCE_KEY = BelgianSnacks.MOD_ID + ".command.announce.";
 
     private BSCommands() {
     }
@@ -62,6 +65,9 @@ public final class BSCommands {
             .then(Commands.literal("foods")
                 .then(Commands.literal("count").executes(BSCommands::count))
                 .then(Commands.literal("export").executes(BSCommands::export)))
+            .then(Commands.literal("announce")
+                .executes(BSCommands::showAnnounce)
+                .then(Commands.argument("enabled", BoolArgumentType.bool()).executes(BSCommands::setAnnounce)))
             .then(Commands.literal("grinder")
                 .then(Commands.literal("fill")
                     .then(Commands.argument("pos", BlockPosArgument.blockPos())
@@ -103,6 +109,19 @@ public final class BSCommands {
         }
         context.getSource().sendFailure(Component.translatable(GRINDER_KEY + "not_found", pos.toShortString()));
         return null;
+    }
+
+    private static int showAnnounce(CommandContext<CommandSourceStack> context) {
+        boolean announce = BSConfig.announceUltimate();
+        context.getSource().sendSuccess(() -> Component.translatable(ANNOUNCE_KEY + (announce ? "on" : "off")), false);
+        return announce ? 1 : 0;
+    }
+
+    private static int setAnnounce(CommandContext<CommandSourceStack> context) {
+        boolean announce = BoolArgumentType.getBool(context, "enabled");
+        BSConfig.setAnnounceUltimate(announce);
+        context.getSource().sendSuccess(() -> Component.translatable(ANNOUNCE_KEY + (announce ? "on" : "off")), true);
+        return announce ? 1 : 0;
     }
 
     private static int count(CommandContext<CommandSourceStack> context) {

@@ -27,6 +27,8 @@
   "block.create_belgian_snacks.supreme_grinder": "ɹǝpuıɹ⅁ ǝɯǝɹdnS",
   "config.jade.plugin_create_belgian_snacks.fryer": "ɹǝʎɹℲ",
   "config.jade.plugin_create_belgian_snacks.supreme_grinder": "ɹǝpuıɹ⅁ ǝɯǝɹdnS",
+  "create_belgian_snacks.command.announce.off": "ʇɐɥɔ uı pǝɔunouuɐ ɹǝbuoן ou sı ƎꞀꞀƎᗡⱯƆIᴚℲ‾ƎH⟘ buıʇɐƎ",
+  "create_belgian_snacks.command.announce.on": "ʇɐɥɔ uı pǝɔunouuɐ sı ƎꞀꞀƎᗡⱯƆIᴚℲ‾ƎH⟘ buıʇɐƎ",
   "create_belgian_snacks.command.foods.count": "sɯ %s uı pǝʇndɯoɔ 'pǝpnןɔxǝ %s ')bɐʇ ɐɹʇxǝ ǝɥʇ ɯoɹɟ %s( spooɟ %s",
   "create_belgian_snacks.command.foods.export": "%s oʇ spooɟ %s pǝʇɹodxƎ",
   "create_belgian_snacks.command.foods.export_failed": "%s :pǝןıɐɟ ʇɹodxǝ pooℲ",

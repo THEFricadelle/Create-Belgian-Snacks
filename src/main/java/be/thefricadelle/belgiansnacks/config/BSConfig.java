@@ -31,6 +31,7 @@ public final class BSConfig {
     private static final ModConfigSpec.BooleanValue GRINDER_REJECT_DUPLICATES;
     private static final ModConfigSpec.IntValue GRINDER_MIN_SPEED;
     private static final ModConfigSpec.DoubleValue GRINDER_STRESS_IMPACT;
+    private static final ModConfigSpec.BooleanValue ULTIMATE_ANNOUNCE;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -71,10 +72,27 @@ public final class BSConfig {
             .comment("Stress impact per RPM (D11). 8 is a crushing wheel's.")
             .defineInRange("stressImpact", 8.0, 0.0, 1024.0);
         builder.pop();
+
+        builder.push("ultimate");
+        ULTIMATE_ANNOUNCE = builder
+            .comment("Tell the whole server in chat when a player eats THE_FRICADELLE.",
+                "Operators can also switch it in game: /belgiansnacks announce true|false.")
+            .define("announceInChat", true);
+        builder.pop();
         SPEC = builder.build();
     }
 
     private BSConfig() {
+    }
+
+    public static boolean announceUltimate() {
+        return SPEC.isLoaded() ? ULTIMATE_ANNOUNCE.get() : ULTIMATE_ANNOUNCE.getDefault();
+    }
+
+    /** Switches the chat announcement and writes it to the server config file. */
+    public static void setAnnounceUltimate(boolean announce) {
+        ULTIMATE_ANNOUNCE.set(announce);
+        ULTIMATE_ANNOUNCE.save();
     }
 
     public static int fryerTankCapacity() {
