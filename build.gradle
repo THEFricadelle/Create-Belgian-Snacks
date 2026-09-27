@@ -159,6 +159,15 @@ neoForge {
             programArguments.addAll '--username', 'Visitor'
             systemProperty 'create_belgian_snacks.showcase', 'play'
         }
+        // The spark scenario of docs/10 in the showcase world (spark in run/showcase/mods, never in
+        // the build): profiles, heap summaries saved to files, then quits.
+        showcaseSpark {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/showcase')
+            programArguments.addAll '--username', 'Visitor'
+            systemProperty 'create_belgian_snacks.showcase', 'spark'
+        }
         // The same in a fresh world: waits for every tier's fried fricadelle, films and quits.
         showcaseCheck {
             client()

@@ -104,6 +104,12 @@ Automatisée par `GrinderGameTests` (serveur), `GrinderProgressTest` (JUnit), `C
 - [ ] FoodIndex : recalcul < 50 ms sur le modpack complet (log au démarrage).
 - [ ] Aucun parcours du registre des items dans un `tick()`.
 
+### Scenario automatise (27/09/2026)
+
+`./gradlew runShowcaseSpark` joue le scenario ci-dessus seul dans le monde du showcase (spark doit etre dans `run/showcase/mods`, jamais dans le build) : 30 s de mise en route, heap summary, profil serveur 60 s, profil client 60 s, 20 THE_FRICADELLE mangees d'un coup, 50 ouvertures de l'ecran des aliments manquants, second heap summary. Les rapports sont ecrits dans `run/showcase/config/spark/` et jamais envoyes (les publier sur spark.lucko.me reste le choix de l'auteur) ; les messages de spark vont dans `run/showcase/spark-report.txt`.
+
+Resultat du 27/09/2026 (0.0.9, dev) : serveur 20 TPS, ticks 2,5 ms en mediane et 9,5 ms au pire sur 1 min ; le mod pese 0,23 % du thread serveur et 1,1 % du thread de rendu (le rendu des trois friteuses). Apres le scenario : 0 `TheFricadelleNpc`, 0 `GrinderMissingScreen`, friteuses et hachoirs en nombre constant.
+
 ## Checklist Arcadia V2
 Automatisée par `python tools/arcadia_smoke.py` (M6.5, voir `docs/11`), sauf mention contraire.
 - [x] Démarrage sans crash ni erreur de recette `create_belgian_snacks` : le jar de release avec les jars exacts du pack (phase jar), et le client de dev (`recipes.loaded`).
