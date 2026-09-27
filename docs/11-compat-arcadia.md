@@ -108,6 +108,8 @@ Vérifié au M2 (scan des jars et de `kubejs/` de l'instance 2.0.32) :
 
 Le script KubeJS de test (`tools/arcadia/zz_belgian_snacks_m65_test.js`, copié dans `run/` seulement) montre ce que la team peut faire sans toucher au jar : supprimer `create_belgian_snacks:frying/fricadelle`, ajouter une recette `create_belgian_snacks:frying` (pomme de terre vers pomme de terre cuite, frite par une vraie Friteuse), retirer un aliment du Hachoir par le tag `grinder/blacklist`.
 
+Hors de notre mod, signalé par Crash Assistant pendant le test : `create_waystones_recipes` 3.0.1.b référence `com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeBuilder`, une classe de datagen de Create 5 absente de Create 6. Référence morte (jamais chargée en jeu, aucune erreur dans le log) : fausse alerte, mais à signaler à la team du pack si le mod reçoit une mise à jour. Crash Assistant analyse le log quand un jeu s'arrête anormalement, ce que fait le script en arrêtant le client du jar une fois l'export obtenu.
+
 Trouvé et corrigé en chemin : la Friteuse prenait la première recette de l'item sans regarder la chaleur (bloquée si une variante demande plus de chaleur), et Create Heat JS change les règles de chaleur (voir plus haut). Dans le pack, `incomplete_the_fricadelle` apparaît dans la liste d'items de JEI (voir `docs/10`).
 
 ## Le FoodIndex réel d'Arcadia 2.0.32 (export du 27/09/2026)

@@ -99,8 +99,8 @@ Automatisée par `GrinderGameTests` (serveur), `GrinderProgressTest` (JUnit), `C
 ## Checklist Arcadia V2
 Automatisée par `python tools/arcadia_smoke.py` (M6.5, voir `docs/11`), sauf mention contraire.
 - [x] Démarrage sans crash ni erreur de recette `create_belgian_snacks` : le jar de release avec les jars exacts du pack (phase jar), et le client de dev (`recipes.loaded`).
-- [x] JEI : catégories Friture et Hachoir, recette KubeJS affichée, recette supprimée absente (`jei.*`). `incomplete_the_fricadelle` **apparaît** dans la liste d'items : à trancher (le cacher ou non).
-- [ ] Jade : infos Friteuse / Hachoir affichées (manuel, capture à regarder).
+- [x] JEI : catégories Friture et Hachoir, recette KubeJS affichée, recette supprimée absente (`jei.*`). `incomplete_the_fricadelle` apparaît dans la liste d'items, comme les items de transition de Create : **on le laisse** (décidé le 27/09/2026).
+- [ ] Jade : infos Friteuse / Hachoir affichées (manuel, capture à regarder ; à faire par THEFricadelle, avec les scénarios spark).
 - [x] KubeJS : `event.remove` et `event.custom` de type `frying` (frite par une vraie Friteuse), ajout au tag blacklist pris en compte (`kubejs.*`).
 - [x] Aucun conflit Polymorph ni conflit de recette de même type (`recipes.polymorph`, `recipes.conflicts`).
 - [x] Friteuse chauffée par Blaze Burner dans le pack, règles de Create respectées malgré Create Heat JS (`heat.fryerRules`, `kubejs.fryingWorks`) ; toutes les constantes de chaleur du pack gérées (`heat.createHeatJs`). Pas de source de chaleur custom dans le pack aujourd'hui.
