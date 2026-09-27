@@ -191,7 +191,7 @@ def render_bucket(colour):
     return px
 
 
-def write_png(path, px):
+def png_bytes(px):
     height, width = len(px), len(px[0])
     raw = b"".join(
         b"\x00" + b"".join(bytes(p if p else (0, 0, 0, 0)) for p in row) for row in px
@@ -204,14 +204,15 @@ def write_png(path, px):
     png += chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0))
     png += chunk(b"IDAT", zlib.compress(raw, 9))
     png += chunk(b"IEND", b"")
-    path.write_bytes(png)
+    return png
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--force", action="store_true", help="overwrite existing textures")
-    args = parser.parse_args()
+def write_png(path, px):
+    path.write_bytes(png_bytes(px))
 
+
+def planned():
+    """Every placeholder texture: path -> function drawing its pixels. tools/asset_status.py reads it too."""
     outputs = {}
     for item_id, (shape, colour, glyph) in ITEMS.items():
         outputs[ITEM_DIR / f"{item_id}.png"] = lambda s=shape, c=colour, g=glyph: render(s, c, g)
@@ -224,9 +225,16 @@ def main():
         outputs[BLOCK_DIR / f"{face}.png"] = lambda c=colour: render_block_face(c)
     for fill in range(5):
         outputs[BLOCK_DIR / f"supreme_grinder/side_{fill}.png"] = lambda f=fill: render_grinder_side(f)
+    return outputs
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--force", action="store_true", help="overwrite existing textures")
+    args = parser.parse_args()
 
     written = skipped = 0
-    for path, draw in outputs.items():
+    for path, draw in planned().items():
         path.parent.mkdir(parents=True, exist_ok=True)
         if path.exists() and not args.force:
             skipped += 1
