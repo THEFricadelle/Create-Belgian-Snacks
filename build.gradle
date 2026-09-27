@@ -141,6 +141,15 @@ neoForge {
             systemProperty 'log4j2.configurationFile', project.file('build/moddev/arcadiaJarLog4j2.xml').toURI().toString()
         }
 
+        // Builds the Ponder schematics with real blocks and writes them to src/main/resources, then stops.
+        ponderSchematics {
+            server()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/ponder')
+            programArgument '--nogui'
+            systemProperty 'create_belgian_snacks.ponderSchematics', project.file('src/main/resources/assets/create_belgian_snacks/ponder').absolutePath
+        }
+
         // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
         serverSmoke {
             server()

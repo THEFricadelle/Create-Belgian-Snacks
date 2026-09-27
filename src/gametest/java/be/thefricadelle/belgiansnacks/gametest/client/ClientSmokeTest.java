@@ -256,6 +256,16 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("jei.grinderCraft.shot", 30, () -> screenshot("jei-grinder-craft")));
         STEPS.add(new Step("jei.grinding", 10, () -> SmokeJeiPlugin.runtime.getRecipesGui().showTypes(List.of(GrindingGoalCategory.TYPE))));
         STEPS.add(new Step("jei.grinding.shot", 30, () -> screenshot("jei-grinding-goal")));
+        STEPS.add(new Step("ponder.check", 10, () -> mc.setScreen(null)));
+        STEPS.add(new Step("ponder.scenes", 5, ClientSmokeTest::checkPonder));
+        STEPS.add(new Step("ponder.fryer", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(new ItemStack(BSBlocks.FRYER.get())))));
+        STEPS.add(new Step("ponder.fryer.shot", 200, () -> screenshot("ponder-fryer")));
+        STEPS.add(new Step("ponder.grinder", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(new ItemStack(BSBlocks.SUPREME_GRINDER.get())))));
+        STEPS.add(new Step("ponder.grinder.shot", 220, () -> screenshot("ponder-supreme-grinder")));
+        STEPS.add(new Step("ponder.line2", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.EXCEPTIONAL_PASTE.asStack()))));
+        STEPS.add(new Step("ponder.line2.shot", 260, () -> screenshot("ponder-the-fricadelle-line")));
+        STEPS.add(new Step("ponder.line3", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.ABSOLUTE_PASTE.asStack()))));
+        STEPS.add(new Step("ponder.line3.shot", 120, () -> screenshot("ponder-ultimate-fricadelle-line")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 
@@ -570,6 +580,32 @@ public final class ClientSmokeTest {
             require(skin != null && skin.texture() != null, "no skin");
             return "\"" + npc.getCustomName().getString() + "\", " + (be.thefricadelle.belgiansnacks.client.NpcSkin.isOnline()
                 ? "the THEFricadelle account's skin" : "default skin (the account's skin did not load)") + ", " + skin.model() + " model";
+        });
+    }
+
+    // Every scene of ours builds without an error and finds its schematic; the tag is there.
+    private static void checkPonder() {
+        check("ponder.scenes", () -> {
+            var access = net.createmod.ponder.foundation.PonderIndex.getSceneAccess();
+            List<String> built = new ArrayList<>();
+            Set<ResourceLocation> components = new TreeSet<>();
+            for (var entry : access.getRegisteredEntries()) {
+                if (entry.getValue().getNamespace().equals(BelgianSnacks.MOD_ID)) {
+                    components.add(entry.getKey());
+                    ResourceLocation schematic = entry.getValue().getSchematicLocation();
+                    var template = net.createmod.ponder.foundation.registration.PonderSceneRegistry.loadSchematic(schematic);
+                    require(template.getSize().getX() > 0, "no schematic " + schematic);
+                }
+            }
+            for (ResourceLocation component : components) {
+                for (var scene : access.compile(component)) {
+                    built.add(component.getPath() + ":" + scene.getId().getPath());
+                }
+            }
+            require(built.size() == 9, "scenes built: " + built);
+            require(net.createmod.ponder.foundation.PonderIndex.getTagAccess().getListedTags().stream()
+                .anyMatch(tag -> tag.getId().equals(BelgianSnacks.asResource("belgian_snacks"))), "no Ponder tag");
+            return built.size() + " scenes built for " + components.size() + " components: " + built;
         });
     }
 
