@@ -1,0 +1,20 @@
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "superheated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:raw_ultimate_fricadelle"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:melted_beef_tallow"
+    }
+  ],
+  "processing_time": 600,
+  "results": [
+    {
+      "id": "create_belgian_snacks:ultimate_fricadelle"
+    }
+  ]
+}

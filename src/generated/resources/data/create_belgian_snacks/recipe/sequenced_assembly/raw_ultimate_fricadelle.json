@@ -1,0 +1,125 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:crops/onion"
+      }
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:absolute_paste"
+  },
+  "loops": 5,
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_ultimate_fricadelle"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 250,
+          "fluid": "create_belgian_snacks:melted_beef_tallow"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        },
+        {
+          "item": "create_belgian_snacks:belgian_spices"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 250,
+          "fluid": "create_belgian_snacks:mayonnaise"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 250,
+          "fluid": "create_belgian_snacks:curry_ketchup"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        },
+        {
+          "tag": "c:crops/onion"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_ultimate_fricadelle"
+  }
+}

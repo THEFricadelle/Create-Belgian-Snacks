@@ -30,6 +30,7 @@ import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
 import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
 import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
+import be.thefricadelle.belgiansnacks.registry.BSTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -61,6 +62,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  */
 public class SupremeGrinderBlockEntity extends KineticBlockEntity {
     private static final int MISSING_SAMPLES = 5;
+    private static final int HALFWAY_RANGE = 16;
 
     // Set from addBehaviours, which the SmartBlockEntity constructor calls before field initialisers:
     // no initialiser here, or it would be reset to null.
@@ -125,12 +127,16 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
             int newCount = GrinderProgress.count(consumed, index.lookup());
             int newGoal = GrinderProgress.goal(getMode().ratio(), index.size());
             if (newCount != count || newGoal != goal || index.size() != total || indexChanged) {
+                boolean grew = newCount > count;
                 count = newCount;
                 goal = newGoal;
                 total = index.size();
                 samples = pickSamples(index);
                 updateGauge();
                 sendData();
+                if (grew) {
+                    rewardHalfway();
+                }
             }
         } else {
             // The ratio is config: a reload changes the goal without touching the index.
@@ -143,6 +149,18 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
         }
         if (GrinderProgress.reached(count, goal) && output.getStackInSlot(0).isEmpty()) {
             produce();
+        }
+    }
+
+    // Advancement "Halfway There": half of every food of the index, whatever the mode is aiming at.
+    private void rewardHalfway() {
+        if (count < GrinderProgress.goal(0.5, total) || !(level instanceof ServerLevel server)) {
+            return;
+        }
+        for (ServerPlayer player : server.players()) {
+            if (player.blockPosition().closerThan(worldPosition, HALFWAY_RANGE)) {
+                BSTriggers.GRINDER_HALF.get().trigger(player);
+            }
         }
     }
 

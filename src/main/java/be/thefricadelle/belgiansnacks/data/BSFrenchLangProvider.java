@@ -14,6 +14,7 @@ import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
+import be.thefricadelle.belgiansnacks.registry.BSEntities;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
@@ -49,6 +50,8 @@ public class BSFrenchLangProvider extends LanguageProvider {
 
         add(BSItems.ABSOLUTE_PASTE.get(), "Pâte absolue");
         add(BSItems.RAW_ULTIMATE_FRICADELLE.get(), "THE_FRICADELLE crue");
+        add(BSItems.INCOMPLETE_ULTIMATE_FRICADELLE.get(), "THE_FRICADELLE en cours");
+        add(BSEntities.THE_FRICADELLE_NPC.get(), "THEFricadelle");
         add(BSItems.ULTIMATE_FRICADELLE.get(), "THE_FRICADELLE");
 
         fluid(BSFluids.FRYING_OIL, "Huile de friture", "Seau d'huile de friture");

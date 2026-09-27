@@ -1,0 +1,35 @@
+{
+  "parent": "create_belgian_snacks:grinder_half",
+  "criteria": {
+    "absolute_paste": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:absolute_paste"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.absolute_paste.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:absolute_paste"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.absolute_paste"
+    }
+  },
+  "requirements": [
+    [
+      "absolute_paste"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

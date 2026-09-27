@@ -1,0 +1,27 @@
+{
+  "parent": "create_belgian_snacks:supreme_grinder",
+  "criteria": {
+    "grinder_half": {
+      "trigger": "create_belgian_snacks:grinder_half"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.grinder_half.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:supreme_grinder"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.grinder_half"
+    }
+  },
+  "requirements": [
+    [
+      "grinder_half"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

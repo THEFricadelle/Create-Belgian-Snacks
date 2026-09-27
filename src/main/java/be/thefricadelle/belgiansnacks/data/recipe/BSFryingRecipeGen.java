@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.fryer.FryingRecipe;
+import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
@@ -39,6 +40,14 @@ public class BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>
         .output(BSItems.THE_FRICADELLE.get())
         .duration(200)
         .requiresHeat(HeatCondition.HEATED));
+
+    // Tier 3: beef tallow only, superheated, one at a time (the raw item carries fryer/one_at_a_time).
+    GeneratedRecipe ULTIMATE_FRICADELLE = create("ultimate_fricadelle", b -> b
+        .require(BSItems.RAW_ULTIMATE_FRICADELLE.get())
+        .require(BSFluids.MELTED_BEEF_TALLOW.get(), 250)
+        .output(BSItems.ULTIMATE_FRICADELLE.get())
+        .duration(600)
+        .requiresHeat(HeatCondition.SUPERHEATED));
 
     public BSFryingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

@@ -1,0 +1,33 @@
+{
+  "parent": "create_belgian_snacks:fryer",
+  "criteria": {
+    "beef_tallow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:melted_beef_tallow_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.beef_tallow.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:melted_beef_tallow_bucket"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.beef_tallow"
+    }
+  },
+  "requirements": [
+    [
+      "beef_tallow"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

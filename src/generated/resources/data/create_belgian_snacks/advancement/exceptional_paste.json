@@ -1,0 +1,33 @@
+{
+  "parent": "create_belgian_snacks:supreme_grinder",
+  "criteria": {
+    "exceptional_paste": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:exceptional_paste"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.exceptional_paste.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:exceptional_paste"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.exceptional_paste"
+    }
+  },
+  "requirements": [
+    [
+      "exceptional_paste"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

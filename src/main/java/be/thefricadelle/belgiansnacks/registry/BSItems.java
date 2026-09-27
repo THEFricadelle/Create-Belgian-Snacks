@@ -14,9 +14,11 @@ import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import com.tterrag.registrate.util.nullness.NonNullFunction;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.food.FricadelleItem;
+import be.thefricadelle.belgiansnacks.content.food.UltimateFricadelleItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -38,7 +40,8 @@ public final class BSItems {
         FRICADELLE_PASTE = ingredient("fricadelle_paste", "Fricadelle Paste").tag(BSTags.GRINDER_BLACKLIST).register(),
         RAW_FRICADELLE = ingredient("raw_fricadelle", "Raw Fricadelle").tag(BSTags.GRINDER_BLACKLIST).register();
 
-    public static final ItemEntry<FricadelleItem> FRICADELLE = fricadelle("fricadelle", "Fricadelle", BSFoods.FRICADELLE).register();
+    public static final ItemEntry<FricadelleItem> FRICADELLE =
+        fricadelle("fricadelle", "Fricadelle", BSFoods.FRICADELLE, FricadelleItem::new).register();
 
     // Tier 2: THE_Fricadelle
     public static final ItemEntry<Item>
@@ -47,7 +50,7 @@ public final class BSItems {
         RAW_THE_FRICADELLE = ingredient("raw_the_fricadelle", "Raw THE_Fricadelle").tag(BSTags.GRINDER_BLACKLIST).register();
 
     public static final ItemEntry<FricadelleItem> THE_FRICADELLE =
-        fricadelle("the_fricadelle", "THE_Fricadelle", BSFoods.THE_FRICADELLE).register();
+        fricadelle("the_fricadelle", "THE_Fricadelle", BSFoods.THE_FRICADELLE, FricadelleItem::new).register();
 
     public static final ItemEntry<SequencedAssemblyItem> INCOMPLETE_THE_FRICADELLE =
         REGISTRATE.item("incomplete_the_fricadelle", SequencedAssemblyItem::new)
@@ -61,8 +64,14 @@ public final class BSItems {
         RAW_ULTIMATE_FRICADELLE = ingredient("raw_ultimate_fricadelle", "Raw THE_FRICADELLE")
             .tag(BSTags.GRINDER_BLACKLIST, BSTags.FRYER_ONE_AT_A_TIME).register();
 
-    public static final ItemEntry<FricadelleItem> ULTIMATE_FRICADELLE =
-        fricadelle("ultimate_fricadelle", "THE_FRICADELLE", BSFoods.ULTIMATE_FRICADELLE)
+    public static final ItemEntry<SequencedAssemblyItem> INCOMPLETE_ULTIMATE_FRICADELLE =
+        REGISTRATE.item("incomplete_ultimate_fricadelle", SequencedAssemblyItem::new)
+            .lang("Incomplete THE_FRICADELLE")
+            .tag(BSTags.GRINDER_BLACKLIST)
+            .register();
+
+    public static final ItemEntry<UltimateFricadelleItem> ULTIMATE_FRICADELLE =
+        fricadelle("ultimate_fricadelle", "THE_FRICADELLE", BSFoods.ULTIMATE_FRICADELLE, UltimateFricadelleItem::new)
             .properties(p -> p.rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true))
             .register();
 
@@ -73,8 +82,9 @@ public final class BSItems {
         return REGISTRATE.item(name, Item::new).lang(englishName);
     }
 
-    private static ItemBuilder<FricadelleItem, ?> fricadelle(String name, String englishName, FoodProperties food) {
-        return REGISTRATE.item(name, FricadelleItem::new)
+    private static <T extends FricadelleItem> ItemBuilder<T, ?> fricadelle(String name, String englishName, FoodProperties food,
+                                                                        NonNullFunction<Item.Properties, T> factory) {
+        return REGISTRATE.item(name, factory)
             .lang(englishName)
             .properties(p -> p.food(food))
             .tag(Tags.Items.FOODS_COOKED_MEAT, BSTags.GRINDER_BLACKLIST);

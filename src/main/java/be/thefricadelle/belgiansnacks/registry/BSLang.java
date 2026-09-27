@@ -68,9 +68,35 @@ public final class BSLang {
         add(ID + ".command.grinder.filled", "Supreme grinder filled with %s of %s foods", "Hachoir suprême rempli avec %s aliments sur %s");
         add(ID + ".command.grinder.cleared", "Supreme grinder emptied", "Hachoir suprême vidé");
         add(ID + ".command.grinder.not_found", "No supreme grinder at %s", "Pas de hachoir suprême en %s");
+        add(ID + ".ultimate.eaten", "%s ate THE_FRICADELLE. It literally contained everything.",
+            "%s a mangé THE_FRICADELLE. Elle contenait littéralement tout.");
+        add(ID + ".npc.phrase.0", "One fricadelle, coming up!", "Une fricadelle, une !");
+        add(ID + ".npc.phrase.1", "You ate everything. Everything.", "Tu as tout mangé. Tout.");
+        add(ID + ".npc.phrase.2", "Mayo or curry ketchup? Both, obviously.", "Mayo ou curry ketchup ? Les deux, évidemment.");
+        add(ID + ".npc.phrase.3", "That was %s foods in one bite.", "%s aliments en une bouchée.");
+        add(ID + ".npc.phrase.4", "The friterie is proud of you.", "La friterie est fière de toi.");
+        advancement("root", "Create: Belgian Snacks", "Mince some meat: the friterie starts here",
+            "Create: Belgian Snacks", "Hacher de la viande : la friterie commence ici");
+        advancement("fryer", "Friterie Open", "Place a Fryer", "Friterie ouverte", "Poser une Friteuse");
+        advancement("beef_tallow", "Beef Tallow", "Get a bucket of melted beef tallow, the fat of real Belgian fries",
+            "Blanc de bœuf", "Obtenir un seau de blanc de bœuf fondu, la graisse des vraies frites belges");
+        advancement("fricadelle", "One Fricadelle, Coming Up!", "Eat a Fricadelle", "Une fricadelle, une !", "Manger une Fricadelle");
+        advancement("supreme_grinder", "The Supreme Grinder", "Place a Supreme Grinder", "Le Hachoir Suprême", "Poser un Hachoir Suprême");
+        advancement("exceptional_paste", "Exceptional", "Get an Exceptional Paste", "Exceptionnelle", "Obtenir une Pâte d'exception");
+        advancement("the_fricadelle", "Make It a Spéciale", "Eat a THE_Fricadelle", "Avec une spéciale", "Manger une THE_Fricadelle");
+        advancement("grinder_half", "Halfway There", "Fill a Supreme Grinder with half of every food in the pack",
+            "À mi-chemin", "Remplir un Hachoir Suprême avec la moitié de tous les aliments du pack");
+        advancement("absolute_paste", "Absolute", "Get an Absolute Paste: every food of the pack in one paste",
+            "Absolue", "Obtenir une Pâte absolue : tous les aliments du pack en une seule pâte");
+        advancement("ultimate_fricadelle", "I Ate Everything", "Eat THE_FRICADELLE", "J'ai tout mangé", "Manger THE_FRICADELLE");
     }
 
     private BSLang() {
+    }
+
+    private static void advancement(String name, String englishTitle, String englishDescription, String frenchTitle, String frenchDescription) {
+        add(BSAdvancements.KEY + name, englishTitle, frenchTitle);
+        add(BSAdvancements.KEY + name + ".desc", englishDescription, frenchDescription);
     }
 
     private static void add(String key, String english, String french) {
