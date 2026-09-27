@@ -26,6 +26,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 /** Draws the fat inside the vat and the items floating in it (the basket, or the waiting input). */
 @OnlyIn(Dist.CLIENT)
 public class FryerRenderer extends SmartBlockEntityRenderer<FryerBlockEntity> {
+    // Between two floating items, across the vat.
+    private static final double SPACING = 0.15;
+
     public FryerRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
@@ -44,17 +47,23 @@ public class FryerRenderer extends SmartBlockEntityRenderer<FryerBlockEntity> {
         if (shown.isEmpty()) {
             return;
         }
-        // A few copies bobbing at the surface: enough to read the batch without drawing all 16.
+        // A few copies lying side by side at the surface, enough to read the batch without drawing
+        // all 16; while frying they tremble in the bubbling fat.
         int copies = Math.min(4, 1 + shown.getCount() / 4);
-        float time = (fryer.getLevel().getGameTime() + partialTicks) / 20f;
+        boolean frying = fryer.status() == FryerBlockEntity.Status.FRYING;
+        float time = fryer.getLevel().getGameTime() + partialTicks;
         for (int i = 0; i < copies; i++) {
             ms.pushPose();
-            float angle = i * 90f + time * 20f;
-            double bob = Math.sin(time * 2 + i) * 0.015;
+            double jitterX = frying ? Math.sin(time * 2.1 + i * 1.7) * 0.006 : 0;
+            double jitterY = frying ? Math.sin(time * 3.3 + i * 2.3) * 0.004 : 0;
+            double jitterZ = frying ? Math.cos(time * 2.7 + i * 1.1) * 0.006 : 0;
+            float wobble = frying ? (float) Math.sin(time * 2.9 + i) * 3f : 0;
+            // Spread across the vat, centred on it.
+            double offset = (i - (copies - 1) / 2.0) * SPACING;
             // Just above the surface: drawn under it, the fat would hide them.
-            ms.translate(0.5, surface + 0.03 + bob, 0.5);
-            ms.mulPose(Axis.YP.rotationDegrees(angle));
-            ms.translate(0.2, 0, 0);
+            ms.translate(0.5 + jitterX, surface + 0.03 + jitterY, 0.5 + offset + jitterZ);
+            // The sprite's sausage is diagonal: a -45 degree turn lays it along x, the copies side by side along z.
+            ms.mulPose(Axis.YP.rotationDegrees(-45 + wobble));
             ms.mulPose(Axis.XP.rotationDegrees(90));
             ms.scale(0.5f, 0.5f, 0.5f);
             Minecraft.getInstance().getItemRenderer()

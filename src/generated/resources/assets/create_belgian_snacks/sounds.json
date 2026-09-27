@@ -26,5 +26,35 @@
       "block/grindstone/grindstone3"
     ],
     "subtitle": "subtitles.create_belgian_snacks.grinder.grind"
+  },
+  "npc.phrase.0": {
+    "sounds": [
+      "mob/villager/yes1"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
+  },
+  "npc.phrase.1": {
+    "sounds": [
+      "mob/villager/yes2"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
+  },
+  "npc.phrase.2": {
+    "sounds": [
+      "mob/villager/yes3"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
+  },
+  "npc.phrase.3": {
+    "sounds": [
+      "mob/villager/yes1"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
+  },
+  "npc.phrase.4": {
+    "sounds": [
+      "mob/villager/yes2"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
   }
 }

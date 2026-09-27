@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.registry.BSEntities;
+import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -39,8 +40,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * THEFricadelle in person: runs up to whoever eats THE_FRICADELLE, claps and says one of a few
- * lines, then shoots up into the sky like a rocket and bursts into fireworks. Purely visual: the
+ * THEFricadelle in person: appears with a chorus fruit's sound, runs up to whoever eats
+ * THE_FRICADELLE, claps and says one of a few lines (aloud and above its head), then shoots up into
+ * the sky like a rocket and bursts into fireworks. Purely visual: the
  * burst breaks nothing and hurts no one. Never saved (its entity type is noSave), so it cannot
  * outlive a restart; invulnerable, no collision, nothing to loot.
  */
@@ -61,7 +63,6 @@ public class TheFricadelleNpc extends PathfinderMob {
     public static final int LIFETIME_TICKS = 160;
     public static final int PHRASES = 5;
     private static final String PHRASE_KEY = BelgianSnacks.MOD_ID + ".npc.phrase.";
-    private static final double CHAT_RANGE = 32;
     private static final int[] TURNS = {0, 25, -25, 50, -50};
     private static final int[] HEIGHTS = {0, 1, -1, 2, -2, -3};
     private static final EntityDataAccessor<Byte> PHASE = SynchedEntityData.defineId(TheFricadelleNpc.class, EntityDataSerializers.BYTE);
@@ -106,6 +107,7 @@ public class TheFricadelleNpc extends PathfinderMob {
         npc.setSprinting(true);
         level.addFreshEntity(npc);
         npc.poof();
+        level.playSound(null, npc.getX(), npc.getY(), npc.getZ(), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.NEUTRAL, 1.5f, 1f);
         return npc;
     }
 
@@ -211,15 +213,10 @@ public class TheFricadelleNpc extends PathfinderMob {
         setDeltaMovement(0, getDeltaMovement().y, 0);
         setPhase(Phase.TALK);
         faceTarget(player);
-        Component phrase = phrase(random.nextInt(PHRASES));
-        setCustomName(phrase);
-        Component line = Component.translatable("chat.type.text", Component.literal(NAME), phrase);
-        ServerLevel level = (ServerLevel) level();
-        for (ServerPlayer listener : level.players()) {
-            if (listener.distanceToSqr(this) <= CHAT_RANGE * CHAT_RANGE) {
-                listener.sendSystemMessage(line);
-            }
-        }
+        // Said aloud and written above the head; nothing in the chat.
+        int index = random.nextInt(PHRASES);
+        setCustomName(phrase(index));
+        level().playSound(null, getX(), getY(), getZ(), BSSoundEvents.NPC_PHRASES.get(index).get(), SoundSource.NEUTRAL, 1.5f, 1f);
     }
 
     private void launch() {
@@ -251,6 +248,7 @@ public class TheFricadelleNpc extends PathfinderMob {
             double y = getY() + 1;
             server.sendParticles(ParticleTypes.EXPLOSION_EMITTER, getX(), y, getZ(), 1, 0, 0, 0, 0);
             server.sendParticles(ParticleTypes.FIREWORK, getX(), y, getZ(), 80, 0.5, 0.5, 0.5, 0.25);
+            server.playSound(null, getX(), y, getZ(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 4f, 1f);
             server.playSound(null, getX(), y, getZ(), SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.NEUTRAL, 4f, 1f);
             server.playSound(null, getX(), y, getZ(), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.NEUTRAL, 4f, 1f);
         }

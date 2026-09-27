@@ -64,6 +64,7 @@ public final class BSLang {
         add(ID + ".recipe.grinding_goal.each", "Each food counts once", "Chaque aliment compte une fois");
         add("subtitles." + ID + ".grinder.grind", "Grinder grinds", "Le hachoir broie");
         add("subtitles." + ID + ".grinder.complete", "Grinder finishes a paste", "Le hachoir termine une pâte");
+        add("subtitles." + ID + ".npc.speaks", "THEFricadelle speaks", "THEFricadelle parle");
         add("config.jade.plugin_" + ID + ".supreme_grinder", "Supreme Grinder", "Hachoir Suprême");
         add(ID + ".command.grinder.filled", "Supreme grinder filled with %s of %s foods", "Hachoir suprême rempli avec %s aliments sur %s");
         add(ID + ".command.grinder.cleared", "Supreme grinder emptied", "Hachoir suprême vidé");

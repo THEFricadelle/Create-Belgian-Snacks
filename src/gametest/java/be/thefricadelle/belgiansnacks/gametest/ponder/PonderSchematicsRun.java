@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
+import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.kinetics.belt.item.BeltConnectorItem;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
@@ -34,6 +35,8 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -98,6 +101,13 @@ public final class PonderSchematicsRun {
         StructureTemplate template = new StructureTemplate();
         template.fillFromWorld(level, origin, schematic.size(), false, Blocks.STRUCTURE_VOID);
         CompoundTag tag = template.save(new CompoundTag());
+        // Belt segments name their controller by world position: make it relative to the schematic,
+        // where the Ponder scene places it.
+        for (Tag block : tag.getList("blocks", Tag.TAG_COMPOUND)) {
+            CompoundTag nbt = ((CompoundTag) block).getCompound("nbt");
+            NbtUtils.readBlockPos(nbt, "Controller")
+                .ifPresent(controller -> nbt.put("Controller", NbtUtils.writeBlockPos(controller.subtract(origin))));
+        }
         Path file = Path.of(OUTPUT).resolve(schematic.name() + ".nbt");
         try {
             Files.createDirectories(file.getParent());
@@ -181,6 +191,9 @@ public final class PonderSchematicsRun {
 
         void belt(BlockPos from, BlockPos to) {
             BeltConnectorItem.createBelts(level, origin.offset(from), origin.offset(to));
+            // A belt links to its controller on its first server tick, which the Ponder world (client
+            // side) never runs: link it now, so the schematic carries the chain.
+            BeltBlock.initBelt(level, origin.offset(from));
         }
 
         void fluid(int x, int y, int z, Fluid fluid, int amount) {

@@ -28,8 +28,25 @@ OPTIONAL_MODELS = {
     "supreme_grinder_blades.json": "Supreme Grinder blades, rotating about the vertical axis through the block centre",
 }
 
+SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
+# Recorded voice lines the datagen picks up when present (BSSoundDefinitionsProvider); a vanilla
+# sound stands in until then. The text of each line is in BSLang (npc.phrase.N).
+OPTIONAL_SOUNDS = {f"npc/phrase_{i}.ogg": f"THEFricadelle's voice line {i}" for i in range(5)}
+
 
 MAX_COLOURS = 48
+
+
+def ogg_problem(data):
+    """None for a mono Ogg Vorbis file, the reason otherwise (a stereo sound is not positional in game)."""
+    if data[:4] != b"OggS":
+        return "not an Ogg file"
+    segments = data[26]
+    packet = data[27 + segments:]
+    if packet[:7] != b"vorbis":
+        return "not Vorbis (export as Ogg Vorbis)"
+    channels = packet[11]
+    return None if channels == 1 else f"{channels} channels, must be mono"
 
 
 def decode_png(data):
@@ -115,6 +132,18 @@ def main():
     for file, what in OPTIONAL_MODELS.items():
         state = "present" if (MODELS / file).is_file() else "not yet"
         print(f"  {state:11} models/block/custom/{file}: {what}")
+    print("recorded sounds (optional, vanilla sounds stand in):")
+    for file, what in OPTIONAL_SOUNDS.items():
+        path = SOUNDS / file
+        if not path.is_file():
+            state = "not yet"
+        else:
+            problem = ogg_problem(path.read_bytes())
+            state = "present" if problem is None else "to fix"
+            if problem:
+                broken.append(f"sounds/{file}: {problem}")
+                what += f" ({problem})"
+        print(f"  {state:11} sounds/{file}: {what}")
     return 1 if missing or broken else 0
 
 

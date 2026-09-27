@@ -34,7 +34,7 @@ public class SupremeGrinderRenderer extends KineticBlockEntityRenderer<SupremeGr
     private static final ResourceLocation MINCE = BelgianSnacks.asResource("block/supreme_grinder/mince");
     // The pit floor, and the highest surface: just under the blades' hub.
     private static final float FLOOR = 2 / 16f;
-    private static final float TOP = 11.5f / 16f;
+    private static final float TOP = 10 / 16f;
     private static final float EDGE = 2 / 16f;
 
     public SupremeGrinderRenderer(BlockEntityRendererProvider.Context context) {

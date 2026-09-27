@@ -179,11 +179,15 @@ public final class ClientMultiplayerSmoke {
                 pass("mp.ultimateEaten", "THE_FRICADELLE eaten by holding right click");
             });
         }
-        // Both players see THEFricadelle run up and say its line, and read the server's announcement.
+        // Both players see THEFricadelle run up and say its line above its head (not in the chat), and
+        // read the server's announcement.
         step("visitor.seen", 0, () -> visitor() != null
             && visitor().getPhase() != be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.RUN && CHAT.stream().anyMatch(line -> line.contains("ate THE_FRICADELLE"))
-            && CHAT.stream().anyMatch(line -> line.startsWith("<THEFricadelle> ")), () -> pass("mp.visitorSeen",
-            "THEFricadelle appeared saying \"" + visitor().getCustomName().getString() + "\"; chat: " + String.join(" | ", CHAT)));
+            && !visitor().getCustomName().getString().equals(be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.NAME), () -> {
+            require(CHAT.stream().noneMatch(line -> line.startsWith("<THEFricadelle> ")), "the visitor wrote in the chat: " + CHAT);
+            pass("mp.visitorSeen",
+                "THEFricadelle appeared saying \"" + visitor().getCustomName().getString() + "\"; chat: " + String.join(" | ", CHAT));
+        });
         if (ROLE.equals("B")) {
             step("grinder.missing.ask", 0, () -> true, () -> PacketDistributor.sendToServer(new GrinderMissingRequestPayload(grinderPos)));
             step("grinder.missing", 0, () -> mc.screen instanceof GrinderMissingScreen, () -> {

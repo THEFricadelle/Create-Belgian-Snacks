@@ -104,6 +104,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 @EventBusSubscriber(modid = BelgianSnacks.MOD_ID, value = Dist.CLIENT)
 public final class ClientSmokeTest {
+    // Every sound this client played since THE_FRICADELLE was eaten.
+    private static final java.util.Set<String> SOUNDS = java.util.concurrent.ConcurrentHashMap.newKeySet();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final boolean ENABLED = Boolean.getBoolean("create_belgian_snacks.clientSmoke");
     private static final String WORLD = "belgian-snacks-smoke";
@@ -250,8 +252,14 @@ public final class ClientSmokeTest {
             faceVisitor();
             screenshot("thefricadelle-takeoff");
         }));
-        STEPS.add(new Step("ultimate.gone", 0, () -> visitor() == null, () -> check("ultimate.takeoff",
-            () -> "the visitor took off and burst")));
+        STEPS.add(new Step("ultimate.gone", 0, () -> visitor() == null, () -> check("ultimate.sounds", () -> {
+            for (String sound : List.of("minecraft:item.chorus_fruit.teleport", "minecraft:entity.firework_rocket.launch",
+                "minecraft:entity.generic.explode")) {
+                require(SOUNDS.contains(sound), "never heard " + sound + " in " + SOUNDS);
+            }
+            require(SOUNDS.stream().anyMatch(sound -> sound.startsWith(BelgianSnacks.MOD_ID + ":npc.phrase.")), "no voice line in " + SOUNDS);
+            return "chorus on arrival, a voice line, rocket and explosion on take-off";
+        })));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));
         STEPS.add(new Step("jei.paste.shot", 30, () -> screenshot("jei-fricadelle-paste")));
@@ -288,11 +296,17 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("ponder.check", 10, () -> mc.setScreen(null)));
         STEPS.add(new Step("ponder.scenes", 5, ClientSmokeTest::checkPonder));
         STEPS.add(new Step("ponder.fryer", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(new ItemStack(BSBlocks.FRYER.get())))));
-        STEPS.add(new Step("ponder.fryer.shot", 200, () -> screenshot("ponder-fryer")));
+        STEPS.add(new Step("ponder.fryer.belt", 0, () -> ponderBeltItems() > 0 || ponderEnded(), () -> checkPonderBelt("fryer")));
+        STEPS.add(new Step("ponder.fryer.belt.shot", 3, () -> screenshot("ponder-fryer-belt")));
+        STEPS.add(new Step("ponder.fryer.shot", 60, () -> screenshot("ponder-fryer")));
         STEPS.add(new Step("ponder.grinder", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(new ItemStack(BSBlocks.SUPREME_GRINDER.get())))));
-        STEPS.add(new Step("ponder.grinder.shot", 220, () -> screenshot("ponder-supreme-grinder")));
+        STEPS.add(new Step("ponder.grinder.belt", 0, () -> ponderBeltItems() > 0 || ponderEnded(), () -> checkPonderBelt("grinder")));
+        STEPS.add(new Step("ponder.grinder.belt.shot", 3, () -> screenshot("ponder-grinder-belt")));
+        STEPS.add(new Step("ponder.grinder.shot", 60, () -> screenshot("ponder-supreme-grinder")));
         STEPS.add(new Step("ponder.line2", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.EXCEPTIONAL_PASTE.asStack()))));
-        STEPS.add(new Step("ponder.line2.shot", 260, () -> screenshot("ponder-the-fricadelle-line")));
+        STEPS.add(new Step("ponder.line2.belt", 0, () -> ponderBeltItems() > 0 || ponderEnded(), () -> checkPonderBelt("line2")));
+        STEPS.add(new Step("ponder.line2.belt.shot", 3, () -> screenshot("ponder-line2-belt")));
+        STEPS.add(new Step("ponder.line2.shot", 200, () -> screenshot("ponder-the-fricadelle-line")));
         STEPS.add(new Step("ponder.line3", 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(BSItems.ABSOLUTE_PASTE.asStack()))));
         STEPS.add(new Step("ponder.line3.shot", 120, () -> screenshot("ponder-ultimate-fricadelle-line")));
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
@@ -569,6 +583,8 @@ public final class ClientSmokeTest {
 
     private static void eatUltimate() {
         Minecraft mc = Minecraft.getInstance();
+        SOUNDS.clear();
+        mc.getSoundManager().addListener((sound, events, range) -> SOUNDS.add(sound.getLocation().toString()));
         var server = mc.getSingleplayerServer();
         java.util.UUID id = mc.player.getUUID();
         SYSTEM_CHAT.clear();
@@ -612,7 +628,8 @@ public final class ClientSmokeTest {
         check("ultimate.chat", () -> {
             String eaten = mc.player.getName().getString() + " ate THE_FRICADELLE";
             require(SYSTEM_CHAT.stream().anyMatch(line -> line.startsWith(eaten)), "no server announcement in " + SYSTEM_CHAT);
-            require(SYSTEM_CHAT.stream().anyMatch(line -> line.startsWith("<THEFricadelle> ")), "the visitor said nothing in " + SYSTEM_CHAT);
+            // The visitor speaks aloud and above its head, never in the chat.
+            require(SYSTEM_CHAT.stream().noneMatch(line -> line.startsWith("<THEFricadelle> ")), "the visitor wrote in the chat: " + SYSTEM_CHAT);
             return String.join(" | ", SYSTEM_CHAT);
         });
         check("ultimate.visitor", () -> {
@@ -626,6 +643,41 @@ public final class ClientSmokeTest {
             require("THE_Fricadelle".equals(account), "skin of account " + account + ", expected THE_Fricadelle");
             require(skin.texture() != null, "no skin texture");
             return "\"" + npc.getCustomName().getString() + "\", skin of the " + account + " account, " + skin.model() + " model";
+        });
+    }
+
+    // Items on the belts of the open Ponder scene, counted on the controllers (they carry the items).
+    private static int ponderBeltItems() {
+        if (!(Minecraft.getInstance().screen instanceof net.createmod.ponder.foundation.ui.PonderUI ui)) {
+            return 0;
+        }
+        var world = ui.getActiveScene().getWorld();
+        int items = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(0, 0, 0, 9, 5, 9)) {
+            if (world.getBlockEntity(pos) instanceof com.simibubi.create.content.kinetics.belt.BeltBlockEntity belt && belt.isController()) {
+                items += belt.getInventory().getTransportedItems().size();
+            }
+        }
+        return items;
+    }
+
+    private static boolean ponderEnded() {
+        return Minecraft.getInstance().screen instanceof net.createmod.ponder.foundation.ui.PonderUI ui
+            && ui.getActiveScene().getCurrentTime() >= ui.getActiveScene().getTotalTime() - 5;
+    }
+
+    private static void checkPonderBelt(String scene) {
+        check("ponder.belt." + scene, () -> {
+            var ui = (net.createmod.ponder.foundation.ui.PonderUI) Minecraft.getInstance().screen;
+            var world = ui.getActiveScene().getWorld();
+            List<String> belts = new java.util.ArrayList<>();
+            for (BlockPos pos : BlockPos.betweenClosed(0, 0, 0, 9, 5, 9)) {
+                if (world.getBlockEntity(pos) instanceof com.simibubi.create.content.kinetics.belt.BeltBlockEntity belt) {
+                    belts.add(pos.toShortString() + "->" + belt.getController().toShortString());
+                }
+            }
+            require(ponderBeltItems() > 0, "no item ever rode a belt; belts and their controllers: " + belts);
+            return ponderBeltItems() + " item(s) on the belt at tick " + ui.getActiveScene().getCurrentTime();
         });
     }
 

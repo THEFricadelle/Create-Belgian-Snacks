@@ -55,9 +55,9 @@ Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder
 
 | Fichier | Contrat |
 |---|---|
-| `models/block/custom/fryer.json` | Friteuse : une cuve ouverte sur quatre pieds (fond de cuve à y = 4). Le code dessine la graisse et les items flottants, x/z de 2 à 14 : dès la première goutte la graisse monte à y = 9, puis jusqu'à y = 15 cuve pleine. Laisser cet intérieur vide. Livré le 27/09/2026 |
-| `models/block/custom/supreme_grinder.json` | (Livré le 27/09/2026 : quatre parois pleine hauteur autour d'une fosse profonde, fond à y = 2, la jauge sur les quatre faces.) Le code dessine le hachis (`supreme_grinder/mince`) dans la fosse, x/z de 2 à 14, de y = 2 à y = 11,5 selon la progression vers l'objectif : laisser la fosse vide sous les lames. Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
-| `models/block/custom/supreme_grinder_blades.json` | Les lames seules. Le code les fait tourner autour de l'axe vertical passant par le centre du bloc (8, y, 8) : modéliser centré sur ce point. Livré le 27/09/2026 : deux lames opposées et courbées (3 segments chacune, tournés de 0, 22,5 et 45°) sur un moyeu |
+| `models/block/custom/fryer.json` | Friteuse : une cuve ouverte sur quatre pieds (fond de cuve à y = 4). Le code dessine la graisse et les items flottants, x/z de 2 à 14 : dès la première goutte la graisse monte à y = 9, puis jusqu'à y = 15 cuve pleine ; jusqu'à 4 items flottent côte à côte et frémissent pendant la friture. Laisser cet intérieur vide. Livré le 27/09/2026 |
+| `models/block/custom/supreme_grinder.json` | (Livré le 27/09/2026 : quatre parois pleine hauteur autour d'une fosse profonde, fond à y = 2, la jauge sur les quatre faces.) Le code dessine le hachis (`supreme_grinder/mince`) dans la fosse, x/z de 2 à 14, de y = 2 à y = 10 selon la progression vers l'objectif : laisser la fosse vide sous les lames. Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
+| `models/block/custom/supreme_grinder_blades.json` | Les lames seules. Le code les fait tourner autour de l'axe vertical passant par le centre du bloc (8, y, 8) : modéliser centré sur ce point. Livré le 27/09/2026 : deux lames opposées et courbées (3 segments chacune, tournés de 0, 22,5 et 45°) sur un moyeu, à y = 11-12 (moyeu de 10,5 à 12,5) |
 
 Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotation des lames et rendu de la graisse sont générés ou codés. Le PNJ THEFricadelle n'a besoin d'aucune texture (skin du compte, en ligne).
 
@@ -69,6 +69,11 @@ Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotat
 | `grinder.grind` | aliment accepté | son vanilla (meule) |
 | `grinder.complete` | objectif atteint | son vanilla (niveau) |
 | `fricadelle.burp` | gag en mangeant | `minecraft:entity.player.burp` |
+| `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | grognement de villageois ; remplacé par `sounds/npc/phrase_N.ogg` dès que le fichier existe |
+
+**Voix du PNJ** : enregistrer chaque phrase dans `src/main/resources/assets/create_belgian_snacks/sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
+
+Sons vanilla joués par le PNJ, référencés et non copiés : fruit de chorus à l'apparition, lancement de fusée au décollage, explosion et feu d'artifice quand il éclate.
 
 Les sous-titres ont une clé de traduction (`subtitles.create_belgian_snacks.*`).
 

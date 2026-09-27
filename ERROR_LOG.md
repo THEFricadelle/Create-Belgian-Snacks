@@ -118,3 +118,10 @@
 **Root cause:** The held click repeats once after the last bite, with the hand just emptied, and takes the batch. The visitor used to spawn between the player and the fryer and absorbed that click.
 **Fix:** Client A looks at the sky while eating and turns back to the fryer before the take step.
 **Prevention:** A held key in a scripted client must never point at an interactive block when its purpose ends.
+
+## [2026-09-27 16:50] - No items on the belts of our Ponder scenes
+**Context:** Ponder scenes put items on belts with `createItemOnBelt`.
+**Error:** The items were never drawn; every belt segment of the scene reported controller 0, 0, 0.
+**Root cause:** A belt links to its controller on its first server tick (`BeltBlock.initBelt`). `PonderSchematicsRun` saved the schematic in the tick the belts were placed, so no segment had a controller; the Ponder world is client side and never initialises them. Only the controller carries and renders belt items.
+**Fix:** Call `BeltBlock.initBelt` after `createBelts`, and rewrite each segment's `Controller` relative to the schematic origin before saving. The client smoke checks an item rides a belt in three scenes.
+**Prevention:** Blocks that link up on their first tick must be initialised before a structure is exported; world positions inside block entity NBT must be made relative.
