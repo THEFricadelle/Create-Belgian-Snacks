@@ -28,6 +28,7 @@ public final class BSSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> FRICADELLE_BURP = sound("fricadelle.burp");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_GRIND = sound("grinder.grind");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_COMPLETE = sound("grinder.complete");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_RUNNING = sound("grinder.running");
     /** THEFricadelle's voice, one event per line (npc.phrase.N), so a recording can match its text. */
     public static final List<DeferredHolder<SoundEvent, SoundEvent>> NPC_PHRASES = IntStream.range(0, TheFricadelleNpc.PHRASES)
         .mapToObj(i -> sound("npc.phrase." + i))

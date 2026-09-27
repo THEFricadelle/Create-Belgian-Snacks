@@ -9,7 +9,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 ### Added
 
 - **Original texture artwork** — Replaced all 41 placeholder textures with original 16-colour pixel art: shared food and bucket silhouettes, two-frame fluid animations, steel fryer panels and five brass grinder gauge states. Added a reproducible standard-library drawing tool with manual-edit protection and a local preview gallery.
-- **Real sounds** — The fryer sizzles like a deep fryer, the grinder crunches, a finished paste rings like a microwave and fricadelles end in a burp: public-domain (CC0) recordings from BigSoundBank. THEFricadelle's first voice line is recorded.
+- **Real sounds** — The fryer sizzles like a deep fryer, the grinder crunches, a running grinder hums, higher as it turns faster, a finished paste rings like a microwave and fricadelles end in a burp: public-domain (CC0) recordings from BigSoundBank. THEFricadelle's first voice line is recorded.
 - **Chat announcement switch** — Server operators can turn off the chat line announcing that someone ate THE_FRICADELLE, with `ultimate.announceInChat` in the server config or `/belgiansnacks announce true|false` in game.
 - **Recorded sounds** — The fryer, grinder and burp sounds, like the visitor's voice, play a recording dropped in `sounds/` as soon as it exists, vanilla sounds until then.
 - **Showcase world (development)** — `./gradlew runShowcase` builds a flat creative world with every item on display, the four fluids, and the three tiers as automated production lines kept stocked; `runShowcaseCheck` builds it fresh, waits for each tier's fried fricadelle and takes screenshots.
@@ -48,7 +48,7 @@ All notable changes to Create: Belgian Snacks are documented here.
 ### Ajouts
 
 - **Textures originales** — Remplacement des 41 textures provisoires par du pixel art original limité à 16 couleurs : silhouettes communes des aliments et seaux, fluides animés sur deux images, panneaux en inox de la friteuse et cinq états de jauge du hachoir en laiton. Ajout d'un outil de dessin reproductible en bibliothèque standard, avec protection des retouches manuelles et galerie d'aperçu locale.
-- **Vrais sons** — La friteuse grésille comme une vraie friteuse, le hachoir croque, une pâte terminée sonne comme un micro-ondes et les fricadelles finissent en rot : enregistrements du domaine public (CC0) de BigSoundBank. La première réplique de THEFricadelle est enregistrée.
+- **Vrais sons** — La friteuse grésille comme une vraie friteuse, le hachoir croque, un hachoir en marche ronronne, plus aigu quand il tourne plus vite, une pâte terminée sonne comme un micro-ondes et les fricadelles finissent en rot : enregistrements du domaine public (CC0) de BigSoundBank. La première réplique de THEFricadelle est enregistrée.
 - **Option d'annonce dans le chat** — Les opérateurs d'un serveur peuvent couper la ligne du chat annonçant que quelqu'un a mangé THE_FRICADELLE, par `ultimate.announceInChat` dans la config serveur ou `/belgiansnacks announce true|false` en jeu.
 - **Sons enregistrés** — Les sons de la friteuse, du hachoir et du rot, comme la voix du visiteur, jouent l'enregistrement déposé dans `sounds/` dès qu'il existe, des sons vanilla en attendant.
 - **Terrain de démonstration (développement)** — `./gradlew runShowcase` construit un monde plat en créatif avec tous les items exposés, les quatre fluides et les trois paliers en lignes de production automatisées et réapprovisionnées ; `runShowcaseCheck` le construit à neuf, attend la fricadelle frite de chaque palier et prend des captures.

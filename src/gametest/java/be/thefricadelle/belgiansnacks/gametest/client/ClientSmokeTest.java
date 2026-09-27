@@ -104,7 +104,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 @EventBusSubscriber(modid = BelgianSnacks.MOD_ID, value = Dist.CLIENT)
 public final class ClientSmokeTest {
-    // Every sound this client played since THE_FRICADELLE was eaten.
+    // Every sound this client played (cleared when THE_FRICADELLE is eaten).
     private static final java.util.Set<String> SOUNDS = java.util.concurrent.ConcurrentHashMap.newKeySet();
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final boolean ENABLED = Boolean.getBoolean("create_belgian_snacks.clientSmoke");
@@ -159,6 +159,7 @@ public final class ClientSmokeTest {
         if (!planned) {
             plan();
             planned = true;
+            Minecraft.getInstance().getSoundManager().addListener((sound, events, range) -> SOUNDS.add(sound.getLocation().toString()));
         }
         ticks++;
         sampleRide();
@@ -208,6 +209,9 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
             ClientSmokeTest::checkGrinder));
         STEPS.add(new Step("grinder.shot", 10, () -> screenshot("grinder-in-world")));
+        // A running grinder hums (played on this client every two seconds).
+        STEPS.add(new Step("grinder.hum", 0, () -> SOUNDS.contains(BelgianSnacks.MOD_ID + ":grinder.running"),
+            () -> check("grinder.hum", () -> "the running grinder hums")));
         // A grinder with nothing above it, seen from straight above: the blades over the mince, which
         // fills half the pit (half of every food, in ULTIMATE mode).
         STEPS.add(new Step("grinder.blades", 10, () -> {
@@ -587,7 +591,6 @@ public final class ClientSmokeTest {
     private static void eatUltimate() {
         Minecraft mc = Minecraft.getInstance();
         SOUNDS.clear();
-        mc.getSoundManager().addListener((sound, events, range) -> SOUNDS.add(sound.getLocation().toString()));
         var server = mc.getSingleplayerServer();
         java.util.UUID id = mc.player.getUUID();
         SYSTEM_CHAT.clear();

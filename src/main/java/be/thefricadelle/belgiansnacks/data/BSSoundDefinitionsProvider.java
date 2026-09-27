@@ -42,6 +42,9 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
         add(BSSoundEvents.GRINDER_COMPLETE, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.complete")
             .with(recordingOr("grinder/complete", vanilla("random/levelup"))));
+        add(BSSoundEvents.GRINDER_RUNNING, SoundDefinition.definition()
+            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.running")
+            .with(recordingOr("grinder/running", vanilla("minecart/base"))));
         // THEFricadelle's voice: a villager's grunt until the author records the line.
         for (int i = 0; i < BSSoundEvents.NPC_PHRASES.size(); i++) {
             add(BSSoundEvents.NPC_PHRASES.get(i), SoundDefinition.definition()

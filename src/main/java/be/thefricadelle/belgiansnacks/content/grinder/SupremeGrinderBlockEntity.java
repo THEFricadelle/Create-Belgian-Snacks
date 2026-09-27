@@ -47,9 +47,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -61,6 +64,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * the figures and a few missing examples, never the collection itself.
  */
 public class SupremeGrinderBlockEntity extends KineticBlockEntity {
+    private static final int RUNNING_SOUND_INTERVAL = 40;
     private static final int MISSING_SAMPLES = 5;
     private static final int HALFWAY_RANGE = 16;
 
@@ -212,6 +216,21 @@ public class SupremeGrinderBlockEntity extends KineticBlockEntity {
             grindEffects(stack);
         }
         return stack.copyWithCount(stack.getCount() - 1);
+    }
+
+    /**
+     * The motor's hum while the grinder turns fast enough to take foods: a two-second recording played
+     * every two seconds, higher as it turns faster. Client side only, so nothing crosses the network.
+     */
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void tickAudio() {
+        super.tickAudio();
+        if (level == null || !isFastEnough() || level.getGameTime() % RUNNING_SOUND_INTERVAL != 0) {
+            return;
+        }
+        float pitch = Mth.clamp(0.6f + Math.abs(getSpeed()) / 512f, 0.6f, 1f);
+        level.playLocalSound(worldPosition, BSSoundEvents.GRINDER_RUNNING.get(), SoundSource.BLOCKS, 0.35f, pitch, false);
     }
 
     public boolean isFastEnough() {
