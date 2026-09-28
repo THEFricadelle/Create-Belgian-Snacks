@@ -71,6 +71,12 @@ La première image de la galerie Modrinth sert de bannière : mettre la 1 ou la 
 4. Settings du projet : laisser activée la distribution dans les modpacks. Liens : Source et Issues.
 5. Le premier fichier passe en modération (quelques heures à quelques jours) avant d'être visible.
 
+**Par l'API** (quand la recherche de « Related projects » ne propose pas les mods voulus) : coller le token (authors.curseforge.com > API Tokens) dans `curseforge.token` à la racine du dépôt, ignoré par git, puis :
+
+- `python tools/curseforge.py relations --file-id <id>` : pose les dépendances d'un fichier déjà publié (l'id est le nombre à la fin de l'URL du fichier).
+- `python tools/curseforge.py upload` : envoie le jar de `build/libs` avec version, notes de `release-<version>.md`, versions de jeu et dépendances.
+- `--dry-run` affiche la requête sans l'envoyer.
+
 ### Modrinth
 
 1. **Create a project** : nom, slug `create-belgian-snacks`, résumé du tableau. Type : Mod.
