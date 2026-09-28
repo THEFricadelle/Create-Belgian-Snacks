@@ -136,6 +136,6 @@
 ## [2026-09-28 02:30] - CurseForge update-file fails on dependencies
 **Context:** Setting the dependencies (Create required, JEI, Jade, KubeJS, Farmer's Delight optional) of the published 1.0.0 file: the author console's Related Projects search only offered a short list without them, so `POST /api/projects/1715566/update-file` of the Upload API was used instead.
 **Error:** `HTTP 500 {"errorCode":500,"errorMessage":"An unhandled exception occurred while processing the request."}` whenever the metadata held `relations` (any single slug, including `create`) or `gameVersions`. `changelog`, `changelogType`, `displayName` and `releaseType` alone returned 200.
-**Root cause:** Server side on CurseForge: the endpoint validates the fields (missing `fileID`, `slug` or an environment version give a 400) then crashes applying relations or game versions to an existing file.
-**Fix:** None on an existing file. `tools/curseforge.py upload` sets the dependencies and game versions at upload through `upload-file`.
-**Prevention:** Always upload a CurseForge file through `tools/curseforge.py upload` so its dependencies are declared at creation; never plan on adding them afterwards.
+**Root cause:** Server side on CurseForge: the endpoint validates the fields (missing `fileID`, `slug` or an environment version give a 400), saves the relations, then crashes. The 500 hides a successful write: test calls with one relation each replaced the list, and the last one left Create as an optional dependency.
+**Fix:** One call with the complete list (`tools/curseforge.py relations --file-id 8996274`): the author console then showed Create required, JEI, Jade, KubeJS and Farmer's Delight optional.
+**Prevention:** Never probe a live file with partial relations: each call replaces the whole list even when it answers 500. Send the full list once, then check the file's Related Projects; prefer `tools/curseforge.py upload`, which declares them at creation.

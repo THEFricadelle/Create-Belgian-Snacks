@@ -73,7 +73,7 @@ La première image de la galerie Modrinth sert de bannière : mettre la 1 ou la 
 
 **Par l'API** (la recherche de « Related projects » de l'interface ne propose qu'une courte liste sans Create, JEI, Jade, KubeJS ni Farmer's Delight) : coller le token (authors.curseforge.com > API Tokens) dans `curseforge.token` à la racine du dépôt, ignoré par git, puis `python tools/curseforge.py upload` : envoie le jar de `build/libs` avec version, notes de `release-<version>.md`, versions de jeu (1.21.1, NeoForge, Java 21, client et serveur) et dépendances. `--dry-run` affiche la requête sans l'envoyer.
 
-Les dépendances ne se posent qu'à l'upload : le 28/09/2026, l'endpoint `update-file` répondait HTTP 500 à tout changement de dépendances ou de versions de jeu sur un fichier existant (notes, nom et type de version passaient).
+Sur un fichier déjà publié : `python tools/curseforge.py relations --file-id <id>` (l'id est le nombre à la fin de l'URL du fichier). L'API enregistre les dépendances puis répond HTTP 500 (constaté le 28/09/2026) : vérifier le résultat dans Related Projects du fichier. Chaque appel remplace toute la liste.
 
 ### Modrinth
 

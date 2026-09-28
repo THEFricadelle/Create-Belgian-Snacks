@@ -10,13 +10,15 @@
 The API token is read from the CF_API_TOKEN environment variable, else from curseforge.token at
 the repository root (git-ignored by *.token). It is never printed or written anywhere else.
 
-  python tools/curseforge.py upload             upload build/libs/<jar> with its dependencies
-  python tools/curseforge.py upload --dry-run   print the request without sending it
+  python tools/curseforge.py upload                       upload build/libs/<jar> with its dependencies
+  python tools/curseforge.py relations --file-id <id>     set the dependencies of a published file
+  add --dry-run to either to print the request without sending it.
 
 Metadata: version from gradle.properties, release notes from the English block of
 docs/publication/release-<version>.md, game versions Minecraft 1.21.1 + NeoForge + Java 21, client and
-server, and the dependencies below. Dependencies can only be set here, at upload: on 2026-09-28 the
-update-file endpoint answered HTTP 500 to any relations or gameVersions change on an existing file.
+server, and the dependencies below. On an existing file, update-file saves the relations and then
+answers HTTP 500 (2026-09-28): `relations` treats that 500 as expected, check the file's page. Each
+call replaces the whole list. gameVersions are never sent there, they also end in a 500.
 """
 
 import argparse
@@ -148,15 +150,40 @@ def send(label, path, metadata, api_token, dry_run, file_path=None):
         sys.exit(f"Failed: HTTP {status} {reply[:500]}")
 
 
+def set_relations(file_id, api_token, dry_run):
+    version = properties()["mod_version"]
+    metadata = {"fileID": file_id, "changelog": release_notes(version), "changelogType": "markdown",
+                "relations": {"projects": RELATIONS}}
+    path = f"/projects/{PROJECT_ID}/update-file"
+    print(f"Dependencies: POST {API}{path}")
+    print(json.dumps(metadata["relations"], indent=2))
+    if dry_run:
+        print("dry run: nothing sent")
+        return
+    body, content_type = multipart({"metadata": json.dumps(metadata)})
+    status, reply = request("POST", path, api_token, body, content_type)
+    if 200 <= status < 300 or status == 500:
+        print(f"Sent (HTTP {status}; a 500 is CurseForge's usual answer here). "
+              "Check the Related Projects of the file in the author console.")
+    else:
+        sys.exit(f"Failed: HTTP {status} {reply[:500]}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     commands = parser.add_subparsers(dest="command", required=True)
+    relations = commands.add_parser("relations", help="set the dependencies of a published file")
+    relations.add_argument("--file-id", type=int, required=True, help="number at the end of the file's URL")
+    relations.add_argument("--dry-run", action="store_true")
     upload = commands.add_parser("upload", help="upload the built jar with its dependencies")
     upload.add_argument("--release-type", choices=("release", "beta", "alpha"), default="release")
     upload.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     api_token = token()
+    if args.command == "relations":
+        set_relations(args.file_id, api_token, args.dry_run)
+        return
     props, version, metadata = file_metadata(api_token, args.release_type)
     jar = ROOT / f"build/libs/{props['mod_slug']}-{version}.jar"
     if not jar.is_file():
