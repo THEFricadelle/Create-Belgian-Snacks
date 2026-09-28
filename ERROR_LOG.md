@@ -132,3 +132,10 @@
 **Root cause:** The intro item was never stalled nor removed in time. Riding a single item instead then stopped one segment short: inserted from the west it starts at 0.1, not at the segment centre, and the first deployer held it at its centre, shifting every stop.
 **Fix:** One item, inserted from above (centre of the first segment), moved one block per 15 ticks at 32 RPM and stalled under each station. The press is set back to idle after its stroke, since only a server ends a pressing cycle. The client smoke samples the belt every tick: one item at most, stops at every segment centre.
 **Prevention:** Belt items in Ponder scenes start at a segment centre and move by whole blocks; check real machine behaviours that may hold them.
+
+## [2026-09-28 02:30] - CurseForge update-file fails on dependencies
+**Context:** Setting the dependencies (Create required, JEI, Jade, KubeJS, Farmer's Delight optional) of the published 1.0.0 file: the author console's Related Projects search only offered a short list without them, so `POST /api/projects/1715566/update-file` of the Upload API was used instead.
+**Error:** `HTTP 500 {"errorCode":500,"errorMessage":"An unhandled exception occurred while processing the request."}` whenever the metadata held `relations` (any single slug, including `create`) or `gameVersions`. `changelog`, `changelogType`, `displayName` and `releaseType` alone returned 200.
+**Root cause:** Server side on CurseForge: the endpoint validates the fields (missing `fileID`, `slug` or an environment version give a 400) then crashes applying relations or game versions to an existing file.
+**Fix:** None on an existing file. `tools/curseforge.py upload` sets the dependencies and game versions at upload through `upload-file`.
+**Prevention:** Always upload a CurseForge file through `tools/curseforge.py upload` so its dependencies are declared at creation; never plan on adding them afterwards.

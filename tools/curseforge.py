@@ -10,12 +10,13 @@
 The API token is read from the CF_API_TOKEN environment variable, else from curseforge.token at
 the repository root (git-ignored by *.token). It is never printed or written anywhere else.
 
-  python tools/curseforge.py relations --file-id 1234567   set the dependencies of a published file
-  python tools/curseforge.py upload                        upload build/libs/<jar> with its dependencies
-  add --dry-run to either to print the request without sending it.
+  python tools/curseforge.py upload             upload build/libs/<jar> with its dependencies
+  python tools/curseforge.py upload --dry-run   print the request without sending it
 
-Upload metadata: version from gradle.properties, release notes from the English block of
-docs/publication/release-<version>.md, game versions Minecraft 1.21.1 + NeoForge + Java 21.
+Metadata: version from gradle.properties, release notes from the English block of
+docs/publication/release-<version>.md, game versions Minecraft 1.21.1 + NeoForge + Java 21, client and
+server, and the dependencies below. Dependencies can only be set here, at upload: on 2026-09-28 the
+update-file endpoint answered HTTP 500 to any relations or gameVersions change on an existing file.
 """
 
 import argparse
@@ -41,7 +42,8 @@ RELATIONS = [
     {"slug": "farmers-delight", "type": "optionalDependency"},
 ]
 # (version type slug prefix, version name) for every file.
-GAME_VERSIONS = [("minecraft-1-21", "1.21.1"), ("modloader", "NeoForge"), ("java", "Java 21")]
+GAME_VERSIONS = [("minecraft-1-21", "1.21.1"), ("modloader", "NeoForge"), ("java", "Java 21"),
+                 ("environment", "Client"), ("environment", "Server")]
 
 
 def token():
@@ -118,6 +120,19 @@ def game_version_ids(api_token):
     return ids
 
 
+def file_metadata(api_token, release_type):
+    props = properties()
+    version = props["mod_version"]
+    return props, version, {
+        "changelog": release_notes(version),
+        "changelogType": "markdown",
+        "displayName": f"{props['mod_name']} {version}",
+        "gameVersions": game_version_ids(api_token),
+        "releaseType": release_type,
+        "relations": {"projects": RELATIONS},
+    }
+
+
 def send(label, path, metadata, api_token, dry_run, file_path=None):
     shown = json.dumps(metadata, indent=2, ensure_ascii=False)
     print(f"{label}: POST {API}{path}" + (f" with {file_path.relative_to(ROOT)}" if file_path else ""))
@@ -127,9 +142,6 @@ def send(label, path, metadata, api_token, dry_run, file_path=None):
         return
     body, content_type = multipart({"metadata": json.dumps(metadata)}, "file", file_path)
     status, reply = request("POST", path, api_token, body, content_type)
-    if status in (400, 415) and file_path is None:
-        # The documentation does not say whether update-file takes a form or plain JSON.
-        status, reply = request("POST", path, api_token, json.dumps(metadata).encode(), "application/json")
     if 200 <= status < 300:
         print(f"OK (HTTP {status}) {reply[:300]}")
     else:
@@ -139,34 +151,16 @@ def send(label, path, metadata, api_token, dry_run, file_path=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     commands = parser.add_subparsers(dest="command", required=True)
-    relations = commands.add_parser("relations", help="set the dependencies of a published file")
-    relations.add_argument("--file-id", type=int, required=True, help="number at the end of the file's URL")
-    relations.add_argument("--dry-run", action="store_true")
     upload = commands.add_parser("upload", help="upload the built jar with its dependencies")
     upload.add_argument("--release-type", choices=("release", "beta", "alpha"), default="release")
     upload.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    if args.command == "relations":
-        metadata = {"fileID": args.file_id, "relations": {"projects": RELATIONS}}
-        send("Dependencies", f"/projects/{PROJECT_ID}/update-file", metadata,
-             None if args.dry_run else token(), args.dry_run)
-        return
-
-    props = properties()
-    version = props["mod_version"]
+    api_token = token()
+    props, version, metadata = file_metadata(api_token, args.release_type)
     jar = ROOT / f"build/libs/{props['mod_slug']}-{version}.jar"
     if not jar.is_file():
         sys.exit(f"No {jar.relative_to(ROOT)}: run ./gradlew build first")
-    api_token = token()
-    metadata = {
-        "changelog": release_notes(version),
-        "changelogType": "markdown",
-        "displayName": f"{props['mod_name']} {version}",
-        "gameVersions": game_version_ids(api_token),
-        "releaseType": args.release_type,
-        "relations": {"projects": RELATIONS},
-    }
     send("Upload", f"/projects/{PROJECT_ID}/upload-file", metadata, api_token, args.dry_run, jar)
 
 
