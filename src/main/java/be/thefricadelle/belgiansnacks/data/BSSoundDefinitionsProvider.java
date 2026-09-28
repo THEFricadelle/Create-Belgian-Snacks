@@ -10,6 +10,7 @@
 package be.thefricadelle.belgiansnacks.data;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc;
 import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -42,12 +43,10 @@ public class BSSoundDefinitionsProvider extends SoundDefinitionsProvider {
         add(BSSoundEvents.GRINDER_RUNNING, SoundDefinition.definition()
             .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".grinder.running")
             .with(recordingOr("grinder/running", vanilla("minecart/base"))));
-        // THEFricadelle's voice: a villager's grunt until the author records the line.
-        for (int i = 0; i < BSSoundEvents.NPC_PHRASES.size(); i++) {
-            add(BSSoundEvents.NPC_PHRASES.get(i), SoundDefinition.definition()
-                .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".npc.speaks")
-                .with(recordingOr("npc/phrase_" + i, vanilla("mob/villager/yes" + (i % 3 + 1)))));
-        }
+        // THEFricadelle's voice: only the line the author recorded is said.
+        add(BSSoundEvents.NPC_VOICE, SoundDefinition.definition()
+            .subtitle("subtitles." + BelgianSnacks.MOD_ID + ".npc.speaks")
+            .with(recordingOr("npc/phrase_" + TheFricadelleNpc.SPOKEN_PHRASE, vanilla("mob/villager/yes1"))));
     }
 
     // A recording of ours at sounds/<path>.ogg (mono Ogg Vorbis, tools/asset_status.py checks it)

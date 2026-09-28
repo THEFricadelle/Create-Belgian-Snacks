@@ -71,7 +71,7 @@ Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create
 | `grinder.grind` | aliment accepté (court, moins d'1 s) | `grinder/grind.ogg` | meule |
 | `grinder.complete` | pâte terminée (1 à 2 s) | `grinder/complete.ogg` | niveau gagné |
 | `grinder.running` | toutes les 2 s tant que le hachoir tourne assez vite, plus aigu quand il tourne plus vite (environ 2 s, joué côté client) | `grinder/running.ogg` | wagonnet |
-| `npc.phrase.0` … `npc.phrase.4` | voix de THEFricadelle, une par phrase (texte dans `BSLang`, clés `npc.phrase.N`) | `npc/phrase_N.ogg` | grognement de villageois |
+| `npc.phrase.4` | voix de THEFricadelle ; le visiteur dit toujours la phrase 4, la seule enregistrée (texte dans `BSLang`) | `npc/phrase_4.ogg` | grognement de villageois |
 
 **Provenance** (27/09/2026) : les quatre bruitages viennent de [BigSoundBank](https://bigsoundbank.com), sous licence CC0 (domaine public : aucun crédit requis, usage commercial permis). Découpés, fondus et normalisés (crête à -1,5 dB) avec ffmpeg :
 
@@ -82,11 +82,11 @@ Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create
 | `grinder/complete.ogg` | [Microwave Bell](https://bigsoundbank.com/microwave-bell-s1631.html) | 1,6 s, fin en fondu |
 | `grinder/running.ogg` | [Electric hand mixer #1](https://bigsoundbank.com/electric-hand-mixer-1-s1752.html) (batteur dans une pâte à crêpes) | 2,2 s à partir de 3 s, joué plus grave (hauteur 0,6 à 1 selon la vitesse) |
 
-La voix du PNJ est enregistrée par l'auteur (`npc/phrase_4.ogg` le 27/09/2026).
+La voix du PNJ est enregistrée par l'auteur (`npc/phrase_4.ogg` le 27/09/2026). Depuis le 28/09/2026 (1.0.0), le visiteur ne dit plus que cette phrase (`TheFricadelleNpc.SPOKEN_PHRASE`) : les textes 0 à 3 restent dans `BSLang` pour plus tard, sans événement sonore.
 
 **Format** : tous en **Ogg Vorbis mono**. Un MP3 renommé ne se lit pas : `ffmpeg -i in.mp3 -ac 1 -c:a libvorbis -q:a 5 out.ogg`. `python tools/asset_status.py` liste ce qui est fait, et signale un fichier stéréo, un MP3 renommé ou un nom qu'aucun son n'utilise.
 
-**Voix du PNJ** : enregistrer chaque phrase dans `sounds/npc/phrase_0.ogg` … `phrase_4.ogg`, en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
+**Voix du PNJ** : pour rendre une autre phrase au visiteur, l'enregistrer dans `sounds/npc/phrase_N.ogg`, remettre un événement par phrase dans `BSSoundEvents` et le tirage au hasard dans `TheFricadelleNpc.arrive`, puis l'ajouter à `tools/asset_status.py`. Format : en **Ogg Vorbis mono** (un son stéréo n'est pas positionné dans le monde ; Audacity : piste mono, Exporter > Ogg Vorbis). Puis `./gradlew runData` : le datagen prend l'enregistrement à la place du grognement. `python tools/asset_status.py` dit quelles phrases sont faites et signale un fichier stéréo ou pas en Vorbis. Les phrases : 0 « Une fricadelle, une ! », 1 « Tu as tout mangé. Tout. », 2 « Mayo ou curry ketchup ? Les deux, évidemment. », 3 et 4 : voir `BSLang` (la 3 cite le nombre d'aliments du pack ; la voix peut dire « tous les aliments » sans chiffre).
 
 Sons vanilla joués par le PNJ, référencés et non copiés : fruit de chorus à l'apparition, lancement de fusée au décollage, explosion et feu d'artifice quand il éclate.
 

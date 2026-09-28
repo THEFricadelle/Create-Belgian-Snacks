@@ -14,7 +14,7 @@
 
 ## 2. Git Workflow
 
-Use the existing `dev` branch conventions; use `feat/`, `fix/` or `hotfix/` branches for isolated work. Do not invent staging or release branches. Conventional commits, no co-author trailers. Commit freely, but push only when the author asks, in grouped batches (decided on 2026-09-27; this replaces the global batch-push thresholds for this project). Keep version 0.9.0 until a version change is requested. Preserve unrelated local changes.
+Use the existing `dev` branch conventions; use `feat/`, `fix/` or `hotfix/` branches for isolated work. Do not invent staging or release branches. Conventional commits, no co-author trailers. Commit freely, but push only when the author asks, in grouped batches (decided on 2026-09-27; this replaces the global batch-push thresholds for this project). Keep version 1.0.0 until a version change is requested. Preserve unrelated local changes.
 
 ## 3. Code Conventions
 

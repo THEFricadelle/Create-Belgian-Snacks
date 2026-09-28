@@ -30,13 +30,14 @@ OPTIONAL_MODELS = {
 
 SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
 # Recordings the datagen picks up when present (BSSoundDefinitionsProvider.recordingOr); vanilla
-# sounds stand in until then. The voice lines' text is in BSLang (npc.phrase.N).
-OPTIONAL_SOUNDS = {
+# sounds stand in until then. The visitor only says line 4 (TheFricadelleNpc.SPOKEN_PHRASE), whose
+# text is in BSLang (npc.phrase.4).
+SOUNDS_USED = {
     "fryer/sizzle.ogg": "Fryer sizzling, played every 2 s while frying (about 2 s long)",
     "grinder/grind.ogg": "Supreme Grinder taking a food (short, under 1 s)",
     "grinder/complete.ogg": "Supreme Grinder finishing a paste (1 to 2 s)",
     "grinder/running.ogg": "Supreme Grinder turning, played every 2 s while fast enough (about 2 s long)",
-    **{f"npc/phrase_{i}.ogg": f"THEFricadelle's voice line {i}" for i in range(5)},
+    "npc/phrase_4.ogg": "THEFricadelle's voice, line 4 (the visitor always says it)",
 }
 
 
@@ -141,7 +142,7 @@ def main():
         state = "present" if (MODELS / file).is_file() else "not yet"
         print(f"  {state:11} models/block/custom/{file}: {what}")
     print("recorded sounds (optional, vanilla sounds stand in):")
-    for file, what in OPTIONAL_SOUNDS.items():
+    for file, what in SOUNDS_USED.items():
         path = SOUNDS / file
         if not path.is_file():
             state = "not yet"
@@ -154,7 +155,7 @@ def main():
         print(f"  {state:11} sounds/{file}: {what}")
     for path in sorted(p for p in SOUNDS.rglob("*") if p.is_file()) if SOUNDS.is_dir() else []:
         name = path.relative_to(SOUNDS).as_posix()
-        if name not in OPTIONAL_SOUNDS:
+        if name not in SOUNDS_USED:
             reason = "no sound uses this name (see the list above)"
             problem = ogg_problem(path.read_bytes())
             if problem:

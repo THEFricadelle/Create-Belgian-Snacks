@@ -80,9 +80,10 @@ following:
 | Ponder | Ponder scenes library, shipped inside Create | MIT |
 | Flywheel | Rendering library, shipped inside Create | MIT |
 | JEI (Just Enough Items) | Optional integration, compile-time API | MIT |
-| Jade | Optional integration, development runtime only | CC-BY-NC-SA-4.0 |
+| Jade | Optional integration, compile-time API | CC-BY-NC-SA-4.0 |
+| BigSoundBank recordings | Four fryer and grinder sounds, bundled in the artifact | CC0-1.0 (public domain) |
 
-These are compile-time or runtime dependencies resolved on the user's side. No third-party code is bundled into the artifact, and no Create asset is copied or modified.
+The software components are compile-time or runtime dependencies resolved on the user's side. No third-party code is bundled into the artifact. The only third-party material it ships is four sound recordings (fryer and grinder) released into the public domain under CC0 by BigSoundBank, listed in `docs/06-assets.md`; this license does not restrict them. No Create asset is copied or modified.
 
 ## Requesting permission
 
@@ -184,9 +185,10 @@ redistribuer :
 | Ponder | Bibliothèque de scènes Ponder, fournie dans Create | MIT |
 | Flywheel | Bibliothèque de rendu, fournie dans Create | MIT |
 | JEI (Just Enough Items) | Intégration optionnelle, API à la compilation | MIT |
-| Jade | Intégration optionnelle, runtime de développement uniquement | CC-BY-NC-SA-4.0 |
+| Jade | Intégration optionnelle, API à la compilation | CC-BY-NC-SA-4.0 |
+| Enregistrements BigSoundBank | Quatre sons de la friteuse et du hachoir, inclus dans l'artefact | CC0-1.0 (domaine public) |
 
-Ce sont des dépendances de compilation ou d'exécution résolues côté utilisateur. Aucun code tiers n'est inclus dans l'artefact, et aucun asset de Create n'est copié ni modifié.
+Les composants logiciels sont des dépendances de compilation ou d'exécution résolues côté utilisateur. Aucun code tiers n'est inclus dans l'artefact. Le seul contenu tiers qu'il embarque est quatre enregistrements sonores (friteuse et hachoir) placés dans le domaine public sous CC0 par BigSoundBank, listés dans `docs/06-assets.md` ; cette licence ne les restreint pas. Aucun asset de Create n'est copié ni modifié.
 
 ## Demander une autorisation
 

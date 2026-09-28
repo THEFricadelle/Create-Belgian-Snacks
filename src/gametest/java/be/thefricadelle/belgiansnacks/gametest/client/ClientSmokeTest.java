@@ -50,6 +50,7 @@ import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -262,8 +263,9 @@ public final class ClientSmokeTest {
                 "minecraft:entity.generic.explode")) {
                 require(SOUNDS.contains(sound), "never heard " + sound + " in " + SOUNDS);
             }
-            require(SOUNDS.stream().anyMatch(sound -> sound.startsWith(BelgianSnacks.MOD_ID + ":npc.phrase.")), "no voice line in " + SOUNDS);
-            return "chorus on arrival, a voice line, rocket and explosion on take-off";
+            String voice = BSSoundEvents.NPC_VOICE.getId().toString();
+            require(SOUNDS.contains(voice), "never heard " + voice + " in " + SOUNDS);
+            return "chorus on arrival, the recorded voice line, rocket and explosion on take-off";
         })));
         STEPS.add(new Step("jei.ready", 20, () -> SmokeJeiPlugin.runtime != null, ClientSmokeTest::checkJei));
         STEPS.add(new Step("jei.paste", 10, () -> showOutput(BSItems.FRICADELLE_PASTE.asStack())));

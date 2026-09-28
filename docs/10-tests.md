@@ -110,6 +110,8 @@ Automatisée par `GrinderGameTests` (serveur), `GrinderProgressTest` (JUnit), `C
 
 Resultat du 27/09/2026 (0.9.0, dev) : serveur 20 TPS, ticks 2,5 ms en mediane et 9,5 ms au pire sur 1 min ; le mod pese 0,23 % du thread serveur et 1,1 % du thread de rendu (le rendu des trois friteuses). Apres le scenario : 0 `TheFricadelleNpc`, 0 `GrinderMissingScreen`, friteuses et hachoirs en nombre constant.
 
+Resultat du 28/09/2026 (1.0.0, dev) : serveur 20 TPS, ticks 2,4 ms en mediane et 13,3 ms au pire sur 1 min, CPU du processus 8 %. Apres le scenario : 0 `TheFricadelleNpc`, 0 `GrinderMissingScreen`, 8 `FryerBlockEntity` et 10 `SupremeGrinderBlockEntity` avant comme apres.
+
 ## Checklist Arcadia V2
 Automatisée par `python tools/arcadia_smoke.py` (M6.5, voir `docs/11`), sauf mention contraire.
 - [x] Démarrage sans crash ni erreur de recette `create_belgian_snacks` : le jar de release avec les jars exacts du pack (phase jar), et le client de dev (`recipes.loaded`).

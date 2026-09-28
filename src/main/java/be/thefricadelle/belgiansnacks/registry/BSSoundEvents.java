@@ -9,9 +9,6 @@
 
 package be.thefricadelle.belgiansnacks.registry;
 
-import java.util.List;
-import java.util.stream.IntStream;
-
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc;
 import net.minecraft.core.registries.Registries;
@@ -28,10 +25,8 @@ public final class BSSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_GRIND = sound("grinder.grind");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_COMPLETE = sound("grinder.complete");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_RUNNING = sound("grinder.running");
-    /** THEFricadelle's voice, one event per line (npc.phrase.N), so a recording can match its text. */
-    public static final List<DeferredHolder<SoundEvent, SoundEvent>> NPC_PHRASES = IntStream.range(0, TheFricadelleNpc.PHRASES)
-        .mapToObj(i -> sound("npc.phrase." + i))
-        .toList();
+    /** THEFricadelle's voice, named after the line it says (npc.phrase.N) so its recording matches the text. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> NPC_VOICE = sound("npc.phrase." + TheFricadelleNpc.SPOKEN_PHRASE);
 
     private BSSoundEvents() {
     }

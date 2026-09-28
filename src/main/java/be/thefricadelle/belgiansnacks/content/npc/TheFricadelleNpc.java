@@ -41,7 +41,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * THEFricadelle in person: appears with a chorus fruit's sound, runs up to whoever eats
- * THE_FRICADELLE, claps and says one of a few lines (aloud and above its head), then shoots up into
+ * THE_FRICADELLE, claps and says its line (aloud and above its head), then shoots up into
  * the sky like a rocket and bursts into fireworks. Purely visual: the
  * burst breaks nothing and hurts no one. Never saved (its entity type is noSave), so it cannot
  * outlive a restart; invulnerable, no collision, nothing to loot.
@@ -62,6 +62,8 @@ public class TheFricadelleNpc extends PathfinderMob {
     /** Hard cap, above the three phases together. */
     public static final int LIFETIME_TICKS = 160;
     public static final int PHRASES = 5;
+    /** The only line with a recorded voice so far: the visitor always says it. */
+    public static final int SPOKEN_PHRASE = 4;
     private static final String PHRASE_KEY = BelgianSnacks.MOD_ID + ".npc.phrase.";
     private static final int[] TURNS = {0, 25, -25, 50, -50};
     private static final int[] HEIGHTS = {0, 1, -1, 2, -2, -3};
@@ -214,9 +216,8 @@ public class TheFricadelleNpc extends PathfinderMob {
         setPhase(Phase.TALK);
         faceTarget(player);
         // Said aloud and written above the head; nothing in the chat.
-        int index = random.nextInt(PHRASES);
-        setCustomName(phrase(index));
-        level().playSound(null, getX(), getY(), getZ(), BSSoundEvents.NPC_PHRASES.get(index).get(), SoundSource.NEUTRAL, 1.5f, 1f);
+        setCustomName(phrase(SPOKEN_PHRASE));
+        level().playSound(null, getX(), getY(), getZ(), BSSoundEvents.NPC_VOICE.get(), SoundSource.NEUTRAL, 1.5f, 1f);
     }
 
     private void launch() {
