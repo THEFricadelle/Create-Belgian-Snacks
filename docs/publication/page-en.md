@@ -35,11 +35,11 @@ Install on the client and on the server.
 
 ## Modpacks
 
-You may include this mod in a CurseForge or Modrinth modpack that references the official, unmodified file. Bundling the jar in an exported or offline pack, or re-uploading it anywhere, needs written permission. Details in the [license summary](https://github.com/THEFricadelle/Create-Belgian-Snacks/blob/main/NOTICE.md).
+You may include this mod in a CurseForge or Modrinth modpack that references the official, unmodified file. Bundling the jar in an exported or offline pack, or re-uploading it anywhere, needs written permission. Details in the [license summary](https://github.com/THEFricadelle/mc-mods-issues/blob/main/licenses/create-belgian-snacks/NOTICE.md).
 
 ## Links
 
-- Source: https://github.com/THEFricadelle/Create-Belgian-Snacks
-- Issues and suggestions: https://github.com/THEFricadelle/Create-Belgian-Snacks/issues
+- Bug reports: https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=bug-create-belgian-snacks.yml
+- Permission requests: https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=permission-request.yml
 
 All Rights Reserved, by THEFricadelle. This is an unofficial addon, not affiliated with or endorsed by the Create team.

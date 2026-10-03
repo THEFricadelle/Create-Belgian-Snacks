@@ -17,12 +17,11 @@ Tout ce qu'il faut remplir sur les deux plateformes. Le texte de la page est dan
 | Dépendances requises | Create (6.0.10 à 6.1.0 exclu) |
 | Dépendances optionnelles | JEI, Jade, KubeJS, Farmer's Delight |
 | Licence CurseForge | All Rights Reserved |
-| Licence Modrinth | Personnalisée : identifiant SPDX `LicenseRef-Create-Belgian-Snacks-ARR`, URL `https://github.com/THEFricadelle/Create-Belgian-Snacks/blob/main/LICENSE` |
+| Licence Modrinth | Personnalisée : identifiant SPDX `LicenseRef-Create-Belgian-Snacks-ARR`, URL `https://github.com/THEFricadelle/mc-mods-issues/blob/main/licenses/create-belgian-snacks/LICENSE` |
 | Environnement Modrinth | Client : **Required** ; Serveur : **Required** |
 | Java | 21 |
 | Distribution dans les modpacks (CurseForge) | **Activée** (licence §3(b) : un modpack qui référence le fichier officiel est autorisé) |
-| Source | https://github.com/THEFricadelle/Create-Belgian-Snacks |
-| Issues | https://github.com/THEFricadelle/Create-Belgian-Snacks/issues |
+| Issues | https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=bug-create-belgian-snacks.yml |
 | Icône | `docs/publication/icon.png` (512×512, la THE_FRICADELLE agrandie sans lissage, `python tools/make_icon.py`) ; la même image est le logo du mod dans la liste des mods du jeu |
 
 ## Fichier

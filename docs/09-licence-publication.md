@@ -12,7 +12,7 @@
 |---|---|
 | `gradle.properties` | `mod_license=All Rights Reserved` |
 | `neoforge.mods.toml` | `license="All Rights Reserved"` (vient de `mod_license`) |
-| `LICENSE` à la racine | Licence propriétaire source visible v2.1 (kit ARR), `LicenseRef-Create-Belgian-Snacks-ARR` : permission modpack §3(b), envoi aux joueurs d'un serveur §2.2, fork de contribution §5.1, droit français. Résumé : `NOTICE.md` |
+| `LICENSE` à la racine | Licence propriétaire à code fermé v3.0 (kit ARR), `LicenseRef-Create-Belgian-Snacks-ARR` : permission modpack §3(b), envoi aux joueurs d'un serveur §2.2, accès au code réservé aux contributeurs invités §5.1, droit français. Résumé : `NOTICE.md` |
 | En-tête des fichiers Java | En-tête SPDX obligatoire sur chaque fichier source (`LicenseRef-Create-Belgian-Snacks-ARR`), à recopier sur tout nouveau fichier |
 | Jar | `LICENSE`, `NOTICE.md` et `CONTRIBUTORS.md` copiés dans `META-INF/` |
 | Page CurseForge/Modrinth | Licence « All Rights Reserved » + texte d'autorisation pour les modpacks |
@@ -33,4 +33,5 @@
 ## Publication
 
 - ✅ Décidé (T4, 26/09/2026) : **public** sur CurseForge, Modrinth et GitHub Releases. Repo GitHub **public** (T5).
+- Révisé (03/10/2026) : publication sur CurseForge et Modrinth seulement ; le repo passe en **privé** et la licence en code fermé (v3.0). Le texte de la licence est publié dans `THEFricadelle/mc-mods-issues` (`licenses/create-belgian-snacks/`), les bugs et demandes d'autorisation passent par ce même repo.
 - Si public : catégories « Food », « Technology », « Create addon » ; dépendances NeoForge 21.1.x + Create (même version que le pack) ; compat optionnelle listée (JEI, Jade, KubeJS, Farmer's Delight…).
