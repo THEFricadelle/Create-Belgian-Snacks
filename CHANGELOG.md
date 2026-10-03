@@ -9,10 +9,12 @@ All notable changes to Create: Belgian Snacks are documented here.
 ### Changed
 
 - **License** — Moved to license 3.0, closed-source variant. The source code is no longer published: the contribution fork of the former Section 5.1 is replaced by access for invited contributors only, and a fork made under 2.1 stays governed by 2.1. Official channels are CurseForge and Modrinth; bug reports and permission requests go to `THEFricadelle/mc-mods-issues`. Releases already published keep the license they shipped with.
+- **Mod list links** — The issue tracker link opens the bug report form of `THEFricadelle/mc-mods-issues`, and the mod page link opens the CurseForge page instead of the source repository.
 
 ### Modifications
 
 - **Licence** — Passage à la licence 3.0, variante code fermé. Le code source n'est plus publié : le fork de contribution de l'ancienne Section 5.1 est remplacé par un accès réservé aux contributeurs invités, et un fork fait sous la 2.1 reste régi par la 2.1. Les canaux officiels sont CurseForge et Modrinth ; les signalements de bugs et les demandes d'autorisation passent par `THEFricadelle/mc-mods-issues`. Les versions déjà publiées gardent la licence avec laquelle elles sont sorties.
+- **Liens de la liste des mods** — Le lien de suivi des problèmes ouvre le formulaire de bug de `THEFricadelle/mc-mods-issues`, et le lien de la page du mod ouvre la page CurseForge au lieu du dépôt des sources.
 
 ---
 
