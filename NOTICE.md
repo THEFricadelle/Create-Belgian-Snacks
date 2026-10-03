@@ -3,9 +3,8 @@
 **Copyright (C) 2026 THEFricadelle. All rights reserved.**
 SPDX-License-Identifier: `LicenseRef-Create-Belgian-Snacks-ARR`
 
-Create: Belgian Snacks is **source-available proprietary software**. The source code is
-public, but the project is **not open-source**. Reading the code grants you no
-right to reuse it.
+Create: Belgian Snacks is **proprietary software**. Its source code is not published,
+and the project is **not open-source**.
 
 This file is a plain-language summary for convenience. The binding terms are in
 [LICENSE](LICENSE); if the two ever disagree, the LICENSE wins.
@@ -14,12 +13,9 @@ This file is a plain-language summary for convenience. The binding terms are in
 
 | Action | Allowed? |
 |--------|----------|
-| Download the official build from CurseForge / Modrinth / GitHub Releases | ✅ Yes |
+| Download the official build from CurseForge / Modrinth | ✅ Yes |
 | Run it on Minecraft server(s) or client(s) you own or operate, for any number of players, including monetized servers | ✅ Yes — as long as the mod itself isn't sold or paywalled |
-| Read, audit, and review the source code | ✅ Yes |
 | Report bugs, open issues | ✅ Yes |
-| Fork the repo to submit a pull request | ✅ Yes — see [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Ship the mod in your own modpack **after** contributing a PR | ✅ Yes — §5.3, official file only |
 | Be credited for a merged contribution, by name and by what you contributed | ✅ Yes — [CONTRIBUTORS.md](CONTRIBUTORS.md), §5.3(a) |
 | Redistribute it, relicense it, or publish a fork **because you contributed** | ❌ No — §5.2, a merged PR enlarges nothing |
 | Include it in a CurseForge / Modrinth modpack that **references** the official unmodified file | ✅ Yes, no need to ask |
@@ -29,7 +25,9 @@ This file is a plain-language summary for convenience. The binding terms are in
 | Offer it as a "one-click install" product in a hosting panel catalogue | ❌ Written permission required |
 | Re-upload or mirror it anywhere (mod-hosting sites, modpack platforms, forums, Discord, file lockers) | ❌ No |
 | Modify it and distribute the result | ❌ No |
-| Publish a build made from your fork | ❌ No |
+| Decompile or reverse-engineer it, beyond what the law always allows | ❌ No — §4 |
+| Share the source code, if you were given access to contribute | ❌ No — §5.1 |
+| Publish a build made from the source code | ❌ No |
 | Reuse its code in another project | ❌ No |
 | Sell it, rent it, or bundle it with a paid product | ❌ No |
 | Claim you wrote it, or remove the copyright notices | ❌ No |
@@ -47,12 +45,13 @@ users' ability to run an Official Build they lawfully obtained. It is a tool
 against abuse, not a kill switch over the ecosystem. See
 §2.3 of the LICENSE.
 
-## Why source-available and not open-source
+## Source code
 
-The source is public so that modpack makers and server owners can audit what runs on their machines, so that compatibility problems with Create, recipe viewers, scripting mods and other food mods can be diagnosed against the real implementation, and so that anyone who spots a bug can fix it through a pull request.
-
-It is not open-source because the author retains exclusive control over
-distribution and derivative works. Visibility is not a license.
+The source code is not published. People given access to contribute may read
+it and prepare contributions, nothing more, and that access can be withdrawn
+(§5.1). A copy of the source made while an earlier version of the license made
+it public stays governed by that earlier version, grants no right over later
+releases, and is never an official channel.
 
 ## Ownership and maintenance
 
@@ -88,9 +87,9 @@ The software components are compile-time or runtime dependencies resolved on the
 ## Requesting permission
 
 Anything marked ❌ above can still be granted case by case. Ask — the answer is
-often yes for reasonable requests. Open an issue on the official repository:
+often yes for reasonable requests. Use the official issue tracker:
 
-  https://github.com/THEFricadelle/Create-Belgian-Snacks/issues
+  https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=permission-request.yml
 
 Permission must be **written** to be valid. Silence is not consent: no reply, or
 no objection to a use, never counts as permission. A permission granted in one
@@ -105,9 +104,8 @@ case applies to that case only.
 **Copyright (C) 2026 THEFricadelle. Tous droits réservés.**
 SPDX-License-Identifier: `LicenseRef-Create-Belgian-Snacks-ARR`
 
-Create: Belgian Snacks est un **logiciel propriétaire à source visible**. Le code
-source est public, mais le projet n'est **pas open-source**. Lire le code ne vous
-donne aucun droit de le réutiliser.
+Create: Belgian Snacks est un **logiciel propriétaire**. Son code source n'est pas
+publié, et le projet n'est **pas open-source**.
 
 Ce fichier est un résumé en langage clair, fourni par commodité. Les conditions
 contraignantes se trouvent dans [LICENSE](LICENSE) ; en cas de divergence, la
@@ -117,12 +115,9 @@ LICENSE prévaut.
 
 | Action | Autorisé ? |
 |--------|-----------|
-| Télécharger le build officiel depuis CurseForge / Modrinth / GitHub Releases | ✅ Oui |
+| Télécharger le build officiel depuis CurseForge / Modrinth | ✅ Oui |
 | L'exécuter sur le(s) serveur(s) ou client(s) Minecraft que vous possédez ou opérez, quel que soit le nombre de joueurs, serveurs monétisés compris | ✅ Oui — tant que le mod lui-même n'est ni vendu ni derrière un paywall |
-| Lire, auditer et relire le code source | ✅ Oui |
 | Signaler des bugs, ouvrir des issues | ✅ Oui |
-| Forker le dépôt pour soumettre une pull request | ✅ Oui — voir [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Diffuser le mod dans votre propre modpack **après** avoir contribué une PR | ✅ Oui — §5.3, fichier officiel uniquement |
 | Être crédité pour une contribution fusionnée, par nom et par ce que vous avez apporté | ✅ Oui — [CONTRIBUTORS.md](CONTRIBUTORS.md), §5.3(a) |
 | Le redistribuer, le relicencier ou publier un fork **au motif que vous avez contribué** | ❌ Non — §5.2, une PR fusionnée n'élargit rien |
 | L'inclure dans un modpack CurseForge / Modrinth qui **référence** le fichier officiel non modifié | ✅ Oui, sans demander |
@@ -132,7 +127,9 @@ LICENSE prévaut.
 | Le proposer en « installation en un clic » dans le catalogue d'un hébergeur | ❌ Autorisation écrite requise |
 | Le ré-uploader ou le mirrorer ailleurs (sites d'hébergement de mods, plateformes de modpacks, forums, Discord, hébergeurs de fichiers) | ❌ Non |
 | Le modifier et en distribuer le résultat | ❌ Non |
-| Publier un build issu de votre fork | ❌ Non |
+| Le décompiler ou le rétro-concevoir, au-delà de ce que la loi permet toujours | ❌ Non — §4 |
+| Partager le code source, si l'on vous y a donné accès pour contribuer | ❌ Non — §5.1 |
+| Publier un build issu du code source | ❌ Non |
 | Réutiliser son code dans un autre projet | ❌ Non |
 | Le vendre, le louer, ou le lier à un produit payant | ❌ Non |
 | Prétendre l'avoir écrit, ou retirer les mentions de copyright | ❌ Non |
@@ -151,12 +148,14 @@ les autres utilisateurs d'exécuter un build officiel obtenu licitement. C'est u
 outil contre l'abus, pas un interrupteur sur l'écosystème. Voir
 §2.3 de la LICENSE.
 
-## Pourquoi source visible et pas open-source
+## Code source
 
-Le code est public pour que les créateurs de modpacks et les administrateurs de serveurs puissent auditer ce qui tourne sur leurs machines, pour que les problèmes de compatibilité avec Create, les visualiseurs de recettes, les mods de script et les autres mods de nourriture puissent être diagnostiqués sur l'implémentation réelle, et pour que quiconque repère un bug puisse le corriger par une pull request.
-
-Ce n'est pas open-source parce que l'auteur conserve le contrôle exclusif de la
-distribution et des œuvres dérivées. La visibilité n'est pas une licence.
+Le code source n'est pas publié. Les personnes à qui l'on donne accès pour
+contribuer peuvent le lire et préparer des contributions, rien de plus, et cet
+accès peut être retiré (§5.1). Une copie du code faite à l'époque où une version
+antérieure de la licence le rendait public reste régie par cette version
+antérieure, ne donne aucun droit sur les versions suivantes, et n'est jamais un
+canal officiel.
 
 ## Propriété et maintenance
 
@@ -193,10 +192,10 @@ Les composants logiciels sont des dépendances de compilation ou d'exécution r�
 ## Demander une autorisation
 
 Tout ce qui est marqué ❌ ci-dessus peut malgré tout être accordé au cas par cas.
-Demandez — la réponse est souvent oui pour les demandes raisonnables. Ouvrez une
-issue sur le dépôt officiel :
+Demandez — la réponse est souvent oui pour les demandes raisonnables. Passez par
+le tracker d'issues officiel :
 
-  https://github.com/THEFricadelle/Create-Belgian-Snacks/issues
+  https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=permission-request.yml
 
 L'autorisation doit être **écrite** pour être valable. Le silence ne vaut pas
 accord : l'absence de réponse, ou l'absence d'objection à un usage, ne constitue
