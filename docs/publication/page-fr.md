@@ -35,11 +35,11 @@ Tout le reste est du Create natif : broyage, meule, mixer, compacteur, presse, r
 
 ## Modpacks
 
-Vous pouvez inclure ce mod dans un modpack CurseForge ou Modrinth qui référence le fichier officiel non modifié. Empaqueter le jar dans un pack exporté ou hors ligne, ou le ré-uploader ailleurs, demande une autorisation écrite. Détails dans le [résumé de la licence](https://github.com/THEFricadelle/Create-Belgian-Snacks/blob/main/NOTICE.md).
+Vous pouvez inclure ce mod dans un modpack CurseForge ou Modrinth qui référence le fichier officiel non modifié. Empaqueter le jar dans un pack exporté ou hors ligne, ou le ré-uploader ailleurs, demande une autorisation écrite. Détails dans le [résumé de la licence](https://github.com/THEFricadelle/mc-mods-issues/blob/main/licenses/create-belgian-snacks/NOTICE.md).
 
 ## Liens
 
-- Sources : https://github.com/THEFricadelle/Create-Belgian-Snacks
-- Bugs et suggestions : https://github.com/THEFricadelle/Create-Belgian-Snacks/issues
+- Signaler un bug : https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=bug-create-belgian-snacks.yml
+- Demandes d'autorisation : https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=permission-request.yml
 
 Tous droits réservés, THEFricadelle. Addon non officiel, ni affilié ni approuvé par l'équipe de Create.

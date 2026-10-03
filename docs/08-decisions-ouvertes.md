@@ -58,8 +58,8 @@ Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement des
 | T1 | JEI ou EMI ? | — | ✅ **JEI** (26/09/2026) |
 | T2 | Modpack cible | — | ✅ **Arcadia: Echoes of Power V2** 2.0.32 — versions relevées dans `11-compat-arcadia.md` (26/09/2026) |
 | T3 | Licence du mod | — | ✅ **All Rights Reserved** (code + assets) (26/09/2026) |
-| T4 | Publication publique (Modrinth/CurseForge) ou privée au modpack ? | ? | ✅ **Public : CurseForge + Modrinth + GitHub Releases** ; Arcadia référence le fichier officiel CurseForge (licence §3(b)) (26/09/2026) |
-| T5 | Où héberger le repo ? | repo **perso** de THEFricadelle (privé conseillé avec ARR) | ✅ **GitHub public** `THEFricadelle/Create-Belgian-Snacks` (source visible, ARR) ; issues = contact de la licence (§11) (26/09/2026) |
+| T4 | Publication publique (Modrinth/CurseForge) ou privée au modpack ? | ? | ✅ **Public : CurseForge + Modrinth + GitHub Releases** ; Arcadia référence le fichier officiel CurseForge (licence §3(b)) (26/09/2026). Révisé (03/10/2026) : CurseForge + Modrinth seulement |
+| T5 | Où héberger le repo ? | repo **perso** de THEFricadelle (privé conseillé avec ARR) | ✅ **GitHub public** `THEFricadelle/Create-Belgian-Snacks` (source visible, ARR) ; issues = contact de la licence (§11) (26/09/2026). Révisé (03/10/2026) : repo **privé**, licence en code fermé v3.0 ; issues et contact sur `THEFricadelle/mc-mods-issues` |
 | T6 | Traduction `fr_fr` via datagen ou fichier manuel | selon ce qui est le plus simple au M1 | ✅ **Datagen** (`BSFrenchLangProvider`), Registrate ne générant que `en_us` (26/09/2026) |
 | T7 | Titulaire des droits ARR | — | ✅ **THEFricadelle seul** — projet perso, la team ne contribue pas au code (26/09/2026) |
 | T8 | Forme du nom d'auteur dans les métadonnées et le copyright | — | ✅ **`THEFricadelle`** (sans underscore) ; « THE_Fricadelle » reste le nom de l'item du palier 2 (26/09/2026) |

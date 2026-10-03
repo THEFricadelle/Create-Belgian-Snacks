@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
-issueTrackerURL="https://github.com/THEFricadelle/Create-Belgian-Snacks/issues"
+issueTrackerURL="https://github.com/THEFricadelle/mc-mods-issues/issues/new?template=bug-create-belgian-snacks.yml"
 
 [[mods]]
 modId="${mod_id}"
@@ -11,7 +11,7 @@ authors="${mod_authors}"
 description='''${mod_description}'''
 logoFile="create_belgian_snacks.png"
 logoBlur=false
-displayURL="https://github.com/THEFricadelle/Create-Belgian-Snacks"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/create-belgian-snacks"
 
 [[dependencies.${mod_id}]]
     modId="neoforge"

@@ -59,7 +59,7 @@ The artwork follows [the texture brief](docs/12-prompts-textures.md). Run `pytho
 
 ## License
 
-All Rights Reserved. The source is public for reading, auditing and contributing, but the mod is not open-source. See [LICENSE](LICENSE) for the binding terms and [NOTICE.md](NOTICE.md) for a plain-language summary. Modpacks may include the official, unmodified file when they reference an official channel.
+All Rights Reserved. The source code is not published, and the mod is not open-source. See [LICENSE](LICENSE) for the binding terms and [NOTICE.md](NOTICE.md) for a plain-language summary. Modpacks may include the official, unmodified file when they reference an official channel.
 
 This is an unofficial addon, not affiliated with or endorsed by the Create team.
 
@@ -132,7 +132,7 @@ Les dessins suivent [le cahier des textures](docs/12-prompts-textures.md). Exéc
 
 ## Licence
 
-Tous droits réservés. Le code est public pour être lu, audité et amélioré, mais le mod n'est pas open-source. Voir [LICENSE](LICENSE) pour les conditions contraignantes et [NOTICE.md](NOTICE.md) pour un résumé en langage clair. Les modpacks peuvent inclure le fichier officiel non modifié s'ils référencent un canal officiel.
+Tous droits réservés. Le code source n'est pas publié, et le mod n'est pas open-source. Voir [LICENSE](LICENSE) pour les conditions contraignantes et [NOTICE.md](NOTICE.md) pour un résumé en langage clair. Les modpacks peuvent inclure le fichier officiel non modifié s'ils référencent un canal officiel.
 
 Addon non officiel, ni affilié ni approuvé par l'équipe de Create.
 
