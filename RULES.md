@@ -16,6 +16,8 @@
 
 Use the existing `dev` branch conventions; use `feat/`, `fix/` or `hotfix/` branches for isolated work. Do not invent staging or release branches. Conventional commits, no co-author trailers. Commit freely, but push only when the author asks, in grouped batches (decided on 2026-09-27; this replaces the global batch-push thresholds for this project). Keep version 1.0.0 until a version change is requested. Preserve unrelated local changes.
 
+Issues live in the public `THEFricadelle/mc-mods-issues` repository, not in this one. A commit that fixes one carries `Fixes THEFricadelle/mc-mods-issues#<number>` in its body; the issue closes when the commit reaches `main`, that is at release. Until then, label the issue `fixed next release`. Use `Refs` instead of `Fixes` for a commit that only advances it.
+
 ## 3. Code Conventions
 
 English code, comments and logs; French user communication. Java PascalCase classes and camelCase members, Python snake_case. Preserve author and license headers. README and changelog are bilingual, English first. Edit source providers rather than generated resources when changing datagen. No copied Minecraft/Create artwork. Textures use at most 16 opaque colours, binary alpha, 16x16 pixels (flow: 16x32). Preserve flow metadata and atlas registration.
