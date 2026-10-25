@@ -2,7 +2,7 @@
 
 Rédigé le 25/10/2026. Base : la v1 publiée (1.0.0, jalons M0 à M9), le rapport de bug Solonion du 20/10/2026 et les choix de THEFricadelle du 25/10/2026.
 
-La v2 transforme la friterie industrielle en **friterie complète** : frites, sauces, mitraillettes, boulets et gaufres, deux machines de plus, et un comptoir où des clients passent commande. Elle reste sur Arcadia V2 (Minecraft 1.21.1, NeoForge 21.1.x, Create 6.0.10) et garde tous les principes de la v1. Une exigence passe avant tout le reste : **retirer le mod ne doit jamais bloquer une sauvegarde ni un monde.**
+La v2 transforme la friterie industrielle en **friterie complète** : frites, sauces, mitraillettes, boulets et gaufres, un Gaufrier, l'huile usagée à filtrer et de quoi décorer sa friterie. La vente passe par les boutiques de Create 6 (Stock Keeper et nappes), sans code de notre côté. Elle reste sur Arcadia V2 (Minecraft 1.21.1, NeoForge 21.1.x, Create 6.0.10) et garde tous les principes de la v1. Une exigence passe avant tout le reste : **retirer le mod ne doit jamais bloquer une sauvegarde ni un monde.**
 
 Conventions du document :
 - **Doit** = exigence ferme, vérifiée par un test ou une checklist. **Devrait** = attendu, abandonnable avec une raison écrite. **Peut** = bonus.
@@ -19,15 +19,16 @@ Conventions du document :
 |---|---|---|
 | O1 | Retirer le mod laisse tout monde jouable | Test de retrait (section 3.6) vert en environnement minimal **et** dans Arcadia |
 | O2 | Élargir la carte de la friterie belge | Frites, 4 sauces, mitraillette, boulets à la liégeoise, croquettes de crevettes, 2 gaufres : chacun produit par une ligne entièrement automatisable |
-| O3 | Ajouter un vrai gameplay de friterie | Un comptoir reçoit des commandes de clients, se sert par tapis ou funnel, encaisse un paiement extractible par funnel |
+| O3 | Pouvoir tenir une friterie avec Create | Nos snacks se vendent dans une boutique Create 6 (Stock Keeper + nappe) sans réglage particulier ; décor de friterie disponible |
 | O4 | Rester léger sur un serveur de 464 mods | Part du mod sous 1 % du thread serveur dans le scénario spark v2 (section 12.4) |
-| O5 | Tout rester réglable sans toucher au jar | Chaque recette, menu, paiement et seuil passe par datapack, tag, loot table ou config serveur |
+| O5 | Tout rester réglable sans toucher au jar | Chaque recette et chaque seuil passe par datapack, tag ou config serveur |
 
 ### Non-objectifs v2
 
 - Pas de changement de version de Minecraft, NeoForge ou Create (cible Arcadia, décidé le 25/10/2026).
 - Pas de structure générée dans le monde (friterie de village) : reportée (section 9).
 - Pas de métier de villageois : écarté pour la v2, il persiste dans les villageois vanilla et contredit l'exigence de retrait (section 3.3).
+- Pas de comptoir ni de clients maison : Create 6 sait déjà tenir une boutique (retiré le 25/10/2026).
 - Pas de refonte des 3 paliers de fricadelle : leurs recettes et IDs restent ceux de la v1.
 
 ---
@@ -48,7 +49,7 @@ Avant le premier jalon v2 : relire l'instance Arcadia à jour (version du pack, 
 ### 2.2 Principes repris de la v1
 
 1. **Create natif d'abord.** Une machine maison n'entre que si aucune machine de Create ne sait faire l'étape. Chaque machine v2 justifie ce point (section 6).
-2. **Automatisable de bout en bout.** Aucun clic droit obligatoire, y compris pour servir un client.
+2. **Automatisable de bout en bout.** Aucun clic droit obligatoire.
 3. **Rien de lourd en tick.** Pas de scan du registre, pas de recherche d'entités chaque tick, caches invalidés par événement.
 4. **Compat par tags `c:`** et conditions `neoforge:mod_loaded` / `neoforge:tag_empty`, avec recette de secours vanilla.
 5. **IDs de recettes stables et lisibles** : `create_belgian_snacks:<type>/<résultat>`.
@@ -91,11 +92,11 @@ Ce que la v1 respecte déjà (vérifié le 25/10/2026) et que la v2 **doit** gar
 | Entités | Toutes `noSave()` : jamais écrites dans un chunk | PNJ `noSave()` |
 | Métiers de villageois, POI | Aucun | Aucun |
 
-Toute exception future **doit** être listée ici, avec un test de retrait qui la couvre. Les clients du comptoir (section 7) respectent cette règle par conception : ce sont des entités `noSave()`, la commande vit dans le comptoir.
+Toute exception future **doit** être listée ici, avec un test de retrait qui la couvre.
 
 ### 3.4 Règle R3 : un état persistant vit dans nos blocs et nos items
 
-- La réputation du comptoir, la collection du Hachoir, la graisse et l'huile usagée de la Friteuse vivent dans nos block entities, et dans nos blocs-items quand on casse le bloc.
+- La collection du Hachoir, la graisse et l'huile usagée de la Friteuse vivent dans nos block entities, et dans nos blocs-items quand on casse le bloc.
 - Au retrait, ces blocs deviennent de l'air et leur état est perdu. C'est le comportement attendu, **documenté** dans le README (section « Retirer le mod »).
 - Aucune donnée « globale » (SavedData de monde) sauf nécessité démontrée. Si une est ajoutée, elle porte un nom de fichier à notre namespace, que le jeu ignore sans erreur une fois le mod retiré.
 
@@ -135,7 +136,7 @@ Toute exception future **doit** être listée ici, avec un test de retrait qui l
 | Coffre, tonneau, Depot, tapis, Toolbox, Vault de Create | nos items, dont les blocs-items qui portent un data component |
 | Réservoir, Spout, Basin, tuyaux de Create | chacun de nos fluides |
 | Filtres et Stock Ticker de Create | un de nos items comme filtre |
-| Friteuse, Hachoir, Comptoir posés | en marche, avec état |
+| Friteuse, Hachoir, Gaufrier posés | en marche, avec état |
 | Arcadia seulement : Solonion, Sophisticated Backpacks, AE2 (cellule), Mekanism (réservoir) | un de nos aliments mangé, nos items et fluides stockés |
 
 **Phase 2, sans le mod** : relance avec le même monde, sans notre jar.
@@ -275,7 +276,7 @@ Les gaufres de Create: Food (`createfood:*_mini_waffle`) ne sont pas touchées ;
 | `liege_waffle`, `brussels_waffle`, `brussels_waffle_sugared` | oui | |
 | `used_oil_filter`, `oil_filter` | non | section 6.2 |
 
-Environ **31 items**, **5 fluides** (4 sauces + huile usagée), **4 blocs** (Gaufrier, Comptoir, enseigne, néon). Les valeurs nutritives de chaque snack sont fixées au jalon qui l'introduit, dans un tableau ajouté à `08-decisions-ouvertes.md`.
+Environ **31 items**, **5 fluides** (4 sauces + huile usagée), **3 blocs** (Gaufrier, enseigne, néon). Les valeurs nutritives de chaque snack sont fixées au jalon qui l'introduit, dans un tableau ajouté à `08-decisions-ouvertes.md`.
 
 ---
 
@@ -330,80 +331,17 @@ Le blanc de bœuf fondu suit la même règle (son huile usagée est la même `us
 
 ---
 
-## 7. Gameplay friterie : le Comptoir
+## 7. Tenir une friterie
 
-### 7.1 Principe
+### 7.1 Vendre : les boutiques de Create 6
 
-Un **Comptoir de friterie** posé dans une zone éclairée attire des clients pendant la journée. Chaque client passe une commande (1 à 4 snacks). Le Comptoir la sert seul dès que les snacks sont dans son passe-plat : la friterie s'automatise de bout en bout, de la pomme de terre au paiement. Les clients sont de la mise en scène : **la commande vit dans le Comptoir**, jamais dans l'entité.
+Create 6 fait déjà la boutique : un Stock Keeper derrière une nappe (Table Cloth) affiche un prix, le client paie et reçoit sa commande depuis le réseau logistique (paquets, Stock Ticker). Une friterie automatisée s'y branche telle quelle. **Aucun code de notre côté** (décidé le 25/10/2026).
 
-```mermaid
-flowchart LR
-  L[Lignes de production] -->|tapis / funnel| PP[Passe-plat<br/>9 emplacements]
-  CL[Client<br/>entité noSave] -->|commande| CT[Comptoir]
-  PP --> CT
-  CT -->|commande complète| SV[Service :<br/>snacks retirés, client content]
-  SV --> CA[Caisse<br/>paiement + pourboire]
-  CA -->|funnel / trémie| ST[Stockage]
-  SV --> RP[Réputation +1]
-```
+Exigences de notre côté :
+- **Doit** : nos snacks finis s'empilent (64, ou 16 pour les plats en bol) et passent dans les paquets de Create, les filtres et le Stock Ticker comme n'importe quel item (GameTest : un paquet contenant chaque snack fini se crée et se déballe).
+- **Devrait** : une scène Ponder ou une page de doc montre une friterie complète (ligne de frites, sauces, Stock Keeper derrière une nappe), pour donner l'idée sans rien ajouter au code.
 
-### 7.2 Comptoir (`friterie_counter`)
-
-| Aspect | Spéc |
-|---|---|
-| Taille | 1 bloc orientable ; le client se présente devant la face avant |
-| Passe-plat | 9 emplacements, insertion par funnel, tapis, trémie, clic droit ; n'accepte que les items du tag `create_belgian_snacks:friterie/servable` (nos snacks finis par défaut) |
-| Caisse | 9 emplacements, extraction seule (funnel, trémie, clic droit main vide) ; pleine → plus de nouveau client |
-| Commandes | Jusqu'à `counter.maxQueue` (3) en attente, chacune avec son délai de patience |
-| Service | Chaque seconde au plus (pas chaque tick), le Comptoir vérifie la commande en tête ; si le passe-plat la contient, il retire les snacks et paie |
-| Goggles / Jade | Commande en cours (icônes), patience restante, réputation, file d'attente |
-| Écran | Pas de GUI d'inventaire en v2 : le passe-plat et la caisse passent par les capabilities et le clic droit ; la commande s'affiche au-dessus du Comptoir (rendu client) et dans Jade |
-| Casser | Le contenu tombe ; la réputation est **conservée** dans l'item (data component `counter_state`, sur notre item uniquement, règle R2) |
-| Comparateur | Signal = commandes en attente (0 à 3) × 5 |
-| Craft | Mechanical Crafter : planches, Brass Casing, Depot, Clipboard de Create (provisoire, `⚠️ V-D9`) |
-
-### 7.3 Clients (`friterie_customer`)
-
-| Aspect | Spéc |
-|---|---|
-| Entité | `PathfinderMob` sans IA hostile, invulnérable, sans loot, **`noSave()`** (règle R2) |
-| Apparition | À 8 à 24 blocs du Comptoir, sur un bloc où les mobs peuvent apparaître et éclairé, hors de la vue directe du joueur si possible ; seulement le jour (`counter.openHours`) |
-| Fréquence | Un essai toutes les `counter.spawnInterval` (provisoire 600 ticks), si la file a de la place ; plafonds `counter.maxCustomersPerCounter` (3) et `counter.maxCustomersPerServer` (30) |
-| Trajet | Navigation vanilla vers la face avant ; s'il n'y arrive pas en 30 s, il abandonne et part (la commande n'est pas créée) |
-| Commande | Créée **dans le Comptoir** à l'arrivée ; affichée au-dessus du client |
-| Patience | `counter.patienceSeconds` (provisoire 180 s) ; à zéro, le client part mécontent, la commande est annulée, réputation −1 |
-| Départ | Marche quelques blocs puis disparaît (particules) ; s'il est déchargé avec son chunk, la commande reste valable jusqu'à sa patience |
-| Apparence | Skin de villageois varié ou modèle de joueur avec skins inclus (`⚠️ V-D11`) ; aucun skin chargé en ligne |
-| Multijoueur | Visible par tous, comportement décidé côté serveur uniquement |
-
-### 7.4 Menu et commandes (data-driven)
-
-- Menu en datapack : `data/<namespace>/friterie_menu/<id>.json`, un fichier par plat proposable.
-
-```json
-{
-  "item": "create_belgian_snacks:cone_of_fries_andalouse",
-  "weight": 10,
-  "min_reputation": 0,
-  "max_count": 2,
-  "price": 3
-}
-```
-
-- Une commande tire 1 à `1 + réputation / 10` plats (max 4) parmi ceux dont `min_reputation` est atteinte. Les plats d'autres mods peuvent être ajoutés par datapack ou KubeJS : le pack décide.
-- Plats par défaut : tous nos snacks finis ; la mitraillette et les boulets à partir de la réputation 10 ; THE_Fricadelle à 30 (rare).
-
-### 7.5 Paiement et réputation
-
-| Aspect | Spéc |
-|---|---|
-| Paiement | Loot table `create_belgian_snacks:friterie/payment`, appelée avec la somme des `price` de la commande ; par défaut des émeraudes (1 émeraude par 3 points de prix, arrondi au-dessus `⚠️ V-D12`). Le pack peut la remplacer (pièces de Create Numismatics, par exemple) par datapack ou LootJS, sans toucher au jar |
-| Pourboire | Servi dans le premier tiers de la patience : loot table `friterie/tip` en plus |
-| Réputation | 0 à 50, dans le Comptoir. +1 par commande servie, −1 par client parti mécontent. Débloque des plats plus chers et des commandes plus grandes |
-| Étoiles | 5 paliers affichés (0, 10, 20, 35, 50) |
-| Advancements | « Première commande », « Coup de feu » (10 commandes servies dans la même journée de jeu), « Friterie étoilée » (réputation 50), « Le client est roi » (commande de 4 plats) |
-
-### 7.6 Décoration
+### 7.2 Décoration
 
 | Bloc | Spéc |
 |---|---|
@@ -424,12 +362,6 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | `fryer.usedOilCapacity` | `2000` mB | Réservoir d'huile usagée |
 | `waffleIron.maxBatch` | `4` | Pâtes cuites ensemble |
 | `waffleIron.speedMultiplier` | `1.0` | Divise les temps de cuisson |
-| `counter.enabled` | `true` | Coupe toute apparition de client sur le serveur |
-| `counter.spawnInterval` | `600` ticks | Délai entre deux essais d'apparition par Comptoir |
-| `counter.maxQueue` | `3` | Commandes en attente par Comptoir |
-| `counter.maxCustomersPerCounter` / `maxCustomersPerServer` | `3` / `30` | Plafonds d'entités |
-| `counter.patienceSeconds` | `180` | Patience d'un client |
-| `counter.openHours` | `day` | `day`, `always` ou `night` |
 | `uninstall.prepare` | `false` | Mode préparation au retrait (section 3.5) |
 
 ---
@@ -439,16 +371,16 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | Priorité | Idée | Note |
 |---|---|---|
 | Devrait | Schéma KubeJS pour `frying` et `waffle_baking` | Reporté depuis la v1 ; `event.custom` marche déjà |
-| Devrait | Scènes Ponder pour le Gaufrier, l'huile usagée, le Comptoir et la ligne de frites | Même méthode que la v1 (schémas construits par `runPonderSchematics`) |
+| Devrait | Scènes Ponder pour le Gaufrier, l'huile usagée et la ligne de frites | Même méthode que la v1 (schémas construits par `runPonderSchematics`) |
 | Devrait | Chapitre FTB Quests « La Friterie » proposé à la team du pack | Livré comme fichier d'exemple dans `docs/`, la team l'intègre ou non |
 | Peut | Frites ratées (brûlées) si laissées trop longtemps dans la Friteuse pleine | Contredit D5 (100 % de réussite) : à trancher |
-| Peut | Fête de la frite : un jour de jeu sur N, clients doublés et pourboires plus gros | Config, désactivable |
 | Peut | Compat .3D Placeable Food (cornets posables) | Si le mod l'expose simplement |
 | Peut | Compat upgrade d'alimentation de Sophisticated Backpacks | Vérifier que nos aliments sont mangés |
 | Plus tard | Friterie générée dans les villages (jigsaw) | Hors v2 ; sans risque de retrait (blocs seulement) |
 | Plus tard | Carbonnade flamande à la bière (`culturaldelights:beer` dans Arcadia) | Recette au Mixer chauffé, simple à ajouter |
 | Plus tard | Friteuse industrielle (multibloc) | Seulement si les joueurs saturent les friteuses 1 bloc |
 | Écarté | Métier de villageois friturier | Persisté dans les villageois vanilla : contraire à E1 |
+| Écarté | Comptoir de friterie et clients maison | Create 6 fait déjà la boutique (section 7.1) |
 | Écarté | Voix des 4 phrases restantes du PNJ | Le PNJ est débranché (C1) |
 
 ---
@@ -457,9 +389,9 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 
 | Mod | Exigence v2 |
 |---|---|
-| JEI | Catégories : Gaufrier (`waffle_baking`), Comptoir (menu : plats, réputation requise, prix) ; Friteuse affiche l'huile usagée rendue ; catalysts enregistrés ; items de transition traités comme en v1 |
-| Jade | Gaufrier (statut, progression), Comptoir (commande, patience, réputation), Friteuse (2e réservoir) ; données serveur par le mécanisme de Jade |
-| KubeJS | Tous les IDs de recettes stables ; menu en datapack et tags ; paiement en loot table ; test KubeJS du jalon M6.5 étendu : retirer `frying/fries`, ajouter un plat au menu, changer le paiement |
+| JEI | Catégorie Gaufrier (`waffle_baking`) ; Friteuse affiche l'huile usagée rendue ; catalysts enregistrés ; items de transition traités comme en v1 |
+| Jade | Gaufrier (statut, progression), Friteuse (2e réservoir) ; données serveur par le mécanisme de Jade |
+| KubeJS | Tous les IDs de recettes stables ; tags modifiables ; test KubeJS du jalon M6.5 étendu : retirer `frying/fries`, ajouter une recette `waffle_baking` |
 | Farmer's Delight et addons | Oignon, tomate, haché, lait par tags `c:` ; recettes de secours vanilla |
 | Crabber's Delight | Crevettes (optionnel, secours cabillaud) |
 | Burger Mod | `burgermod:fries` accepté dans le cornet (optionnel) |
@@ -476,9 +408,8 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 |---|---|---|
 | Textures d'items 16×16 | ~31 | Placeholders par `tools/gen_placeholders.py`, puis vraies textures par THEFricadelle (`06-assets.md`, `12-prompts-textures.md` à compléter) |
 | Fluides | 5 × (still + flow animé) + 5 seaux | Même gabarit que les 4 fluides v1 |
-| Blocs | Gaufrier (corps + plaque partielle), Comptoir, enseigne (3 variantes ?), néon (4 couleurs) | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
-| Entité | Client : skins ou modèle (V-D11) | Aucun asset de Create ni de Minecraft copié |
-| Sons | Gaufrier (fermeture, cuisson), Comptoir (sonnette, caisse), client content / mécontent | Enregistrements CC0 ou faits maison, listés dans `NOTICE.md` |
+| Blocs | Gaufrier (corps + plaque partielle), enseigne (3 variantes ?), néon (4 couleurs) | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
+| Sons | Gaufrier (fermeture, cuisson) | Enregistrements CC0 ou faits maison, listés dans `NOTICE.md` |
 | Lang | Toutes les nouvelles clés en `en_us` et `fr_fr` ; tooltips d'humour | `ResourceConsistencyTest` couvre déjà la parité |
 
 `tools/asset_status.py` est étendu à chaque nouvel asset attendu.
@@ -491,36 +422,35 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 
 | Suite | Nouveaux contrats |
 |---|---|
-| JUnit | `frozen-ids.txt` (R1) ; aucun data component de notre namespace hors de nos items dans les fichiers générés (R2) ; parité des langues ; recettes v2 : IDs exacts, conditions et jumelles de secours ; logique pure du menu (tirage pondéré, réputation, taille de commande) et du paiement |
-| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé si V-D2 confirmé) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout : frites jusqu'au cornet sauce, mitraillette, boulets, croquettes ; Comptoir (commande servie depuis le passe-plat, patience écoulée, réputation, caisse pleine, conservation à la casse) ; clients `noSave()` ; C1 : aucun PNJ |
+| JUnit | `frozen-ids.txt` (R1) ; aucun data component de notre namespace hors de nos items dans les fichiers générés (R2) ; parité des langues ; recettes v2 : IDs exacts, conditions et jumelles de secours |
+| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé si V-D2 confirmé) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout : frites jusqu'au cornet sauce, mitraillette, boulets, croquettes ; snacks finis dans un paquet de Create (section 7.1) ; C1 : aucun PNJ |
 | GameTest compat (FD) | Recettes tomate / oignon actives, secours inactifs |
-| Client smoke | Modèles, fluides, JEI (nouvelles catégories), Ponder (nouvelles scènes), captures du Comptoir avec commande |
-| Multijoueur smoke | 2 clients voient le même client et la même commande ; l'un remplit le passe-plat, l'autre voit la commande servie et la caisse se remplir |
+| Client smoke | Modèles, fluides, JEI (nouvelles catégories), Ponder (nouvelles scènes) |
+| Multijoueur smoke | 2 clients voient le même Gaufrier en marche ; l'un le charge, l'autre récupère la gaufre |
 | `uninstall_smoke.py` | Section 3.6 |
-| Arcadia smoke | Étendu : recettes v2 chargées, conflits, KubeJS, Comptoir en LAN |
+| Arcadia smoke | Étendu : recettes v2 chargées, conflits, KubeJS, Gaufrier en LAN |
 
 Chaque contrat est vérifié par mutation, comme en v1.
 
 ### 12.2 Manuel
 
-- Rendu : plaques du Gaufrier, commande au-dessus du Comptoir, néons.
-- Ressenti : rythme des clients, patience, valeur du paiement face au coût des lignes.
+- Rendu : plaques du Gaufrier, néons.
+- Ressenti : coût des lignes face à la valeur nutritive des snacks.
+- Une boutique Create 6 vend nos snacks dans le pack (section 7.1).
 - Jade dans le pack.
 
 ### 12.3 Équilibrage
 
 - Un export `foods export` sur le pack à jour, pour mesurer l'effet de V-D1 sur le total.
-- Une session de jeu de 2 heures dans Arcadia avec une friterie de réputation 0 à 20, pour régler `spawnInterval`, `patienceSeconds` et les prix.
+- Une session de jeu de 2 heures dans Arcadia, de la pomme de terre à la mitraillette, pour régler les temps de cuisson et les quantités.
 
 ### 12.4 Performance (spark)
 
 | Scénario | Mesure | Cible |
 |---|---|---|
-| 20 Comptoirs servis en continu, 30 clients sur le serveur | `/spark profiler` 2 min | part du mod < 1 % du thread serveur ; aucune recherche d'entités par tick |
-| Apparition et départ de 200 clients | `/spark heapsummary` avant / après | `FriterieCustomer` retombe au nombre vivant ; aucune commande orpheline |
 | 50 Friteuses avec huile usagée | profiler | coût par tick ≈ v1 |
 | 20 Gaufriers | profiler client | rendu des plaques sans pic de frame |
-| `/reload` × 10 | heapsummary | instances de menu et de recettes constantes |
+| `/reload` × 10 | heapsummary | instances de recettes constantes |
 
 Avant la release v2 : rapport spark demandé à THEFricadelle et revu (règle globale), aucune fusion dans `main` avant.
 
@@ -537,13 +467,11 @@ flowchart LR
   M12 --> M13[M13 Mitraillette<br/>boulets, croquettes]
   M10 --> M14[M14 Huile usagée]
   M10 --> M15[M15 Gaufrier]
-  M13 --> M16[M16 Comptoir<br/>et clients]
+  M13 --> M16[M16 Déco, Ponder,<br/>JEI, Jade]
+  M14 --> M16
   M15 --> M16
-  M16 --> M17[M17 Économie<br/>réputation]
-  M17 --> M18[M18 Déco, Ponder,<br/>JEI, Jade]
-  M14 --> M18
-  M18 --> M19[M19 Arcadia<br/>+ retrait]
-  M19 --> M20[M20 Finitions<br/>publication]
+  M16 --> M17[M17 Arcadia<br/>+ retrait]
+  M17 --> M18[M18 Finitions<br/>publication]
 ```
 
 | Jalon | Contenu | Accepté si |
@@ -554,11 +482,9 @@ flowchart LR
 | **M13 — Plats** | Mitraillette, boulets à la liégeoise, croquettes | Chacun produit par une ligne automatique (GameTest) |
 | **M14 — Huile usagée** | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |
 | **M15 — Gaufrier** | Bloc, recette `waffle_baking`, rendu, JEI, Jade, 2 gaufres | Checklist Gaufrier en solo et serveur dédié |
-| **M16 — Comptoir et clients** | Comptoir, passe-plat, caisse, entité client, commandes, menu datapack | Une friterie entièrement automatique sert 20 commandes d'affilée sans intervention (GameTest) |
-| **M17 — Économie** | Paiement en loot table, pourboire, réputation, étoiles, advancements | Réputation de 0 à 10 en jeu ; paiement remplacé par un datapack de test |
-| **M18 — Finitions de contenu** | Enseigne, néons, Ponder, catégories JEI, plugins Jade, schéma KubeJS (si fait) | Client smoke et multijoueur smoke verts |
-| **M19 — Arcadia** | Arcadia smoke étendu, `uninstall_smoke.py` dans le pack, scénario Solonion, export FoodIndex | Tous verts sur le pack à jour, 2 joueurs en LAN |
-| **M20 — Publication** | Textures, sons, rapports spark, README et CHANGELOG bilingues, page CurseForge, procédure de test HTML | Rapports spark revus ; fusion `dev` → `main` ; mise en ligne par THEFricadelle |
+| **M16 — Finitions de contenu** | Enseigne, néons, Ponder (dont une friterie vendue par Create), catégories JEI, advancements, plugins Jade, schéma KubeJS (si fait) | Client smoke et multijoueur smoke verts |
+| **M17 — Arcadia** | Arcadia smoke étendu, `uninstall_smoke.py` dans le pack, scénario Solonion, export FoodIndex | Tous verts sur le pack à jour, 2 joueurs en LAN |
+| **M18 — Publication** | Textures, sons, rapports spark, README et CHANGELOG bilingues, page CurseForge, procédure de test HTML | Rapports spark revus ; fusion `dev` → `main` ; mise en ligne par THEFricadelle |
 
 ---
 
@@ -576,10 +502,8 @@ flowchart LR
 | V-D6 | Croquettes : mayonnaise ou œuf pour la panure ? | Mayonnaise (un fluide passe au Spout, un œuf demanderait un Deployer de plus) |
 | V-D7 | Huile usagée : activée par défaut ? Quel ratio ? | Oui, 0.5 |
 | V-D8 | Gaufrier maison ou cuisson native au ventilateur ? | Gaufrier maison |
-| V-D9 | Recettes de craft du Gaufrier et du Comptoir | Voir sections 6.1 et 7.2 |
+| V-D9 | Recette de craft du Gaufrier | Voir section 6.1 |
 | V-D10 | Huile usagée vers biodiesel de Diesel Generators | Recette de Mixer si leur fluide existe, sinon rien |
-| V-D11 | Apparence des clients | Modèle de joueur avec 6 skins inclus, faits par THEFricadelle |
-| V-D12 | Barème du paiement | 1 émeraude par 3 points de prix |
 | V-D13 | Langue de l'enseigne | 3 variantes : « Friterie » (FR), « Frituur » (NL), « Chip shop » (EN) |
 | V-D14 | Le nom affiché du mod change-t-il (« Belgian Snacks » couvre déjà la carte) ? | Non |
 | V-D15 | Les frites ratées (brûlées) entrent-elles en v2 ? | Non (section 9) |

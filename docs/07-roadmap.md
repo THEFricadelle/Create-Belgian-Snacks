@@ -93,4 +93,4 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 
 ## v2
 
-Jalons M10 à M20 (friterie complète, retrait du mod sans casse, Comptoir et clients) : voir `13-cahier-des-charges-v2.md`, section 13.
+Jalons M10 à M18 (friterie complète, retrait du mod sans casse) : voir `13-cahier-des-charges-v2.md`, section 13.
