@@ -158,7 +158,7 @@ public final class UninstallSeedClient {
         ItemStack left = ItemHandlerHelper.insertItem(depot, BSItems.FRICADELLE.asStack(), false);
         REPORT.add((left.isEmpty() ? "PASS" : "FAIL") + " depot - a fricadelle on a Create depot");
 
-        List<FluidEntry<?>> fluids = List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
+        List<? extends FluidEntry<?>> fluids = BSFluids.ALL;
         for (int i = 0; i < fluids.size(); i++) {
             BlockPos tankPos = o.offset(4 + i, 0, 0);
             level.setBlockAndUpdate(tankPos, AllBlocks.FLUID_TANK.getDefaultState());

@@ -124,9 +124,14 @@ public final class ClientSmokeTest {
         "sequenced_assembly/raw_the_fricadelle_from_beetroot",
         "frying/ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
-        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow");
-    private static final List<FluidEntry<?>> FLUIDS =
-        List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
+        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        "mixing/andalouse_from_beetroot", "mixing/samourai_from_blaze_powder", "mixing/americaine_from_beetroot",
+        "filling/cone_of_fries_mayonnaise", "filling/cone_of_fries_beef_tallow_mayonnaise",
+        "filling/cone_of_fries_curry_ketchup", "filling/cone_of_fries_beef_tallow_curry_ketchup",
+        "filling/cone_of_fries_andalouse", "filling/cone_of_fries_beef_tallow_andalouse",
+        "filling/cone_of_fries_samourai", "filling/cone_of_fries_beef_tallow_samourai",
+        "filling/cone_of_fries_americaine", "filling/cone_of_fries_beef_tallow_americaine");
+    private static final List<? extends FluidEntry<?>> FLUIDS = BSFluids.ALL;
 
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
@@ -439,7 +444,7 @@ public final class ClientSmokeTest {
             var level = server.overworld();
             for (int i = 0; i < FLUIDS.size(); i++) {
                 Fluid source = FLUIDS.get(i).get().getSource();
-                level.setBlockAndUpdate(base.east(i * 2 - 3), source.defaultFluidState().createLegacyBlock());
+                level.setBlockAndUpdate(base.east(i * 2 - FLUIDS.size() + 1), source.defaultFluidState().createLegacyBlock());
             }
         });
         player.setYRot(180f);

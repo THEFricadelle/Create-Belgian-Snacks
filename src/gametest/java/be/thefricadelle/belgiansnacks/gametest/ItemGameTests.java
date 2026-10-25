@@ -17,6 +17,7 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
+import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSFoods;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
@@ -72,8 +73,11 @@ public final class ItemGameTests {
     }
 
     private static List<Item> snacks() {
-        return List.of(BSItems.FRIES.get(), BSItems.FRIES_BEEF_TALLOW.get(), BSItems.CONE_OF_FRIES.get(),
-            BSItems.CONE_OF_FRIES_BEEF_TALLOW.get());
+        List<Item> snacks = new java.util.ArrayList<>(List.of(BSItems.FRIES.get(), BSItems.FRIES_BEEF_TALLOW.get(),
+            BSItems.CONE_OF_FRIES.get(), BSItems.CONE_OF_FRIES_BEEF_TALLOW.get()));
+        BSItems.SAUCED_CONES.values().forEach(cone -> snacks.add(cone.get()));
+        BSItems.SAUCED_TALLOW_CONES.values().forEach(cone -> snacks.add(cone.get()));
+        return snacks;
     }
 
     @GameTest(template = TEMPLATE)
@@ -96,6 +100,10 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.FRIES_BEEF_TALLOW.get(), BSFoods.FRIES_BEEF_TALLOW);
         assertFood(helper, BSItems.CONE_OF_FRIES.get(), BSFoods.CONE_OF_FRIES);
         assertFood(helper, BSItems.CONE_OF_FRIES_BEEF_TALLOW.get(), BSFoods.CONE_OF_FRIES_BEEF_TALLOW);
+        BSItems.SAUCED_CONES.values().forEach(cone -> assertFood(helper, cone.get(), BSFoods.CONE_OF_FRIES_SAUCED));
+        BSItems.SAUCED_TALLOW_CONES.values().forEach(cone -> assertFood(helper, cone.get(), BSFoods.CONE_OF_FRIES_BEEF_TALLOW_SAUCED));
+        // Every sauce a cone carries has its fluid, and the other way round.
+        helper.assertValueEqual(BSItems.CONE_SAUCES.keySet(), BSFluids.CONE_SAUCES.keySet(), "cone sauces");
         helper.succeed();
     }
 

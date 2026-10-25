@@ -36,8 +36,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public final class FluidGameTests {
     private static final String TEMPLATE = "empty";
-    private static final List<FluidEntry<BaseFlowingFluid.Flowing>> FLUIDS =
-        List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
+    private static final List<FluidEntry<BaseFlowingFluid.Flowing>> FLUIDS = BSFluids.ALL;
 
     private FluidGameTests() {
     }
@@ -65,6 +64,24 @@ public final class FluidGameTests {
         helper.assertFalse(BSFluids.MAYONNAISE.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), "mayonnaise is not a frying oil");
         helper.assertFalse(BSFluids.CURRY_KETCHUP.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), "curry ketchup is not a frying oil");
         helper.assertFalse(Fluids.WATER.defaultFluidState().is(BSTags.FRYING_OILS), "water is not a frying oil");
+        for (var sauce : BSFluids.CONE_SAUCES.values()) {
+            helper.assertFalse(sauce.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), sauce.getId() + " is not a frying oil");
+        }
+        helper.succeed();
+    }
+
+    // v2 (section 5.2): every sauce, flowing too, and nothing else.
+    @GameTest(template = TEMPLATE)
+    public static void theSaucesTagHoldsEverySauceAndOnlyThem(GameTestHelper helper) {
+        // Written out, not read from the code that fills the tag.
+        List<FluidEntry<BaseFlowingFluid.Flowing>> sauces =
+            List.of(BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP, BSFluids.ANDALOUSE, BSFluids.SAMOURAI, BSFluids.AMERICAINE);
+        for (var entry : FLUIDS) {
+            boolean sauce = sauces.contains(entry);
+            helper.assertValueEqual(entry.get().getSource().defaultFluidState().is(BSTags.SAUCES), sauce, entry.getId() + " in sauces");
+            helper.assertValueEqual(entry.get().getFlowing().defaultFluidState().is(BSTags.SAUCES), sauce, entry.getId() + " flowing in sauces");
+        }
+        helper.assertFalse(Fluids.WATER.defaultFluidState().is(BSTags.SAUCES), "water is not a sauce");
         helper.succeed();
     }
 

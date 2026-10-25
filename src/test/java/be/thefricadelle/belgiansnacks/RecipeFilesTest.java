@@ -102,6 +102,21 @@ class RecipeFilesTest {
     }
 
     @Test
+    void everyGuardedRecipeHasAFallbackTwin() throws IOException {
+        // Any tag a recipe needs filled, ours included (hot_peppers), has a twin for when it is empty.
+        Map<String, JsonObject> recipes = recipes();
+        recipes.forEach((id, json) -> {
+            for (String condition : conditions(json)) {
+                if (condition.startsWith("not tag_empty ")) {
+                    String tag = condition.substring("not tag_empty ".length());
+                    boolean twin = recipes.values().stream().anyMatch(other -> conditions(other).contains("tag_empty " + tag));
+                    assertTrue(twin, id + " needs " + tag + " filled but no fallback recipe covers it being empty");
+                }
+            }
+        });
+    }
+
+    @Test
     void conventionTagsThatCanBeEmptyHaveAFallbackTwin() throws IOException {
         Map<String, JsonObject> recipes = recipes();
         recipes.forEach((id, json) -> {

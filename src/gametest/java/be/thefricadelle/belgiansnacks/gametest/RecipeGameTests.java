@@ -66,7 +66,13 @@ public final class RecipeGameTests {
         "pressing/fricadelle_paste",
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
-        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow");
+        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // The sauced cones (M12); the sauces themselves follow the tomato, onion and pepper tags below.
+        "filling/cone_of_fries_mayonnaise", "filling/cone_of_fries_beef_tallow_mayonnaise",
+        "filling/cone_of_fries_curry_ketchup", "filling/cone_of_fries_beef_tallow_curry_ketchup",
+        "filling/cone_of_fries_andalouse", "filling/cone_of_fries_beef_tallow_andalouse",
+        "filling/cone_of_fries_samourai", "filling/cone_of_fries_beef_tallow_samourai",
+        "filling/cone_of_fries_americaine", "filling/cone_of_fries_beef_tallow_americaine");
     private static final List<String> ONION_ASSEMBLIES =
         List.of("sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle");
     private static final List<String> BEETROOT_ASSEMBLIES =
@@ -97,7 +103,49 @@ public final class RecipeGameTests {
             helper.assertTrue((find(helper, beetroot) != null) != onions,
                 beetroot + (onions ? " must stay off when onions exist" : " should be loaded as the fallback"));
         }
+        // v2 sauces: tomato and onion come with Farmer's Delight; no runtime here has a hot pepper (V-D5).
+        twins(helper, "mixing/andalouse", "mixing/andalouse_from_beetroot", tomatoes);
+        twins(helper, "mixing/americaine", "mixing/americaine_from_beetroot", onions);
+        twins(helper, "mixing/samourai", "mixing/samourai_from_blaze_powder", false);
         helper.succeed();
+    }
+
+    private static void twins(GameTestHelper helper, String main, String fallback, boolean ingredient) {
+        helper.assertTrue((find(helper, main) != null) == ingredient, main + (ingredient ? " should be loaded" : " must stay off"));
+        helper.assertTrue((find(helper, fallback) != null) != ingredient, fallback + (ingredient ? " must stay off" : " should be loaded"));
+    }
+
+    // v2 sauces on a real basin: mayonnaise-based, samouraï needs heat, américaine takes two fluids.
+    @GameTest(template = TEMPLATE)
+    public static void saucesMixOnARealBasin(GameTestHelper helper) {
+        ItemStack tomato = farmersDelight() ? new ItemStack(item("farmersdelight", "tomato")) : new ItemStack(Items.BEETROOT);
+        ItemStack onion = farmersDelight() ? new ItemStack(item("farmersdelight", "onion")) : new ItemStack(Items.BEETROOT);
+        FluidStack mayo = new FluidStack(BSFluids.MAYONNAISE.get().getSource(), 250);
+        Recipe<?> andalouse = recipe(helper, farmersDelight() ? "mixing/andalouse" : "mixing/andalouse_from_beetroot");
+        Recipe<?> samourai = recipe(helper, "mixing/samourai_from_blaze_powder");
+        Recipe<?> americaine = recipe(helper, farmersDelight() ? "mixing/americaine" : "mixing/americaine_from_beetroot");
+        List<ItemStack> spicyTomato = List.of(tomato, BSItems.BELGIAN_SPICES.asStack());
+        List<ItemStack> fire = List.of(new ItemStack(Items.BLAZE_POWDER), BSItems.BELGIAN_SPICES.asStack());
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, spicyTomato, mayo), andalouse), "andalouse mixes cold");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), false, spicyTomato, null), andalouse), "andalouse without mayonnaise");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 2), false, fire, mayo), samourai), "samourai mixed cold");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 2), true, fire, mayo), samourai), "samourai over a lit burner");
+        BasinBlockEntity both = basin(helper, new BlockPos(1, 1, 1), false, List.of(onion), mayo);
+        IFluidHandler tanks = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(new BlockPos(1, 1, 1)), null);
+        helper.assertValueEqual(tanks.fill(new FluidStack(BSFluids.CURRY_KETCHUP.get().getSource(), 50), IFluidHandler.FluidAction.EXECUTE), 50,
+            "curry ketchup beside the mayonnaise");
+        helper.assertTrue(BasinRecipe.match(both, americaine), "americaine from mayonnaise, curry ketchup and onion");
+        assertFluidOutput(helper, "mixing/americaine_from_beetroot", BSFluids.AMERICAINE.get().getSource(), 300);
+        helper.succeed();
+    }
+
+    private static void assertFluidOutput(GameTestHelper helper, String id, net.minecraft.world.level.material.Fluid fluid, int amount) {
+        if (find(helper, id) == null) {
+            return;
+        }
+        var outputs = ((com.simibubi.create.content.processing.recipe.ProcessingRecipe<?, ?>) recipe(helper, id)).getFluidResults();
+        helper.assertTrue(outputs.size() == 1 && outputs.get(0).getFluid() == fluid && outputs.get(0).getAmount() == amount,
+            id + " gives " + outputs);
     }
 
     @GameTest(template = TEMPLATE)
