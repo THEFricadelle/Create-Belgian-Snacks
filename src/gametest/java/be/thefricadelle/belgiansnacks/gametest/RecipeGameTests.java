@@ -64,7 +64,9 @@ public final class RecipeGameTests {
         "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise",
         "compacting/frying_oil_from_seeds",
         "pressing/fricadelle_paste",
-        "frying/the_fricadelle", "frying/ultimate_fricadelle");
+        "frying/the_fricadelle", "frying/ultimate_fricadelle",
+        "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
+        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow");
     private static final List<String> ONION_ASSEMBLIES =
         List.of("sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle");
     private static final List<String> BEETROOT_ASSEMBLIES =

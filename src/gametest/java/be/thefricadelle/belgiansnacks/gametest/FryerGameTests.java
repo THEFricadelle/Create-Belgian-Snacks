@@ -101,14 +101,49 @@ public final class FryerGameTests {
         });
     }
 
-    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    // The real tier 3 recipe: superheated, beef tallow only, 600 ticks a piece.
+    @GameTest(template = TEMPLATE, timeoutTicks = 1400)
     public static void oneAtATimeItemsFryAlone(GameTestHelper helper) {
-        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
-        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.SEETHING);
+        fill(helper, fryer, BSFluids.MELTED_BEEF_TALLOW.get().getSource(), 1000);
         helper.assertTrue(BSItems.RAW_ULTIMATE_FRICADELLE.asStack().is(BSTags.FRYER_ONE_AT_A_TIME), "tier 3 is tagged one_at_a_time");
-        fryer.getItemCapability().insertItem(0, BSItems.RAW_ULTIMATE_FRICADELLE.asStack(3), false);
+        fryer.getItemCapability().insertItem(0, BSItems.RAW_ULTIMATE_FRICADELLE.asStack(2), false);
         helper.onEachTick(() -> helper.assertTrue(fryer.getBasket().getCount() <= 1, "more than one THE_FRICADELLE in the basket"));
-        helper.succeedWhen(() -> helper.assertValueEqual(count(fryer, BSItems.ULTIMATE_FRICADELLE.asStack()), 3, "fried one by one"));
+        helper.succeedWhen(() -> helper.assertValueEqual(count(fryer, BSItems.ULTIMATE_FRICADELLE.asStack()), 2, "fried one by one"));
+    }
+
+    // v2 fries (V-D2): raw fries blanch on a lit burner; the second fry needs a seething one.
+    @GameTest(template = TEMPLATE, timeoutTicks = 300)
+    public static void blanchingNeedsHeatAndTheSecondFryNeedsSeething(GameTestHelper helper) {
+        FryerBlockEntity blanch = fryerAt(helper, new BlockPos(0, 1, 0), HeatLevel.KINDLED);
+        FryerBlockEntity second = fryerAt(helper, new BlockPos(2, 1, 2), HeatLevel.KINDLED);
+        fill(helper, blanch, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fill(helper, second, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        blanch.getItemCapability().insertItem(0, BSItems.RAW_FRIES.asStack(4), false);
+        second.getItemCapability().insertItem(0, BSItems.BLANCHED_FRIES.asStack(4), false);
+        helper.succeedWhen(() -> {
+            helper.assertValueEqual(count(blanch, BSItems.BLANCHED_FRIES.asStack()), 4, "blanched on a lit burner");
+            helper.assertTrue(second.getBasket().isEmpty() && second.status() == FryerBlockEntity.Status.NO_HEAT,
+                "the second fry ran on a lit burner, status " + second.status());
+            helper.assertValueEqual(blanch.getTank().getPrimaryHandler().getFluidAmount(), 980, "fat left after 4 x 5 mB");
+        });
+    }
+
+    // V-D4: both second-fry recipes accept beef tallow; the fryer takes the one whose fat is the most
+    // specific, so tallow gives tallow fries and any other oil plain fries.
+    @GameTest(template = TEMPLATE, timeoutTicks = 300)
+    public static void theFatPicksTheFries(GameTestHelper helper) {
+        FryerBlockEntity oil = fryerAt(helper, new BlockPos(0, 1, 0), HeatLevel.SEETHING);
+        FryerBlockEntity tallow = fryerAt(helper, new BlockPos(2, 1, 2), HeatLevel.SEETHING);
+        fill(helper, oil, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fill(helper, tallow, BSFluids.MELTED_BEEF_TALLOW.get().getSource(), 1000);
+        oil.getItemCapability().insertItem(0, BSItems.BLANCHED_FRIES.asStack(4), false);
+        tallow.getItemCapability().insertItem(0, BSItems.BLANCHED_FRIES.asStack(4), false);
+        helper.succeedWhen(() -> {
+            helper.assertValueEqual(count(oil, BSItems.FRIES.asStack()), 4, "plain fries from oil");
+            helper.assertValueEqual(count(tallow, BSItems.FRIES_BEEF_TALLOW.asStack()), 4, "tallow fries from tallow");
+            helper.assertValueEqual(count(tallow, BSItems.FRIES.asStack()), 0, "plain fries from tallow");
+        });
     }
 
     @GameTest(template = TEMPLATE, timeoutTicks = 600)

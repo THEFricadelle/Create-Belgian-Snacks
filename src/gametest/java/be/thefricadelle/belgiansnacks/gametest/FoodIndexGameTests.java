@@ -60,6 +60,15 @@ public final class FoodIndexGameTests {
             helper.assertFalse(index.contains(id(excluded)), excluded + " must not count");
         }
         helper.assertTrue(index.excluded() >= 4, "blacklist exclusions counted: " + index.excluded());
+        // V-D1: the finished snacks of the v2 menu count, their intermediates are not food.
+        for (String snack : List.of("create_belgian_snacks:fries", "create_belgian_snacks:fries_beef_tallow",
+            "create_belgian_snacks:cone_of_fries", "create_belgian_snacks:cone_of_fries_beef_tallow")) {
+            helper.assertTrue(index.contains(id(snack)), snack + " should count");
+        }
+        for (String part : List.of("create_belgian_snacks:raw_fries", "create_belgian_snacks:blanched_fries",
+            "create_belgian_snacks:paper_cone")) {
+            helper.assertFalse(index.contains(id(part)), part + " must not count");
+        }
         helper.succeed();
     }
 

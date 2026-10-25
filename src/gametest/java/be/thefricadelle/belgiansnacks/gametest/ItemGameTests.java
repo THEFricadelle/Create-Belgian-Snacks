@@ -66,12 +66,22 @@ public final class ItemGameTests {
         helper.succeed();
     }
 
+    // The three fricadelles, and the finished snacks of the v2 menu; nothing in between is edible.
+    private static List<Item> fricadelles() {
+        return List.of(BSItems.FRICADELLE.get(), BSItems.THE_FRICADELLE.get(), BSItems.ULTIMATE_FRICADELLE.get());
+    }
+
+    private static List<Item> snacks() {
+        return List.of(BSItems.FRIES.get(), BSItems.FRIES_BEEF_TALLOW.get(), BSItems.CONE_OF_FRIES.get(),
+            BSItems.CONE_OF_FRIES_BEEF_TALLOW.get());
+    }
+
     @GameTest(template = TEMPLATE)
-    public static void onlyTheFricadellesAreFood(GameTestHelper helper) {
-        List<Item> fricadelles = List.of(BSItems.FRICADELLE.get(), BSItems.THE_FRICADELLE.get(), BSItems.ULTIMATE_FRICADELLE.get());
+    public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            helper.assertTrue(food == fricadelles.contains(item),
+            boolean expected = fricadelles().contains(item) || snacks().contains(item);
+            helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
         }
         helper.succeed();
@@ -82,6 +92,10 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.FRICADELLE.get(), BSFoods.FRICADELLE);
         assertFood(helper, BSItems.THE_FRICADELLE.get(), BSFoods.THE_FRICADELLE);
         assertFood(helper, BSItems.ULTIMATE_FRICADELLE.get(), BSFoods.ULTIMATE_FRICADELLE);
+        assertFood(helper, BSItems.FRIES.get(), BSFoods.FRIES);
+        assertFood(helper, BSItems.FRIES_BEEF_TALLOW.get(), BSFoods.FRIES_BEEF_TALLOW);
+        assertFood(helper, BSItems.CONE_OF_FRIES.get(), BSFoods.CONE_OF_FRIES);
+        assertFood(helper, BSItems.CONE_OF_FRIES_BEEF_TALLOW.get(), BSFoods.CONE_OF_FRIES_BEEF_TALLOW);
         helper.succeed();
     }
 
@@ -131,14 +145,15 @@ public final class ItemGameTests {
         helper.succeed();
     }
 
+    // The fricadelles stay out, or the Supreme Grinder could eat its own output; the finished snacks
+    // of the v2 menu count, so THE_FRICADELLE asks for them too (V-D1).
     @GameTest(template = TEMPLATE)
-    public static void everyFoodOfTheModIsBlacklistedFromTheGrinder(GameTestHelper helper) {
-        // Otherwise the Supreme Grinder could eat its own output.
-        for (Item item : modItems()) {
-            ItemStack stack = new ItemStack(item);
-            if (stack.has(DataComponents.FOOD)) {
-                helper.assertTrue(stack.is(BSTags.GRINDER_BLACKLIST), BuiltInRegistries.ITEM.getKey(item) + " is food but not blacklisted");
-            }
+    public static void fricadellesAreBlacklistedAndSnacksCount(GameTestHelper helper) {
+        for (Item item : fricadelles()) {
+            helper.assertTrue(new ItemStack(item).is(BSTags.GRINDER_BLACKLIST), BuiltInRegistries.ITEM.getKey(item) + " is not blacklisted");
+        }
+        for (Item item : snacks()) {
+            helper.assertFalse(new ItemStack(item).is(BSTags.GRINDER_BLACKLIST), BuiltInRegistries.ITEM.getKey(item) + " is blacklisted");
         }
         helper.assertFalse(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE).is(BSTags.GRINDER_BLACKLIST), "the enchanted golden apple counts (D8)");
         helper.assertTrue(new ItemStack(Items.OMINOUS_BOTTLE).is(BSTags.GRINDER_BLACKLIST), "the ominous bottle is blacklisted (D8)");
@@ -159,6 +174,14 @@ public final class ItemGameTests {
             // c:foods includes c:foods/cooked_meat: checks the convention nesting still reaches us.
             helper.assertTrue(stack.is(Tags.Items.FOODS), entry.getId() + " in c:foods");
         }
+        for (Item item : snacks()) {
+            ItemStack stack = new ItemStack(item);
+            helper.assertTrue(stack.is(BSTags.C_FOODS_FRIES), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/fries");
+            helper.assertTrue(stack.is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
+            helper.assertFalse(stack.is(Tags.Items.FOODS_COOKED_MEAT), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/cooked_meat");
+        }
+        helper.assertTrue(BSItems.FRIES.asStack().is(BSTags.FRIES), "fries in #fries");
+        helper.assertFalse(BSItems.FRIES_BEEF_TALLOW.asStack().is(BSTags.FRIES), "tallow fries in #fries: a plain cone would take them");
         helper.succeed();
     }
 

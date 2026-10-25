@@ -205,8 +205,9 @@ public final class EatingGameTests {
         helper.succeed();
     }
 
-    // Half of every food of the index, whatever the mode: players within 16 blocks earn it.
-    @GameTest(template = TEMPLATE)
+    // Half of every food of the index, whatever the mode: players within 16 blocks earn it. Its own batch:
+    // a full grinder of another test placed within 16 blocks would reward this player first.
+    @GameTest(template = TEMPLATE, batch = "grinder_halfway")
     public static void aGrinderAtHalfwayRewardsThePlayersAround(GameTestHelper helper) {
         BlockPos grinderPos = new BlockPos(1, 1, 1);
         helper.setBlock(grinderPos, BSBlocks.SUPREME_GRINDER.getDefaultState());

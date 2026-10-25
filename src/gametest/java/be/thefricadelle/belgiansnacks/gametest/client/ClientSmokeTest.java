@@ -122,7 +122,9 @@ public final class ClientSmokeTest {
         "frying/fricadelle", "frying/the_fricadelle",
         "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
         "sequenced_assembly/raw_the_fricadelle_from_beetroot",
-        "frying/ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot");
+        "frying/ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot",
+        "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
+        "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow");
     private static final List<FluidEntry<?>> FLUIDS =
         List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP);
 

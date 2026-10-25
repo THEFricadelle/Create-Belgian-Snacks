@@ -50,7 +50,7 @@ class RecipeFilesTest {
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
     // c:plates/copper and c:plates/brass are filled by Create, a required dependency.
-    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:plates/copper", "c:plates/brass",
+    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:plates/copper", "c:plates/brass",
         "c:ingots/gold", "c:storage_blocks/iron");
 
     @Test
@@ -63,7 +63,9 @@ class RecipeFilesTest {
         recipes().forEach((id, json) -> {
             String folder = id.substring(0, id.indexOf('/'));
             String namespace = OWN_TYPES.contains(folder) ? MOD_ID : "create";
-            assertEquals(namespace + ":" + folder, json.get("type").getAsString(), id + " type");
+            // Vanilla crafting (the paper cone) keeps its own shaped type.
+            String expected = folder.equals("crafting") ? "minecraft:crafting_shaped" : namespace + ":" + folder;
+            assertEquals(expected, json.get("type").getAsString(), id + " type");
         });
     }
 
