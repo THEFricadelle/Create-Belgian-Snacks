@@ -80,11 +80,16 @@ public final class ItemGameTests {
         return snacks;
     }
 
+    // v2 base ingredients that can be eaten as they are (M13).
+    private static List<Item> edibleIngredients() {
+        return List.of(BSItems.HERVE_CHEESE.get(), BSItems.PISTOLET.get(), BSItems.ARDENNES_HAM.get(), BSItems.MERINGUE.get(), BSItems.RAISINS.get(), BSItems.APPLE_COMPOTE.get(), BSItems.VANILLA_ICE_CREAM.get());
+    }
+
     @GameTest(template = TEMPLATE)
     public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            boolean expected = fricadelles().contains(item) || snacks().contains(item);
+            boolean expected = fricadelles().contains(item) || snacks().contains(item) || edibleIngredients().contains(item);
             helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
         }
@@ -102,6 +107,13 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.CONE_OF_FRIES_BEEF_TALLOW.get(), BSFoods.CONE_OF_FRIES_BEEF_TALLOW);
         BSItems.SAUCED_CONES.values().forEach(cone -> assertFood(helper, cone.get(), BSFoods.CONE_OF_FRIES_SAUCED));
         BSItems.SAUCED_TALLOW_CONES.values().forEach(cone -> assertFood(helper, cone.get(), BSFoods.CONE_OF_FRIES_BEEF_TALLOW_SAUCED));
+        assertFood(helper, BSItems.HERVE_CHEESE.get(), BSFoods.HERVE_CHEESE);
+        assertFood(helper, BSItems.PISTOLET.get(), BSFoods.PISTOLET);
+        assertFood(helper, BSItems.ARDENNES_HAM.get(), BSFoods.ARDENNES_HAM);
+        assertFood(helper, BSItems.MERINGUE.get(), BSFoods.MERINGUE);
+        assertFood(helper, BSItems.RAISINS.get(), BSFoods.RAISINS);
+        assertFood(helper, BSItems.APPLE_COMPOTE.get(), BSFoods.APPLE_COMPOTE);
+        assertFood(helper, BSItems.VANILLA_ICE_CREAM.get(), BSFoods.VANILLA_ICE_CREAM);
         // Every sauce a cone carries has its fluid, and the other way round.
         helper.assertValueEqual(BSItems.CONE_SAUCES.keySet(), BSFluids.CONE_SAUCES.keySet(), "cone sauces");
         helper.succeed();

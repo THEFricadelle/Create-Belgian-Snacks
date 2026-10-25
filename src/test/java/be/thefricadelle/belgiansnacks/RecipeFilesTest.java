@@ -50,7 +50,7 @@ class RecipeFilesTest {
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
     // c:plates/copper and c:plates/brass are filled by Create, a required dependency.
-    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:plates/copper", "c:plates/brass",
+    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:foods/berry", "c:plates/copper", "c:plates/brass",
         "c:ingots/gold", "c:storage_blocks/iron");
 
     @Test
@@ -63,8 +63,12 @@ class RecipeFilesTest {
         recipes().forEach((id, json) -> {
             String folder = id.substring(0, id.indexOf('/'));
             String namespace = OWN_TYPES.contains(folder) ? MOD_ID : "create";
-            // Vanilla crafting (the paper cone) keeps its own shaped type.
-            String expected = folder.equals("crafting") ? "minecraft:crafting_shaped" : namespace + ":" + folder;
+            // Vanilla recipes keep their own types: shaped crafting (the paper cone), smoking and smelting.
+            String expected = switch (folder) {
+                case "crafting" -> "minecraft:crafting_shaped";
+                case "smoking", "smelting" -> "minecraft:" + folder;
+                default -> namespace + ":" + folder;
+            };
             assertEquals(expected, json.get("type").getAsString(), id + " type");
         });
     }
@@ -99,6 +103,38 @@ class RecipeFilesTest {
                 }
             }
         });
+    }
+
+    // M13 rule 1: a mixing or compacting recipe with fluids only would match every basin holding that
+    // fluid and take it from another line still waiting for its items.
+    @Test
+    void basinRecipesNeedAnItem() throws IOException {
+        recipes().forEach((id, json) -> {
+            String type = json.get("type").getAsString();
+            if (!type.equals("create:mixing") && !type.equals("create:compacting")) {
+                return;
+            }
+            boolean item = false;
+            for (JsonElement ingredient : json.getAsJsonArray("ingredients")) {
+                JsonObject object = ingredient.isJsonObject() ? ingredient.getAsJsonObject() : null;
+                if (object == null || !object.has("amount") && !object.has("fluid")) {
+                    item = true;
+                }
+            }
+            assertTrue(item, id + " has fluids only: it would take them from any basin");
+        });
+    }
+
+    // M13 rule 2: where the pack makes an ingredient already, ours turns off and our recipes read theirs.
+    @Test
+    void packIngredientsTurnOurRecipeOff() throws IOException {
+        Map<String, JsonObject> recipes = recipes();
+        Map<String, String> expected = Map.of(
+            "mixing/salt", "tag_empty c:salt",
+            "mixing/butter", "tag_empty c:butter",
+            "milling/powdered_sugar", "not mod_loaded createfood");
+        expected.forEach((id, condition) ->
+            assertTrue(conditions(recipes.get(id)).contains(condition), id + " must carry " + condition + ", has " + conditions(recipes.get(id))));
     }
 
     @Test

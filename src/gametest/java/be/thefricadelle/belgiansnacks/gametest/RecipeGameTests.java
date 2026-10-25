@@ -67,6 +67,42 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M13 base ingredients; salt, butter, powdered sugar, raisins and the Liège sauce follow the pack below.
+        "mixing/cassonade",
+        "mixing/cream",
+        "mixing/maton",
+        "mixing/vinegar",
+        "mixing/liege_syrup",
+        "mixing/bechamel",
+        "mixing/brewers_yeast",
+        "mixing/brioche_dough",
+        "mixing/pita_dough",
+        "mixing/noodles",
+        "mixing/brined_ham",
+        "mixing/raw_meringue",
+        "mixing/apple_compote",
+        "compacting/pearl_sugar",
+        "compacting/young_herve_cheese",
+        "compacting/puff_pastry",
+        "compacting/vanilla_ice_cream",
+        "crushing/chocolate_shavings",
+        "cutting/pistolet_dough",
+        "cutting/burger_bun_dough",
+        "cutting/lardons",
+        "pressing/raw_pita",
+        "splashing/herve_cheese",
+        "splashing/sprouted_grain",
+        "smoking/malt",
+        "smoking/pistolet",
+        "smelting/pistolet",
+        "smoking/burger_bun",
+        "smelting/burger_bun",
+        "smoking/pita_bread",
+        "smelting/pita_bread",
+        "smoking/ardennes_ham",
+        "smoking/meringue",
+        "filling/cone_of_fries_sauce_lapin",
+        "filling/cone_of_fries_beef_tallow_sauce_lapin",
         // The sauced cones (M12); the sauces themselves follow the tomato, onion and pepper tags below.
         "filling/cone_of_fries_mayonnaise", "filling/cone_of_fries_beef_tallow_mayonnaise",
         "filling/cone_of_fries_curry_ketchup", "filling/cone_of_fries_beef_tallow_curry_ketchup",
@@ -107,6 +143,40 @@ public final class RecipeGameTests {
         twins(helper, "mixing/andalouse", "mixing/andalouse_from_beetroot", tomatoes);
         twins(helper, "mixing/americaine", "mixing/americaine_from_beetroot", onions);
         twins(helper, "mixing/samourai", "mixing/samourai_from_blaze_powder", false);
+        twins(helper, "mixing/sauce_lapin", "mixing/sauce_lapin_from_beetroot", onions);
+        twins(helper, "smoking/raisins", "smoking/raisins_from_sweet_berries", false);
+        // M13 rule 2: ours only where the pack does not make it (no runtime here has Create: Food).
+        helper.assertTrue((find(helper, "mixing/salt") != null) == tagEmpty(BSTags.C_SALT), "mixing/salt follows c:salt");
+        helper.assertTrue((find(helper, "mixing/butter") != null) == tagEmpty(BSTags.C_BUTTER), "mixing/butter follows c:butter");
+        helper.assertTrue(find(helper, "milling/powdered_sugar") != null, "milling/powdered_sugar without Create: Food");
+        helper.succeed();
+    }
+
+    private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
+        return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M13 on a real basin: dairy and doughs need their item, béchamel needs heat and its three items.
+    @GameTest(template = TEMPLATE)
+    public static void baseIngredientsMixOnARealBasin(GameTestHelper helper) {
+        FluidStack milk = new FluidStack(net.neoforged.neoforge.common.NeoForgeMod.MILK.get(), 1000);
+        ItemStack salt = BSItems.SALT.asStack();
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, List.of(salt), milk), recipe(helper, "mixing/cream")),
+            "cream from milk and salt");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), false, List.of(), milk), recipe(helper, "mixing/cream")),
+            "cream from milk alone would take any line's milk");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 2), false, List.of(salt),
+            new FluidStack(BSFluids.CREAM.get().getSource(), 250)), recipe(helper, "mixing/butter")), "salted butter from cream");
+        List<ItemStack> roux = List.of(new ItemStack(com.simibubi.create.AllItems.WHEAT_FLOUR.get()), BSItems.BUTTER.asStack(),
+            BSItems.BELGIAN_SPICES.asStack());
+        FluidStack halfMilk = new FluidStack(net.neoforged.neoforge.common.NeoForgeMod.MILK.get(), 500);
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 2), false, roux, halfMilk), recipe(helper, "mixing/bechamel")),
+            "bechamel cooked cold");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(1, 1, 1), true, roux, halfMilk), recipe(helper, "mixing/bechamel")),
+            "bechamel over a lit burner");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 4), false, List.of(new ItemStack(com.simibubi.create.AllItems.DOUGH.get()),
+            BSItems.BUTTER.asStack(), new ItemStack(Items.EGG), new ItemStack(Items.SUGAR), BSItems.BREWERS_YEAST.asStack()), null),
+            recipe(helper, "mixing/brioche_dough")), "brioche dough from Create's dough");
         helper.succeed();
     }
 
