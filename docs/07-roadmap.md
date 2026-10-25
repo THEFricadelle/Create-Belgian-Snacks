@@ -88,3 +88,9 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 - [ ] Vraies textures / modèles Blockbench : **à faire par THEFricadelle** ; livrables, contrat et suivi (`tools/asset_status.py`) dans `06-assets.md`, code prêt à les prendre
 - [x] Page mod préparée (`docs/publication/`), README à jour, brouillon de release GitHub
 - **Reste avant publication** : textures, rapports spark, fusion de `dev` dans `main`, mise en ligne (par THEFricadelle) ; check-list dans `docs/publication/fiche.md`.
+
+---
+
+## v2
+
+Jalons M10 à M20 (friterie complète, retrait du mod sans casse, Comptoir et clients) : voir `13-cahier-des-charges-v2.md`, section 13.

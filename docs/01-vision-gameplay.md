@@ -67,6 +67,8 @@ Faim/saturation croissantes, effets de potion, gags (sons, particules, message),
 
 ## Hors périmètre v1 (idées pour plus tard)
 
+Reprises et détaillées pour la v2 dans `13-cahier-des-charges-v2.md`.
+
 - Frites, mitraillette, sauce andalouse/samouraï, cornet de frites.
 - Huile usagée qui se dégrade et doit être filtrée.
 - Friterie décorative (comptoir, enseigne, néons).
