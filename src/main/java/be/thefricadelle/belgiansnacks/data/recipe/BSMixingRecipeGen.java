@@ -157,6 +157,41 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             .require(BSFluids.VINEGAR.get(), 100).require(Fluids.WATER, 100)
             .output(BSFluids.MUSTARD.get().getSource(), 250)),
 
+        // v2 cooking beers (section 5.9). Create's mixer takes processing_time into account, scaled by its
+        // speed: 2400 ticks of gueuze last about 54 s at 64 rpm.
+        WORT = create("wort", b -> b
+            .require(BSItems.MALT.get()).require(BSItems.MALT.get()).require(BSCrops.HOPS.get()).require(Fluids.WATER, 1000)
+            .output(BSFluids.WORT.get().getSource(), 1000)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        BLONDE_BEER = create("blonde_beer", b -> b
+            .require(BSFluids.WORT.get(), 1000).require(BSItems.BREWERS_YEAST.get())
+            .output(BSFluids.BLONDE_BEER.get().getSource(), 1000)
+            .duration(600)),
+
+        // One item more than the blonde: with cassonade in the basin, Create makes the brown one.
+        BROWN_BEER = create("brown_beer", b -> b
+            .require(BSFluids.WORT.get(), 1000).require(BSItems.CASSONADE.get()).require(BSItems.BREWERS_YEAST.get())
+            .output(BSFluids.BROWN_BEER.get().getSource(), 1000)
+            .duration(600)),
+
+        // Lambic is brewed with unmalted wheat and left to wild yeasts: no brewer's yeast, a long wait.
+        GUEUZE = create("gueuze", b -> b
+            .require(BSFluids.WORT.get(), 1000).require(Items.WHEAT)
+            .output(BSFluids.GUEUZE.get().getSource(), 1000)
+            .duration(2400)),
+
+        KRIEK = create("kriek", b -> kriek(b, BSTags.CHERRIES)
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.CHERRIES)))),
+        KRIEK_FROM_SWEET_BERRIES = create("kriek_from_sweet_berries", b -> kriek(b, null)
+            .withCondition(new TagEmptyCondition(BSTags.CHERRIES))),
+
+        // A vinegar mother turns beer sour: an apple stands in for it.
+        VINEGAR_FROM_BEER = create("vinegar_from_beer", b -> b
+            .require(BSFluids.BLONDE_BEER.get(), 1000).require(Items.APPLE)
+            .output(BSFluids.VINEGAR.get().getSource(), 1000)
+            .duration(2400)),
+
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
             .output(BSItems.APPLE_COMPOTE.get())
@@ -164,6 +199,19 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
 
     public BSMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> kriek(StandardProcessingRecipe.Builder<MixingRecipe> b,
+                                                                       net.minecraft.tags.TagKey<net.minecraft.world.item.Item> cherries) {
+        b.require(BSFluids.GUEUZE.get(), 1000);
+        for (int i = 0; i < 4; i++) {
+            if (cherries == null) {
+                b.require(Items.SWEET_BERRIES);
+            } else {
+                b.require(cherries);
+            }
+        }
+        return b.output(BSFluids.KRIEK.get().getSource(), 1000).duration(600);
     }
 
     private static StandardProcessingRecipe.Builder<MixingRecipe> sauceLapin(StandardProcessingRecipe.Builder<MixingRecipe> b) {

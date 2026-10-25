@@ -43,12 +43,18 @@ public final class BSFluids {
         VINEGAR = fluid("vinegar", "Vinegar", MapColor.TERRACOTTA_YELLOW),
         SAUCE_LAPIN = fluid("sauce_lapin", "Liège Sauce", MapColor.COLOR_BROWN),
         // v2 crops (section 5.8): mustard from mustard seeds.
-        MUSTARD = fluid("mustard", "Mustard", MapColor.COLOR_YELLOW);
+        MUSTARD = fluid("mustard", "Mustard", MapColor.COLOR_YELLOW),
+        // v2 cooking beers (section 5.9): cooking fluids only, nobody drinks them.
+        WORT = fluid("wort", "Wort", MapColor.TERRACOTTA_BROWN),
+        BLONDE_BEER = fluid("blonde_beer", "Blonde Beer", MapColor.GOLD),
+        BROWN_BEER = fluid("brown_beer", "Brown Beer", MapColor.COLOR_BROWN),
+        GUEUZE = fluid("gueuze", "Gueuze", MapColor.TERRACOTTA_ORANGE),
+        KRIEK = fluid("kriek", "Kriek", MapColor.CRIMSON_STEM);
 
     /** Every fluid of the mod, in registration order. */
     public static final List<FluidEntry<BaseFlowingFluid.Flowing>> ALL =
         List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE,
-            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN, MUSTARD);
+            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN, MUSTARD, WORT, BLONDE_BEER, BROWN_BEER, GUEUZE, KRIEK);
 
     /** The sauces a Spout puts on a cone, by the name their cones carry (BSItems.CONE_SAUCES). */
     public static final Map<String, FluidEntry<BaseFlowingFluid.Flowing>> CONE_SAUCES = orderedSauces();
@@ -89,6 +95,8 @@ public final class BSFluids {
             .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "plantoil"))
             .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "vegetable_oil")));
         REGISTRATE.addDataGenerator(ProviderType.FLUID_TAGS, prov -> {
+            var beers = prov.addTag(BSTags.BEERS);
+            List.of(BLONDE_BEER, BROWN_BEER, GUEUZE, KRIEK).forEach(beer -> beers.add(beer.get().getSource(), beer.get()));
             var sauces = prov.addTag(BSTags.SAUCES);
             CONE_SAUCES.values().forEach(sauce -> sauces.add(sauce.get().getSource(), sauce.get()));
         });

@@ -43,6 +43,7 @@ public final class BSTags {
     public static final TagKey<Item> NOODLES = item("noodles");
     public static final TagKey<Item> VANILLA_ICE_CREAMS = item("vanilla_ice_creams");
     public static final TagKey<Item> GRAPES = item("grapes");
+    public static final TagKey<Item> CHERRIES = item("cherries");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -65,6 +66,8 @@ public final class BSTags {
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
     // Every sauce of the friterie (v2, section 5.2): what a mitraillette or a burger takes.
     public static final TagKey<Fluid> SAUCES = FluidTags.create(BelgianSnacks.asResource("sauces"));
+    // The four cooking beers (v2, section 5.9).
+    public static final TagKey<Fluid> BEERS = FluidTags.create(BelgianSnacks.asResource("beers"));
 
     private BSTags() {
     }
@@ -98,6 +101,7 @@ public final class BSTags {
                 .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "ham"))
                 .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "smoked_ham"));
             prov.addTag(NOODLES).addOptionalTag(common("raw_pasta").location());
+            prov.addTag(CHERRIES).addOptionalTag(common("foods/cherry").location()).addOptionalTag(common("crops/cherry").location());
             prov.addTag(GRAPES).addOptionalTag(common("foods/grape").location()).addOptionalTag(common("crops/grape").location());
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_CHEESE);
             // My Nether's Delight (Arcadia) grows bullet peppers.

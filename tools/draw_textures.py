@@ -458,6 +458,11 @@ LIQUIDS = {
     'vinegar': ['8C6A2C', 'AC8840', 'C8A458', 'E6C67C'],
     'sauce_lapin': ['2E180A', '442410', '5A3218', '83542E'],
     'mustard': ['8A6A10', 'B08A18', 'D8A828', 'F4D25C'],
+    'wort': ['4E2E0C', '6E4214', '8A5A1E', 'B07E3C'],
+    'blonde_beer': ['A07818', 'C89A24', 'E8B83A', 'FFF2C8'],
+    'brown_beer': ['2A140A', '42200E', '5A2E14', 'C8A27A'],
+    'gueuze': ['8E5E1A', 'B47A28', 'D89A3A', 'F6E2B8'],
+    'kriek': ['560E16', '781420', '9A1E2A', 'E8B0B8'],
 }
 CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin']
 

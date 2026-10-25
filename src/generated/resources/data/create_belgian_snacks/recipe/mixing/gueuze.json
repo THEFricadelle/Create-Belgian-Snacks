@@ -1,0 +1,20 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "create_belgian_snacks:wort"
+    }
+  ],
+  "processing_time": 2400,
+  "results": [
+    {
+      "amount": 1000,
+      "id": "create_belgian_snacks:gueuze"
+    }
+  ]
+}

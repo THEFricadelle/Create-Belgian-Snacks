@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:cherries"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:cherries"
+    },
+    {
+      "tag": "create_belgian_snacks:cherries"
+    },
+    {
+      "tag": "create_belgian_snacks:cherries"
+    },
+    {
+      "tag": "create_belgian_snacks:cherries"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "create_belgian_snacks:gueuze"
+    }
+  ],
+  "processing_time": 600,
+  "results": [
+    {
+      "amount": 1000,
+      "id": "create_belgian_snacks:kriek"
+    }
+  ]
+}

@@ -12,6 +12,11 @@
     "create_belgian_snacks:liege_syrup_bucket",
     "create_belgian_snacks:vinegar_bucket",
     "create_belgian_snacks:sauce_lapin_bucket",
-    "create_belgian_snacks:mustard_bucket"
+    "create_belgian_snacks:mustard_bucket",
+    "create_belgian_snacks:wort_bucket",
+    "create_belgian_snacks:blonde_beer_bucket",
+    "create_belgian_snacks:brown_beer_bucket",
+    "create_belgian_snacks:gueuze_bucket",
+    "create_belgian_snacks:kriek_bucket"
   ]
 }

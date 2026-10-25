@@ -141,6 +141,11 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.VINEGAR, "Vinaigre", "Seau de vinaigre");
         fluid(BSFluids.SAUCE_LAPIN, "Sauce lapin", "Seau de sauce lapin");
         fluid(BSFluids.MUSTARD, "Moutarde", "Seau de moutarde");
+        fluid(BSFluids.WORT, "Moût", "Seau de moût");
+        fluid(BSFluids.BLONDE_BEER, "Bière blonde", "Seau de bière blonde");
+        fluid(BSFluids.BROWN_BEER, "Bière brune", "Seau de bière brune");
+        fluid(BSFluids.GUEUZE, "Gueuze", "Seau de gueuze");
+        fluid(BSFluids.KRIEK, "Kriek", "Seau de kriek");
 
         add(BSBlocks.FRYER.get(), "Friteuse");
         add(BSBlocks.SUPREME_GRINDER.get(), "Hachoir Suprême");

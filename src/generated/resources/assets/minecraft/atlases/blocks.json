@@ -103,6 +103,46 @@
     {
       "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/mustard_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/wort_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/wort_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/blonde_beer_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/blonde_beer_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/brown_beer_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/brown_beer_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/gueuze_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/gueuze_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/kriek_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/kriek_flow"
     }
   ]
 }

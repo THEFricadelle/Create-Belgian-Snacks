@@ -1,0 +1,20 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:brewers_yeast"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "create_belgian_snacks:wort"
+    }
+  ],
+  "processing_time": 600,
+  "results": [
+    {
+      "amount": 1000,
+      "id": "create_belgian_snacks:blonde_beer"
+    }
+  ]
+}
