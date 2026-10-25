@@ -1,0 +1,13 @@
+{
+  "values": [
+    {
+      "id": "#c:salt",
+      "required": false
+    },
+    {
+      "id": "#c:dusts/salt",
+      "required": false
+    },
+    "create_belgian_snacks:salt"
+  ]
+}

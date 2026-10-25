@@ -25,6 +25,11 @@ public class BSMillingRecipeGen extends MillingRecipeGen {
         .output(BSItems.BELGIAN_SPICES.get())
         .output(0.25f, BSItems.BELGIAN_SPICES.get(), 1));
 
+    // Create: Food mills sugar into its own powdered sugar: there, ours stays off and theirs is in #powdered_sugars.
+    GeneratedRecipe POWDERED_SUGAR = create("powdered_sugar", b -> b.duration(100).require(Items.SUGAR)
+        .output(BSItems.POWDERED_SUGAR.get())
+        .whenModMissing("createfood"));
+
     public BSMillingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

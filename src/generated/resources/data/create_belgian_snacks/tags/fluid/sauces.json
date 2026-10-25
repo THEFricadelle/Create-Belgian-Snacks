@@ -9,6 +9,8 @@
     "create_belgian_snacks:samourai",
     "create_belgian_snacks:flowing_samourai",
     "create_belgian_snacks:americaine",
-    "create_belgian_snacks:flowing_americaine"
+    "create_belgian_snacks:flowing_americaine",
+    "create_belgian_snacks:sauce_lapin",
+    "create_belgian_snacks:flowing_sauce_lapin"
   ]
 }

@@ -13,7 +13,12 @@ import java.util.concurrent.CompletableFuture;
 
 import com.simibubi.create.api.data.recipe.CompactingRecipeGen;
 
+import com.simibubi.create.AllItems;
+
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSTags;
+import net.minecraft.world.item.Items;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -30,6 +35,23 @@ public class BSCompactingRecipeGen extends CompactingRecipeGen {
             .whenModMissing("createaddition")
             .whenModMissing("createdieselgenerators");
     });
+
+    // v2 base ingredients (section 5.7); each recipe has an item, so none takes another line's milk.
+    GeneratedRecipe PEARL_SUGAR = create("pearl_sugar", b -> b
+        .require(Items.SUGAR).require(Items.SUGAR).require(Items.SUGAR).require(Items.SUGAR)
+        .output(BSItems.PEARL_SUGAR.get(), 2));
+
+    GeneratedRecipe YOUNG_HERVE_CHEESE = create("young_herve_cheese", b -> b
+        .require(Tags.Fluids.MILK, 1000).require(BSTags.SALTS)
+        .output(BSItems.YOUNG_HERVE_CHEESE.get()));
+
+    GeneratedRecipe PUFF_PASTRY = create("puff_pastry", b -> b
+        .require(AllItems.DOUGH.get()).require(BSTags.BUTTERS)
+        .output(BSItems.PUFF_PASTRY.get()));
+
+    GeneratedRecipe VANILLA_ICE_CREAM = create("vanilla_ice_cream", b -> b
+        .require(BSFluids.CREAM.get(), 250).require(Items.SUGAR).require(Items.ICE)
+        .output(BSItems.VANILLA_ICE_CREAM.get(), 2));
 
     public BSCompactingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

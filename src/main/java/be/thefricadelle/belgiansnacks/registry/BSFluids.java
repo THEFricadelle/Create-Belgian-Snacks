@@ -35,11 +35,18 @@ public final class BSFluids {
         // v2 friterie sauces (docs/13, section 5.2), all mayonnaise-based.
         ANDALOUSE = fluid("andalouse", "Andalouse Sauce", MapColor.COLOR_ORANGE),
         SAMOURAI = fluid("samourai", "Samurai Sauce", MapColor.COLOR_RED),
-        AMERICAINE = fluid("americaine", "Américaine Sauce", MapColor.COLOR_PINK);
+        AMERICAINE = fluid("americaine", "Américaine Sauce", MapColor.COLOR_PINK),
+        // v2 base ingredients (section 5.7) and the Liège sauce made from Liège syrup.
+        CREAM = fluid("cream", "Cream", MapColor.SNOW),
+        BECHAMEL = fluid("bechamel", "Béchamel", MapColor.SAND),
+        LIEGE_SYRUP = fluid("liege_syrup", "Liège Syrup", MapColor.TERRACOTTA_BROWN),
+        VINEGAR = fluid("vinegar", "Vinegar", MapColor.TERRACOTTA_YELLOW),
+        SAUCE_LAPIN = fluid("sauce_lapin", "Liège Sauce", MapColor.COLOR_BROWN);
 
     /** Every fluid of the mod, in registration order. */
     public static final List<FluidEntry<BaseFlowingFluid.Flowing>> ALL =
-        List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE);
+        List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE,
+            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN);
 
     /** The sauces a Spout puts on a cone, by the name their cones carry (BSItems.CONE_SAUCES). */
     public static final Map<String, FluidEntry<BaseFlowingFluid.Flowing>> CONE_SAUCES = orderedSauces();
@@ -54,6 +61,7 @@ public final class BSFluids {
         sauces.put("andalouse", ANDALOUSE);
         sauces.put("samourai", SAMOURAI);
         sauces.put("americaine", AMERICAINE);
+        sauces.put("sauce_lapin", SAUCE_LAPIN);
         return Collections.unmodifiableMap(sauces);
     }
 

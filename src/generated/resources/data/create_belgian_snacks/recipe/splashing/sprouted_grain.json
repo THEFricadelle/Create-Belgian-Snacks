@@ -1,0 +1,13 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:malting_grains"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:sprouted_grain"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "minecraft:porkchop"
+    }
+  ],
+  "processing_time": 50,
+  "results": [
+    {
+      "count": 3,
+      "id": "create_belgian_snacks:lardons"
+    }
+  ]
+}

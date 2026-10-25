@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ardennes_ham": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:ardennes_ham"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "create_belgian_snacks:smoking/ardennes_ham"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ardennes_ham"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "create_belgian_snacks:smoking/ardennes_ham"
+    ]
+  }
+}

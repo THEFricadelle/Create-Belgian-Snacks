@@ -1,0 +1,23 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:salts"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 500,
+      "tag": "c:milk"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:vinegar"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:maton"
+    }
+  ]
+}

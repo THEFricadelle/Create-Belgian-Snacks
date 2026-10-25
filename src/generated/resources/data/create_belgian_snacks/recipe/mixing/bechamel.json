@@ -1,0 +1,26 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create:wheat_flour"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    },
+    {
+      "item": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 500,
+      "tag": "c:milk"
+    }
+  ],
+  "results": [
+    {
+      "amount": 500,
+      "id": "create_belgian_snacks:bechamel"
+    }
+  ]
+}

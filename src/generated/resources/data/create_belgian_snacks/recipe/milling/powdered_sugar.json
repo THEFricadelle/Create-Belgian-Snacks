@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "createfood"
+      }
+    }
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_belgian_snacks:powdered_sugar"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:grapes"
+      }
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raisins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:raisins"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "create_belgian_snacks:smoking/raisins"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raisins"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "create_belgian_snacks:smoking/raisins"
+    ]
+  }
+}

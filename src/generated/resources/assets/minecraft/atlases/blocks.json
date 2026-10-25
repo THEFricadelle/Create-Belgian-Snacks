@@ -55,6 +55,46 @@
     {
       "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/americaine_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/cream_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/cream_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/bechamel_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/bechamel_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/liege_syrup_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/liege_syrup_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/vinegar_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/vinegar_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/sauce_lapin_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/sauce_lapin_flow"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:young_herve_cheese"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:herve_cheese"
+    }
+  ]
+}

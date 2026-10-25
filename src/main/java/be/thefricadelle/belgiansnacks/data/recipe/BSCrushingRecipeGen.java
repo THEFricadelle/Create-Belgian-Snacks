@@ -11,6 +11,7 @@ package be.thefricadelle.belgiansnacks.data.recipe;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.api.data.recipe.CrushingRecipeGen;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
@@ -26,7 +27,9 @@ public class BSCrushingRecipeGen extends CrushingRecipeGen {
             .output(BSItems.MINCED_BEEF.get(), 2)
             .output(0.5f, BSItems.BEEF_TALLOW.get(), 1)),
         CHICKEN = create("chicken", b -> b.duration(150).require(Items.CHICKEN).output(BSItems.MINCED_CHICKEN.get(), 2)),
-        BREAD = create("bread", b -> b.duration(100).require(Items.BREAD).output(BSItems.BREAD_CRUMBS.get(), 3));
+        BREAD = create("bread", b -> b.duration(100).require(Items.BREAD).output(BSItems.BREAD_CRUMBS.get(), 3)),
+        CHOCOLATE_SHAVINGS = create("chocolate_shavings", b -> b.duration(100).require(AllItems.BAR_OF_CHOCOLATE.get())
+            .output(BSItems.CHOCOLATE_SHAVINGS.get(), 2));
 
     public BSCrushingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

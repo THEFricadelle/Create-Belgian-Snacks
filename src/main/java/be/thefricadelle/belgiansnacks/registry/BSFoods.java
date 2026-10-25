@@ -12,6 +12,7 @@ package be.thefricadelle.belgiansnacks.registry;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Items;
 
 // Provisional values: nutrition, saturation and effects are still open (docs/08-decisions-ouvertes.md).
 public final class BSFoods {
@@ -50,6 +51,18 @@ public final class BSFoods {
     // A sauce adds a little (M12, provisional).
     public static final FoodProperties CONE_OF_FRIES_SAUCED = snack(7, 0.7f);
     public static final FoodProperties CONE_OF_FRIES_BEEF_TALLOW_SAUCED = snack(7, 0.9f);
+
+    // v2 base ingredients that can be eaten as they are (M13, provisional).
+    public static final FoodProperties HERVE_CHEESE = new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f)
+        // Its smell, not the cheese.
+        .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 3 * SECONDS, 0), 1.0f).build();
+    public static final FoodProperties PISTOLET = snack(4, 0.5f);
+    public static final FoodProperties ARDENNES_HAM = snack(6, 0.8f);
+    public static final FoodProperties MERINGUE = snack(2, 0.2f);
+    public static final FoodProperties RAISINS = snack(2, 0.3f);
+    public static final FoodProperties APPLE_COMPOTE = new FoodProperties.Builder().nutrition(5).saturationModifier(0.5f)
+        .usingConvertsTo(Items.BOWL).build();
+    public static final FoodProperties VANILLA_ICE_CREAM = snack(4, 0.4f);
 
     private static FoodProperties snack(int nutrition, float saturation) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();

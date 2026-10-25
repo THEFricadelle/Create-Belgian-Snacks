@@ -149,6 +149,156 @@ def cone_of_fries(palette, sauce=None):
     return px
 
 
+# v2 base ingredients (docs/12, section 2 ter): a few shared shapes, recoloured per item. A shape is a
+# set of cells; edges take the darkest shade, cells lit from the top-left the lightest.
+def shape(cells, palette, px=None):
+    px = px or canvas()
+    for x, y in cells:
+        if not (0 <= x < 16 and 0 <= y < 16):
+            continue
+        if any((x + dx, y + dy) not in cells for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]):
+            px[y][x] = colour(palette[0])
+        elif (x - 1, y - 1) not in cells or (x, y - 2) not in cells:
+            px[y][x] = colour(palette[3])
+        elif (x + 1, y + 1) not in cells or (x, y + 2) not in cells:
+            px[y][x] = colour(palette[1])
+        else:
+            px[y][x] = colour(palette[2])
+    return px
+
+
+def ellipse(cx, cy, rx, ry, keep=lambda x, y: True):
+    return {(x, y) for y in range(16) for x in range(16)
+            if ((x + 0.5 - cx) / rx) ** 2 + ((y + 0.5 - cy) / ry) ** 2 <= 1 and keep(x, y)}
+
+
+def roll(palette, crease=None):
+    px = shape(ellipse(8, 9.5, 6.5, 3.6), palette)
+    if crease:
+        dots(px, [(5, 8), (6, 8), (7, 9), (8, 9), (9, 9), (10, 10)], crease)
+    return px
+
+
+def bun(palette, seeds=False):
+    cells = ellipse(8, 10, 6.5, 4.5, keep=lambda x, y: y <= 10) | {(x, y) for x in range(3, 13) for y in (11, 12)}
+    px = shape(cells, palette)
+    if seeds:
+        dots(px, [(5, 8), (8, 7), (10, 9), (7, 10)], 'FFF6D8')
+    return px
+
+
+def disc(palette, spots=None):
+    px = shape(ellipse(8, 10, 6.8, 2.6), palette)
+    if spots:
+        dots(px, [(5, 10), (9, 9), (11, 10)], spots)
+    return px
+
+
+def wedge(palette, rind=None):
+    cells = {(x, y) for y in range(5, 13) for x in range(2, 15) if x - 2 >= (12 - y) * 1.5 or y >= 11}
+    px = shape(cells, palette)
+    if rind:
+        for x, y in cells:
+            if y == max(yy for xx, yy in cells if xx == x):
+                px[y][x] = colour(rind)
+        dots(px, [(10, 8), (7, 10), (12, 10)], palette[1])
+    return px
+
+
+def block(palette):
+    return shape({(x, y) for x in range(3, 13) for y in range(6, 12)}, palette)
+
+
+def ham(palette, bone='F2EAD8'):
+    px = shape(ellipse(7, 10, 5.5, 4), palette)
+    for x, y in [(11, 6), (12, 5), (13, 4), (12, 4), (13, 5)]:
+        px[y][x] = colour(bone)
+    dots(px, [(5, 9), (8, 11)], palette[3])
+    return px
+
+
+def peak(palette):
+    cells = {(x, y) for y in range(4, 14) for x in range(16) if abs(x + 0.5 - 8) <= (y - 3) * 0.55 + 0.6}
+    px = shape(cells, palette)
+    dots(px, [(7, 7), (6, 10), (9, 11)], palette[1])
+    return px
+
+
+def bowl(content, highlight=None):
+    px = canvas()
+    shape(ellipse(8, 8, 6.5, 6, keep=lambda x, y: y >= 8), ['6E4A2C', '8C6038', 'A8784A', 'C8955E'], px)
+    for x in range(3, 13):
+        px[8][x] = colour(content[2])
+        px[7][x] = colour(content[3] if x < 9 else content[2])
+    for x in (2, 13):
+        px[8][x] = colour('6E4A2C')
+    if highlight:
+        dots(px, [(5, 7), (9, 8)], highlight)
+    return px
+
+
+def scoop(palette):
+    px = bowl(['000000', '000000', 'B8B0A0', 'D8D0C0'])
+    shape(ellipse(8, 6.5, 4.5, 3.5), palette, px)
+    return px
+
+
+def nest(palette):
+    px = canvas()
+    for i, y0 in enumerate((7, 9, 11)):
+        for x in range(3, 14):
+            y = y0 + (1 if (x + i) % 4 in (1, 2) else 0)
+            px[y][x] = colour(palette[2 if (x + i) % 3 else 3])
+            px[y + 1][x] = colour(palette[1])
+    return px
+
+
+def heap(palette, sparkle=None):
+    px = bitmap(HEAP, dict(zip('0123', palette)))
+    if sparkle:
+        dots(px, [(7, 8), (5, 11), (10, 10)], sparkle)
+    return px
+
+
+def base_ingredients():
+    WHITE = ['B8B4A8', 'DCD8CC', 'F2F0E8', 'FFFFFF']
+    DOUGH = ['B8A47C', 'D8C49C', 'ECDCB8', 'FAF0DA']
+    CRUST = ['6E3E14', 'A0662A', 'C8873C', 'E8B06A']
+    out = {
+        'pearl_sugar': heap(WHITE, 'FFFFFF'),
+        'cassonade': heap(['5E3714', '875323', 'A86A2C', 'C98C4A']),
+        'powdered_sugar': heap(['D2D0CC', 'E8E6E2', 'F8F8F6', 'FFFFFF']),
+        'salt': heap(['A6AEB4', 'C8D0D4', 'E8ECF0', 'FFFFFF'], 'FFFFFF'),
+        'butter': block(['B8962E', 'D8B84A', 'F4D86A', 'FFF0A0']),
+        'young_herve_cheese': wedge(['B8A660', 'DCCC88', 'F0E0A0', 'FFF4C8']),
+        'herve_cheese': wedge(['B88A40', 'D8B060', 'F0D078', 'FFE8A8'], rind='C26A24'),
+        'maton': heap(['C4BEB0', 'E0DCD2', 'F4F0E6', 'FFFFFF']),
+        'brewers_yeast': heap(['8E7444', 'B0925C', 'C8A870', 'E2C894']),
+        'sprouted_grain': heap(['8C7638', 'B09A4E', 'C8B060', 'E2CC84'], '7CB04A'),
+        'malt': heap(['5C3818', '7E4E22', '9A622C', 'BC8248']),
+        'pistolet_dough': roll(DOUGH),
+        'pistolet': roll(CRUST, crease='F2D49A'),
+        'puff_pastry': block(['BCA674', 'DCC896', 'F2E2B0', 'FFF4D4']),
+        'brioche_dough': roll(['C0A256', 'DCC070', 'F4D88C', 'FFEDB8']),
+        'burger_bun_dough': bun(['BCA466', 'DCC484', 'F0D898', 'FFEEC4']),
+        'burger_bun': bun(['7A4618', 'A8642A', 'C87C30', 'E8A658'], seeds=True),
+        'pita_dough': roll(['BAAE90', 'DCD0B0', 'EEE2C4', 'FFF6E2']),
+        'raw_pita': disc(['BAAE90', 'DCD0B0', 'EEE2C4', 'FFF6E2']),
+        'pita_bread': disc(['94703A', 'C49A5C', 'DCB474', 'F2D29C'], spots='8A5A26'),
+        'noodles': nest(['A8902E', 'D2B654', 'F0D880', 'FFF0B8']),
+        'lardons': heap(['9A5050', 'C87878', 'E89A9A', 'FFD6D0'], 'FFF2EC'),
+        'brined_ham': ham(['A85858', 'D07878', 'E89898', 'FFC4C0']),
+        'ardennes_ham': ham(['4E1C16', '762A22', '9A3A30', 'C25C4C']),
+        'raw_meringue': peak(['CEC8BC', 'E8E4DC', 'F8F6F0', 'FFFFFF']),
+        'meringue': peak(['C0A478', 'DCC8A4', 'F4E6C8', 'FFF8E8']),
+        'raisins': heap(['20101A', '3A2030', '4A2A3A', '6E4A5E'], '8A6A7A'),
+        'apple_compote': bowl(['8C7C30', 'B0A048', 'D8C86A', 'F0E498'], 'F8F0B8'),
+        'chocolate_shavings': heap(['2E1A0E', '442814', '5A341E', '7E4E30'], '9A6A48'),
+        'vanilla_ice_cream': scoop(['D6CCAE', 'ECE4C8', 'FAF2D8', 'FFFFFF']),
+    }
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 BALL = [
     '................', '................', '................', '................',
     '................', '......0000......', '....00333300....', '...0333322220...',
@@ -190,8 +340,13 @@ LIQUIDS = {
     'andalouse': ['9C4F12', 'C46A1C', 'E8862A', 'FFB062'],
     'samourai': ['8A2A12', 'B03C1C', 'D9542B', 'F58358'],
     'americaine': ['A85A45', 'C9786A', 'E89A7A', 'FFC0A8'],
+    'cream': ['CFC6AE', 'E8E2D2', 'FAF6E8', 'FFFFFF'],
+    'bechamel': ['C8BC98', 'E0D6B6', 'F0E6C8', 'FFF8E4'],
+    'liege_syrup': ['24120A', '3A1E0E', '4A2A14', '74482A'],
+    'vinegar': ['8C6A2C', 'AC8840', 'C8A458', 'E6C67C'],
+    'sauce_lapin': ['2E180A', '442410', '5A3218', '83542E'],
 }
-CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine']
+CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin']
 
 
 def fluid(palette, flow=False):
@@ -346,6 +501,7 @@ def artwork():
         out[gen.ITEM_DIR / f'{name}_bucket.png'] = bitmap(BUCKET, {**METAL, 'h': palette[3], 'l': palette[2], 'd': palette[0]})
         out[gen.FLUID_DIR / f'{name}_still.png'] = fluid(palette)
         out[gen.FLUID_DIR / f'{name}_flow.png'] = fluid(palette, True)
+    out.update(base_ingredients())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     return out
 

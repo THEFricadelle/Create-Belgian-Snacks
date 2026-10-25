@@ -33,6 +33,16 @@ public final class BSTags {
     public static final TagKey<Item> FRIES = item("fries");
     // What makes a samurai sauce hot; blaze powder stands in when no mod brings one (V-D5).
     public static final TagKey<Item> HOT_PEPPERS = item("hot_peppers");
+    // v2 base ingredients (section 5.7): ours, plus what the pack already makes (M13 rule 2).
+    public static final TagKey<Item> SALTS = item("salts");
+    public static final TagKey<Item> BUTTERS = item("butters");
+    public static final TagKey<Item> POWDERED_SUGARS = item("powdered_sugars");
+    public static final TagKey<Item> MALTING_GRAINS = item("malting_grains");
+    public static final TagKey<Item> LARDONS = item("lardons");
+    public static final TagKey<Item> HAMS = item("hams");
+    public static final TagKey<Item> NOODLES = item("noodles");
+    public static final TagKey<Item> VANILLA_ICE_CREAMS = item("vanilla_ice_creams");
+    public static final TagKey<Item> GRAPES = item("grapes");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -46,6 +56,10 @@ public final class BSTags {
     public static final TagKey<Item> C_ONIONS = common("crops/onion");
     public static final TagKey<Item> C_POTATOES = common("crops/potato");
     public static final TagKey<Item> C_FOODS_FRIES = common("foods/fries");
+    // What the pack makes already: our recipe for it turns off when the tag is filled.
+    public static final TagKey<Item> C_SALT = common("salt");
+    public static final TagKey<Item> C_BUTTER = common("butter");
+    public static final TagKey<Item> C_FOODS_CHEESE = common("foods/cheese");
 
     // Any fat tiers 1 and 2 can fry in, including other mods' plant and vegetable oils (D13).
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
@@ -75,6 +89,17 @@ public final class BSTags {
             prov.addTag(MINCED_CHICKEN).addOptionalTag(C_GROUND_CHICKEN.location());
             // c:foods gathers the food subtags; ours joins it like NeoForge's own.
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_FRIES);
+            prov.addTag(SALTS).addOptionalTag(C_SALT.location()).addOptionalTag(common("dusts/salt").location());
+            prov.addTag(BUTTERS).addOptionalTag(C_BUTTER.location()).addOptionalTag(common("foods/butter").location());
+            prov.addTag(POWDERED_SUGARS).addOptional(ResourceLocation.fromNamespaceAndPath("createfood", "powdered_sugar"));
+            prov.addTag(MALTING_GRAINS).add(Items.WHEAT).addOptionalTag(common("crops/barley").location());
+            prov.addTag(LARDONS).addOptionalTag(common("foods/raw_bacon").location());
+            prov.addTag(HAMS).add(Items.COOKED_PORKCHOP)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "ham"))
+                .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "smoked_ham"));
+            prov.addTag(NOODLES).addOptionalTag(common("raw_pasta").location());
+            prov.addTag(GRAPES).addOptionalTag(common("foods/grape").location()).addOptionalTag(common("crops/grape").location());
+            prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_CHEESE);
             // My Nether's Delight (Arcadia) grows bullet peppers.
             prov.addTag(HOT_PEPPERS)
                 .addOptional(ResourceLocation.fromNamespaceAndPath("mynethersdelight", "bullet_pepper"))

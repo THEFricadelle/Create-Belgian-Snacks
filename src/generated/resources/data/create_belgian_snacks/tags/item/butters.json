@@ -1,0 +1,13 @@
+{
+  "values": [
+    {
+      "id": "#c:butter",
+      "required": false
+    },
+    {
+      "id": "#c:foods/butter",
+      "required": false
+    },
+    "create_belgian_snacks:butter"
+  ]
+}

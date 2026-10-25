@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:cooked_porkchop",
+    {
+      "id": "farmersdelight:ham",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:smoked_ham",
+      "required": false
+    },
+    "create_belgian_snacks:ardennes_ham"
+  ]
+}

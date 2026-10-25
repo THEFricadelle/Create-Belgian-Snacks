@@ -23,6 +23,10 @@ public class BSPressingRecipeGen extends PressingRecipeGen {
         .require(BSItems.FRICADELLE_PASTE.get())
         .output(BSItems.RAW_FRICADELLE.get()));
 
+    GeneratedRecipe RAW_PITA = create("raw_pita", b -> b
+        .require(BSItems.PITA_DOUGH.get())
+        .output(BSItems.RAW_PITA.get()));
+
     public BSPressingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

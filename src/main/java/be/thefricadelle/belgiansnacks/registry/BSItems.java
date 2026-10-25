@@ -25,7 +25,14 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.food.FricadelleItem;
 import be.thefricadelle.belgiansnacks.content.food.UltimateFricadelleItem;
 import net.minecraft.core.component.DataComponents;
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateRecipeProvider;
+
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.conditions.NotCondition;
+import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
@@ -107,6 +114,39 @@ public final class BSItems {
         CONE_OF_FRIES_BEEF_TALLOW = snack("cone_of_fries_beef_tallow", "Cone of Beef Tallow Fries", BSFoods.CONE_OF_FRIES_BEEF_TALLOW)
             .register();
 
+    // v2 base ingredients (docs/13, section 5.7). Ovens are Create fans on a campfire: smoking recipes.
+    public static final ItemEntry<Item>
+        PEARL_SUGAR = ingredient("pearl_sugar", "Pearl Sugar").register(),
+        CASSONADE = ingredient("cassonade", "Cassonade").register(),
+        POWDERED_SUGAR = ingredient("powdered_sugar", "Powdered Sugar").tag(BSTags.POWDERED_SUGARS).register(),
+        SALT = ingredient("salt", "Salt").tag(BSTags.SALTS).register(),
+        BUTTER = ingredient("butter", "Butter").tag(BSTags.BUTTERS).register(),
+        YOUNG_HERVE_CHEESE = ingredient("young_herve_cheese", "Young Herve Cheese").register(),
+        HERVE_CHEESE = food("herve_cheese", "Herve Cheese", BSFoods.HERVE_CHEESE).tag(BSTags.C_FOODS_CHEESE).register(),
+        MATON = ingredient("maton", "Maton").register(),
+        BREWERS_YEAST = ingredient("brewers_yeast", "Brewer's Yeast").register(),
+        SPROUTED_GRAIN = ingredient("sprouted_grain", "Sprouted Grain").register(),
+        MALT = ingredient("malt", "Malt").recipe((context, provider) -> cook(context, provider, Ingredient.of(SPROUTED_GRAIN.get()), "malt", false)).register(),
+        PISTOLET_DOUGH = ingredient("pistolet_dough", "Pistolet Dough").register(),
+        PISTOLET = food("pistolet", "Pistolet", BSFoods.PISTOLET).recipe((context, provider) -> cook(context, provider, Ingredient.of(PISTOLET_DOUGH.get()), "pistolet", true)).register(),
+        PUFF_PASTRY = ingredient("puff_pastry", "Puff Pastry").register(),
+        BRIOCHE_DOUGH = ingredient("brioche_dough", "Brioche Dough").register(),
+        BURGER_BUN_DOUGH = ingredient("burger_bun_dough", "Burger Bun Dough").register(),
+        BURGER_BUN = ingredient("burger_bun", "Burger Bun").recipe((context, provider) -> cook(context, provider, Ingredient.of(BURGER_BUN_DOUGH.get()), "burger_bun", true)).register(),
+        PITA_DOUGH = ingredient("pita_dough", "Pita Dough").register(),
+        RAW_PITA = ingredient("raw_pita", "Raw Pita").register(),
+        PITA_BREAD = ingredient("pita_bread", "Pita Bread").recipe((context, provider) -> cook(context, provider, Ingredient.of(RAW_PITA.get()), "pita_bread", true)).register(),
+        NOODLES = ingredient("noodles", "Noodles").tag(BSTags.NOODLES).register(),
+        LARDONS = ingredient("lardons", "Lardons").tag(BSTags.LARDONS).register(),
+        BRINED_HAM = ingredient("brined_ham", "Brined Ham").register(),
+        ARDENNES_HAM = food("ardennes_ham", "Ardennes Ham", BSFoods.ARDENNES_HAM).tag(BSTags.HAMS).recipe((context, provider) -> cook(context, provider, Ingredient.of(BRINED_HAM.get()), "ardennes_ham", false)).register(),
+        RAW_MERINGUE = ingredient("raw_meringue", "Raw Meringue").register(),
+        MERINGUE = food("meringue", "Meringue", BSFoods.MERINGUE).recipe((context, provider) -> cook(context, provider, Ingredient.of(RAW_MERINGUE.get()), "meringue", false)).register(),
+        RAISINS = food("raisins", "Raisins", BSFoods.RAISINS).recipe(BSItems::raisins).register(),
+        APPLE_COMPOTE = food("apple_compote", "Apple Compote", BSFoods.APPLE_COMPOTE).properties(p -> p.stacksTo(16)).register(),
+        CHOCOLATE_SHAVINGS = ingredient("chocolate_shavings", "Chocolate Shavings").register(),
+        VANILLA_ICE_CREAM = food("vanilla_ice_cream", "Vanilla Ice Cream", BSFoods.VANILLA_ICE_CREAM).tag(BSTags.VANILLA_ICE_CREAMS).register();
+
     /** The sauces a cone can carry, id suffix -> English name; the fluids are BSFluids.CONE_SAUCES. */
     public static final Map<String, String> CONE_SAUCES = new LinkedHashMap<>();
 
@@ -116,6 +156,7 @@ public final class BSItems {
         CONE_SAUCES.put("andalouse", "Andalouse");
         CONE_SAUCES.put("samourai", "Samurai");
         CONE_SAUCES.put("americaine", "Américaine");
+        CONE_SAUCES.put("sauce_lapin", "Liège Sauce");
     }
 
     // v2 sauced cones (section 5.2): a Spout puts 50 mB of sauce on a plain cone.
@@ -143,6 +184,34 @@ public final class BSItems {
         CONE_SAUCES.forEach((sauce, englishSauce) ->
             cones.put(sauce, snack(cone + "_" + sauce, englishCone + " with " + englishSauce, food).register()));
         return Collections.unmodifiableMap(cones);
+    }
+
+    // A v2 ingredient that can be eaten as it is; finished food, so the Supreme Grinder counts it.
+    private static ItemBuilder<Item, ?> food(String name, String englishName, FoodProperties food) {
+        return REGISTRATE.item(name, Item::new).lang(englishName).properties(p -> p.food(food));
+    }
+
+    // Smoked by a fan on a campfire (Create's bulk smoking runs vanilla smoking recipes); breads also bake in a furnace.
+    private static void cook(DataGenContext<Item, Item> context, RegistrateRecipeProvider provider, Ingredient input, String name,
+                             boolean alsoSmelting) {
+        SimpleCookingRecipeBuilder.smoking(input, RecipeCategory.FOOD, context.get(), 0.1f, 100)
+            .unlockedBy("has_" + name, RegistrateRecipeProvider.has(context.get()))
+            .save(provider, BelgianSnacks.asResource("smoking/" + name));
+        if (alsoSmelting) {
+            SimpleCookingRecipeBuilder.smelting(input, RecipeCategory.FOOD, context.get(), 0.1f, 200)
+                .unlockedBy("has_" + name, RegistrateRecipeProvider.has(context.get()))
+                .save(provider, BelgianSnacks.asResource("smelting/" + name));
+        }
+    }
+
+    // Grapes from the pack when there are some; sweet berries otherwise.
+    private static void raisins(DataGenContext<Item, Item> context, RegistrateRecipeProvider provider) {
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(BSTags.GRAPES), RecipeCategory.FOOD, context.get(), 0.1f, 100)
+            .unlockedBy("has_raisins", RegistrateRecipeProvider.has(context.get()))
+            .save(provider.withConditions(new NotCondition(new TagEmptyCondition(BSTags.GRAPES))), BelgianSnacks.asResource("smoking/raisins"));
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(Items.SWEET_BERRIES), RecipeCategory.FOOD, context.get(), 0.1f, 100)
+            .unlockedBy("has_raisins", RegistrateRecipeProvider.has(context.get()))
+            .save(provider.withConditions(new TagEmptyCondition(BSTags.GRAPES)), BelgianSnacks.asResource("smoking/raisins_from_sweet_berries"));
     }
 
     // A snack of the v2 menu: food, in c:foods/fries, counted by the Supreme Grinder.
@@ -175,6 +244,10 @@ public final class BSItems {
         sauceTooltip("andalouse", "Mayonnaise that went on holiday to Spain.");
         sauceTooltip("samourai", "Hot. Keep a drink at hand.");
         sauceTooltip("americaine", "Not from America. Nobody knows why.");
+        sauceTooltip("sauce_lapin", "Rabbit sauce, without the rabbit.");
+        REGISTRATE.addRawLang(tooltipKey("herve_cheese"), "Your neighbours will know.");
+        REGISTRATE.addRawLang(tooltipKey("pistolet"), "The Sunday morning bread roll.");
+        REGISTRATE.addRawLang(tooltipKey("ardennes_ham"), "Smoked in the Ardennes. Or in front of a fan.");
     }
 
     // One line per sauce, on both cones that carry it.

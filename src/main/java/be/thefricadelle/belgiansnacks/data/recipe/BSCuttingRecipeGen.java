@@ -11,6 +11,7 @@ package be.thefricadelle.belgiansnacks.data.recipe;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.api.data.recipe.CuttingRecipeGen;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
@@ -18,6 +19,7 @@ import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Items;
 
 public class BSCuttingRecipeGen extends CuttingRecipeGen {
     // v2 (section 5.1): a mechanical saw cuts a potato into four portions of fries. Any mod's potato
@@ -26,6 +28,16 @@ public class BSCuttingRecipeGen extends CuttingRecipeGen {
         .require(BSTags.C_POTATOES)
         .output(BSItems.RAW_FRIES.get(), 4)
         .duration(50));
+
+    // v2 base ingredients (section 5.7): doughs cut into rolls, pork into lardons.
+    GeneratedRecipe PISTOLET_DOUGH = create("pistolet_dough", b -> b
+        .require(AllItems.DOUGH.get()).output(BSItems.PISTOLET_DOUGH.get(), 2).duration(50));
+
+    GeneratedRecipe BURGER_BUN_DOUGH = create("burger_bun_dough", b -> b
+        .require(BSItems.BRIOCHE_DOUGH.get()).output(BSItems.BURGER_BUN_DOUGH.get(), 2).duration(50));
+
+    GeneratedRecipe LARDONS = create("lardons", b -> b
+        .require(Items.PORKCHOP).output(BSItems.LARDONS.get(), 3).duration(50));
 
     public BSCuttingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "createfood:powdered_sugar",
+      "required": false
+    },
+    "create_belgian_snacks:powdered_sugar"
+  ]
+}

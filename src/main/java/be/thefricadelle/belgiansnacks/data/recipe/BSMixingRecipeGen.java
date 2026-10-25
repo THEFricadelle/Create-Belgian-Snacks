@@ -16,6 +16,8 @@ import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
+import com.simibubi.create.AllItems;
+
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
@@ -23,6 +25,7 @@ import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
@@ -70,10 +73,97 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
         AMERICAINE = create("americaine", b -> americaine(b.require(BSTags.C_ONIONS))
             .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_ONIONS)))),
         AMERICAINE_FROM_BEETROOT = create("americaine_from_beetroot", b -> americaine(b.require(Items.BEETROOT))
-            .withCondition(new TagEmptyCondition(BSTags.C_ONIONS)));
+            .withCondition(new TagEmptyCondition(BSTags.C_ONIONS))),
+
+        // v2 base ingredients (section 5.7). Every basin recipe here has an item: a fluid-only one would
+        // take the milk or the water of any other line waiting for its items (docs/03, M13 rules).
+        CASSONADE = create("cassonade", b -> b
+            .require(Items.SUGAR).require(Items.SUGAR)
+            .output(BSItems.CASSONADE.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        // Sea salt from kelp boiled down; only where no mod of the pack makes salt already.
+        SALT = create("salt", b -> b
+            .require(Fluids.WATER, 500).require(Items.KELP)
+            .output(BSItems.SALT.get())
+            .requiresHeat(HeatCondition.HEATED)
+            .withCondition(new TagEmptyCondition(BSTags.C_SALT))),
+
+        CREAM = create("cream", b -> b
+            .require(Tags.Fluids.MILK, 1000).require(BSTags.SALTS)
+            .output(BSFluids.CREAM.get().getSource(), 250)),
+
+        // Salted butter, churned from cream; packs with a butter of their own use theirs.
+        BUTTER = create("butter", b -> b
+            .require(BSFluids.CREAM.get(), 250).require(BSTags.SALTS)
+            .output(BSItems.BUTTER.get(), 2)
+            .withCondition(new TagEmptyCondition(BSTags.C_BUTTER))),
+
+        MATON = create("maton", b -> b
+            .require(Tags.Fluids.MILK, 500).require(BSFluids.VINEGAR.get(), 50).require(BSTags.SALTS)
+            .output(BSItems.MATON.get())),
+
+        VINEGAR = create("vinegar", b -> b
+            .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Fluids.WATER, 250)
+            .output(BSFluids.VINEGAR.get().getSource(), 250)
+            .duration(1200)),
+
+        LIEGE_SYRUP = create("liege_syrup", b -> b
+            .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Tags.Items.FOODS_BERRY)
+            .output(BSFluids.LIEGE_SYRUP.get().getSource(), 250)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        // Three items (flour, butter, the nutmeg of the spices): it beats the butter dough of other mods.
+        BECHAMEL = create("bechamel", b -> b
+            .require(Tags.Fluids.MILK, 500).require(AllItems.WHEAT_FLOUR.get()).require(BSTags.BUTTERS).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.BECHAMEL.get().getSource(), 500)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        SAUCE_LAPIN = create("sauce_lapin", b -> sauceLapin(b.require(BSTags.C_ONIONS))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_ONIONS)))),
+        SAUCE_LAPIN_FROM_BEETROOT = create("sauce_lapin_from_beetroot", b -> sauceLapin(b.require(Items.BEETROOT))
+            .withCondition(new TagEmptyCondition(BSTags.C_ONIONS))),
+
+        BREWERS_YEAST = create("brewers_yeast", b -> b
+            .require(Items.BREAD).require(Items.SUGAR).require(Fluids.WATER, 250)
+            .output(BSItems.BREWERS_YEAST.get(), 2)),
+
+        // Doughs start from Create's dough, never from flour and water: Create already mixes those into dough.
+        BRIOCHE_DOUGH = create("brioche_dough", b -> b
+            .require(AllItems.DOUGH.get()).require(BSTags.BUTTERS).require(Tags.Items.EGGS).require(Items.SUGAR)
+            .require(BSItems.BREWERS_YEAST.get())
+            .output(BSItems.BRIOCHE_DOUGH.get(), 2)),
+
+        PITA_DOUGH = create("pita_dough", b -> b
+            .require(AllItems.DOUGH.get()).require(BSItems.BREWERS_YEAST.get())
+            .output(BSItems.PITA_DOUGH.get(), 2)),
+
+        NOODLES = create("noodles", b -> b
+            .require(AllItems.DOUGH.get()).require(Tags.Items.EGGS)
+            .output(BSItems.NOODLES.get(), 2)),
+
+        BRINED_HAM = create("brined_ham", b -> b
+            .require(Items.PORKCHOP).require(BSTags.SALTS)
+            .output(BSItems.BRINED_HAM.get())),
+
+        RAW_MERINGUE = create("raw_meringue", b -> b
+            .require(Tags.Items.EGGS).require(Items.SUGAR)
+            .output(BSItems.RAW_MERINGUE.get(), 2)),
+
+        APPLE_COMPOTE = create("apple_compote", b -> b
+            .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
+            .output(BSItems.APPLE_COMPOTE.get())
+            .requiresHeat(HeatCondition.HEATED));
 
     public BSMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> sauceLapin(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.LIEGE_SYRUP.get(), 250)
+            .require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.SAUCE_LAPIN.get().getSource(), 250)
+            .requiresHeat(HeatCondition.HEATED);
     }
 
     private static StandardProcessingRecipe.Builder<MixingRecipe> andalouse(StandardProcessingRecipe.Builder<MixingRecipe> b) {

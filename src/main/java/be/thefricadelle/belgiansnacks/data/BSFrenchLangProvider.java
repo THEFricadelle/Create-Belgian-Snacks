@@ -54,6 +54,38 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSEntities.THE_FRICADELLE_NPC.get(), "THEFricadelle");
         add(BSItems.ULTIMATE_FRICADELLE.get(), "THE_FRICADELLE");
 
+        add(BSItems.PEARL_SUGAR.get(), "Sucre perlé");
+        add(BSItems.CASSONADE.get(), "Cassonade");
+        add(BSItems.POWDERED_SUGAR.get(), "Sucre glace");
+        add(BSItems.SALT.get(), "Sel");
+        add(BSItems.BUTTER.get(), "Beurre");
+        add(BSItems.YOUNG_HERVE_CHEESE.get(), "Fromage de Herve jeune");
+        add(BSItems.HERVE_CHEESE.get(), "Fromage de Herve");
+        add(BSItems.MATON.get(), "Maton");
+        add(BSItems.BREWERS_YEAST.get(), "Levure de bière");
+        add(BSItems.SPROUTED_GRAIN.get(), "Grain germé");
+        add(BSItems.MALT.get(), "Malt");
+        add(BSItems.PISTOLET_DOUGH.get(), "Pâton de pistolet");
+        add(BSItems.PISTOLET.get(), "Pistolet");
+        add(BSItems.PUFF_PASTRY.get(), "Pâte feuilletée");
+        add(BSItems.BRIOCHE_DOUGH.get(), "Pâte à brioche");
+        add(BSItems.BURGER_BUN_DOUGH.get(), "Pâton de pain à burger");
+        add(BSItems.BURGER_BUN.get(), "Pain à burger");
+        add(BSItems.PITA_DOUGH.get(), "Pâte à pita");
+        add(BSItems.RAW_PITA.get(), "Pita crue");
+        add(BSItems.PITA_BREAD.get(), "Pain pita");
+        add(BSItems.NOODLES.get(), "Nouilles");
+        add(BSItems.LARDONS.get(), "Lardons");
+        add(BSItems.BRINED_HAM.get(), "Jambon en saumure");
+        add(BSItems.ARDENNES_HAM.get(), "Jambon d'Ardenne");
+        add(BSItems.RAW_MERINGUE.get(), "Meringue crue");
+        add(BSItems.MERINGUE.get(), "Meringue");
+        add(BSItems.RAISINS.get(), "Raisins secs");
+        add(BSItems.APPLE_COMPOTE.get(), "Compote de pommes");
+        add(BSItems.CHOCOLATE_SHAVINGS.get(), "Copeaux de chocolat");
+        add(BSItems.VANILLA_ICE_CREAM.get(), "Glace vanille");
+        add(BSItems.SAUCED_CONES.get("sauce_lapin").get(), "Cornet de frites sauce lapin");
+        add(BSItems.SAUCED_TALLOW_CONES.get("sauce_lapin").get(), "Cornet de frites au blanc, sauce lapin");
         add(BSItems.RAW_FRIES.get(), "Frites crues");
         add(BSItems.BLANCHED_FRIES.get(), "Frites blanchies");
         add(BSItems.FRIES.get(), "Frites");
@@ -79,6 +111,11 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.ANDALOUSE, "Sauce andalouse", "Seau de sauce andalouse");
         fluid(BSFluids.SAMOURAI, "Sauce samouraï", "Seau de sauce samouraï");
         fluid(BSFluids.AMERICAINE, "Sauce américaine", "Seau de sauce américaine");
+        fluid(BSFluids.CREAM, "Crème", "Seau de crème");
+        fluid(BSFluids.BECHAMEL, "Béchamel", "Seau de béchamel");
+        fluid(BSFluids.LIEGE_SYRUP, "Sirop de Liège", "Seau de sirop de Liège");
+        fluid(BSFluids.VINEGAR, "Vinaigre", "Seau de vinaigre");
+        fluid(BSFluids.SAUCE_LAPIN, "Sauce lapin", "Seau de sauce lapin");
 
         add(BSBlocks.FRYER.get(), "Friteuse");
         add(BSBlocks.SUPREME_GRINDER.get(), "Hachoir Suprême");
@@ -101,6 +138,11 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.tooltipKey("cone_of_fries_beef_tallow_samourai"), "Ça pique. Garde une boisson à portée de main.");
         add(BSItems.tooltipKey("cone_of_fries_americaine"), "Ne vient pas d'Amérique. Personne ne sait pourquoi.");
         add(BSItems.tooltipKey("cone_of_fries_beef_tallow_americaine"), "Ne vient pas d'Amérique. Personne ne sait pourquoi.");
+        add(BSItems.tooltipKey("cone_of_fries_sauce_lapin"), "Sauce lapin, sans lapin.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_sauce_lapin"), "Sauce lapin, sans lapin.");
+        add(BSItems.tooltipKey("herve_cheese"), "Tes voisins le sauront.");
+        add(BSItems.tooltipKey("pistolet"), "Le petit pain du dimanche matin.");
+        add(BSItems.tooltipKey("ardennes_ham"), "Fumé en Ardenne. Ou devant un ventilateur.");
     }
 
     // A fluid shows up under three keys: the fluid type, its placed block and its bucket.
