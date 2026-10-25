@@ -150,6 +150,42 @@ Détail : `13-cahier-des-charges-v2.md`, section 5.2. La sauce lapin arrive au M
 - Tag fluide `create_belgian_snacks:sauces` : mayonnaise, curry ketchup, andalouse, samouraï, américaine (sources et écoulements). Aucune sauce n'est une graisse de friture.
 - **Cornets sauce** : `filling/cone_of_fries_<sauce>` et `filling/cone_of_fries_beef_tallow_<sauce>`, un Spout verse 50 mB de la sauce sur le cornet nature. 10 items, comptés par le Hachoir (V-D1).
 
+## v2 — Ingrédients de base (M13, 25/10/2026)
+
+Détail : `13-cahier-des-charges-v2.md`, section 5.7, et les trois règles de bassin dans `03-architecture.md`. Les fours sont des ventilateurs de Create sur un feu de camp (recettes vanilla `smoking`, que le fumage en masse de Create exécute) ; les pains cuisent aussi au four.
+
+| Ingrédient | Recette (ID) |
+|---|---|
+| `pearl_sugar` | Compacting 4 sucre → 2 (`compacting/pearl_sugar`) |
+| `cassonade` | Mixer chauffé 2 sucre → 1 (`mixing/cassonade`) |
+| `powdered_sugar` | Meule 1 sucre → 1 (`milling/powdered_sugar`), coupée avec Create: Food (dont le sucre glace entre dans `#powdered_sugars`) |
+| `salt` | Mixer chauffé 500 mB d'eau + 1 algue → 1 (`mixing/salt`), coupée quand `#c:salt` est rempli (Create: Food dans Arcadia) |
+| fluide `cream` | Mixer 1000 mB de lait + 1 `#salts` → 250 mB (`mixing/cream`) |
+| `butter` | Mixer 250 mB de crème + 1 `#salts` → 2 (`mixing/butter`), coupée quand `#c:butter` est rempli |
+| `young_herve_cheese` → `herve_cheese` | Compacting 1000 mB de lait + 1 `#salts` ; lavage au ventilateur (`compacting/young_herve_cheese`, `splashing/herve_cheese`) |
+| `maton` | Mixer 500 mB de lait + 50 mB de vinaigre + 1 `#salts` (`mixing/maton`) |
+| fluide `vinegar` | Mixer 3 pommes + 250 mB d'eau, 1200 ticks → 250 mB (`mixing/vinegar`) |
+| fluide `liege_syrup` | Mixer chauffé 3 pommes + 1 sucre + 1 baie → 250 mB (`mixing/liege_syrup`) |
+| fluide `bechamel` | Mixer chauffé 500 mB de lait + 1 farine + 1 `#butters` + 1 épices → 500 mB (`mixing/bechamel`) |
+| fluide `sauce_lapin` | Mixer chauffé 250 mB de sirop de Liège + 1 oignon + 1 épices → 250 mB ; jumelle à la betterave (`mixing/sauce_lapin`, `…_from_beetroot`) ; 2 cornets sauce lapin de plus |
+| `brewers_yeast` | Mixer 1 pain + 1 sucre + 250 mB d'eau → 2 (`mixing/brewers_yeast`) |
+| `sprouted_grain` → `malt` | Lavage au ventilateur 1 `#malting_grains` (blé, orge) ; fumage (`splashing/sprouted_grain`, `smoking/malt`) |
+| `pistolet_dough` → `pistolet` | Scie 1 `create:dough` → 2 ; fumage ou four (`cutting/pistolet_dough`, `smoking/pistolet`, `smelting/pistolet`) |
+| `puff_pastry` | Compacting 1 `create:dough` + 1 `#butters` (`compacting/puff_pastry`) |
+| `brioche_dough` | Mixer 1 `create:dough` + 1 `#butters` + 1 œuf + 1 sucre + 1 levure → 2 (`mixing/brioche_dough`) |
+| `burger_bun_dough` → `burger_bun` | Scie 1 `brioche_dough` → 2 ; fumage ou four |
+| `pita_dough` → `raw_pita` → `pita_bread` | Mixer 1 `create:dough` + 1 levure → 2 ; presse ; fumage ou four |
+| `noodles` | Mixer 1 `create:dough` + 1 œuf → 2 (`mixing/noodles`) |
+| `lardons` | Scie 1 côtelette de porc → 3 (`cutting/lardons`) |
+| `brined_ham` → `ardennes_ham` | Mixer 1 côtelette + 1 `#salts` ; fumage (`mixing/brined_ham`, `smoking/ardennes_ham`) |
+| `raw_meringue` → `meringue` | Mixer 1 œuf + 1 sucre → 2 ; fumage |
+| `raisins` | Fumage d'un raisin (`#grapes`) ; jumelle aux baies sucrées sans raisin (`smoking/raisins`, `…_from_sweet_berries`) |
+| `apple_compote` | Mixer chauffé 3 pommes + 1 sucre + 1 bol (`mixing/apple_compote`), rend le bol |
+| `chocolate_shavings` | Concassage 1 barre de chocolat de Create → 2 (`crushing/chocolate_shavings`) |
+| `vanilla_ice_cream` | Compacting 250 mB de crème + 1 sucre + 1 glace → 2 (`compacting/vanilla_ice_cream`) |
+
+Se mangent tels quels (comptés par le Hachoir) : fromage de Herve (nausée 3 s : son odeur), pistolet, jambon d'Ardenne, meringue, raisins secs, compote, glace vanille. La moutarde et la farine de sarrasin arrivent avec leurs cultures (M14).
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

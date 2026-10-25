@@ -15,6 +15,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Friterie sauces** — Andalouse, samurai and américaine, mixed from mayonnaise in a mixer (samurai over a lit burner), with a bucket each. Without tomatoes, onions or hot peppers in the pack, beetroot or blaze powder stand in.
 - **Sauced cones** — A spout puts 50 mB of mayonnaise, curry ketchup, andalouse, samurai or américaine on a cone of fries or of beef tallow fries: ten cones, all counted by the Supreme Grinder.
 
+- **Base ingredients** — Pearl sugar, cassonade, powdered sugar, salt, cream, salted butter, Herve cheese (washed by a fan; its smell makes you dizzy), maton, vinegar, Liège syrup, béchamel, brewer's yeast, malt, pistolet, puff pastry, brioche, burger bun, pita and noodle doughs, lardons, Ardennes ham, meringue, raisins, apple compote, chocolate shavings and vanilla ice cream, all made by Create machines; fans on a campfire do the baking and smoking. Where the pack already makes salt, butter or powdered sugar, those are used and ours stay off.
+- **Liège sauce** — From Liège syrup, onion and spices, with its two sauced cones.
+
 ### Changed
 
 - **The fryer's recipe** — Of the recipes an item has, the fryer now takes one its heat and the fat in its tank allow, the most specific fat first.
@@ -28,6 +31,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 - **Les sauces de friterie** — Andalouse, samouraï et américaine, à base de mayonnaise au mixer (la samouraï sur un brûleur allumé), chacune avec son seau. Sans tomates, oignons ou piments dans le pack, la betterave ou la poudre de blaze les remplacent.
 - **Les cornets sauce** — Un spout verse 50 mB de mayonnaise, curry ketchup, andalouse, samouraï ou américaine sur un cornet de frites ou de frites au blanc : dix cornets, tous comptés par le Hachoir Suprême.
+
+- **Les ingrédients de base** — Sucre perlé, cassonade, sucre glace, sel, crème, beurre salé, fromage de Herve (lavé au ventilateur ; son odeur fait tourner la tête), maton, vinaigre, sirop de Liège, béchamel, levure de bière, malt, pistolet, pâte feuilletée, pâtes à brioche, à pain à burger, à pita et nouilles, lardons, jambon d'Ardenne, meringue, raisins secs, compote de pommes, copeaux de chocolat et glace vanille, tous faits par des machines de Create ; les ventilateurs sur feu de camp cuisent et fument. Là où le pack fait déjà du sel, du beurre ou du sucre glace, ce sont les siens qui servent et les nôtres restent coupés.
+- **La sauce lapin** — Au sirop de Liège, à l'oignon et aux épices, avec ses deux cornets sauce.
 
 ### Modifications
 

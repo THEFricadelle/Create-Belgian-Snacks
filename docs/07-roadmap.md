@@ -117,5 +117,12 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Recettes au Mixer et jumelles de secours (betterave, poudre de blaze) ; tags `sauces` et `hot_peppers`
 - [x] 10 cornets sauce remplis au Spout (5 sauces × cornet nature ou au blanc)
 - [x] Tests : bassin réel, ligne de Spouts, jumelles de tous nos tags (mutation qui a révélé le trou : corrigé)
-- [ ] Sauce lapin : reportée au M13 (sirop de Liège)
+- [x] Sauce lapin : livrée au M13 (sirop de Liège)
 - **Accepté si** : les cornets sauce sortent d'une ligne ; testé avec et sans FD. ✅
+
+### M13 — Ingrédients de base ✅ (25/10/2026)
+- [x] Scan des recettes d'Arcadia et lecture du bassin de Create : trois règles de bassin (`03-architecture.md`)
+- [x] 30 items, 5 fluides (crème, béchamel, sirop de Liège, vinaigre, sauce lapin), 2 cornets sauce lapin, textures
+- [x] Ventilateurs de Create pour laver et fumer (GameTest sur de vraies machines)
+- [x] Sel, beurre et sucre glace se coupent quand le pack les fournit
+- **Accepté si** : chaque ingrédient sort d'une machine Create ; aucun conflit de recette avec le pack. ✅ (scan statique ; vérification en jeu au M22)

@@ -192,6 +192,14 @@ Exigence E1 du cahier des charges v2 (`13-cahier-des-charges-v2.md`, section 3).
 - `compat/solonion/SolonionPurger` : chargé seulement si `solonion` est présent, **sans aucune classe de Solonion à la compilation ni dépendance de build**. L'historique est l'attachment NeoForge `solonion:foodlist` (`FoodPlayerDataImpl`, un `INBTSerializable<ListTag>` de piles sauvegardées) : lu et réécrit par l'interface de NeoForge. Ensuite `SOLOnion.EVENT.updatePlayerBenefits(player)` et `SOLOnionAPI.syncFoodList(player)` par réflexion, résolus une fois ; s'ils manquent (autre version), la purge reste enregistrée et le client se met à jour au prochain sync. Vérifié sur Solonion 1.5.7 (jar d'Arcadia) le 25/10/2026.
 - Test de bout en bout : `tools/uninstall_smoke.py` (voir `10-tests.md`), avec la sonde `src/uninstallProbe` (mod de test `uninstall_probe`, jamais livré, chargé par ses deux runs seulement : les autres runs ne chargent que ce mod, et la sonde reste inactive sans `uninstall_probe.phase`).
 
+## Recettes de bassin : trois règles (v2, M13)
+
+Établies au jalon M13 après un scan de toutes les recettes de traitement d'Arcadia 2.0.32 et la lecture de `BasinOperatingBlockEntity.getMatchingRecipes` dans Create 6.0.10 : quand plusieurs recettes de bassin correspondent, **Create prend celle qui a le plus d'items** (les fluides ne comptent pas).
+
+1. **Toute recette de Mixer ou de Compacting a au moins un item** (`RecipeFilesTest.basinRecipesNeedAnItem`). Une recette de fluides seuls correspondrait à tout bassin qui contient ce fluide et le volerait à une autre ligne qui attend encore ses items (par exemple le lait d'une ligne de chocolat de Create). D'où le sel dans la crème, le beurre, le fromage de Herve et le maton.
+2. **Quand le pack fabrique déjà un ingrédient sous un tag `c:`, notre recette se coupe** et nos recettes lisent un tag qui contient le sien (`RecipeFilesTest.packIngredientsTurnOurRecipeOff`) : sel (`c:salt`, `#salts`), beurre (`c:butter`, `#butters`), sucre glace (Create: Food, `#powdered_sugars`).
+3. **Une recette qui en recoupe une du pack a strictement plus d'items**, ou part d'un autre ingrédient : nos pâtes partent de la pâte de Create (`create:dough`), jamais de farine + eau (que Create mélange déjà en pâte) ; la béchamel porte trois items (farine, beurre, épices) pour passer devant la pâte au beurre de Create: Food.
+
 ## Ponder (M9)
 
 - `client/ponder/BSPonderPlugin` : 5 scènes (Friteuse, Hachoir « collectionner » et « modes », lignes des paliers 2 et 3) et un tag ; ajouté à `PonderIndex` sur `FMLClientSetupEvent`, comme Create.

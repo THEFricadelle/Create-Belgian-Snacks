@@ -72,6 +72,11 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 - FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` (D12, décidé) : toujours enregistré ; les recettes lisent `create_belgian_snacks:minced_meats/beef`, qui contient le nôtre et celui de FD.
 - Vérifier au jalon M5 (export CSV) si un mod du pack fournit déjà **huile**, **mayonnaise** ou **ketchup** (Burger Mod, Cook's Collection, Create: Food…). Si oui : les accepter dans nos recettes via un tag `create_belgian_snacks:frying_oils` / sauces, pour éviter les doublons.
 
+### Create: Food et Farmer's Delight : ingrédients en commun (v2, M13)
+Scan du 25/10/2026 sur les jars d'Arcadia 2.0.32 : Create: Food moud le sucre en sucre glace, fait du sel (`c:salt`) et utilise `c:butter` ; Create mélange farine + eau en pâte ; Create: Food mélange beurre + farine (+ œuf, sucre) en pâtes et appareils ; Farmer's Delight mélange lait + farine en pâte à tarte. Nos recettes de sel, de beurre et de sucre glace se coupent donc dans le pack, et nos tags `salts`, `butters`, `powdered_sugars` lisent les leurs ; nos pâtes partent de `create:dough`. Les recoupements restants sont tranchés par la règle de Create (le plus d'items gagne) ; voir `03-architecture.md`. À vérifier en jeu au M22.
+
+À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
+
 ### Piments (sauce samouraï, v2)
 `mynethersdelight:bullet_pepper` (My Nether's Delight, présent dans Arcadia) remplit `#create_belgian_snacks:hot_peppers` : la samouraï s'y fait au piment, et la jumelle à la poudre de blaze reste éteinte. À vérifier au jalon M22 dans le pack.
 

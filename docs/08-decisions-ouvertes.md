@@ -80,3 +80,11 @@ Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seu
 | `cone_of_fries_beef_tallow` | 6 | 0.8 | M11 |
 | `cone_of_fries_<sauce>` (5 sauces) | 7 | 0.7 | M12 |
 | `cone_of_fries_beef_tallow_<sauce>` (5 sauces) | 7 | 0.9 | M12 |
+| cornets sauce lapin (nature, au blanc) | 7 | 0.7 / 0.9 | M13 |
+| `herve_cheese` (+ nausée 3 s) | 4 | 0.6 | M13 |
+| `pistolet` | 4 | 0.5 | M13 |
+| `ardennes_ham` | 6 | 0.8 | M13 |
+| `meringue` | 2 | 0.2 | M13 |
+| `raisins` | 2 | 0.3 | M13 |
+| `apple_compote` (rend le bol) | 5 | 0.5 | M13 |
+| `vanilla_ice_cream` | 4 | 0.4 | M13 |
