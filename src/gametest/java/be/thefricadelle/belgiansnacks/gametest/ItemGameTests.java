@@ -50,12 +50,8 @@ public final class ItemGameTests {
     private static final String TEMPLATE = "empty";
 
     // Recipe ids and KubeJS scripts refer to these: renaming or removing one is a breaking change.
-    private static final Set<String> EXPECTED_IDS = Set.of(
-        "minced_pork", "minced_beef", "minced_chicken", "beef_tallow", "bread_crumbs", "fricadelle_paste",
-        "raw_fricadelle", "fricadelle", "belgian_spices", "exceptional_paste", "incomplete_the_fricadelle",
-        "raw_the_fricadelle", "the_fricadelle", "absolute_paste", "raw_ultimate_fricadelle", "ultimate_fricadelle",
-        "frying_oil_bucket", "melted_beef_tallow_bucket", "mayonnaise_bucket", "curry_ketchup_bucket",
-        "fryer", "supreme_grinder", "incomplete_ultimate_fricadelle");
+    // The list is the minecraft:item part of frozen-ids.txt (spec v2, rule R1).
+    private static final Set<String> EXPECTED_IDS = FrozenIds.paths("minecraft:item");
 
     private ItemGameTests() {
     }

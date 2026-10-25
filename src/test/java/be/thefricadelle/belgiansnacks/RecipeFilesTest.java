@@ -41,18 +41,9 @@ class RecipeFilesTest {
     private static final Path ITEM_MODELS = Path.of("src/generated/resources/assets/" + MOD_ID + "/models/item");
     private static final Path FLUID_TEXTURES = Path.of("src/main/resources/assets/" + MOD_ID + "/textures/fluid");
 
-    // KubeJS scripts refer to these ids: renaming or removing one is a breaking change.
-    private static final Set<String> EXPECTED_IDS = Set.of(
-        "crushing/porkchop", "crushing/beef", "crushing/chicken", "crushing/bread",
-        "milling/dried_kelp",
-        "mixing/fricadelle_paste", "mixing/melted_beef_tallow", "mixing/mayonnaise",
-        "mixing/curry_ketchup", "mixing/curry_ketchup_from_beetroot",
-        "compacting/frying_oil_from_seeds",
-        "pressing/fricadelle_paste",
-        "frying/fricadelle", "frying/the_fricadelle", "frying/ultimate_fricadelle",
-        "mechanical_crafting/fryer", "mechanical_crafting/supreme_grinder",
-        "sequenced_assembly/raw_the_fricadelle", "sequenced_assembly/raw_the_fricadelle_from_beetroot",
-        "sequenced_assembly/raw_ultimate_fricadelle", "sequenced_assembly/raw_ultimate_fricadelle_from_beetroot");
+    // KubeJS scripts refer to these ids: renaming or removing one is a breaking change. They are the
+    // data/recipe part of the frozen id list (spec v2, rule R1).
+    private static final Set<String> EXPECTED_IDS = FrozenIdsFileTest.ids("data/recipe");
 
     // Recipe types this mod registers; every other folder is a Create type.
     private static final Set<String> OWN_TYPES = Set.of("frying");
