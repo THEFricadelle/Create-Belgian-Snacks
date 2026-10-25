@@ -1,0 +1,60 @@
+/*
+ * Create: Belgian Snacks - Copyright (C) 2026 THEFricadelle. All rights reserved.
+ * SPDX-License-Identifier: LicenseRef-Create-Belgian-Snacks-ARR
+ *
+ * Proprietary, closed-source software. Access to this source is restricted and
+ * grants no right to copy, share, reuse, redistribute, or create derivative works.
+ * See LICENSE and CONTRIBUTING.md at the repository root.
+ */
+
+package be.thefricadelle.belgiansnacks.gametest;
+
+import java.util.List;
+
+import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.gametest.FriterieLineGameTests.Station;
+import be.thefricadelle.belgiansnacks.registry.BSCrops;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSFluids;
+import be.thefricadelle.belgiansnacks.registry.BSItems;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+/**
+ * v2 Belgian oven dishes on real Create machines (docs/13, section 5.11): a belt under deployers,
+ * spouts and a press, one pass each, with the line of FriterieLineGameTests.
+ */
+@GameTestHolder(BelgianSnacks.MOD_ID)
+@PrefixGameTestTemplate(false)
+public final class BelgianDishesLineGameTests {
+    private static final int STOCK = 16;
+
+    private BelgianDishesLineGameTests() {
+    }
+
+    // A cooked porkchop is a ham (#hams).
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void croqueMonsieurIsAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(new ItemStack(Items.BREAD)), List.of(BSDishes.RAW_CROQUE_MONSIEUR.get()),
+            List.of(Station.deployer(new ItemStack(Items.COOKED_PORKCHOP, STOCK)), Station.deployer(BSItems.HERVE_CHEESE.asStack(STOCK)),
+                Station.press()), 0);
+    }
+
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void chiconsAuGratinAreAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(BSCrops.CHICON.asStack()), List.of(BSDishes.RAW_CHICONS_AU_GRATIN.get()),
+            List.of(Station.deployer(new ItemStack(Items.COOKED_PORKCHOP, STOCK)), Station.spout(BSFluids.BECHAMEL.get().getSource()),
+                Station.deployer(BSItems.HERVE_CHEESE.asStack(STOCK))), 250);
+    }
+
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void flamicheIsAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(BSDishes.TART_SHELL.asStack()), List.of(BSDishes.RAW_FLAMICHE.get()),
+            List.of(Station.deployer(BSCrops.LEEK.asStack(STOCK)), Station.spout(BSFluids.CREAM.get().getSource()),
+                Station.deployer(new ItemStack(Items.EGG, STOCK))), 250);
+    }
+}

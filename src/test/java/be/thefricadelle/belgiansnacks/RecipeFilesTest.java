@@ -51,7 +51,7 @@ class RecipeFilesTest {
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
     // c:plates/copper and c:plates/brass are filled by Create, a required dependency.
     private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:foods/berry", "c:plates/copper", "c:plates/brass",
-        "c:ingots/gold", "c:storage_blocks/iron");
+        "c:ingots/gold", "c:storage_blocks/iron", "c:foods/cooked_fish", "c:mushrooms");
 
     @Test
     void recipeIdsAreExactlyTheExpectedOnes() throws IOException {
@@ -123,6 +123,25 @@ class RecipeFilesTest {
                 }
             }
             assertTrue(item, id + " has fluids only: it would take them from any basin");
+        });
+    }
+
+    // Two basin recipes needing exactly the same items and fluids would tie: Create would pick either.
+    // Twins are exempt, their conditions never load both.
+    @Test
+    void noBasinRecipeHasTheSameIngredientsAsAnother() throws IOException {
+        Map<String, String> seen = new TreeMap<>();
+        recipes().forEach((id, json) -> {
+            String type = json.get("type").getAsString();
+            if (!type.equals("create:mixing") && !type.equals("create:compacting") || json.has("neoforge:conditions")) {
+                return;
+            }
+            List<String> parts = new ArrayList<>();
+            json.getAsJsonArray("ingredients").forEach(e -> parts.add(e.toString()));
+            java.util.Collections.sort(parts);
+            String key = type + parts;
+            String other = seen.put(key, id);
+            assertTrue(other == null, id + " needs the same ingredients as " + other);
         });
     }
 

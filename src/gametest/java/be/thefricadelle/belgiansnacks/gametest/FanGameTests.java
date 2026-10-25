@@ -51,11 +51,13 @@ public final class FanGameTests {
         BlockPos grain = row(helper, 3, water, new ItemStack(Items.WHEAT));
         BlockPos malt = row(helper, 5, campfire, BSItems.SPROUTED_GRAIN.asStack());
         BlockPos roll = row(helper, 7, campfire, BSItems.PISTOLET_DOUGH.asStack());
+        BlockPos croque = row(helper, 9, campfire, be.thefricadelle.belgiansnacks.registry.BSDishes.RAW_CROQUE_MONSIEUR.asStack());
         helper.succeedWhen(() -> {
             expect(helper, cheese, BSItems.HERVE_CHEESE.get());
             expect(helper, grain, BSItems.SPROUTED_GRAIN.get());
             expect(helper, malt, BSItems.MALT.get());
             expect(helper, roll, BSItems.PISTOLET.get());
+            expect(helper, croque, be.thefricadelle.belgiansnacks.registry.BSDishes.CROQUE_MONSIEUR.get());
         });
     }
 

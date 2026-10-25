@@ -52,7 +52,7 @@ public final class FriterieLineGameTests {
     private static final BlockPos BELT_START = new BlockPos(2, 2, 1);
     private static final int STATION_Y = 4;
 
-    private record Station(ItemStack held, Fluid sauce) {
+    record Station(ItemStack held, Fluid sauce) {
         static Station deployer(ItemStack held) {
             return new Station(held, null);
         }
@@ -91,7 +91,7 @@ public final class FriterieLineGameTests {
             List.of(Station.deployer(new ItemStack(Items.SHEARS))), 0);
     }
 
-    private static void run(GameTestHelper helper, List<ItemStack> inputs, List<Item> expected, List<Station> stations, int saucePerItem) {
+    static void run(GameTestHelper helper, List<ItemStack> inputs, List<Item> expected, List<Station> stations, int saucePerItem) {
         BlockPos beltEnd = BELT_START.south(stations.size() + 2);
         BeltConnectorItem.createBelts(helper.getLevel(), helper.absolutePos(BELT_START), helper.absolutePos(beltEnd));
         motor(helper, BELT_START.west(), Direction.EAST);

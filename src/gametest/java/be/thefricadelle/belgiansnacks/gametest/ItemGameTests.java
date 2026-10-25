@@ -21,6 +21,7 @@ import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSFoods;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -86,6 +87,11 @@ public final class ItemGameTests {
         return List.of(BSSnacks.MITRAILLETTE.get(), BSSnacks.BOULET.get(), BSSnacks.BOULETS_LIEGEOIS.get(), BSSnacks.SHRIMP_CROQUETTE.get(), BSSnacks.CHEESE_CROQUETTE.get(), BSSnacks.CHICKEN_CROQUETTE.get(), BSSnacks.LUCIFER.get(), BSSnacks.POTATO_CROQUETTE.get(), BSSnacks.CHICKEN_FINGERS.get(), BSSnacks.FISH_STICKS.get(), BSSnacks.CHEESE_STICKS.get(), BSSnacks.CERVELAS.get(), BSSnacks.MEXICANO.get(), BSSnacks.VIANDELLE.get(), BSSnacks.LOEMPIA.get(), BSSnacks.FILET_AMERICAIN.get(), BSSnacks.PISTOLET_AMERICAIN.get(), BSSnacks.AMERICAIN_FRITES.get(), BSSnacks.PATTY.get(), BSSnacks.FRITERIE_BURGER.get(), BSSnacks.FRITERIE_CHEESEBURGER.get(), BSSnacks.HOT_DOG.get(), BSSnacks.GYROS.get(), BSSnacks.PITA.get(), BSSnacks.BROCHETTE.get(), BSSnacks.BAMI_DISC.get(), BSSnacks.NASI_DISC.get(), BSSnacks.SQUID_RINGS.get(), BSSnacks.CHICKEN_NUGGETS.get(), BSSnacks.CHICKEN_CRUNCH.get(), BSSnacks.FRIED_CHICKEN_WINGS.get(), BSSnacks.SPICY_CHICKEN_WINGS.get(), BSSnacks.ONION_RINGS.get());
     }
 
+    // M17 Belgian dishes, written out.
+    private static List<Item> belgianDishes() {
+        return List.of(BSDishes.MOULES_MARINIERES.get(), BSDishes.MOULES_A_LA_BIERE.get(), BSDishes.MOULES_FRITES.get(), BSDishes.CARBONNADE.get(), BSDishes.CARBONNADE_FRITES.get(), BSDishes.STOEMP.get(), BSDishes.STOEMP_SAUCISSE.get(), BSDishes.WATERZOOI.get(), BSDishes.LAPIN_A_LA_GUEUZE.get(), BSDishes.BRUSSELS_SPROUTS_BACON.get(), BSDishes.ASPARAGUS_FLEMISH.get(), BSDishes.HOP_SHOOTS_CREAM.get(), BSDishes.SALADE_LIEGEOISE.get(), BSDishes.HOCHEPOT.get(), BSDishes.ESCAVECHE.get(), BSDishes.STEAK_FRITES.get(), BSDishes.CHICONS_AU_GRATIN.get(), BSDishes.VOL_AU_VENT.get(), BSDishes.BOUDIN.get(), BSDishes.BOUDIN_COMPOTE.get(), BSDishes.FLAMICHE.get(), BSDishes.CROQUE_MONSIEUR.get());
+    }
+
     // v2 base ingredients that can be eaten as they are (M13).
     private static List<Item> edibleIngredients() {
         return List.of(BSItems.HERVE_CHEESE.get(), BSItems.PISTOLET.get(), BSItems.ARDENNES_HAM.get(), BSItems.MERINGUE.get(), BSItems.RAISINS.get(), BSItems.APPLE_COMPOTE.get(), BSItems.VANILLA_ICE_CREAM.get());
@@ -95,7 +101,7 @@ public final class ItemGameTests {
     public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item)
+            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item) || belgianDishes().contains(item)
                 || edibleIngredients().contains(item);
             helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
@@ -122,6 +128,14 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.APPLE_COMPOTE.get(), BSFoods.APPLE_COMPOTE);
         assertFood(helper, BSItems.VANILLA_ICE_CREAM.get(), BSFoods.VANILLA_ICE_CREAM);
         assertFood(helper, BSSnacks.MITRAILLETTE.get(), BSFoods.MITRAILLETTE);
+        assertFood(helper, BSDishes.STEAK_FRITES.get(), BSFoods.DISH_WITH_FRIES);
+        assertFood(helper, BSDishes.FLAMICHE.get(), BSFoods.SIDE_DISH_LARGE);
+        for (var bowl : List.of(BSDishes.MOULES_FRITES, BSDishes.CARBONNADE, BSDishes.WATERZOOI, BSDishes.BOUDIN_COMPOTE)) {
+            helper.assertTrue(bowl.asStack().get(net.minecraft.core.component.DataComponents.FOOD).usingConvertsTo()
+                .map(stack -> stack.is(Items.BOWL)).orElse(false), bowl.getId() + " gives its bowl back");
+        }
+        helper.assertFalse(BSDishes.STEAK_FRITES.asStack().get(net.minecraft.core.component.DataComponents.FOOD).usingConvertsTo().isPresent(),
+            "steak-frites is served on no bowl");
         assertFood(helper, BSSnacks.BOULETS_LIEGEOIS.get(), BSFoods.BOULETS_LIEGEOIS);
         assertFood(helper, BSSnacks.FRITERIE_CHEESEBURGER.get(), BSFoods.CHEESEBURGER);
         assertFood(helper, BSSnacks.AMERICAIN_FRITES.get(), BSFoods.AMERICAIN_FRITES);
@@ -213,6 +227,10 @@ public final class ItemGameTests {
             helper.assertTrue(stack.is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
             helper.assertFalse(stack.is(Tags.Items.FOODS_COOKED_MEAT), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/cooked_meat");
         }
+        for (Item item : belgianDishes()) {
+            helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
+        }
+        helper.assertTrue(be.thefricadelle.belgiansnacks.registry.BSCrops.LEEK.asStack().is(BSTags.ONIONS), "the leek stands in for an onion");
         for (Item item : friterieSnacks()) {
             helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
             helper.assertFalse(new ItemStack(item).is(BSTags.C_FOODS_FRIES), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/fries");
