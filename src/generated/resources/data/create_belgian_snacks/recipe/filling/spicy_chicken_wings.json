@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:fried_chicken_wings"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 25,
+      "fluid": "create_belgian_snacks:samourai"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:spicy_chicken_wings"
+    }
+  ]
+}

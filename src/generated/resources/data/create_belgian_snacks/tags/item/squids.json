@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:foods/raw_squid",
+      "required": false
+    },
+    {
+      "id": "#c:foods/raw_calamari",
+      "required": false
+    }
+  ]
+}

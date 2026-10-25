@@ -10,11 +10,17 @@
     "create_belgian_snacks:cone_of_fries_samourai",
     "create_belgian_snacks:cone_of_fries_americaine",
     "create_belgian_snacks:cone_of_fries_sauce_lapin",
+    "create_belgian_snacks:cone_of_fries_tartare",
+    "create_belgian_snacks:cone_of_fries_pickles",
+    "create_belgian_snacks:cone_of_fries_brazil",
     "create_belgian_snacks:cone_of_fries_beef_tallow_mayonnaise",
     "create_belgian_snacks:cone_of_fries_beef_tallow_curry_ketchup",
     "create_belgian_snacks:cone_of_fries_beef_tallow_andalouse",
     "create_belgian_snacks:cone_of_fries_beef_tallow_samourai",
     "create_belgian_snacks:cone_of_fries_beef_tallow_americaine",
-    "create_belgian_snacks:cone_of_fries_beef_tallow_sauce_lapin"
+    "create_belgian_snacks:cone_of_fries_beef_tallow_sauce_lapin",
+    "create_belgian_snacks:cone_of_fries_beef_tallow_tartare",
+    "create_belgian_snacks:cone_of_fries_beef_tallow_pickles",
+    "create_belgian_snacks:cone_of_fries_beef_tallow_brazil"
   ]
 }

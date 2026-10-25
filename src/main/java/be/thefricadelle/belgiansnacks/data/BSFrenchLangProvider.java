@@ -19,6 +19,7 @@ import be.thefricadelle.belgiansnacks.registry.BSEntities;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -141,6 +142,9 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.VINEGAR, "Vinaigre", "Seau de vinaigre");
         fluid(BSFluids.SAUCE_LAPIN, "Sauce lapin", "Seau de sauce lapin");
         fluid(BSFluids.MUSTARD, "Moutarde", "Seau de moutarde");
+        fluid(BSFluids.TARTARE, "Sauce tartare", "Seau de sauce tartare");
+        fluid(BSFluids.PICKLES, "Pickles", "Seau de pickles");
+        fluid(BSFluids.BRAZIL, "Sauce brazil", "Seau de sauce brazil");
         fluid(BSFluids.WORT, "Moût", "Seau de moût");
         fluid(BSFluids.BLONDE_BEER, "Bière blonde", "Seau de bière blonde");
         fluid(BSFluids.BROWN_BEER, "Bière brune", "Seau de bière brune");
@@ -171,6 +175,25 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.tooltipKey("cone_of_fries_sauce_lapin"), "Sauce lapin, sans lapin.");
         add(BSItems.tooltipKey("cone_of_fries_beef_tallow_sauce_lapin"), "Sauce lapin, sans lapin.");
         add(BSItems.tooltipKey("herve_cheese"), "Tes voisins le sauront.");
+        for (String sauce : java.util.List.of("tartare", "pickles", "brazil")) {
+            // The three names are the same in French.
+            add(BSItems.SAUCED_CONES.get(sauce).get(), "Cornet de frites " + sauce);
+            add(BSItems.SAUCED_TALLOW_CONES.get(sauce).get(), "Cornet de frites au blanc, " + sauce);
+            String line = switch (sauce) {
+                case "tartare" -> "De la mayonnaise avec des cornichons dedans. Chic.";
+                case "pickles" -> "Jaune, acide, croquant. Sur des frites, oui.";
+                default -> "De l'ananas dans une sauce. Personne au Brésil n'a rien demandé.";
+            };
+            add(BSItems.tooltipKey("cone_of_fries_" + sauce), line);
+            add(BSItems.tooltipKey("cone_of_fries_beef_tallow_" + sauce), line);
+        }
+        BSSnacks.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        add(BSItems.tooltipKey("mitraillette"), "Une demi-baguette, une viande, des frites, une sauce. Le dîner.");
+        add(BSItems.tooltipKey("boulets_liegeois"), "Des boulets noyés dans leur sauce.");
+        add(BSItems.tooltipKey("lucifer"), "Une croquette qui mord.");
+        add(BSItems.tooltipKey("viandelle"), "Longue, fine, mystérieuse. Un classique de friterie.");
+        add(BSItems.tooltipKey("americain_frites"), "Du bœuf cru et des frites. Faites confiance aux Belges.");
+        add(BSItems.tooltipKey("bami_disc"), "Des nouilles en chapelure. Seulement en Flandre.");
         add(BSItems.tooltipKey("pistolet"), "Le petit pain du dimanche matin.");
         add(BSItems.tooltipKey("ardennes_ham"), "Fumé en Ardenne. Ou devant un ventilateur.");
     }

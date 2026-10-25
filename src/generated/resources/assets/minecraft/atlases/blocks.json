@@ -58,6 +58,30 @@
     },
     {
       "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/tartare_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/tartare_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/pickles_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/pickles_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/brazil_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/brazil_flow"
+    },
+    {
+      "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/cream_still"
     },
     {

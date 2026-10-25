@@ -1,0 +1,24 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "c:crops/potato"
+    },
+    {
+      "tag": "c:crops/potato"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    },
+    {
+      "tag": "create_belgian_snacks:salts"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:potato_croquette_mix"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/beef"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_patty"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:stick"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_brochette"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_brochette"
+        },
+        {
+          "item": "minecraft:porkchop"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_brochette"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_brochette"
+        },
+        {
+          "tag": "create_belgian_snacks:lardons"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_brochette"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_brochette"
+        },
+        {
+          "item": "minecraft:porkchop"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_brochette"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_brochette"
+  }
+}

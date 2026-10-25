@@ -1,0 +1,72 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:tag_empty",
+      "tag": "c:crops/tomato"
+    }
+  ],
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:pita_bread"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:pita"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_pita"
+        },
+        {
+          "item": "create_belgian_snacks:gyros"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_pita"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_pita"
+        },
+        {
+          "item": "minecraft:beetroot"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_pita"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_pita"
+        },
+        {
+          "type": "neoforge:tag",
+          "amount": 50,
+          "tag": "create_belgian_snacks:sauces"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_pita"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_pita"
+  }
+}

@@ -64,6 +64,26 @@ public final class BSFoods {
         .usingConvertsTo(Items.BOWL).build();
     public static final FoodProperties VANILLA_ICE_CREAM = snack(4, 0.4f);
 
+    // v2 friterie snacks (M16, provisional): a fried snack is a small meal, a sandwich with fries a full one.
+    public static final FoodProperties MITRAILLETTE = snack(14, 1.2f);
+    public static final FoodProperties BOULET = snack(6, 0.7f);
+    public static final FoodProperties BOULETS_LIEGEOIS = new FoodProperties.Builder().nutrition(12).saturationModifier(1.0f)
+        .usingConvertsTo(Items.BOWL).build();
+    public static final FoodProperties CROQUETTE = snack(5, 0.6f);
+    public static final FoodProperties LUCIFER = snack(6, 0.6f);
+    public static final FoodProperties POTATO_CROQUETTE = snack(4, 0.5f);
+    public static final FoodProperties SAUSAGE = snack(6, 0.6f);
+    public static final FoodProperties FILET_AMERICAIN = snack(5, 0.6f);
+    public static final FoodProperties PISTOLET_AMERICAIN = snack(9, 0.9f);
+    public static final FoodProperties AMERICAIN_FRITES = snack(12, 1.0f);
+    public static final FoodProperties PATTY = snack(6, 0.7f);
+    public static final FoodProperties BURGER = snack(10, 0.9f);
+    public static final FoodProperties CHEESEBURGER = snack(11, 1.0f);
+    public static final FoodProperties HOT_DOG = snack(8, 0.8f);
+    public static final FoodProperties BROCHETTE = snack(7, 0.8f);
+    public static final FoodProperties NUGGETS = snack(4, 0.5f);
+    public static final FoodProperties CHICKEN_CRUNCH = snack(6, 0.7f);
+
     private static FoodProperties snack(int nutrition, float saturation) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();
     }

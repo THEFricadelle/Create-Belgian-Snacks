@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:pineapple",
+      "required": false
+    },
+    {
+      "id": "#c:crops/pineapple",
+      "required": false
+    },
+    {
+      "id": "#c:foods/pineapple",
+      "required": false
+    }
+  ]
+}

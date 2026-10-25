@@ -1,0 +1,28 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:raw_onion_rings"
+    },
+    {
+      "item": "create_belgian_snacks:raw_onion_rings"
+    },
+    {
+      "item": "create_belgian_snacks:raw_onion_rings"
+    },
+    {
+      "item": "create:wheat_flour"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:blonde_beer"
+    }
+  ],
+  "results": [
+    {
+      "count": 3,
+      "id": "create_belgian_snacks:battered_onion_rings"
+    }
+  ]
+}

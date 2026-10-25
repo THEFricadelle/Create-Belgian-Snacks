@@ -15,9 +15,11 @@ import com.simibubi.create.api.data.recipe.DeployingRecipeGen;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Items;
 
 // Deploying: the first ingredient is the item on the belt or depot, the second the one the deployer
 // holds, used up unless the recipe keeps it.
@@ -33,6 +35,29 @@ public class BSDeployingRecipeGen extends DeployingRecipeGen {
         .require(BSItems.FRIES_BEEF_TALLOW.get())
         .require(BSItems.PAPER_CONE.get())
         .output(BSItems.CONE_OF_FRIES_BEEF_TALLOW.get()));
+
+    // v2 friterie snacks (section 5.10).
+    GeneratedRecipe PISTOLET_AMERICAIN = create("pistolet_americain", b -> b
+        .require(BSItems.PISTOLET.get())
+        .require(BSSnacks.FILET_AMERICAIN.get())
+        .output(BSSnacks.PISTOLET_AMERICAIN.get()));
+
+    GeneratedRecipe AMERICAIN_FRITES = create("americain_frites", b -> b
+        .require(BSSnacks.PISTOLET_AMERICAIN.get())
+        .require(BSTags.FRIES)
+        .output(BSSnacks.AMERICAIN_FRITES.get()));
+
+    GeneratedRecipe FRITERIE_CHEESEBURGER = create("friterie_cheeseburger", b -> b
+        .require(BSSnacks.FRITERIE_BURGER.get())
+        .require(BSTags.C_FOODS_CHEESE)
+        .output(BSSnacks.FRITERIE_CHEESEBURGER.get()));
+
+    // The deployer keeps its shears: one pair cuts every chicken.
+    GeneratedRecipe RAW_CHICKEN_WINGS = create("raw_chicken_wings", b -> b
+        .require(Items.CHICKEN)
+        .require(Items.SHEARS)
+        .output(BSSnacks.RAW_CHICKEN_WINGS.get(), 2)
+        .toolNotConsumed());
 
     public BSDeployingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

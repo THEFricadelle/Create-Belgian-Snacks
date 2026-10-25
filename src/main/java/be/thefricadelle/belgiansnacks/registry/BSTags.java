@@ -44,6 +44,13 @@ public final class BSTags {
     public static final TagKey<Item> VANILLA_ICE_CREAMS = item("vanilla_ice_creams");
     public static final TagKey<Item> GRAPES = item("grapes");
     public static final TagKey<Item> CHERRIES = item("cherries");
+    // v2 friterie snacks (section 5.10): what a mitraillette or a hot dog takes, and what the pack may bring.
+    public static final TagKey<Item> MITRAILLETTE_MEATS = item("mitraillette_meats");
+    public static final TagKey<Item> SAUSAGES = item("sausages");
+    public static final TagKey<Item> SHRIMPS = item("shrimps");
+    // No fallback: without squid there are no calamari (RecipeFilesTest.NO_FALLBACK).
+    public static final TagKey<Item> SQUIDS = item("squids");
+    public static final TagKey<Item> PINEAPPLES = item("pineapples");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -61,6 +68,8 @@ public final class BSTags {
     public static final TagKey<Item> C_SALT = common("salt");
     public static final TagKey<Item> C_BUTTER = common("butter");
     public static final TagKey<Item> C_FOODS_CHEESE = common("foods/cheese");
+    public static final TagKey<Item> C_RICE = common("crops/rice");
+    public static final TagKey<Item> C_CORN = common("crops/corn");
 
     // Any fat tiers 1 and 2 can fry in, including other mods' plant and vegetable oils (D13).
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
@@ -102,6 +111,16 @@ public final class BSTags {
                 .addOptional(ResourceLocation.fromNamespaceAndPath("farmersdelight", "smoked_ham"));
             prov.addTag(NOODLES).addOptionalTag(common("raw_pasta").location());
             prov.addTag(CHERRIES).addOptionalTag(common("foods/cherry").location()).addOptionalTag(common("crops/cherry").location());
+            prov.addTag(MITRAILLETTE_MEATS).add(BSItems.FRICADELLE.get(), BSSnacks.BOULET.get(), BSSnacks.CERVELAS.get(), BSSnacks.MEXICANO.get(),
+                BSSnacks.VIANDELLE.get(), BSSnacks.FILET_AMERICAIN.get(), BSSnacks.CHICKEN_FINGERS.get(), BSSnacks.BROCHETTE.get());
+            prov.addTag(SAUSAGES).add(BSItems.FRICADELLE.get(), BSSnacks.CERVELAS.get(), BSSnacks.MEXICANO.get(), BSSnacks.VIANDELLE.get())
+                .addOptionalTag(common("foods/sausage").location()).addOptionalTag(common("foods/cooked_sausage").location());
+            prov.addTag(SHRIMPS).addOptionalTag(common("foods/raw_shrimp").location()).addOptionalTag(common("foods/shrimp").location());
+            // Cultural Delights (Arcadia) brings squid and calamari.
+            prov.addTag(SQUIDS).addOptionalTag(common("foods/raw_squid").location()).addOptionalTag(common("foods/raw_calamari").location());
+            // Create: Food (Arcadia) grows pineapples.
+            prov.addTag(PINEAPPLES).addOptionalTag(common("pineapple").location()).addOptionalTag(common("crops/pineapple").location())
+                .addOptionalTag(common("foods/pineapple").location());
             prov.addTag(GRAPES).addOptionalTag(common("foods/grape").location()).addOptionalTag(common("crops/grape").location());
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_CHEESE);
             // My Nether's Delight (Arcadia) grows bullet peppers.

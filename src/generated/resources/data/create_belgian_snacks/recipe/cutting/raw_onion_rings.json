@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:crops/onion"
+      }
+    }
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "tag": "c:crops/onion"
+    }
+  ],
+  "processing_time": 50,
+  "results": [
+    {
+      "count": 3,
+      "id": "create_belgian_snacks:raw_onion_rings"
+    }
+  ]
+}

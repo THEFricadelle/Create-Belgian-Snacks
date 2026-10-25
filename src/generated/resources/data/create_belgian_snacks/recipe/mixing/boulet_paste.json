@@ -1,0 +1,26 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/pork"
+    },
+    {
+      "tag": "create_belgian_snacks:minced_meats/beef"
+    },
+    {
+      "tag": "c:bread_crumbs"
+    },
+    {
+      "item": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "tag": "create_belgian_snacks:salts"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:boulet_paste"
+    }
+  ]
+}

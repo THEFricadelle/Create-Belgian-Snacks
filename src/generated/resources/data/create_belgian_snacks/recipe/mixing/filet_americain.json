@@ -1,0 +1,30 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/beef"
+    },
+    {
+      "tag": "create_belgian_snacks:minced_meats/beef"
+    },
+    {
+      "item": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 100,
+      "fluid": "create_belgian_snacks:mayonnaise"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 25,
+      "fluid": "create_belgian_snacks:mustard"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:filet_americain"
+    }
+  ]
+}

@@ -463,8 +463,11 @@ LIQUIDS = {
     'brown_beer': ['2A140A', '42200E', '5A2E14', 'C8A27A'],
     'gueuze': ['8E5E1A', 'B47A28', 'D89A3A', 'F6E2B8'],
     'kriek': ['560E16', '781420', '9A1E2A', 'E8B0B8'],
+    'tartare': ['A8A47C', 'CECAA0', 'E8E6C4', 'FAFAE4'],
+    'pickles': ['7A6A0E', 'A4961C', 'CCBC30', 'EEE070'],
+    'brazil': ['A85E14', 'D07E24', 'EEA040', 'FFCE84'],
 }
-CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin']
+CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin', 'tartare', 'pickles', 'brazil']
 
 
 def fluid(palette, flow=False):
@@ -576,6 +579,261 @@ def blocks():
     return out
 
 
+# v2 friterie snacks (docs/12, section 2 quinquies): breaded snacks are capsules dotted with crumbs,
+# sandwiches are stacked layers, rings are hollow ellipses. Raw items are pale, fried ones golden.
+BREADED_RAW = ['A08A60', 'C8B080', 'E0CC9C', 'F4E6C0']
+BREADED = ['7A4A18', 'B8782E', 'D89A44', 'F2C46A']
+EGG_WASH = ['A89040', 'CCB458', 'E6D07A', 'FAEAA8']
+PINK = ['9A5A5A', 'C88080', 'E6A4A0', 'FAD0C8']
+BROWN = ['4A2414', '6E3820', '8E4C2C', 'B06A40']
+SAUCE_WHITE = ['DED09D', 'F3EBC4']
+TOMATO = 'C8352B'
+GREENS = '6AA03A'
+CRUST = ['6E3E14', 'A0662A', 'C8873C', 'E8B06A']
+
+
+def capsule(x0, y0, x1, y1, r):
+    cells = set()
+    length = math.hypot(x1 - x0, y1 - y0)
+    for y in range(16):
+        for x in range(16):
+            t = max(0, min(1, ((x - x0) * (x1 - x0) + (y - y0) * (y1 - y0)) / length ** 2))
+            if math.hypot(x - (x0 + t * (x1 - x0)), y - (y0 + t * (y1 - y0))) <= r:
+                cells.add((x, y))
+    return cells
+
+
+def crumbs(px, cells, light, dark):
+    inner = {(x, y) for x, y in cells if all((x + dx, y + dy) in cells for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)])}
+    for x, y in inner:
+        if (x * 3 + y * 5) % 7 == 0:
+            px[y][x] = colour(light)
+        elif (x * 5 + y * 3) % 11 == 0:
+            px[y][x] = colour(dark)
+    return px
+
+
+def croquette(palette, breaded=True):
+    cells = capsule(4, 11, 11, 4, 2.4)
+    px = shape(cells, palette)
+    return crumbs(px, cells, palette[3], palette[1]) if breaded else px
+
+
+def fingers(palette, breaded=True, straight=False):
+    px = canvas()
+    for segment in ([(3, 4, 12, 4), (3, 9, 12, 9)] if straight else [(3, 12, 8, 5), (8, 13, 13, 6)]):
+        cells = capsule(*segment, 1.6)
+        shape(cells, palette, px)
+        if breaded:
+            crumbs(px, cells, palette[3], palette[1])
+    return px
+
+
+def nuggets(palette):
+    px = canvas()
+    for cx, cy in [(7.5, 6.5), (5, 11), (11, 10.5)]:
+        cells = ellipse(cx, cy, 3.1, 2.4)
+        shape(cells, palette, px)
+        crumbs(px, cells, palette[3], palette[1])
+    return px
+
+
+def rings(palette, crumb=False):
+    px = canvas()
+    for cx, cy in [(6, 9), (10.5, 7)]:
+        cells = ellipse(cx, cy, 4.2, 4.2) - ellipse(cx, cy, 2.2, 2.2)
+        shape(cells, palette, px)
+        if crumb:
+            crumbs(px, cells, palette[3], palette[1])
+    return px
+
+
+def strips(palette):
+    px = canvas()
+    draw_sticks(px, [(3, 12, 8, 5), (8, 13, 12, 6), (5, 14, 10, 8)], palette)
+    return px
+
+
+def baguette(px, palette, top=7):
+    cells = ellipse(8, top + 3, 7.2, 2.8)
+    shape(cells, palette, px)
+    dots(px, [(4, top + 2), (7, top + 2), (10, top + 2)], palette[3])
+    return px
+
+
+def mitraillette(meat=None, fries=None, sauce=None):
+    px = canvas()
+    if fries:
+        draw_sticks(px, [(4, 9, 5, 4), (8, 9, 9, 3), (11, 9, 12, 5)], fries, clip=9)
+    if meat:
+        shape(capsule(2, 8, 13, 8, 1.3), meat, px)
+    baguette(px, CRUST, top=8)
+    if sauce:
+        for x in range(3, 13):
+            px[7 + (x % 2)][x] = colour(sauce[x % 2])
+    return px
+
+
+def burger(patty=True, top=True, cheese=False, sauce=None, bun=None):
+    bun = bun or ['7A4618', 'A8642A', 'C87C30', 'E8A658']
+    px = canvas()
+    shape({(x, y) for x in range(3, 13) for y in (12, 13)}, bun, px)
+    if patty:
+        shape({(x, y) for x in range(2, 14) for y in (10, 11)}, BROWN, px)
+    if sauce:
+        for x in range(3, 13):
+            px[9][x] = colour(sauce[x % 2])
+    if cheese:
+        for x in range(2, 14):
+            px[9 if x % 3 else 10][x] = colour('F4C430')
+    if top:
+        shape(ellipse(8, 8.6, 6.3, 4.4, keep=lambda x, y: y <= 8), bun, px)
+        dots(px, [(5, 6), (8, 5), (10, 7)], 'FFF6D8')
+    return px
+
+
+def hot_dog(sausage_palette=None, onions=False, sauce=None, bun=None):
+    px = canvas()
+    bun = bun or CRUST
+    baguette(px, bun, top=8)
+    if sausage_palette:
+        shape(capsule(2, 9, 13, 9, 1.4), sausage_palette, px)
+    if onions:
+        dots(px, [(4, 8), (7, 7), (10, 8), (12, 7)], 'E9AE60')
+    if sauce:
+        for x in range(3, 13):
+            px[8 + (x % 2)][x] = colour(sauce[x % 2])
+    return px
+
+
+def pita(filled=False, sauce=None):
+    px = shape(ellipse(8, 12.5, 6.6, 7, keep=lambda x, y: y <= 12), ['94703A', 'C49A5C', 'DCB474', 'F2D29C'])
+    if filled:
+        for x, y in [(4, 7), (6, 6), (9, 6), (11, 7)]:
+            px[y][x] = colour(BROWN[2])
+        dots(px, [(5, 6), (10, 6)], TOMATO)
+        dots(px, [(7, 6), (8, 7)], GREENS)
+    if sauce:
+        for x in range(4, 12):
+            px[6 if x % 2 else 5][x] = colour(sauce[x % 2])
+    return px
+
+
+def brochette(meat, cubes=3):
+    px = canvas()
+    draw_sticks(px, [(2, 14, 13, 1)], ['5E4024', '8C6038', 'A8784A', 'C8955E'])
+    for i, (x, y) in enumerate([(3, 10), (6, 7), (9, 4)][:cubes]):
+        shape({(x + dx, y + dy) for dx in range(3) for dy in range(3)}, meat if i % 2 == 0 else PINK, px)
+    return px
+
+
+def bowl_of_boulets():
+    px = bowl(LIQUIDS['sauce_lapin'], '83542E')
+    for cx, cy in [(6, 6), (10, 6.5)]:
+        shape(ellipse(cx, cy, 2.6, 2.4), FRIED, px)
+    return px
+
+
+def thick_disc(palette, spots_value):
+    cells = ellipse(8, 9.5, 6.5, 4)
+    px = shape(cells, palette)
+    crumbs(px, cells, palette[3], palette[1])
+    dots(px, [(5, 9), (9, 8), (11, 10), (7, 11)], spots_value)
+    return px
+
+
+def friterie():
+    RAW_CHICKEN = ['A07868', 'D0A898', 'EAC8B8', 'FFE8DC']
+    FISH = ['A09890', 'D0C8C0', 'E8E2DC', 'FFFAF4']
+    CHEESE = ['B8962E', 'DCC050', 'F0D870', 'FFF0A8']
+    out = {
+        'half_baguette': baguette(canvas(), CRUST),
+        'incomplete_mitraillette': mitraillette(meat=FRIED),
+        'mitraillette': mitraillette(meat=FRIED, fries=FRIES_GOLDEN, sauce=SAUCE_WHITE),
+        'boulet_paste': paste(PINK, 0),
+        'raw_boulet': shape(ellipse(8, 9, 4.6, 4.4), PINK),
+        'boulet': shape(ellipse(8, 9, 4.6, 4.4), FRIED),
+        'boulets_liegeois': bowl_of_boulets(),
+        'incomplete_breaded': croquette(EGG_WASH, breaded=False),
+        'shrimp_croquette_mix': paste(['A86048', 'D88A6A', 'F0AE8C', 'FFD8C0'], 0),
+        'cheese_croquette_mix': paste(['B8A060', 'DCC888', 'F0E0A8', 'FFF6D4'], 0),
+        'chicken_croquette_mix': paste(['B0A088', 'D4C8B0', 'ECE2CC', 'FFF8EC'], 0),
+        'lucifer_mix': paste(['A04830', 'C8684A', 'E08A68', 'F8B898'], 0),
+        'potato_croquette_mix': paste(['B8A468', 'DCCA8C', 'F0E2AE', 'FFF6D8'], 0),
+        'chicken_strips': strips(RAW_CHICKEN),
+        'fish_strips': strips(FISH),
+        'cheese_strips': strips(CHEESE),
+        'raw_shrimp_croquette': croquette(BREADED_RAW),
+        'raw_cheese_croquette': croquette(BREADED_RAW),
+        'raw_chicken_croquette': croquette(BREADED_RAW),
+        'raw_lucifer': croquette(['A07858', 'C89C78', 'E0B898', 'F4D8BC']),
+        'raw_potato_croquette': croquette(BREADED_RAW),
+        'raw_chicken_fingers': fingers(BREADED_RAW),
+        'raw_fish_sticks': fingers(BREADED_RAW, straight=True),
+        'raw_cheese_sticks': fingers(['A89058', 'D0B47A', 'E8CE94', 'FAE8B8'], straight=True),
+        'shrimp_croquette': croquette(BREADED),
+        'cheese_croquette': croquette(['8A5A1A', 'C08830', 'E0AA48', 'FAD070']),
+        'chicken_croquette': croquette(['7E4C1C', 'B47A32', 'D49C4C', 'F0C470']),
+        'lucifer': croquette(['6E2A14', 'A8461E', 'D06A2C', 'F09A50']),
+        'potato_croquette': croquette(['8E6020', 'C89038', 'E6B254', 'FFD87C']),
+        'chicken_fingers': fingers(BREADED),
+        'fish_sticks': fingers(['8E5E1C', 'C48A30', 'E0AC4C', 'FAD278'], straight=True),
+        'cheese_sticks': fingers(['8A5A1A', 'C08830', 'E0AA48', 'FAD070'], straight=True),
+        'cervelas_mix': paste(['A06060', 'CC8484', 'E8A8A4', 'FCD4CC'], 0),
+        'mexicano_mix': paste(['8A3428', 'B44C38', 'D46A50', 'F09478'], 0),
+        'viandelle_mix': paste(['A87868', 'D09E8A', 'EABEA8', 'FCDCC8'], 0),
+        'raw_cervelas': sausage(['A06060', 'CC8484', 'E8A8A4', 'FCD4CC'], thick=True),
+        'raw_mexicano': sausage(['8A3428', 'B44C38', 'D46A50', 'F09478'], thick=True),
+        'raw_viandelle': sausage(['A87868', 'D09E8A', 'EABEA8', 'FCDCC8']),
+        'cervelas': sausage(['5A2418', '8E3C28', 'B85C3C', 'E08A64'], thick=True),
+        'mexicano': sausage(['4A140C', '7A2414', 'A43A1E', 'D46030'], thick=True),
+        'viandelle': sausage(['5E3418', '925428', 'B87038', 'E09C58']),
+        'loempia_wrapper': shape({(x, y) for x in range(3, 13) for y in range(4, 13)}, ['B8AC8C', 'DCD2B4', 'F0E8D0', 'FFFAEC']),
+        'incomplete_loempia': crumbs(shape(capsule(4, 11, 11, 4, 2.4), ['B8AC8C', 'DCD2B4', 'F0E8D0', 'FFFAEC']), capsule(4, 11, 11, 4, 2.4), GREENS, 'E9862A'),
+        'raw_loempia': croquette(['B8AC8C', 'DCD2B4', 'F0E8D0', 'FFFAEC'], breaded=False),
+        'loempia': croquette(['8A5A1A', 'C8882E', 'E8AE4C', 'FFDA80'], breaded=False),
+        'filet_americain': heap(['8E2A2A', 'B84040', 'D86060', 'F09090'], 'F4D25C'),
+        'pistolet_americain': hot_dog(sausage_palette=['8E2A2A', 'B84040', 'D86060', 'F09090']),
+        'americain_frites': mitraillette(meat=['8E2A2A', 'B84040', 'D86060', 'F09090'], fries=FRIES_GOLDEN),
+        'raw_patty': disc(['8E2A2A', 'B84040', 'D86060', 'F09090'], spots='F4C0B0'),
+        'patty': disc(BROWN, spots='3A1A0E'),
+        'incomplete_burger': burger(top=False),
+        'friterie_burger': burger(sauce=SAUCE_WHITE),
+        'friterie_cheeseburger': burger(cheese=True),
+        'hot_dog_bun_dough': baguette(canvas(), ['BCA466', 'DCC484', 'F0D898', 'FFEEC4']),
+        'hot_dog_bun': baguette(canvas(), ['7A4618', 'A8642A', 'C87C30', 'E8A658']),
+        'incomplete_hot_dog': hot_dog(['5A2418', '8E3C28', 'B85C3C', 'E08A64'], bun=['7A4618', 'A8642A', 'C87C30', 'E8A658']),
+        'hot_dog': hot_dog(['5A2418', '8E3C28', 'B85C3C', 'E08A64'], onions=True, sauce=['A8321E', 'D65A36'],
+                           bun=['7A4618', 'A8642A', 'C87C30', 'E8A658']),
+        'gyros': heap(BROWN, 'D49A5A'),
+        'incomplete_pita': pita(),
+        'pita': pita(filled=True, sauce=SAUCE_WHITE),
+        'incomplete_brochette': brochette(PINK, cubes=1),
+        'raw_brochette': brochette(['A06060', 'CC8484', 'E8A8A4', 'FCD4CC']),
+        'brochette': brochette(BROWN),
+        'bami_mix': paste(['B0902E', 'D4B454', 'ECD27A', 'FFF0B0'], 0),
+        'nasi_mix': paste(['B0A890', 'D4CCB4', 'ECE6D4', 'FFFFF4'], 0),
+        'raw_bami_disc': thick_disc(BREADED_RAW, 'F0D880'),
+        'raw_nasi_disc': thick_disc(BREADED_RAW, 'FFFFF4'),
+        'bami_disc': thick_disc(['8A4E14', 'C47424', 'E6963A', 'FFC060'], 'FFE08A'),
+        'nasi_disc': thick_disc(['8A4E14', 'C47424', 'E6963A', 'FFC060'], 'FFFFF0'),
+        'raw_squid_rings': rings(['B8A8B8', 'DCD0DC', 'F0E8F0', 'FFFAFF']),
+        'squid_rings': rings(BREADED, crumb=True),
+        'raw_chicken_nuggets': nuggets(BREADED_RAW),
+        'chicken_nuggets': nuggets(BREADED),
+        'corn_flakes': heap(['A07818', 'D0A030', 'ECC450', 'FFE890'], 'FFF6C8'),
+        'raw_chicken_crunch': croquette(['B89A40', 'DCBE60', 'F0D884', 'FFF0B8']),
+        'chicken_crunch': croquette(['8A5A10', 'C88A20', 'E8B03C', 'FFDA6A']),
+        'raw_chicken_wings': ham(RAW_CHICKEN),
+        'fried_chicken_wings': ham(BREADED),
+        'spicy_chicken_wings': ham(['6E2010', 'A83A1A', 'D05A28', 'F08A48']),
+        'raw_onion_rings': rings(['A8A0B8', 'D0CAE0', 'ECE8F4', 'FFFFFF']),
+        'battered_onion_rings': rings(['B8AC88', 'DCD2AC', 'F0E8CA', 'FFFAE8']),
+        'onion_rings': rings(BREADED, crumb=True),
+    }
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 def artwork():
     out = {}
     for name, palette, topped, thick, unfinished in [
@@ -621,6 +879,7 @@ def artwork():
         out[gen.FLUID_DIR / f'{name}_flow.png'] = fluid(palette, True)
     out.update(base_ingredients())
     out.update(crops_items())
+    out.update(friterie())
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     return out

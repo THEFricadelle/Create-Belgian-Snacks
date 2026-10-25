@@ -16,6 +16,7 @@ import com.simibubi.create.api.data.recipe.FillingRecipeGen;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
@@ -25,6 +26,10 @@ public class BSFillingRecipeGen extends FillingRecipeGen {
 
     public BSFillingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+        create("spicy_chicken_wings", b -> b
+            .require(BSSnacks.FRIED_CHICKEN_WINGS.get())
+            .require(BSFluids.SAMOURAI.get(), 25)
+            .output(BSSnacks.SPICY_CHICKEN_WINGS.get()));
         BSFluids.CONE_SAUCES.forEach((sauce, fluid) -> {
             create("cone_of_fries_" + sauce, b -> b
                 .require(BSItems.CONE_OF_FRIES.get())

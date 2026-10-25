@@ -157,6 +157,9 @@ public final class BSItems {
         CONE_SAUCES.put("samourai", "Samurai");
         CONE_SAUCES.put("americaine", "Américaine");
         CONE_SAUCES.put("sauce_lapin", "Liège Sauce");
+        CONE_SAUCES.put("tartare", "Tartare");
+        CONE_SAUCES.put("pickles", "Pickles");
+        CONE_SAUCES.put("brazil", "Brazil");
     }
 
     // v2 sauced cones (section 5.2): a Spout puts 50 mB of sauce on a plain cone.
@@ -245,6 +248,9 @@ public final class BSItems {
         sauceTooltip("samourai", "Hot. Keep a drink at hand.");
         sauceTooltip("americaine", "Not from America. Nobody knows why.");
         sauceTooltip("sauce_lapin", "Rabbit sauce, without the rabbit.");
+        sauceTooltip("tartare", "Mayonnaise with pickles in it. Fancy.");
+        sauceTooltip("pickles", "Yellow, sour, crunchy. On fries, yes.");
+        sauceTooltip("brazil", "Pineapple in a sauce. Nobody in Brazil asked for it.");
         REGISTRATE.addRawLang(tooltipKey("herve_cheese"), "Your neighbours will know.");
         REGISTRATE.addRawLang(tooltipKey("pistolet"), "The Sunday morning bread roll.");
         REGISTRATE.addRawLang(tooltipKey("ardennes_ham"), "Smoked in the Ardennes. Or in front of a fan.");

@@ -1,0 +1,25 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:boulet"
+    },
+    {
+      "item": "create_belgian_snacks:boulet"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:sauce_lapin"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:boulets_liegeois"
+    }
+  ]
+}

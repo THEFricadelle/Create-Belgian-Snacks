@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:hot_dog_bun"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:hot_dog"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_hot_dog"
+        },
+        {
+          "tag": "create_belgian_snacks:sausages"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_hot_dog"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_hot_dog"
+        },
+        {
+          "item": "create_belgian_snacks:onion_rings"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_hot_dog"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_hot_dog"
+        },
+        {
+          "type": "neoforge:tag",
+          "amount": 50,
+          "tag": "create_belgian_snacks:sauces"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_hot_dog"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_hot_dog"
+  }
+}

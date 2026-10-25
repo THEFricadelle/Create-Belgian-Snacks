@@ -22,6 +22,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -192,6 +193,114 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             .output(BSFluids.VINEGAR.get().getSource(), 1000)
             .duration(2400)),
 
+        // v2 sauces that waited for vinegar and mustard (M16).
+        TARTARE = create("tartare", b -> b
+            .require(BSFluids.MAYONNAISE.get(), 250).require(BSFluids.PICKLES.get(), 50).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.TARTARE.get().getSource(), 300)),
+
+        // Piccalilli: vegetables in a mustard vinegar, cooked.
+        PICKLES = create("pickles", b -> b
+            .require(BSFluids.VINEGAR.get(), 250).require(BSFluids.MUSTARD.get(), 50)
+            .require(Items.CARROT).require(BSCrops.BRUSSELS_SPROUT.get()).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.PICKLES.get().getSource(), 250)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        BRAZIL = create("brazil", b -> brazil(b.require(BSTags.PINEAPPLES))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.PINEAPPLES)))),
+        BRAZIL_FROM_MELON = create("brazil_from_melon", b -> brazil(b.require(Items.MELON_SLICE))
+            .withCondition(new TagEmptyCondition(BSTags.PINEAPPLES))),
+
+        // v2 friterie snacks (section 5.10). No egg in any of these basins: Create: Food turns a lone egg
+        // into liquid egg in any basin (docs/11). Overlaps inside our menu follow the M13 rule 3: the
+        // recipe with more items wins, so the boulet paste (five) beats the cervelas mix (three).
+        BOULET_PASTE = create("boulet_paste", b -> b
+            .require(BSTags.MINCED_PORK).require(BSTags.MINCED_BEEF).require(BSTags.C_BREAD_CRUMBS)
+            .require(BSItems.BELGIAN_SPICES.get()).require(BSTags.SALTS)
+            .output(BSSnacks.BOULET_PASTE.get(), 2)),
+
+        BOULETS_LIEGEOIS = create("boulets_liegeois", b -> b
+            .require(BSSnacks.BOULET.get()).require(BSSnacks.BOULET.get()).require(Items.BOWL).require(BSFluids.SAUCE_LAPIN.get(), 250)
+            .output(BSSnacks.BOULETS_LIEGEOIS.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        SHRIMP_CROQUETTE_MIX = create("shrimp_croquette_mix", b -> shrimpCroquette(b.require(BSTags.SHRIMPS).require(BSTags.SHRIMPS))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.SHRIMPS)))),
+        // Grey shrimps are a North Sea thing; packs without any get cod croquettes.
+        SHRIMP_CROQUETTE_MIX_FROM_COD = create("shrimp_croquette_mix_from_cod", b -> shrimpCroquette(b.require(Items.COD).require(Items.COD))
+            .withCondition(new TagEmptyCondition(BSTags.SHRIMPS))),
+
+        CHEESE_CROQUETTE_MIX = create("cheese_croquette_mix", b -> b
+            .require(BSTags.C_FOODS_CHEESE).require(BSFluids.BECHAMEL.get(), 250)
+            .output(BSSnacks.CHEESE_CROQUETTE_MIX.get(), 2)),
+
+        CHICKEN_CROQUETTE_MIX = create("chicken_croquette_mix", b -> b
+            .require(BSTags.MINCED_CHICKEN).require(BSTags.MINCED_CHICKEN).require(BSFluids.BECHAMEL.get(), 250)
+            .output(BSSnacks.CHICKEN_CROQUETTE_MIX.get(), 2)),
+
+        LUCIFER_MIX = create("lucifer_mix", b -> b
+            .require(BSTags.MINCED_PORK).require(BSFluids.SAMOURAI.get(), 50).require(BSFluids.BECHAMEL.get(), 100)
+            .output(BSSnacks.LUCIFER_MIX.get(), 2)),
+
+        POTATO_CROQUETTE_MIX = create("potato_croquette_mix", b -> b
+            .require(BSTags.C_POTATOES).require(BSTags.C_POTATOES).require(BSTags.BUTTERS).require(BSTags.SALTS)
+            .output(BSSnacks.POTATO_CROQUETTE_MIX.get(), 2)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        CERVELAS_MIX = create("cervelas_mix", b -> b
+            .require(BSTags.MINCED_PORK).require(BSTags.MINCED_BEEF).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSSnacks.CERVELAS_MIX.get(), 2)),
+
+        MEXICANO_MIX = create("mexicano_mix", b -> b
+            .require(BSTags.MINCED_BEEF).require(BSTags.MINCED_BEEF).require(BSItems.BELGIAN_SPICES.get()).require(BSFluids.SAMOURAI.get(), 50)
+            .output(BSSnacks.MEXICANO_MIX.get(), 2)),
+
+        // Five items, like the boulet paste: neither hides inside the fricadelle paste (four).
+        VIANDELLE_MIX = create("viandelle_mix", b -> b
+            .require(BSTags.MINCED_PORK).require(BSTags.MINCED_CHICKEN).require(BSTags.C_BREAD_CRUMBS)
+            .require(BSItems.BELGIAN_SPICES.get()).require(BSTags.SALTS)
+            .output(BSSnacks.VIANDELLE_MIX.get(), 2)),
+
+        FILET_AMERICAIN = create("filet_americain", b -> b
+            .require(BSTags.MINCED_BEEF).require(BSTags.MINCED_BEEF).require(BSItems.BELGIAN_SPICES.get())
+            .require(BSFluids.MAYONNAISE.get(), 100).require(BSFluids.MUSTARD.get(), 25)
+            .output(BSSnacks.FILET_AMERICAIN.get(), 2)),
+
+        GYROS = create("gyros", b -> b
+            .require(BSTags.MINCED_PORK).require(BSTags.MINCED_PORK).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSSnacks.GYROS.get(), 2)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        BAMI_MIX = create("bami_mix", b -> b
+            .require(BSTags.NOODLES).require(BSTags.NOODLES).require(BSTags.MINCED_PORK).require(BSCrops.LEEK.get())
+            .require(BSItems.BELGIAN_SPICES.get())
+            .output(BSSnacks.BAMI_MIX.get(), 2)),
+
+        // Cold on purpose: in Arcadia a heated basin cooks lone rice into a fluid first.
+        NASI_MIX = create("nasi_mix", b -> nasi(b.require(BSTags.C_RICE).require(BSTags.C_RICE))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_RICE)))),
+        NASI_MIX_FROM_WHEAT = create("nasi_mix_from_wheat", b -> nasi(b.require(Items.WHEAT).require(Items.WHEAT))
+            .withCondition(new TagEmptyCondition(BSTags.C_RICE))),
+
+        RAW_CHICKEN_NUGGETS = create("raw_chicken_nuggets", b -> b
+            .require(BSTags.MINCED_CHICKEN).require(BSTags.MINCED_CHICKEN).require(BSTags.C_BREAD_CRUMBS).require(BSTags.SALTS)
+            .output(BSSnacks.RAW_CHICKEN_NUGGETS.get(), 4)),
+
+        RAW_CHICKEN_CRUNCH = create("raw_chicken_crunch", b -> b
+            .require(BSTags.MINCED_CHICKEN).require(BSTags.MINCED_CHICKEN).require(BSItems.BELGIAN_SPICES.get())
+            .require(BSSnacks.CORN_FLAKES.get()).require(BSSnacks.CORN_FLAKES.get())
+            .output(BSSnacks.RAW_CHICKEN_CRUNCH.get(), 2)),
+        // No corn to flake: bread crumbs make the crust.
+        RAW_CHICKEN_CRUNCH_FROM_BREAD_CRUMBS = create("raw_chicken_crunch_from_bread_crumbs", b -> b
+            .require(BSTags.MINCED_CHICKEN).require(BSTags.MINCED_CHICKEN).require(BSItems.BELGIAN_SPICES.get())
+            .require(BSTags.C_BREAD_CRUMBS).require(BSTags.C_BREAD_CRUMBS)
+            .output(BSSnacks.RAW_CHICKEN_CRUNCH.get(), 2)
+            .withCondition(new TagEmptyCondition(BSTags.C_CORN))),
+
+        BATTERED_ONION_RINGS = create("battered_onion_rings", b -> b
+            .require(BSSnacks.RAW_ONION_RINGS.get()).require(BSSnacks.RAW_ONION_RINGS.get()).require(BSSnacks.RAW_ONION_RINGS.get())
+            .require(AllItems.WHEAT_FLOUR.get()).require(BSFluids.BLONDE_BEER.get(), 250)
+            .output(BSSnacks.BATTERED_ONION_RINGS.get(), 3)),
+
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
             .output(BSItems.APPLE_COMPOTE.get())
@@ -212,6 +321,21 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             }
         }
         return b.output(BSFluids.KRIEK.get().getSource(), 1000).duration(600);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> brazil(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.MAYONNAISE.get(), 250)
+            .require(BSFluids.CURRY_KETCHUP.get(), 50)
+            .output(BSFluids.BRAZIL.get().getSource(), 300);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> shrimpCroquette(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.BECHAMEL.get(), 250).output(BSSnacks.SHRIMP_CROQUETTE_MIX.get(), 2);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> nasi(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSTags.MINCED_PORK).require(BSCrops.LEEK.get()).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSSnacks.NASI_MIX.get(), 2);
     }
 
     private static StandardProcessingRecipe.Builder<MixingRecipe> sauceLapin(StandardProcessingRecipe.Builder<MixingRecipe> b) {

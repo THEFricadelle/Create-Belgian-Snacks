@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create:dough"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:loempia_wrapper"
+    }
+  ]
+}

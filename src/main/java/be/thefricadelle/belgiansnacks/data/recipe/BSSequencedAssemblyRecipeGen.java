@@ -20,10 +20,13 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeB
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
@@ -55,8 +58,100 @@ public class BSSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
         RAW_ULTIMATE_FRICADELLE_FROM_BEETROOT = rawUltimateFricadelle("raw_ultimate_fricadelle_from_beetroot", Ingredient.of(Items.BEETROOT),
             new TagEmptyCondition(BSTags.C_ONIONS));
 
+    // v2 friterie snacks (section 5.10): one pass each.
+    GeneratedRecipe
+        MITRAILLETTE = register(output -> new SequencedAssemblyRecipeBuilder(asResource("mitraillette"))
+            .require(BSSnacks.HALF_BAGUETTE.get())
+            .transitionTo(BSSnacks.INCOMPLETE_MITRAILLETTE.get())
+            .addOutput(BSSnacks.MITRAILLETTE.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.MITRAILLETTE_MEATS))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.FRIES))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSTags.SAUCES, SAUCE_PER_STEP))
+            .build(output)),
+
+        // One transitional item for every breaded snack: Create tells them apart by the recipe it stores.
+        RAW_SHRIMP_CROQUETTE = breaded("raw_shrimp_croquette", BSSnacks.SHRIMP_CROQUETTE_MIX.get(), BSSnacks.RAW_SHRIMP_CROQUETTE.get()),
+        RAW_CHEESE_CROQUETTE = breaded("raw_cheese_croquette", BSSnacks.CHEESE_CROQUETTE_MIX.get(), BSSnacks.RAW_CHEESE_CROQUETTE.get()),
+        RAW_CHICKEN_CROQUETTE = breaded("raw_chicken_croquette", BSSnacks.CHICKEN_CROQUETTE_MIX.get(), BSSnacks.RAW_CHICKEN_CROQUETTE.get()),
+        RAW_LUCIFER = breaded("raw_lucifer", BSSnacks.LUCIFER_MIX.get(), BSSnacks.RAW_LUCIFER.get()),
+        RAW_POTATO_CROQUETTE = breaded("raw_potato_croquette", BSSnacks.POTATO_CROQUETTE_MIX.get(), BSSnacks.RAW_POTATO_CROQUETTE.get()),
+        RAW_CHICKEN_FINGERS = breaded("raw_chicken_fingers", BSSnacks.CHICKEN_STRIPS.get(), BSSnacks.RAW_CHICKEN_FINGERS.get()),
+        RAW_FISH_STICKS = breaded("raw_fish_sticks", BSSnacks.FISH_STRIPS.get(), BSSnacks.RAW_FISH_STICKS.get()),
+        RAW_CHEESE_STICKS = breaded("raw_cheese_sticks", BSSnacks.CHEESE_STRIPS.get(), BSSnacks.RAW_CHEESE_STICKS.get()),
+
+        RAW_LOEMPIA = register(output -> new SequencedAssemblyRecipeBuilder(asResource("raw_loempia"))
+            .require(BSSnacks.LOEMPIA_WRAPPER.get())
+            .transitionTo(BSSnacks.INCOMPLETE_LOEMPIA.get())
+            .addOutput(BSSnacks.RAW_LOEMPIA.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.MINCED_CHICKEN))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(be.thefricadelle.belgiansnacks.registry.BSCrops.LEEK.get()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.CARROT))
+            .addStep(PressingRecipe::new, rb -> rb)
+            .build(output)),
+
+        // The pickles are the burger's gherkins.
+        FRITERIE_BURGER = register(output -> new SequencedAssemblyRecipeBuilder(asResource("friterie_burger"))
+            .require(BSItems.BURGER_BUN.get())
+            .transitionTo(BSSnacks.INCOMPLETE_BURGER.get())
+            .addOutput(BSSnacks.FRITERIE_BURGER.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSSnacks.PATTY.get()))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSFluids.PICKLES.get(), 50))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSTags.SAUCES, 50))
+            .build(output)),
+
+        HOT_DOG = register(output -> new SequencedAssemblyRecipeBuilder(asResource("hot_dog"))
+            .require(BSSnacks.HOT_DOG_BUN.get())
+            .transitionTo(BSSnacks.INCOMPLETE_HOT_DOG.get())
+            .addOutput(BSSnacks.HOT_DOG.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.SAUSAGES))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSSnacks.ONION_RINGS.get()))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSTags.SAUCES, 50))
+            .build(output)),
+
+        PITA = pita("pita", Ingredient.of(BSTags.C_TOMATOES), new NotCondition(new TagEmptyCondition(BSTags.C_TOMATOES))),
+        PITA_FROM_BEETROOT = pita("pita_from_beetroot", Ingredient.of(Items.BEETROOT), new TagEmptyCondition(BSTags.C_TOMATOES)),
+
+        RAW_BROCHETTE = register(output -> new SequencedAssemblyRecipeBuilder(asResource("raw_brochette"))
+            .require(Items.STICK)
+            .transitionTo(BSSnacks.INCOMPLETE_BROCHETTE.get())
+            .addOutput(BSSnacks.RAW_BROCHETTE.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.PORKCHOP))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.LARDONS))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.PORKCHOP))
+            .build(output));
+
     public BSSequencedAssemblyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+    }
+
+    // Egg, then crumbs, then the press: a filling or a strip becomes a raw breaded snack.
+    private GeneratedRecipe breaded(String name, Item input, Item raw) {
+        return register(output -> new SequencedAssemblyRecipeBuilder(asResource(name))
+            .require(input)
+            .transitionTo(BSSnacks.INCOMPLETE_BREADED.get())
+            .addOutput(raw, 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Tags.Items.EGGS))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.C_BREAD_CRUMBS))
+            .addStep(PressingRecipe::new, rb -> rb)
+            .build(output));
+    }
+
+    private GeneratedRecipe pita(String name, Ingredient tomato, ICondition condition) {
+        return register(output -> new SequencedAssemblyRecipeBuilder(asResource(name))
+            .require(BSItems.PITA_BREAD.get())
+            .transitionTo(BSSnacks.INCOMPLETE_PITA.get())
+            .addOutput(BSSnacks.PITA.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSSnacks.GYROS.get()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(tomato))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSTags.SAUCES, 50))
+            .build(output.withConditions(condition)));
     }
 
     // Create's builder cannot carry conditions; the recipe output adds them.

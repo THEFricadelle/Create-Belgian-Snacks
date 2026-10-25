@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:pistolet"
+    },
+    {
+      "item": "create_belgian_snacks:filet_americain"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:pistolet_americain"
+    }
+  ]
+}

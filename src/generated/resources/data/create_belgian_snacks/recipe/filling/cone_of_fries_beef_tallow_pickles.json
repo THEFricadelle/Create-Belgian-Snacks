@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:cone_of_fries_beef_tallow"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:pickles"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:cone_of_fries_beef_tallow_pickles"
+    }
+  ]
+}

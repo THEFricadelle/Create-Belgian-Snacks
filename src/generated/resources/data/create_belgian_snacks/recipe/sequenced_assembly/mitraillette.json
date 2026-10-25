@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:half_baguette"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:mitraillette"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_mitraillette"
+        },
+        {
+          "tag": "create_belgian_snacks:mitraillette_meats"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_mitraillette"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_mitraillette"
+        },
+        {
+          "tag": "create_belgian_snacks:fries"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_mitraillette"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_mitraillette"
+        },
+        {
+          "type": "neoforge:tag",
+          "amount": 100,
+          "tag": "create_belgian_snacks:sauces"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_mitraillette"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_mitraillette"
+  }
+}

@@ -2,6 +2,20 @@
   "values": [
     "create_belgian_snacks:fricadelle",
     "create_belgian_snacks:the_fricadelle",
-    "create_belgian_snacks:ultimate_fricadelle"
+    "create_belgian_snacks:ultimate_fricadelle",
+    "create_belgian_snacks:boulet",
+    "create_belgian_snacks:chicken_croquette",
+    "create_belgian_snacks:lucifer",
+    "create_belgian_snacks:chicken_fingers",
+    "create_belgian_snacks:cervelas",
+    "create_belgian_snacks:mexicano",
+    "create_belgian_snacks:viandelle",
+    "create_belgian_snacks:patty",
+    "create_belgian_snacks:gyros",
+    "create_belgian_snacks:brochette",
+    "create_belgian_snacks:chicken_nuggets",
+    "create_belgian_snacks:chicken_crunch",
+    "create_belgian_snacks:fried_chicken_wings",
+    "create_belgian_snacks:spicy_chicken_wings"
   ]
 }

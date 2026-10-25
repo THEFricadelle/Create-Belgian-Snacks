@@ -19,6 +19,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.fryer.FryingRecipe;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
@@ -75,6 +76,13 @@ public class BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>
 
     public BSFryingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+        // v2 friterie snacks (section 5.10): one fry each, heated, any frying fat.
+        BSSnacks.FRIED.forEach((raw, fried) -> create(fried.getId().getPath(), b -> b
+            .require(raw.get())
+            .require(BSTags.FRYING_OILS, 10)
+            .output(fried.get())
+            .duration(100)
+            .requiresHeat(HeatCondition.HEATED)));
     }
 
     @Override

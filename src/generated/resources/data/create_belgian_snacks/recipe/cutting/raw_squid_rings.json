@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:squids"
+      }
+    }
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:squids"
+    }
+  ],
+  "processing_time": 50,
+  "results": [
+    {
+      "count": 3,
+      "id": "create_belgian_snacks:raw_squid_rings"
+    }
+  ]
+}

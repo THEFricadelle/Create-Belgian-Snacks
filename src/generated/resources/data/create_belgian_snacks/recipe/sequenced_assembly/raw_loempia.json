@@ -1,0 +1,77 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:loempia_wrapper"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_loempia"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_loempia"
+        },
+        {
+          "tag": "create_belgian_snacks:minced_meats/chicken"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_loempia"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_loempia"
+        },
+        {
+          "item": "create_belgian_snacks:leek"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_loempia"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_loempia"
+        },
+        {
+          "item": "minecraft:carrot"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_loempia"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_loempia"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_loempia"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_loempia"
+  }
+}

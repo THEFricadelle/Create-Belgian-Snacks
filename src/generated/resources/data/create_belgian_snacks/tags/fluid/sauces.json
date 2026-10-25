@@ -11,6 +11,12 @@
     "create_belgian_snacks:americaine",
     "create_belgian_snacks:flowing_americaine",
     "create_belgian_snacks:sauce_lapin",
-    "create_belgian_snacks:flowing_sauce_lapin"
+    "create_belgian_snacks:flowing_sauce_lapin",
+    "create_belgian_snacks:tartare",
+    "create_belgian_snacks:flowing_tartare",
+    "create_belgian_snacks:pickles",
+    "create_belgian_snacks:flowing_pickles",
+    "create_belgian_snacks:brazil",
+    "create_belgian_snacks:flowing_brazil"
   ]
 }

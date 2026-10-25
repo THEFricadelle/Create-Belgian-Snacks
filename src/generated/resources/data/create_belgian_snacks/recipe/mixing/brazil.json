@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:pineapples"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:pineapples"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:mayonnaise"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:curry_ketchup"
+    }
+  ],
+  "results": [
+    {
+      "amount": 300,
+      "id": "create_belgian_snacks:brazil"
+    }
+  ]
+}

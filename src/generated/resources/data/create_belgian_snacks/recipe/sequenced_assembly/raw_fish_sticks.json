@@ -1,0 +1,61 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:fish_strips"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_fish_sticks"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_breaded"
+        },
+        {
+          "tag": "c:eggs"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_breaded"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_breaded"
+        },
+        {
+          "tag": "c:bread_crumbs"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_breaded"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_breaded"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_breaded"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_breaded"
+  }
+}

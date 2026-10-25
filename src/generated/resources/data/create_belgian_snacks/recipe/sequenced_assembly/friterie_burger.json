@@ -1,0 +1,68 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:burger_bun"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:friterie_burger"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_burger"
+        },
+        {
+          "item": "create_belgian_snacks:patty"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_burger"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_burger"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 50,
+          "fluid": "create_belgian_snacks:pickles"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_burger"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_burger"
+        },
+        {
+          "type": "neoforge:tag",
+          "amount": 50,
+          "tag": "create_belgian_snacks:sauces"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_burger"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_burger"
+  }
+}

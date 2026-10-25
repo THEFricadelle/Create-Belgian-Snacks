@@ -1,0 +1,16 @@
+{
+  "values": [
+    "create_belgian_snacks:fricadelle",
+    "create_belgian_snacks:cervelas",
+    "create_belgian_snacks:mexicano",
+    "create_belgian_snacks:viandelle",
+    {
+      "id": "#c:foods/sausage",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cooked_sausage",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/chicken"
+    },
+    {
+      "tag": "create_belgian_snacks:minced_meats/chicken"
+    },
+    {
+      "tag": "c:bread_crumbs"
+    },
+    {
+      "tag": "create_belgian_snacks:salts"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "create_belgian_snacks:raw_chicken_nuggets"
+    }
+  ]
+}

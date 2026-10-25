@@ -1,0 +1,24 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:minced_meats/pork"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:samourai"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 100,
+      "fluid": "create_belgian_snacks:bechamel"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:lucifer_mix"
+    }
+  ]
+}
