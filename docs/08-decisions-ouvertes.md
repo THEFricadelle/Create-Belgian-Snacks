@@ -63,3 +63,7 @@ Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement des
 | T6 | Traduction `fr_fr` via datagen ou fichier manuel | selon ce qui est le plus simple au M1 | ✅ **Datagen** (`BSFrenchLangProvider`), Registrate ne générant que `en_us` (26/09/2026) |
 | T7 | Titulaire des droits ARR | — | ✅ **THEFricadelle seul** — projet perso, la team ne contribue pas au code (26/09/2026) |
 | T8 | Forme du nom d'auteur dans les métadonnées et le copyright | — | ✅ **`THEFricadelle`** (sans underscore) ; « THE_Fricadelle » reste le nom de l'item du palier 2 (26/09/2026) |
+
+## Décisions v2
+
+Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, section 14. Les valeurs nutritives des nouveaux snacks seront ajoutées ici au jalon qui les introduit.

@@ -6,7 +6,7 @@ La v2 transforme la friterie industrielle en **friterie complète** : frites, sa
 
 Conventions du document :
 - **Doit** = exigence ferme, vérifiée par un test ou une checklist. **Devrait** = attendu, abandonnable avec une raison écrite. **Peut** = bonus.
-- `⚠️ V-Dn` renvoie à une décision ouverte (section 14). Tant qu'elle n'est pas tranchée, le code prend la valeur provisoire indiquée, configurable.
+- `V-Dn` renvoie à une décision v2 (section 14), toutes tranchées le 25/10/2026.
 - Toutes les quantités et durées sont des brouillons d'équilibrage, sauf mention contraire.
 
 ---
@@ -61,7 +61,7 @@ Avant le premier jalon v2 : relire l'instance Arcadia à jour (version du pack, 
 
 - Un monde v1 ouvert en v2 **doit** garder ses Friteuses (graisse comprise), ses Hachoirs (collection et mode), ses items et ses fluides.
 - Aucun ID enregistré par la v1 ne disparaît (section 3.2).
-- Toute nouvelle clé de config a une valeur par défaut qui reproduit le comportement v1 quand c'est possible. Exception assumée : l'huile usagée (section 6.2), activée par défaut si V-D7 le confirme.
+- Toute nouvelle clé de config a une valeur par défaut qui reproduit le comportement v1 quand c'est possible. Exception assumée : l'huile usagée (section 6.2), activée par défaut (V-D7). Une Friteuse v1 commence à en produire à la mise à jour : à annoncer dans le CHANGELOG.
 
 ---
 
@@ -175,7 +175,7 @@ Toute exception future **doit** être listée ici, avec un test de retrait qui l
 
 Tous nos nouveaux aliments ont le composant `minecraft:food`, rejoignent les tags `c:foods/*` pertinents, et ont un tooltip d'humour en `en_us` et `fr_fr`. Valeurs nutritives dans `BSFoods`, comme la v1.
 
-**Comptent-ils pour le Hachoir ?** Provisoire : **oui** pour les snacks finis de la v2, **non** pour les fricadelles, les pâtes et les intermédiaires (`⚠️ V-D1`). Conséquence à annoncer : dans Arcadia, le total du FoodIndex passe d'environ 1804 à environ 1820, donc un Hachoir en cours en mode ULTIME perd un peu de pourcentage à la mise à jour.
+**Comptent-ils pour le Hachoir ?** **Oui** pour les snacks finis de la v2, **non** pour les fricadelles, les pâtes et les intermédiaires (V-D1). Conséquence à annoncer : dans Arcadia, le total du FoodIndex passe d'environ 1804 à environ 1820, donc un Hachoir en cours en mode ULTIME perd un peu de pourcentage à la mise à jour.
 
 ### 5.1 Frites belges (double cuisson)
 
@@ -186,6 +186,7 @@ flowchart LR
   P[Pomme de terre<br/>c:crops/potato] -->|Mechanical Saw<br/>create:cutting| R[Frites crues ×4]
   R -->|Friteuse chauffée<br/>1re cuisson| B[Frites blanchies]
   B -->|Friteuse super-chauffée<br/>2e cuisson| F[Frites]
+  B -->|Friteuse super-chauffée<br/>au blanc de bœuf| FT[Frites au blanc]
   C[Papier] -->|Mechanical Press| K[Cornet]
   F & K -->|Deployer| N((Cornet de frites))
   N -->|Spout + sauce| S((Cornet de frites + sauce))
@@ -195,12 +196,15 @@ flowchart LR
 |---|---|---|---|---|
 | Découpe | Mechanical Saw | 1 `#c:crops/potato` | 4 `raw_fries` | `cutting/raw_fries` |
 | 1re cuisson | Friteuse **chauffée** | `raw_fries` | `blanched_fries` | `frying/blanched_fries` (100 ticks, 5 mB `#frying_oils` par item) |
-| 2e cuisson | Friteuse **super-chauffée** `⚠️ V-D2` | `blanched_fries` | `fries` | `frying/fries` (60 ticks, 5 mB) |
+| 2e cuisson | Friteuse **super-chauffée** (V-D2) | `blanched_fries` | `fries` | `frying/fries` (60 ticks, 5 mB) |
+| 2e cuisson au blanc | Friteuse **super-chauffée** | `blanched_fries` | `fries_beef_tallow` | `frying/fries_beef_tallow` (60 ticks, 5 mB de `melted_beef_tallow` seul) |
 | Cornet | Mechanical Press | 1 `minecraft:paper` | 1 `paper_cone` | `pressing/paper_cone` |
-| Mise en cornet | Deployer (tient le cornet) | 1 `#create_belgian_snacks:fries` | `cone_of_fries` | `deploying/cone_of_fries` `⚠️ V-D3` |
+| Mise en cornet | Deployer (tient le cornet) | 1 `#create_belgian_snacks:fries` | `cone_of_fries` | `deploying/cone_of_fries` (V-D3) |
 | Sauce | Spout, 50 mB d'une sauce | `cone_of_fries` | `cone_of_fries_<sauce>` | `filling/cone_of_fries_<sauce>` |
+| Cornet au blanc | Deployer, puis Spout | `fries_beef_tallow` | `cone_of_fries_beef_tallow`, puis `cone_of_fries_beef_tallow_<sauce>` | `deploying/cone_of_fries_beef_tallow`, `filling/cone_of_fries_beef_tallow_<sauce>` |
 
-- Bonus blanc de bœuf : des frites cuites au `melted_beef_tallow` ? Provisoire : non, pas de variante (`⚠️ V-D4`).
+- **Frites au blanc** (V-D4) : la 2e cuisson au blanc de bœuf fondu donne `fries_beef_tallow`, meilleure saturation que `fries`, et ses propres cornets (nature + 6 sauces). Elles ne sont pas dans `#create_belgian_snacks:fries`, pour ne jamais tomber dans un cornet normal.
+- **Choix de la recette par la Friteuse** (nouveau, M11) : `frying/fries` accepte toute graisse `#frying_oils`, blanc de bœuf compris. La Friteuse choisit donc parmi les recettes de l'item celles que la chaleur **et la graisse du réservoir** permettent, la plus spécifique d'abord (ingrédient fluide le plus restreint). Avec du blanc de bœuf fondu : frites au blanc ; avec toute autre huile : frites normales. GameTest dédié.
 - Compat : `fries` rejoint un tag `c:foods/fries` ; nos recettes de cornet lisent `#create_belgian_snacks:fries`, qui contient nos frites et `burgermod:fries` (présent dans Arcadia, entrée optionnelle).
 - Secours sans pomme de terre de mod : la pomme de terre vanilla est dans `c:crops/potato`, aucun secours nécessaire.
 
@@ -209,7 +213,7 @@ flowchart LR
 | ID | FR / EN | Couleur | Recette (Mixer) | Condition / secours |
 |---|---|---|---|---|
 | `andalouse` | Sauce andalouse / Andalouse Sauce | orange `#E8862A` | 250 mB `mayonnaise` + 1 tomate (`c:crops/tomato`) + 1 `belgian_spices` → 250 mB | betterave si tag tomate vide |
-| `samourai` | Sauce samouraï / Samurai Sauce | rouge orangé `#D9542B` | 250 mB `mayonnaise` + 1 piment (`#create_belgian_snacks:hot_peppers`) + 1 `belgian_spices`, **chauffé** → 250 mB | secours : poudre de blaze à la place du piment (`⚠️ V-D5`) |
+| `samourai` | Sauce samouraï / Samurai Sauce | rouge orangé `#D9542B` | 250 mB `mayonnaise` + 1 piment (`#create_belgian_snacks:hot_peppers`) + 1 `belgian_spices`, **chauffé** → 250 mB | secours : poudre de blaze à la place du piment (V-D5) |
 | `americaine` | Sauce américaine / Américaine Sauce | rose `#E89A7A` | 250 mB `mayonnaise` + 50 mB `curry_ketchup` + 1 oignon (`c:crops/onion`) → 300 mB | betterave si tag oignon vide |
 | `sauce_lapin` | Sauce lapin / Liège Sauce | brun `#5A3218` | 1 sucre + 1 oignon + 1 baie (`#c:foods/berry`) + 250 mB eau, **chauffé** → 250 mB | betterave si tag oignon vide |
 
@@ -243,7 +247,7 @@ Valeur proposée : 14 de nutrition, saturation 1.2. THE_Fricadelle et THE_FRICAD
 | Étape | Machine | Détail |
 |---|---|---|
 | Farce | Mixer | 2 crevettes (`#create_belgian_snacks:shrimps`) + 250 mB de lait (fluide de NeoForge, activé par Create) + 1 `#c:bread_crumbs` → `shrimp_croquette_mix` |
-| Panure | Sequenced Assembly, 1 boucle | Spout 50 mB `mayonnaise` `⚠️ V-D6` (rôle de l'œuf) → Deployer `#c:bread_crumbs` → Press → `raw_shrimp_croquette` |
+| Panure | Sequenced Assembly, 1 boucle | Deployer œuf (`#c:eggs`, V-D6) → Deployer `#c:bread_crumbs` → Press → `raw_shrimp_croquette` |
 | Friture | Friteuse chauffée | → `shrimp_croquette` (100 ticks, 10 mB) |
 
 - `#create_belgian_snacks:shrimps` : `crabbersdelight:shrimp` (présent dans Arcadia) en optionnel + tags `c:` de crevettes existants. Sans aucune crevette chargée : recette de secours au cabillaud (`minecraft:cod`), derrière `neoforge:tag_empty`.
@@ -261,10 +265,12 @@ Les gaufres de Create: Food (`createfood:*_mini_waffle`) ne sont pas touchées ;
 
 | ID | Mangeable | Remarque |
 |---|---|---|
-| `raw_fries`, `blanched_fries` | non ⚠️ | Intermédiaires (V-D1 : hors Hachoir) |
+| `raw_fries`, `blanched_fries` | non | Intermédiaires, hors Hachoir (V-D1) |
 | `fries` | oui (petit) | Frites sans cornet |
+| `fries_beef_tallow` | oui (petit) | Frites au blanc, meilleure saturation (V-D4) |
 | `paper_cone` | non | |
 | `cone_of_fries` + 6 variantes sauce | oui | `cone_of_fries_mayonnaise`, `_curry_ketchup`, `_andalouse`, `_samourai`, `_americaine`, `_sauce_lapin` ; le cornet ne se rend pas |
+| `cone_of_fries_beef_tallow` + 6 variantes sauce | oui | Mêmes sauces, meilleure saturation (V-D4) |
 | `half_baguette`, `incomplete_mitraillette` | non | |
 | `mitraillette` | oui | |
 | `boulet_paste`, `raw_boulet` | non | |
@@ -276,7 +282,7 @@ Les gaufres de Create: Food (`createfood:*_mini_waffle`) ne sont pas touchées ;
 | `liege_waffle`, `brussels_waffle`, `brussels_waffle_sugared` | oui | |
 | `used_oil_filter`, `oil_filter` | non | section 6.2 |
 
-Environ **31 items**, **5 fluides** (4 sauces + huile usagée), **3 blocs** (Gaufrier, enseigne, néon). Les valeurs nutritives de chaque snack sont fixées au jalon qui l'introduit, dans un tableau ajouté à `08-decisions-ouvertes.md`.
+Environ **39 items**, **5 fluides** (4 sauces + huile usagée), **8 blocs** (Gaufrier, 3 enseignes, 4 néons). Les valeurs nutritives de chaque snack sont fixées au jalon qui l'introduit, dans un tableau ajouté à `08-decisions-ouvertes.md`.
 
 ---
 
@@ -284,7 +290,7 @@ Environ **31 items**, **5 fluides** (4 sauces + huile usagée), **3 blocs** (Gau
 
 ### 6.1 Gaufrier (`waffle_iron`)
 
-**Pourquoi une machine** : Create sait cuire en masse (ventilateur sur feu de camp), mais pas mouler une pâte entre deux plaques chaudes avec un temps précis par pièce. Le Gaufrier est aussi l'occasion d'un visuel propre (plaques qui s'ouvrent). Alternative native à trancher : `⚠️ V-D8`.
+**Pourquoi une machine** : Create sait cuire en masse (ventilateur sur feu de camp), mais pas mouler une pâte entre deux plaques chaudes avec un temps précis par pièce. Le Gaufrier est aussi l'occasion d'un visuel propre (plaques qui s'ouvrent). Retenu face à la cuisson au ventilateur (V-D8).
 
 | Aspect | Spéc |
 |---|---|
@@ -299,7 +305,7 @@ Environ **31 items**, **5 fluides** (4 sauces + huile usagée), **3 blocs** (Gau
 | Goggles / Jade | Statut, progression, chaleur |
 | Casser | Les items tombent |
 | Comparateur | Remplissage de la sortie |
-| Craft | Mechanical Crafter : plaques de fer, Precision Mechanism, bassin (provisoire, `⚠️ V-D9`) |
+| Craft | Mechanical Crafter, ID `mechanical_crafting/waffle_iron` : 2 plaques de fer, Precision Mechanism, bassin (V-D9) |
 
 ### 6.2 Huile usagée et filtration
 
@@ -307,7 +313,7 @@ Une huile de friterie s'use. En v2, la Friteuse rend une part de la graisse cons
 
 | Aspect | Spéc |
 |---|---|
-| Production | À chaque lot, la Friteuse ajoute `fryer.usedOilRatio` × graisse consommée dans un **2e réservoir** interne, sortie seule (provisoire 0.5, `⚠️ V-D7`) |
+| Production | À chaque lot, la Friteuse ajoute `fryer.usedOilRatio` × graisse consommée dans un **2e réservoir** interne, sortie seule (0.5, activé par défaut, V-D7) |
 | Capacité | `fryer.usedOilCapacity` (2000 mB) |
 | Blocage | Réservoir d'huile usagée plein → le lot suivant ne démarre pas ; statut « huile usagée à vider » |
 | Évacuation | Tuyau ou seau sur la Friteuse ; la capability fluide expose le réservoir d'huile usagée en extraction seulement, le réservoir de graisse en insertion seulement |
@@ -315,7 +321,7 @@ Une huile de friterie s'use. En v2, la Friteuse rend une part de la graisse cons
 | Monde v1 | Les Friteuses existantes démarrent avec un réservoir d'huile usagée vide |
 | Filtration (native) | Mixer : 1000 mB `used_frying_oil` + 1 `oil_filter` → 800 mB `frying_oil` + 1 `used_oil_filter` (`mixing/frying_oil_from_used_oil`) |
 | Filtre | `oil_filter` : Mechanical Press de 2 papiers + 1 charbon de bois ; `used_oil_filter` se brûle comme combustible (200 ticks) |
-| Compat | Si Create Diesel Generators est chargé : `used_frying_oil` rejoint le tag de biodiesel ou une recette de Mixer vers leur biodiesel (`⚠️ V-D10`, nom exact du fluide à vérifier dans leur jar) |
+| Compat | Si Create Diesel Generators est chargé : `used_frying_oil` rejoint le tag de biodiesel ou une recette de Mixer vers leur biodiesel (V-D10 : recette de Mixer derrière `mod_loaded`, nom exact du fluide à vérifier dans leur jar au M14 ; rien si le fluide n'existe pas) |
 | Fluide | `used_frying_oil`, brun sombre `#5B4A1E`, pas dans `#frying_oils` |
 
 Le blanc de bœuf fondu suit la même règle (son huile usagée est la même `used_frying_oil`, pour rester simple).
@@ -345,7 +351,7 @@ Exigences de notre côté :
 
 | Bloc | Spéc |
 |---|---|
-| Enseigne « Friterie » (`friterie_sign`) | Bloc décoratif orientable, texte fixe, variantes FR / NL / EN `⚠️ V-D13` |
+| Enseignes (`friterie_sign`, `frituur_sign`, `chip_shop_sign`) | Blocs décoratifs orientables, texte fixe : « Friterie », « Frituur », « Chip shop » (V-D13) |
 | Néon (`friterie_neon`, 4 couleurs) | Bloc lumineux (niveau 15), sans block entity |
 
 Ces blocs ne portent aucun état : au retrait, ils deviennent de l'air.
@@ -356,7 +362,7 @@ Ces blocs ne portent aucun état : au retrait, ils deviennent de l'air.
 
 Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur la valeur par défaut tant que la config du monde n'est pas chargée (comme la v1).
 
-| Clé | Défaut provisoire | Rôle |
+| Clé | Défaut | Rôle |
 |---|---|---|
 | `fryer.usedOilRatio` | `0.5` (V-D7) | Part de la graisse consommée rendue en huile usagée ; 0 = v1 |
 | `fryer.usedOilCapacity` | `2000` mB | Réservoir d'huile usagée |
@@ -373,13 +379,13 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | Devrait | Schéma KubeJS pour `frying` et `waffle_baking` | Reporté depuis la v1 ; `event.custom` marche déjà |
 | Devrait | Scènes Ponder pour le Gaufrier, l'huile usagée et la ligne de frites | Même méthode que la v1 (schémas construits par `runPonderSchematics`) |
 | Devrait | Chapitre FTB Quests « La Friterie » proposé à la team du pack | Livré comme fichier d'exemple dans `docs/`, la team l'intègre ou non |
-| Peut | Frites ratées (brûlées) si laissées trop longtemps dans la Friteuse pleine | Contredit D5 (100 % de réussite) : à trancher |
 | Peut | Compat .3D Placeable Food (cornets posables) | Si le mod l'expose simplement |
 | Peut | Compat upgrade d'alimentation de Sophisticated Backpacks | Vérifier que nos aliments sont mangés |
 | Plus tard | Friterie générée dans les villages (jigsaw) | Hors v2 ; sans risque de retrait (blocs seulement) |
 | Plus tard | Carbonnade flamande à la bière (`culturaldelights:beer` dans Arcadia) | Recette au Mixer chauffé, simple à ajouter |
 | Plus tard | Friteuse industrielle (multibloc) | Seulement si les joueurs saturent les friteuses 1 bloc |
 | Écarté | Métier de villageois friturier | Persisté dans les villageois vanilla : contraire à E1 |
+| Écarté | Frites ou fricadelles brûlées si elles attendent trop | Contredit D5 : une ligne ne doit pas échouer pour un tapis bouché (V-D15) |
 | Écarté | Comptoir de friterie et clients maison | Create 6 fait déjà la boutique (section 7.1) |
 | Écarté | Voix des 4 phrases restantes du PNJ | Le PNJ est débranché (C1) |
 
@@ -406,9 +412,9 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 
 | Type | Quantité estimée | Note |
 |---|---|---|
-| Textures d'items 16×16 | ~31 | Placeholders par `tools/gen_placeholders.py`, puis vraies textures par THEFricadelle (`06-assets.md`, `12-prompts-textures.md` à compléter) |
+| Textures d'items 16×16 | ~39 | Placeholders par `tools/gen_placeholders.py`, puis vraies textures par THEFricadelle (`06-assets.md`, `12-prompts-textures.md` à compléter) |
 | Fluides | 5 × (still + flow animé) + 5 seaux | Même gabarit que les 4 fluides v1 |
-| Blocs | Gaufrier (corps + plaque partielle), enseigne (3 variantes ?), néon (4 couleurs) | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
+| Blocs | Gaufrier (corps + plaque partielle), 3 enseignes, néon (4 couleurs) | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
 | Sons | Gaufrier (fermeture, cuisson) | Enregistrements CC0 ou faits maison, listés dans `NOTICE.md` |
 | Lang | Toutes les nouvelles clés en `en_us` et `fr_fr` ; tooltips d'humour | `ResourceConsistencyTest` couvre déjà la parité |
 
@@ -423,7 +429,7 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | Suite | Nouveaux contrats |
 |---|---|
 | JUnit | `frozen-ids.txt` (R1) ; aucun data component de notre namespace hors de nos items dans les fichiers générés (R2) ; parité des langues ; recettes v2 : IDs exacts, conditions et jumelles de secours |
-| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé si V-D2 confirmé) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout : frites jusqu'au cornet sauce, mitraillette, boulets, croquettes ; snacks finis dans un paquet de Create (section 7.1) ; C1 : aucun PNJ |
+| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé ; frites au blanc avec du blanc de bœuf fondu, frites normales avec toute autre huile) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout : frites jusqu'au cornet sauce, mitraillette, boulets, croquettes ; snacks finis dans un paquet de Create (section 7.1) ; C1 : aucun PNJ |
 | GameTest compat (FD) | Recettes tomate / oignon actives, secours inactifs |
 | Client smoke | Modèles, fluides, JEI (nouvelles catégories), Ponder (nouvelles scènes) |
 | Multijoueur smoke | 2 clients voient le même Gaufrier en marche ; l'un le charge, l'autre récupère la gaufre |
@@ -488,22 +494,24 @@ flowchart LR
 
 ---
 
-## 14. Décisions ouvertes v2
+## 14. Décisions v2
 
-À reporter dans `08-decisions-ouvertes.md` au fil des jalons, avec la date.
+Toutes tranchées par THEFricadelle le 25/10/2026. Les numéros V-D11 et V-D12 (apparence des clients, barème de paiement) ont disparu avec le Comptoir ; les autres gardent leur numéro.
 
-| # | Question | Proposition provisoire |
+| # | Question | Décision |
 |---|---|---|
-| V-D1 | Nos snacks v2 comptent-ils pour le Hachoir ? | Oui pour les snacks finis, non pour fricadelles, pâtes et intermédiaires |
-| V-D2 | 2e cuisson des frites : super-chauffée ou chauffée ? | Super-chauffée (fidèle à la double cuisson, mais demande du blaze cake) ; repli : chauffée avec un temps plus long |
-| V-D3 | Ratio frites → cornet | 1 frite + 1 cornet → 1 cornet de frites (le Deployer ne prend qu'un item) |
-| V-D4 | Frites au blanc de bœuf : variante meilleure ? | Non |
-| V-D5 | Samouraï sans piment dans le pack | Poudre de blaze en secours |
-| V-D6 | Croquettes : mayonnaise ou œuf pour la panure ? | Mayonnaise (un fluide passe au Spout, un œuf demanderait un Deployer de plus) |
-| V-D7 | Huile usagée : activée par défaut ? Quel ratio ? | Oui, 0.5 |
-| V-D8 | Gaufrier maison ou cuisson native au ventilateur ? | Gaufrier maison |
-| V-D9 | Recette de craft du Gaufrier | Voir section 6.1 |
-| V-D10 | Huile usagée vers biodiesel de Diesel Generators | Recette de Mixer si leur fluide existe, sinon rien |
-| V-D13 | Langue de l'enseigne | 3 variantes : « Friterie » (FR), « Frituur » (NL), « Chip shop » (EN) |
-| V-D14 | Le nom affiché du mod change-t-il (« Belgian Snacks » couvre déjà la carte) ? | Non |
-| V-D15 | Les frites ratées (brûlées) entrent-elles en v2 ? | Non (section 9) |
+| V-D1 | Nos snacks v2 comptent-ils pour le Hachoir ? | ✅ **Oui** pour les snacks finis ; non pour fricadelles, pâtes et intermédiaires |
+| V-D2 | 2e cuisson des frites | ✅ **Super-chauffée** |
+| V-D3 | Ratio frites → cornet | ✅ **1 portion + 1 cornet → 1 cornet de frites** (Deployer) ; 1 pomme de terre donne 4 portions |
+| V-D4 | Frites au blanc de bœuf | ✅ **Oui** : `fries_beef_tallow` et ses propres cornets (nature + 6 sauces), meilleure saturation |
+| V-D5 | Samouraï sans piment dans le pack | ✅ **Poudre de blaze** en secours |
+| V-D6 | Panure des croquettes | ✅ **Œuf au Deployer** |
+| V-D7 | Huile usagée | ✅ **Activée par défaut, ratio 0.5** |
+| V-D8 | Gaufrier maison ou ventilateur | ✅ **Gaufrier maison** |
+| V-D9 | Craft du Gaufrier | ✅ **Mechanical Crafter** : 2 plaques de fer, Precision Mechanism, bassin |
+| V-D10 | Huile usagée vers biodiesel de Diesel Generators | ✅ **Oui si leur fluide existe** (vérifié au M14) |
+| V-D13 | Enseignes | ✅ **FR + NL + EN** : « Friterie », « Frituur », « Chip shop » |
+| V-D14 | Nom affiché du mod | ✅ **Inchangé** : Create: Belgian Snacks |
+| V-D15 | Frites ou fricadelles brûlées | ✅ **Non** en v2 |
+
+Restent à fixer pendant les jalons : les valeurs nutritives de chaque nouveau snack (tableau ajouté à `08-decisions-ouvertes.md` au jalon qui l'introduit), et la saturation exacte des frites au blanc.
