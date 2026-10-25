@@ -19,7 +19,7 @@ All three tiers are playable and automatable end to end. The 42 original pixel-a
 - Fully automatable, no mandatory manual step.
 - The food list is computed from the running modpack, not hard-coded, and can be tuned through tags and server config.
 - Optional integrations: JEI categories, Jade tooltips, KubeJS-friendly recipe ids and tags, Farmer's Delight ingredients through `c:` tags.
-- Ponder scenes for both machines and both assembly lines, an advancement tab, and a visit from THEFricadelle to whoever eats THE_FRICADELLE.
+- Ponder scenes for both machines and both assembly lines, an advancement tab, and fireworks with a server-wide announcement for whoever eats THE_FRICADELLE.
 - English and French.
 
 ## Requirements
@@ -39,6 +39,15 @@ All three tiers are playable and automatable end to end. The 42 original pixel-a
 1. Install NeoForge 21.1.250 or newer for Minecraft 1.21.1.
 2. Put the Create 6.0.10 jar in the `mods` folder.
 3. Put the `create-belgian-snacks` jar in the `mods` folder, on the client and on the server.
+
+## Removing the mod
+
+Removing the mod from a world is safe: its blocks become air and its items vanish, nothing else breaks. One other mod needs a step beforehand: Spice of Life: Onion keeps every food a player ate, and before its own fix a player who ate one of our foods could no longer join once the mod is gone.
+
+1. Back up the world.
+2. Run `/belgiansnacks uninstall scan` (operator): it lists what of this mod is left in online players and loaded chunks, in `config/create_belgian_snacks/uninstall_scan.txt`.
+3. Run `/belgiansnacks uninstall prepare true`: from then on, each player who logs in has this mod's entries removed from Spice of Life: Onion's history. `/belgiansnacks uninstall purge-references` does it at once for the players online.
+4. Once every player has logged in, stop the server and remove the jar.
 
 ## Building from source
 
@@ -92,7 +101,7 @@ Les trois paliers sont jouables et automatisables de bout en bout. Les 42 textur
 - Entièrement automatisable, aucune étape manuelle obligatoire.
 - La liste des aliments est calculée à partir du modpack chargé, pas écrite en dur, et se règle par tags et config serveur.
 - Intégrations optionnelles : catégories JEI, infobulles Jade, IDs de recettes et tags adaptés à KubeJS, ingrédients de Farmer's Delight via les tags `c:`.
-- Scènes Ponder pour les deux machines et les deux chaînes d'assemblage, un onglet d'advancements, et une visite de THEFricadelle à qui mange THE_FRICADELLE.
+- Scènes Ponder pour les deux machines et les deux chaînes d'assemblage, un onglet d'advancements, et un feu d'artifice avec une annonce à tout le serveur pour qui mange THE_FRICADELLE.
 - Anglais et français.
 
 ## Prérequis
@@ -112,6 +121,15 @@ Les trois paliers sont jouables et automatisables de bout en bout. Les 42 textur
 1. Installer NeoForge 21.1.250 ou plus récent pour Minecraft 1.21.1.
 2. Placer le jar de Create 6.0.10 dans le dossier `mods`.
 3. Placer le jar `create-belgian-snacks` dans le dossier `mods`, côté client et côté serveur.
+
+## Retirer le mod
+
+Retirer le mod d'un monde est sans danger : ses blocs deviennent de l'air et ses items disparaissent, rien d'autre ne casse. Un autre mod demande une étape avant : Spice of Life: Onion garde chaque aliment mangé par un joueur, et tant qu'il n'est pas corrigé, un joueur qui a mangé un de nos aliments ne peut plus se connecter une fois le mod retiré.
+
+1. Sauvegarder le monde.
+2. Lancer `/belgiansnacks uninstall scan` (opérateur) : la liste de ce qui reste de ce mod chez les joueurs en ligne et dans les chunks chargés, dans `config/create_belgian_snacks/uninstall_scan.txt`.
+3. Lancer `/belgiansnacks uninstall prepare true` : dès lors, chaque joueur qui se connecte voit les entrées de ce mod retirées de l'historique de Spice of Life: Onion. `/belgiansnacks uninstall purge-references` le fait tout de suite pour les joueurs en ligne.
+4. Une fois que tous les joueurs se sont connectés, arrêter le serveur et retirer le jar.
 
 ## Compiler depuis les sources
 

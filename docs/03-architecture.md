@@ -173,12 +173,24 @@ La config est côté **serveur** et synchronisée ; le client ne l'utilise que p
   - Les lignes Goggles de `KineticBlockEntity` passent par la police du client : elles ne s'appellent jamais côté serveur (un GameTest l'a montré).
 - Palier 3 (M8) :
   - `content/food/UltimateFricadelleItem` : gags côté serveur (rot géant, feu d'artifice, message à tout le serveur par `PlayerList.broadcastSystemMessage`, apparition du PNJ). Les effets de potion sont dans `BSFoods` (`FoodProperties.Builder.effect`).
+  - Le visiteur est débranché depuis la v2 (25/10/2026) : `UltimateFricadelleItem` n'appelle plus `TheFricadelleNpc.appear` ; tout le reste ci-dessous est gardé et testé en l'appelant directement.
   - `content/npc/TheFricadelleNpc` (`PathfinderMob` sans objectifs d'IA, invulnérable, sans collision, 160 ticks de vie au plus). Trois phases synchronisées par une donnée d'entité : `RUN` (apparaît jusqu'à 8 blocs devant le mangeur, sur un bloc où les entités sont actives, et le rejoint en courant par la navigation vanilla ; téléporté à côté s'il n'y est pas en 3 s), `TALK` (applaudit et dit sa phrase à voix haute, toujours la phrase 4, la seule enregistrée, son `npc.phrase.4`, et au-dessus de sa tête, jamais dans le chat, 3,5 s), `LAUNCH` (monte comme une fusée sans collision, puis éclate : particules et sons seulement, aucune `Explosion`) ; type d'entité `noSave()`, donc jamais écrit dans un chunk. Sa phrase est son nom visible (synchronisé par l'entité), aucun paquet maison.
   - `client/TheFricadelleNpcRenderer` + `ClappingPlayerModel` (modèle de joueur large ou fin : course normale, bras qui applaudissent, poings levés au décollage) ; `client/NpcSkin` résout le skin une fois (`SkullBlockEntity.fetchGameProfile`, puis `SkinManager.getOrLoad`) et le garde.
   - `registry/BSTriggers.GRINDER_HALF` (`SimpleCriterionTrigger`), lancé par le Hachoir quand son compte augmente et atteint 50 % du total, pour les joueurs à 16 blocs. `registry/BSAdvancements` : l'onglet, généré par Registrate.
 - Ponder : une scène par machine (jalon M9).
 
 Toutes ces classes ont été vérifiées dans les sources 6.0.10 au moment de leur usage (règle du `CLAUDE.md`).
+
+## Retrait du mod sans casse (v2, M10)
+
+Exigence E1 du cahier des charges v2 (`13-cahier-des-charges-v2.md`, section 3).
+
+- **IDs figés** : `src/gametest/resources/create_belgian_snacks/frozen-ids.txt`, une ligne `<registre> <id>` par ID jamais livré (registres du jeu, plus `data/recipe` et `data/advancement`). `RegistryGameTests` compare les registres, `FrozenIdsFileTest` (JUnit) les recettes et advancements générés. `ItemGameTests` et `RecipeFilesTest` lisent leur liste dans ce fichier. Renommer un ID : alias de registre (`DeferredRegister.addAlias`), gardé à vie.
+- **Rien de fragile chez les autres** : aucun attachment, effet, attribut, métier, POI ni composant d'enchantement à notre namespace ; entités `noSave()` ; nos data components seulement sur nos items. Vérifié par `RegistryGameTests.nothingFragileIsRegistered`.
+- `content/uninstall/` : `ReferencePurger` (données d'un autre mod qui gardent nos IDs dans un joueur), `Uninstall` (liste des purgeurs, mode préparation sur `PlayerLoggedInEvent`), `UninstallScan` (lecture seule, une fois par commande : joueurs de chaque monde, chunks chargés autour d'eux et chunks forcés ; un handler partagé par un multibloc compté une fois), `SavedStackLists` (retire les entrées d'un namespace d'une liste de piles sauvegardées en la reconstruisant, donc sans pile vide).
+- Commande `/belgiansnacks uninstall scan | purge-references | prepare [true|false]` (op 2), config `uninstall.prepare`.
+- `compat/solonion/SolonionPurger` : chargé seulement si `solonion` est présent, **sans aucune classe de Solonion à la compilation ni dépendance de build**. L'historique est l'attachment NeoForge `solonion:foodlist` (`FoodPlayerDataImpl`, un `INBTSerializable<ListTag>` de piles sauvegardées) : lu et réécrit par l'interface de NeoForge. Ensuite `SOLOnion.EVENT.updatePlayerBenefits(player)` et `SOLOnionAPI.syncFoodList(player)` par réflexion, résolus une fois ; s'ils manquent (autre version), la purge reste enregistrée et le client se met à jour au prochain sync. Vérifié sur Solonion 1.5.7 (jar d'Arcadia) le 25/10/2026.
+- Test de bout en bout : `tools/uninstall_smoke.py` (voir `10-tests.md`), avec la sonde `src/uninstallProbe` (mod de test `uninstall_probe`, jamais livré).
 
 ## Ponder (M9)
 

@@ -139,3 +139,10 @@
 **Root cause:** Server side on CurseForge: the endpoint validates the fields (missing `fileID`, `slug` or an environment version give a 400), saves the relations, then crashes. The 500 hides a successful write: test calls with one relation each replaced the list, and the last one left Create as an optional dependency.
 **Fix:** One call with the complete list (`tools/curseforge.py relations --file-id 8996274`): the author console then showed Create required, JEI, Jade, KubeJS and Farmer's Delight optional.
 **Prevention:** Never probe a live file with partial relations: each call replaces the whole list even when it answers 500. Send the full list once, then check the file's Related Projects; prefer `tools/curseforge.py upload`, which declares them at creation.
+
+## [2026-10-25 19:24] - A run cannot name a mod declared after it
+**Context:** Adding the removal smoke runs, whose `loadedMods = [mods.uninstall_probe]` points at a second mod of the build.
+**Error:** `Could not get unknown property 'uninstall_probe' for ModModel container` when evaluating `build.gradle`.
+**Root cause:** The `neoForge { runs { } }` block was evaluated before `mods { }`, which came after it, so the mod did not exist yet when a run looked it up.
+**Fix:** Moved `mods { }` above `runs { }`.
+**Prevention:** Declare every mod of the build before the runs; a run that loads a specific mod refers to it by `mods.<id>`.

@@ -6,6 +6,22 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Safe removal** — `/belgiansnacks uninstall scan` lists what of the mod is left in online players and loaded chunks; `uninstall prepare true` cleans each player who logs in, and `uninstall purge-references` cleans the players online. They remove this mod's foods from Spice of Life: Onion's history, which otherwise stops a player from joining once the mod is gone. A world full of the mod is now tested opened without it, then with it again.
+
+### Changed
+
+- **THEFricadelle's visit** — Eating THE_FRICADELLE no longer brings the visitor. The fireworks, the server-wide announcement and the effects stay.
+
+### Ajouts
+
+- **Retrait sans danger** — `/belgiansnacks uninstall scan` liste ce qui reste du mod chez les joueurs en ligne et dans les chunks chargés ; `uninstall prepare true` nettoie chaque joueur qui se connecte, et `uninstall purge-references` les joueurs en ligne. Ils retirent les aliments de ce mod de l'historique de Spice of Life: Onion, qui sinon empêche un joueur de se connecter une fois le mod retiré. Un monde rempli du mod est désormais testé ouvert sans lui, puis à nouveau avec.
+
+### Modifications
+
+- **La visite de THEFricadelle** — Manger THE_FRICADELLE ne fait plus venir le visiteur. Le feu d'artifice, l'annonce à tout le serveur et les effets restent.
+
 ---
 
 ## [1.0.1] - 2026-10-03

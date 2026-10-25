@@ -75,6 +75,10 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 ### Spice of Life: Onion
 Le mod pénalise la nourriture répétitive. Nos 3 fricadelles doivent être des aliments normaux (composant `food`), donc elles seront comptées par SoL. Rien de spécial à coder, mais à garder en tête pour l'équilibrage (D-effets).
 
+Son mod id est `solonion` (1.5.7 dans le pack, licence LGPL-3.0, jar `Spice of Life Onion_NEOFORGE_v1.5.7_mc1.21.1.jar`). **Bug connu** (rapporté le 20/10/2026, vu dès le 28/09/2026) : il garde chaque aliment mangé comme une pile sauvegardée dans l'attachment `solonion:foodlist` ; une fois notre mod retiré, nos aliments s'y chargent en piles vides, `FoodPlayerDataImpl.serializeNBT` lève `Cannot encode empty ItemStack`, et le joueur ne peut plus se connecter (« Couldn't place player in world »). La config serveur n'étant alors jamais synchronisée, Pehkui, Arcadia Pets, Ars Nouveau et Mekanism échouent en cascade : ce sont des symptômes. Correctif côté Solonion : ignorer les piles vides à la sauvegarde et au chargement.
+
+De notre côté (v2, M10) : `/belgiansnacks uninstall prepare true` avant tout retrait du mod, puis laisser passer les joueurs ; `compat/solonion/SolonionPurger` retire nos entrées de leur historique (voir `03-architecture.md`). À vérifier dans le pack au jalon M22 : la purge sur un vrai joueur, puis la connexion sans le mod (le scénario sans purge doit reproduire le crash tant que Solonion n'est pas corrigé). Pour la team du pack : annoncer tout retrait d'un mod de nourriture, car les anciens mondes cassent ; en dépannage, remettre le jar 1.0.x le temps de lancer la purge, ou retirer l'aliment des données du joueur après une sauvegarde.
+
 ### Create Heat JS
 Ce mod peut ajouter des niveaux de chaleur custom. La Friteuse lit la chaleur **via l'API de Create** (`BasinBlockEntity.getHeatLevelOf`), pas en testant `instanceof BlazeBurnerBlock`.
 

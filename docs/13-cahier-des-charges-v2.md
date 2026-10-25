@@ -170,7 +170,7 @@ Toute exception future **doit** être listée ici, avec un test de retrait qui l
 | C3 | D14 Spice of Life: Onion | Mesurer en jeu l'effet de SoL sur nos aliments, v2 comprise ; ajuster `BSFoods` si une fricadelle devient inutile après 2 repas | Décision notée dans `08` |
 | C4 | D15 Create Heat JS | Lister les sources de chaleur que la Friteuse et le Gaufrier acceptent dans le pack à jour | Décision notée dans `08` |
 | C5 | Contrôles manuels v1 restés ouverts | Jade dans le pack, SoL compte nos fricadelles, temps du FoodIndex, rendu des lames | Cases cochées dans `10-tests.md` |
-| C6 | Branche `dev` en retard sur `main` | Le bump 1.0.1 n'existe que sur `main` (tag `v1.0.1`) ; `dev` affiche encore 1.0.0. Fusionner `main` dans `dev` avant le premier commit v2 | `gradle.properties` identique sur les deux branches |
+| C6 | `dev` local en retard sur `origin/dev` | Le bump 1.0.1 et la licence 3.0 closed-source étaient sur `origin/dev` et `origin/main`, pas sur le `dev` local. Fait le 25/10/2026 : commits locaux rejoués sur `origin/dev`, `main` avancé sur `origin/main` | ✅ `gradle.properties` à 1.0.1 sur les deux branches |
 
 ---
 

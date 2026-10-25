@@ -94,3 +94,12 @@ Les jalons marqués 🔒 dépendent d'une décision de `08-decisions-ouvertes.md
 ## v2
 
 Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-cahier-des-charges-v2.md`, section 13.
+
+### M10 — Socle v2 ✅ (25/10/2026)
+- [x] `dev` local rejoué sur `origin/dev` (licence 3.0 closed-source, 1.0.1) ; `main` à jour
+- [x] PNJ THEFricadelle débranché, code et tests gardés (le visiteur est appelé directement dans les tests et le smoke client)
+- [x] IDs figés (`frozen-ids.txt`, `RegistryGameTests`, `FrozenIdsFileTest`) et garde contre les enregistrements fragiles, vérifiés par mutation
+- [x] `/belgiansnacks uninstall scan | purge-references | prepare`, config `uninstall.prepare`, purge Solonion sans dépendance de build
+- [x] `tools/uninstall_smoke.py` : monde rempli du mod, ouvert sans lui, puis avec lui, 3 phases vertes
+- [ ] Dans le pack : purge Solonion sur un vrai joueur et scénario sans purge (reporté au M22, le pack complet ne tourne pas dans ce jalon)
+- **Accepté si** : test de retrait vert en environnement minimal ; PNJ absent ; build cassé par un ID retiré.
