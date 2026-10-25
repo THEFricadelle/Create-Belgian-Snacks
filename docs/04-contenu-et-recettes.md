@@ -186,6 +186,27 @@ Détail : `13-cahier-des-charges-v2.md`, section 5.7, et les trois règles de ba
 
 Se mangent tels quels (comptés par le Hachoir) : fromage de Herve (nausée 3 s : son odeur), pistolet, jambon d'Ardenne, meringue, raisins secs, compote, glace vanille. La moutarde et la farine de sarrasin arrivent avec leurs cultures (M14).
 
+## v2 — Cultures et moules (M14, 25/10/2026)
+
+Détail : `13-cahier-des-charges-v2.md`, section 5.8.
+
+| Bloc | Planté avec | Pousse | Récolte mûre |
+|---|---|---|---|
+| `chicon_crop` (âges 0-3) | `chicory_root` | **seulement dans le noir** (lumière ≤ `crops.darkMaxLight`, 4) ; reste planté à la lumière sans pousser | 2-3 `chicon` + 50 % racine |
+| `leek_crop` (0-7) | `leek` | normale | 1-3 `leek` |
+| `hops_crop` (0-7) | `hop_seeds` | normale | 1-2 `hops`, 1 graine, 50 % `hop_shoots` |
+| `brussels_sprouts_crop` (0-7) | `brussels_sprout` | normale | 2-4 `brussels_sprout` |
+| `asparagus_crop` (0-3) | `asparagus_crown` | partout ; chaque pas retient s'il a poussé dans le noir | `white_asparagus` (noir) ou `green_asparagus` (lumière), 1-2, + 25 % griffe |
+| `buckwheat_crop` (0-7) | `buckwheat` | normale | 2-3 `buckwheat` |
+| `mustard_crop` (0-7) | `mustard_seeds` | normale | 2-4 `mustard_seeds` |
+| `bouchot` (0-3, immergé, sans collision) | établi : 3 bâtons, 1 ficelle, 1 moule (`crafting/bouchot`) | tick aléatoire, seulement sous l'eau | 2-4 `mussel` (clic droit ou Harvester), le pieu repart à 0 |
+
+- Pas mûre, une culture rend ce qui l'a plantée. Le Mechanical Harvester de Create récolte les sept cultures et le bouchot mûrs et les replante ; récolté, le bouchot ne donne que des moules (le pieu ne tombe que pour un joueur, sinon il se dupliquerait).
+- Graines : 1 herbe haute ou courte sur ~7 en donne une des sept (`loot_table/gameplay/wild_seeds`, modificateur `neoforge:add_table`) ; 1 prise de pêche sur 20 une moule (`gameplay/fishing_mussels`), en tout biome.
+- Transformations : Meule `buckwheat` → `buckwheat_flour`, `mustard_seeds` → `mustard_powder` ; Mixer 2 poudres de moutarde + 100 mB de vinaigre + 100 mB d'eau → 250 mB fluide `mustard`.
+- Tags : produits dans `c:crops` et `c:crops/<nom>`, graines dans `c:seeds` et `c:seeds/<nom>`. Rien ne se mange cru.
+- Botany Pots : `recipe/botanypots/<culture>.json`, `botanypots:block_derived_crop`, chargées seulement avec le mod.
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

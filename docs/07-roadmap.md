@@ -126,3 +126,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Ventilateurs de Create pour laver et fumer (GameTest sur de vraies machines)
 - [x] Sel, beurre et sucre glace se coupent quand le pack les fournit
 - **Accepté si** : chaque ingrédient sort d'une machine Create ; aucun conflit de recette avec le pack. ✅ (scan statique ; vérification en jeu au M22)
+
+### M14 — Cultures et moules ✅ (25/10/2026)
+- [x] 7 cultures, bouchot, 15 items, fluide moutarde, farine de sarrasin ; textures des stades
+- [x] Chicon forcé dans le noir, asperge blanche ou verte selon la lumière (`crops.darkMaxLight`)
+- [x] Graines de l'herbe, moules de la pêche (modificateurs `neoforge:add_table`)
+- [x] Harvester de Create : cultures et bouchot récoltés et replantés, sans duplication du pieu
+- [x] Botany Pots (si présent)
+- **Accepté si** : une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot. ✅ (le Harvester est vérifié par sa propre logique, pas sur un contraption en mouvement)

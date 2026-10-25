@@ -312,6 +312,8 @@ Fluides `cream`, `bechamel`, `liege_syrup`, `vinegar` et `mustard` : `still`, `f
 
 ### 5.8 Cultures et moules
 
+> **Livré au M14 (25/10/2026)**, avec deux écarts : les graines tombent de l'herbe (1 sur ~7, une des sept au hasard) mais pas des coffres de village, et les moules de la pêche en tout biome (une condition de biome dans une table de loot demande des recherches de registres au datagen, pour peu de gain). Détail réel dans `04-contenu-et-recettes.md`.
+
 | Culture | Bloc | Comment l'obtenir | Pousse | Récolte |
 |---|---|---|---|---|
 | **Chicon** (endive) | `chicon_crop`, âge 0 à 3, sur terre labourée | Racine `chicory_root` : 3 % des hautes herbes (loot modifier) | **Seulement dans le noir** : lumière ≤ `crops.darkMaxLight` (4), comme le vrai chicon forcé en cave. À la lumière, rien ne pousse (particules de fumée au tick aléatoire, rien d'autre) | 2 à 3 `chicon` + 50 % de racine |
@@ -668,7 +670,7 @@ flowchart LR
 | **M11 — Frites** | `raw_fries`, double cuisson, cornet, `cone_of_fries`, recettes, tags `fries` | Une ligne automatique produit des cornets de frites depuis des pommes de terre |
 | **M12 — Sauces** ✅ | Andalouse, samouraï, américaine (la sauce lapin passe au M13, avec le sirop de Liège qu'elle demande) : 3 fluides + seaux, recettes et secours, tag `sauces`, cornets sauce (nature et au blanc) | Les cornets sauce sortent d'une ligne ; testé avec et sans FD |
 | **M13 — Ingrédients de base** ✅ | Sucres, crème et beurre, sel, vinaigre, fromage de Herve, maton, pistolet, pâtes (feuilletée, brioche, pita, burger, nouilles), béchamel, sirop de Liège, levure, malt, lardons, jambon d'Ardenne, meringue, raisins secs, compote, copeaux de chocolat, glace vanille ; scan des conflits avec le pack (baratte, presse ou scie sur la pâte de Create) | Chaque ingrédient sort d'une machine Create ; aucun conflit de recette |
-| **M14 — Cultures et moules** | Chicon, poireau, houblon (et ses jets), choux de Bruxelles, asperges, sarrasin, moutarde (et le fluide moutarde), bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
+| **M14 — Cultures et moules** ✅ | Chicon, poireau, houblon (et ses jets), choux de Bruxelles, asperges, sarrasin, moutarde (et le fluide moutarde), bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
 | **M15 — Bières** | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
 | **M16 — Snacks de friterie** | Sauces tartare, pickles et brazil et leurs cornets ; mitraillette, boulets, croquettes (crevettes, fromage, poulet, lucifer), cervelas, mexicano, viandelle, loempia, filet américain et dérivés, burger et cheeseburger de friterie, hot-dog, pita, brochette, bamischijf, nasischijf, calamars, chicken fingers, nuggets, croquant de poulet, ailes épicées, fish sticks, rondelles d'oignon, bâtonnets de fromage, croquettes de pommes de terre | Chacun produit par une ligne automatique (GameTest) |
 | **M17 — Plats belges** | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |

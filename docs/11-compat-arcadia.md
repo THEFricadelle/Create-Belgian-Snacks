@@ -77,6 +77,9 @@ Scan du 25/10/2026 sur les jars d'Arcadia 2.0.32 : Create: Food moud le sucre en
 
 À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
 
+### Botany Pots (cultures v2)
+Botany Pots 21.1.44 est dans le pack. Nos sept cultures y sont déclarées en `botanypots:block_derived_crop` (fichiers `recipe/botanypots/*.json`, condition `neoforge:mod_loaded botanypots`). En pot, le chicon et l'asperge ignorent la lumière : le pot donne la récolte par défaut (chicon, asperge verte). À vérifier dans le pack au M22.
+
 ### Piments (sauce samouraï, v2)
 `mynethersdelight:bullet_pepper` (My Nether's Delight, présent dans Arcadia) remplit `#create_belgian_snacks:hot_peppers` : la samouraï s'y fait au piment, et la jumelle à la poudre de blaze reste éteinte. À vérifier au jalon M22 dans le pack.
 

@@ -192,6 +192,12 @@ Exigence E1 du cahier des charges v2 (`13-cahier-des-charges-v2.md`, section 3).
 - `compat/solonion/SolonionPurger` : chargé seulement si `solonion` est présent, **sans aucune classe de Solonion à la compilation ni dépendance de build**. L'historique est l'attachment NeoForge `solonion:foodlist` (`FoodPlayerDataImpl`, un `INBTSerializable<ListTag>` de piles sauvegardées) : lu et réécrit par l'interface de NeoForge. Ensuite `SOLOnion.EVENT.updatePlayerBenefits(player)` et `SOLOnionAPI.syncFoodList(player)` par réflexion, résolus une fois ; s'ils manquent (autre version), la purge reste enregistrée et le client se met à jour au prochain sync. Vérifié sur Solonion 1.5.7 (jar d'Arcadia) le 25/10/2026.
 - Test de bout en bout : `tools/uninstall_smoke.py` (voir `10-tests.md`), avec la sonde `src/uninstallProbe` (mod de test `uninstall_probe`, jamais livré, chargé par ses deux runs seulement : les autres runs ne chargent que ce mod, et la sonde reste inactive sans `uninstall_probe.phase`).
 
+## Cultures (v2, M14)
+
+- `registry/BSCrops` : chaque bloc de culture et l'item qui le plante, enregistrés ensemble (aucune classe n'a à charger l'autre d'abord) ; modèles « crop » à 4 dessins (âges 0-7 deux par deux, âges 0-3 un chacun), tables de loot générées.
+- `content/crop/BSCropBlock` (âges 0-7, vanilla), `ShortCropBlock` (âges 0-3, pousse à toute lumière et survit dans le noir, contrairement à `CropBlock` qui exige 9), `ChiconCropBlock` (ne pousse qu'à lumière ≤ `crops.darkMaxLight`), `AsparagusCropBlock` (propriété `blanched` fixée à chaque pas de croissance), `BouchotBlock` (immergeable, sans collision, `age` 0-3 : le Harvester de Create le reconnaît, `HarvesterMovementBehaviour.isValidCrop`, vérifié dans les sources 6.0.10).
+- `data/BSLootProviders` : deux tables et trois modificateurs `neoforge:add_table` (rien d'enregistré chez nous, règle R2) ; `data/BSBotanyPotsProvider` : JSON brut, Botany Pots n'est pas une dépendance.
+
 ## Recettes de bassin : trois règles (v2, M13)
 
 Établies au jalon M13 après un scan de toutes les recettes de traitement d'Arcadia 2.0.32 et la lecture de `BasinOperatingBlockEntity.getMatchingRecipes` dans Create 6.0.10 : quand plusieurs recettes de bassin correspondent, **Create prend celle qui a le plus d'items** (les fluides ne comptent pas).

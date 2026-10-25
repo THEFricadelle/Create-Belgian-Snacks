@@ -68,6 +68,12 @@ Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement des
 
 Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, section 14. Les valeurs nutritives des nouveaux snacks sont ajoutées ici au jalon qui les introduit.
 
+### Réglages v2
+
+| Clé de config serveur | Défaut | Rôle | Jalon |
+|---|---|---|---|
+| `crops.darkMaxLight` | 4 | Lumière la plus haute comptée comme « noir » : le chicon n'y pousse qu'en dessous, l'asperge y sort blanche | M14 |
+
 ### Valeurs nutritives v2 (provisoires, dans `BSFoods`)
 
 Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seules un en-cas ; le blanc de bœuf est la meilleure graisse.

@@ -18,6 +18,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Base ingredients** — Pearl sugar, cassonade, powdered sugar, salt, cream, salted butter, Herve cheese (washed by a fan; its smell makes you dizzy), maton, vinegar, Liège syrup, béchamel, brewer's yeast, malt, pistolet, puff pastry, brioche, burger bun, pita and noodle doughs, lardons, Ardennes ham, meringue, raisins, apple compote, chocolate shavings and vanilla ice cream, all made by Create machines; fans on a campfire do the baking and smoking. Where the pack already makes salt, butter or powdered sugar, those are used and ours stay off.
 - **Liège sauce** — From Liège syrup, onion and spices, with its two sauced cones.
 
+- **Belgian crops** — Chicon (it grows only in the dark, as in a cellar), asparagus (white if grown in the dark, green in daylight), leek, hops (with hop shoots), Brussels sprouts, buckwheat and mustard. Their seeds come out of wild grass; Create's mechanical harvester picks and replants them; Botany Pots grows them when present. Buckwheat and mustard seeds go to the millstone, mustard to the mixer.
+- **Mussels** — Caught while fishing, then grown on a mussel pole (bouchot) standing underwater, picked by hand or by a harvester.
+
 ### Changed
 
 - **The fryer's recipe** — Of the recipes an item has, the fryer now takes one its heat and the fat in its tank allow, the most specific fat first.
@@ -34,6 +37,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 - **Les ingrédients de base** — Sucre perlé, cassonade, sucre glace, sel, crème, beurre salé, fromage de Herve (lavé au ventilateur ; son odeur fait tourner la tête), maton, vinaigre, sirop de Liège, béchamel, levure de bière, malt, pistolet, pâte feuilletée, pâtes à brioche, à pain à burger, à pita et nouilles, lardons, jambon d'Ardenne, meringue, raisins secs, compote de pommes, copeaux de chocolat et glace vanille, tous faits par des machines de Create ; les ventilateurs sur feu de camp cuisent et fument. Là où le pack fait déjà du sel, du beurre ou du sucre glace, ce sont les siens qui servent et les nôtres restent coupés.
 - **La sauce lapin** — Au sirop de Liège, à l'oignon et aux épices, avec ses deux cornets sauce.
+
+- **Les cultures belges** — Chicon (il ne pousse que dans le noir, comme en cave), asperge (blanche si elle pousse dans le noir, verte au jour), poireau, houblon (avec ses jets), choux de Bruxelles, sarrasin et moutarde. Leurs graines tombent de l'herbe sauvage ; le harvester de Create les récolte et les replante ; Botany Pots les fait pousser s'il est là. Le sarrasin et les graines de moutarde passent à la meule, la moutarde au mixer.
+- **Les moules** — Pêchées, puis élevées sur un pieu de bouchot posé sous l'eau, récoltées à la main ou au harvester.
 
 ### Modifications
 

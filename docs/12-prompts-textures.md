@@ -86,6 +86,8 @@ Dessinées par `tools/draw_textures.py` (M11) : quatre bâtonnets de deux pixels
 
 Cornets sauce (M12) : le même cornet de frites, avec un ruban de sauce sur les frites dans la couleur de la sauce : mayonnaise crème `#F3EBC4`, curry ketchup rouge-brun `#A8321E`, andalouse orange `#E8862A`, samouraï rouge orangé `#D9542B`, américaine rose `#E89A7A`. Les nouveaux fluides suivent le gabarit des fluides v1 (`LIQUIDS` dans `draw_textures.py`).
 
+Cultures (M14) : stades `block/crop/<culture>_stage0..3` (tiges et feuilles qui montent, la récolte visible aux stades 2 et 3 : têtes pâles de chicon et de poireau, cônes de houblon, choux, fleurs roses du sarrasin, fleurs jaunes de la moutarde ; l'asperge mûre a deux dessins, `_white` et `_green`), `block/bouchot/stage0..3` (un pieu, des grappes de moules de plus en plus nombreuses). Items : racine, chicon, poireau, asperges et jets de houblon dans la forme épaisse des frites, chou rond, moule noire bleutée.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.
