@@ -42,6 +42,14 @@ ITEMS = {
     "incomplete_ultimate_fricadelle": ("stick", (0xF0, 0xD8, 0xA0), "3"),
     "raw_ultimate_fricadelle": ("stick", (0xF8, 0xC8, 0xA8), "3"),
     "ultimate_fricadelle": ("shiny_stick", (0xE0, 0xA8, 0x20), "3"),
+    # v2 fries (docs/13, section 5.1).
+    "raw_fries": ("stick", (0xEE, 0xE0, 0xB8), "F"),
+    "blanched_fries": ("stick", (0xEE, 0xD8, 0x98), "F"),
+    "fries": ("stick", (0xEE, 0xC1, 0x5A), "F"),
+    "fries_beef_tallow": ("shiny_stick", (0xE6, 0xAE, 0x4E), "T"),
+    "paper_cone": ("heap", (0xF2, 0xEE, 0xE2), "K"),
+    "cone_of_fries": ("heap", (0xEE, 0xC1, 0x5A), "K"),
+    "cone_of_fries_beef_tallow": ("heap", (0xE6, 0xAE, 0x4E), "K"),
 }
 
 # Fluid id -> colour. Each gets still/flow textures and a bucket item texture.
@@ -73,6 +81,8 @@ GLYPHS = {
     "T": ["###", ".#.", ".#.", ".#.", ".#."],
     "R": ["##.", "#.#", "##.", "#.#", "#.#"],
     "S": [".##", "#..", ".#.", "..#", "##."],
+    "F": ["###", "#..", "##.", "#..", "#.."],
+    "K": ["#.#", "#.#", "##.", "#.#", "#.#"],
     "1": [".#.", "##.", ".#.", ".#.", "###"],
     "2": ["##.", "..#", ".#.", "#..", "###"],
     "3": ["##.", "..#", ".#.", "..#", "##."],

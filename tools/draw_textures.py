@@ -66,6 +66,80 @@ def sausage(palette, toppings=False, thick=False, incomplete=False):
     return px
 
 
+# v2 fries (docs/12, section 1): sticks of potato, pale when raw, golden when fried twice; beef
+# tallow gives a deeper gold. Each stick is two pixels wide, lit on its left, outlined in its darkest
+# shade; sticks drawn later sit in front.
+FRIES_RAW = ['9C8A62', 'D3C194', 'EEE0B8', 'FFF6DA']
+FRIES_BLANCHED = ['A38E55', 'D6BC78', 'EED898', 'FFF0C0']
+FRIES_GOLDEN = ['91591F', 'D2953A', 'EEC15A', 'FFE38C']
+FRIES_TALLOW = ['7A4519', 'BF7C2E', 'E6AE4E', 'FFD77A']
+PAPER = ['8C8476', 'D6D0BE', 'F2EEE2', 'FFFFFF']
+STRIPE = ['7E211B', 'C8352B']
+PILE = [(1, 14, 3, 4), (10, 15, 12, 5), (4, 15, 5, 2), (7, 15, 8, 3)]
+
+
+def stick_cells(x0, y0, x1, y1):
+    cells = set()
+    steps = 2 * max(abs(x1 - x0), abs(y1 - y0))
+    for i in range(steps + 1):
+        t = i / steps
+        x, y = round(x0 + (x1 - x0) * t), round(y0 + (y1 - y0) * t)
+        cells.update({(x, y), (x + 1, y)})
+    return cells
+
+
+def draw_sticks(px, segments, palette, clip=16):
+    for segment in segments:
+        cells = {(x, y) for x, y in stick_cells(*segment) if 0 <= x < 16 and 0 <= y < clip}
+        for x, y in cells:
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < 16 and 0 <= ny < clip and (nx, ny) not in cells:
+                    px[ny][nx] = colour(palette[0])
+        top = min(y for _, y in cells)
+        for x, y in cells:
+            left = (x - 1, y) not in cells
+            px[y][x] = colour(palette[3] if y == top else palette[2] if left else palette[1])
+
+
+def fries(palette, sparkle=False):
+    px = canvas()
+    draw_sticks(px, PILE, palette)
+    if sparkle:
+        dots(px, [(6, 5), (10, 7)], 'FFF6CF')
+    return px
+
+
+def cone(px, top=6):
+    # A paper cone with the red and white stripes of a friterie, tip at the bottom.
+    cells = {(x, y) for y in range(top, 16) for x in range(16) if abs(x + 0.5 - 8) <= (15.6 - y) * 0.62}
+    for x, y in cells:
+        edge = any((x + dx, y + dy) not in cells for dx, dy in [(1, 0), (-1, 0), (0, 1)])
+        if edge or y == top:
+            px[y][x] = colour(PAPER[0] if edge else STRIPE[0])
+        elif (x // 2) % 2 == 0:
+            px[y][x] = colour(STRIPE[1] if x < 9 else STRIPE[0])
+        else:
+            px[y][x] = colour(PAPER[3] if x < 6 else PAPER[2] if x < 10 else PAPER[1])
+    return px
+
+
+def paper_cone():
+    px = cone(canvas())
+    # The opening, seen from slightly above.
+    for x in range(4, 12):
+        px[6][x] = colour('5E574B')
+    for x in range(3, 13):
+        px[5][x] = colour(PAPER[0]) if x in (3, 12) else colour(PAPER[1])
+    return px
+
+
+def cone_of_fries(palette):
+    px = canvas()
+    draw_sticks(px, [(3, 8, 4, 1), (11, 8, 12, 2), (5, 8, 6, 0), (8, 8, 9, 1)], palette, clip=8)
+    return cone(px, top=7)
+
+
 BALL = [
     '................', '................', '................', '................',
     '................', '......0000......', '....00333300....', '...0333322220...',
@@ -234,6 +308,12 @@ def artwork():
     for name, palette in [('minced_pork', RAW), ('minced_beef', ['632E2B', '973F38', 'BF6251', 'E6B29B']),
                           ('minced_chicken', ['91705A', 'C79D82', 'E7C3A3', 'FFE0BF']), ('bread_crumbs', FRIED)]:
         out[gen.ITEM_DIR / f'{name}.png'] = bitmap(HEAP, dict(zip('0123', palette)))
+    for name, palette in [('raw_fries', FRIES_RAW), ('blanched_fries', FRIES_BLANCHED), ('fries', FRIES_GOLDEN)]:
+        out[gen.ITEM_DIR / f'{name}.png'] = fries(palette)
+    out[gen.ITEM_DIR / 'fries_beef_tallow.png'] = fries(FRIES_TALLOW, sparkle=True)
+    out[gen.ITEM_DIR / 'paper_cone.png'] = paper_cone()
+    out[gen.ITEM_DIR / 'cone_of_fries.png'] = cone_of_fries(FRIES_GOLDEN)
+    out[gen.ITEM_DIR / 'cone_of_fries_beef_tallow.png'] = cone_of_fries(FRIES_TALLOW)
     out[gen.ITEM_DIR / 'beef_tallow.png'] = bitmap([
         '................', '................', '................', '................',
         '.....000000.....', '...0033333300...', '..033333332220..', '..033333322220..',
@@ -257,7 +337,8 @@ def artwork():
 def preview(outputs):
     (gen.ROOT / 'build').mkdir(exist_ok=True)
     entries = list(outputs.items())
-    sheet = [[colour('202830') for _ in range(7 * 144)] for _ in range(6 * 280)]
+    rows = -(-len(entries) // 7)
+    sheet = [[colour('202830') for _ in range(7 * 144)] for _ in range(rows * 280)]
     cards = []
     for index, (path, px) in enumerate(entries):
         ox, oy = (index % 7) * 144 + 8, (index // 7) * 280 + 8
