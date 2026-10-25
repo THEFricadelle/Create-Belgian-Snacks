@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.config.BSConfig;
-import be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -25,7 +24,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 /**
  * THE_FRICADELLE: whoever eats it is announced to the whole server (unless its operators turned it
- * off), fireworks go off, and THEFricadelle comes to congratulate them (decided on 27/09/2026).
+ * off) and fireworks go off. THEFricadelle no longer comes to congratulate them: the visitor was
+ * switched off for v2 (decided on 25/10/2026); its code stays in content.npc.
  */
 public class UltimateFricadelleItem extends FricadelleItem {
     public UltimateFricadelleItem(Properties properties) {
@@ -42,7 +42,6 @@ public class UltimateFricadelleItem extends FricadelleItem {
             if (line != null) {
                 level.getServer().getPlayerList().broadcastSystemMessage(line, false);
             }
-            TheFricadelleNpc.appear(level, player);
         }
     }
 

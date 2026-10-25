@@ -228,8 +228,8 @@ public final class Showcase {
         sign(level, o.offset(TIER1.getX() + 2, 0, SIGN_Z), lit("Tier 1 · Palier 1"), name(BSItems.FRICADELLE.get()),
             lit("meat > fryer"), lit("viande > friteuse"));
         set(level, o.offset(NPC_CHEST), Blocks.CHEST.defaultBlockState());
-        sign(level, o.offset(NPC_CHEST.getX(), 0, SIGN_Z), lit("Eat one to meet"), lit("the author"), lit("Manges-en une"),
-            lit("pour le voir"));
+        sign(level, o.offset(NPC_CHEST.getX(), 0, SIGN_Z), lit("Eat one for"), lit("the fireworks"), lit("Manges-en une"),
+            lit("feu d'artifice"));
         line(level, o, THE_LINE);
         line(level, o, ULTIMATE_LINE);
         sign(level, o.offset(TIER2.getX(), 0, SIGN_Z), lit("Tier 2 · Palier 2"), name(BSItems.THE_FRICADELLE.get()),

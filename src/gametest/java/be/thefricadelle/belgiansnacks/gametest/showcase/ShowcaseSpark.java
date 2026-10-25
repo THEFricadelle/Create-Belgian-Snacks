@@ -147,7 +147,8 @@ public final class ShowcaseSpark {
         });
     }
 
-    // Twenty visitors at once, as the scenario asks: each must be gone once its lifetime is over.
+    // Twenty THE_FRICADELLE eaten at once: the gags must leave nothing behind. The visitor is switched
+    // off since v2, so none comes.
     private static void eatUltimates() {
         Minecraft mc = Minecraft.getInstance();
         var server = mc.getSingleplayerServer();

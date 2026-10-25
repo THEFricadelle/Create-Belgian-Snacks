@@ -242,6 +242,8 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("grinder.missing.shot", 20, () -> screenshot("grinder-missing")));
         STEPS.add(new Step("grinder.missing.close", 5, () -> mc.setScreen(null)));
         // The player eats THE_FRICADELLE on the integrated server: every gag reaches this client.
+        // Eating no longer brings the visitor (switched off for v2): the server calls it directly so
+        // its rendering stays checked.
         STEPS.add(new Step("ultimate.eat", 10, ClientSmokeTest::eatUltimate));
         // The visitor runs in from a few blocks ahead.
         STEPS.add(new Step("ultimate.run.shot", 4, () -> visitor() != null && visitor().getPhase() == be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.Phase.RUN,
@@ -602,6 +604,7 @@ public final class ClientSmokeTest {
             var player = server.getPlayerList().getPlayer(id);
             ItemStack food = BSItems.ULTIMATE_FRICADELLE.asStack();
             food.getItem().finishUsingItem(food, player.serverLevel(), player);
+            be.thefricadelle.belgiansnacks.content.npc.TheFricadelleNpc.appear(player.serverLevel(), player);
         });
     }
 

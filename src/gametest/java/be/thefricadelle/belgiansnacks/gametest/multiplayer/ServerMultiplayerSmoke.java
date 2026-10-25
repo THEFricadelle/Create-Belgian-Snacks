@@ -119,7 +119,7 @@ public final class ServerMultiplayerSmoke {
                 player.teleportTo(fryerPos.getX() + (a ? -1.5 : 2.5), fryerPos.getY(), fryerPos.getZ() + 0.5);
                 // One food each for the grinder, a different one per player.
                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(a ? Items.APPLE : Items.BREAD));
-                // A also eats THE_FRICADELLE; B checks the visitor and the announcement arrive.
+                // A also eats THE_FRICADELLE; both check the announcement arrives and no visitor comes.
                 if (a) {
                     player.getInventory().setItem(1, BSItems.ULTIMATE_FRICADELLE.asStack());
                 }

@@ -90,8 +90,22 @@ public final class EatingGameTests {
 
     // ------------------------------------------------------------------ THE_FRICADELLE's visitor
 
-    // It runs up from a few blocks ahead, stops beside the eater to say its line, then takes off and
-    // bursts in the sky, all within its lifetime (the timeout).
+    // Switched off for v2 (25/10/2026): eating THE_FRICADELLE no longer brings the visitor, the
+    // fireworks and the announcement stay.
+    @GameTest(template = TEMPLATE)
+    public static void eatingTheUltimateFricadelleBringsNoVisitor(GameTestHelper helper) {
+        ServerPlayer player = eat(helper, BSItems.ULTIMATE_FRICADELLE.asStack());
+        helper.assertTrue(UltimateFricadelleItem.announcement(player) != null, "the announcement went with the visitor");
+        helper.runAfterDelay(40, () -> {
+            List<TheFricadelleNpc> visitors = helper.getLevel().getEntitiesOfClass(TheFricadelleNpc.class,
+                player.getBoundingBox().inflate(TheFricadelleNpc.RUN_DISTANCE + 2));
+            helper.assertTrue(visitors.isEmpty(), "a visitor came: " + visitors.size());
+            helper.succeed();
+        });
+    }
+
+    // The visitor's code stays: called directly, it runs up from a few blocks ahead, stops beside the
+    // player to say its line, then takes off and bursts in the sky, all within its lifetime (the timeout).
     @GameTest(template = TEMPLATE, timeoutTicks = TheFricadelleNpc.LIFETIME_TICKS + 30)
     public static void theFricadelleRunsUpCongratulatesAndTakesOff(GameTestHelper helper) {
         // Entities tick around the eater, as they do around a real player (simulation distance).
@@ -109,6 +123,7 @@ public final class EatingGameTests {
         // The forced chunks load first.
         helper.runAfterDelay(20, () -> {
             ServerPlayer player = eat(helper, BSItems.ULTIMATE_FRICADELLE.asStack());
+            TheFricadelleNpc.appear(helper.getLevel(), player);
             List<TheFricadelleNpc> visitors = helper.getLevel().getEntitiesOfClass(TheFricadelleNpc.class,
                 player.getBoundingBox().inflate(TheFricadelleNpc.RUN_DISTANCE + 2));
             helper.assertValueEqual(visitors.size(), 1, "visitors around the eater");
