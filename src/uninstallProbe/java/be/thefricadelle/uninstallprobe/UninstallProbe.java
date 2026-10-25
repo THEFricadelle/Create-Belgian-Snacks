@@ -40,8 +40,8 @@ import net.neoforged.neoforge.common.NeoForge;
 public final class UninstallProbe {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String MOD_NAMESPACE = "create_belgian_snacks";
-    // "without": the mod must be absent; "back": it must be loaded again.
-    private static final String PHASE = System.getProperty("uninstall_probe.phase", "without");
+    // "without": the mod must be absent; "back": it must be loaded again. Unset: the probe stays idle.
+    private static final String PHASE = System.getProperty("uninstall_probe.phase");
     private static final int IN_WORLD_TICKS = 100;
     private static final int TIMEOUT_TICKS = 20 * 60 * 4;
 
@@ -51,7 +51,9 @@ public final class UninstallProbe {
     private boolean done;
 
     public UninstallProbe() {
-        NeoForge.EVENT_BUS.addListener(this::onClientTick);
+        if (PHASE != null) {
+            NeoForge.EVENT_BUS.addListener(this::onClientTick);
+        }
     }
 
     private void onClientTick(ClientTickEvent.Post event) {

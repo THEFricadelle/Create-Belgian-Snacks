@@ -77,6 +77,8 @@ neoForge {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             logLevel = org.slf4j.event.Level.DEBUG
+            // Only this mod by default: the removal probe is loaded by its own two runs alone.
+            loadedMods = [mods."${mod_id}"]
         }
 
         client {

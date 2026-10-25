@@ -146,3 +146,10 @@
 **Root cause:** The `neoForge { runs { } }` block was evaluated before `mods { }`, which came after it, so the mod did not exist yet when a run looked it up.
 **Fix:** Moved `mods { }` above `runs { }`.
 **Prevention:** Declare every mod of the build before the runs; a run that loads a specific mod refers to it by `mods.<id>`.
+
+## [2026-10-25 19:33] - The removal probe closed the client smoke run
+**Context:** First `testAll` after adding the `uninstall_probe` test mod for the removal smoke run.
+**Error:** `verifyClientSmoke` failed: no `smoke-report.txt`; the log showed the probe's report ("FAIL mod - loaded in phase without") and the client quitting five seconds into the world.
+**Root cause:** A run loads every mod of the `mods { }` block unless told otherwise, so the probe ran in every client run and stopped the game once a player stood in a world.
+**Fix:** All runs default to `loadedMods = [mods."${mod_id}"]`; only `uninstallWithout` and `uninstallBack` load the probe, and the probe stays idle without its `uninstall_probe.phase` property.
+**Prevention:** A test-only mod added to `mods { }` must be opted into by its own runs, never loaded by default.
