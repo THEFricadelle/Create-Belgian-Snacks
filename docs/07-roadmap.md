@@ -111,3 +111,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Les frites et les cornets comptent pour le Hachoir (V-D1) ; tags `fries` et `c:foods/fries`
 - [x] Ligne automatique pomme de terre → cornet (GameTest), mutations attrapées
 - **Accepté si** : une ligne automatique produit des cornets de frites depuis des pommes de terre. ✅
+
+### M12 — Sauces ✅ (25/10/2026)
+- [x] Fluides `andalouse`, `samourai`, `americaine` + seaux, textures, animation et atlas (l'atlas lit désormais tous les fluides)
+- [x] Recettes au Mixer et jumelles de secours (betterave, poudre de blaze) ; tags `sauces` et `hot_peppers`
+- [x] 10 cornets sauce remplis au Spout (5 sauces × cornet nature ou au blanc)
+- [x] Tests : bassin réel, ligne de Spouts, jumelles de tous nos tags (mutation qui a révélé le trou : corrigé)
+- [ ] Sauce lapin : reportée au M13 (sirop de Liège)
+- **Accepté si** : les cornets sauce sortent d'une ligne ; testé avec et sans FD. ✅

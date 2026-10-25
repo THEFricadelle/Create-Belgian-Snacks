@@ -136,6 +136,20 @@ Détail et schéma : `13-cahier-des-charges-v2.md`, section 5.1.
 - Tags : `create_belgian_snacks:fries` = `fries` + `burgermod:fries` (optionnel, Arcadia) ; les frites au blanc n'y sont pas, pour ne jamais finir dans un cornet normal. `c:foods/fries` (dans `c:foods`) = les frites et les deux cornets.
 - Les frites et les cornets sont des aliments finis : ils **comptent** pour le Hachoir Suprême (V-D1), donc ne sont pas dans `grinder/blacklist`. Les intermédiaires ne se mangent pas.
 
+## v2 — Sauces et cornets sauce (M12, 25/10/2026)
+
+Détail : `13-cahier-des-charges-v2.md`, section 5.2. La sauce lapin arrive au M13, avec le sirop de Liège dont elle a besoin.
+
+| ID de recette | Mixer | Entrées | Sortie | Jumelle de secours |
+|---|---|---|---|---|
+| `mixing/andalouse` | froid | 250 mB `mayonnaise` + 1 tomate (`c:crops/tomato`) + 1 `belgian_spices` | 250 mB `andalouse` | `mixing/andalouse_from_beetroot` (betterave) si aucune tomate |
+| `mixing/samourai` | **chauffé** | 250 mB `mayonnaise` + 1 `#create_belgian_snacks:hot_peppers` + 1 `belgian_spices` | 250 mB `samourai` | `mixing/samourai_from_blaze_powder` (poudre de blaze, V-D5) si aucun piment |
+| `mixing/americaine` | froid | 250 mB `mayonnaise` + 50 mB `curry_ketchup` + 1 oignon (`c:crops/onion`) | 300 mB `americaine` | `mixing/americaine_from_beetroot` (betterave) si aucun oignon |
+
+- `#create_belgian_snacks:hot_peppers` : `mynethersdelight:bullet_pepper` (Arcadia) et `#c:crops/chili_pepper`, optionnels.
+- Tag fluide `create_belgian_snacks:sauces` : mayonnaise, curry ketchup, andalouse, samouraï, américaine (sources et écoulements). Aucune sauce n'est une graisse de friture.
+- **Cornets sauce** : `filling/cone_of_fries_<sauce>` et `filling/cone_of_fries_beef_tallow_<sauce>`, un Spout verse 50 mB de la sauce sur le cornet nature. 10 items, comptés par le Hachoir (V-D1).
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

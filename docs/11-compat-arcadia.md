@@ -72,6 +72,9 @@ Le pack modifie ses recettes par KubeJS, notre mod doit s'y prêter :
 - FD fournit déjà `farmersdelight:minced_beef`, oignons, tomates… → on **ne double pas** ce qui existe. Nos recettes lisent des **tags** (`c:crops/onion`, `c:crops/tomato`, tags de viande). Notre `minced_beef` (D12, décidé) : toujours enregistré ; les recettes lisent `create_belgian_snacks:minced_meats/beef`, qui contient le nôtre et celui de FD.
 - Vérifier au jalon M5 (export CSV) si un mod du pack fournit déjà **huile**, **mayonnaise** ou **ketchup** (Burger Mod, Cook's Collection, Create: Food…). Si oui : les accepter dans nos recettes via un tag `create_belgian_snacks:frying_oils` / sauces, pour éviter les doublons.
 
+### Piments (sauce samouraï, v2)
+`mynethersdelight:bullet_pepper` (My Nether's Delight, présent dans Arcadia) remplit `#create_belgian_snacks:hot_peppers` : la samouraï s'y fait au piment, et la jumelle à la poudre de blaze reste éteinte. À vérifier au jalon M22 dans le pack.
+
 ### Spice of Life: Onion
 Le mod pénalise la nourriture répétitive. Nos 3 fricadelles doivent être des aliments normaux (composant `food`), donc elles seront comptées par SoL. Rien de spécial à coder, mais à garder en tête pour l'équilibrage (D-effets).
 

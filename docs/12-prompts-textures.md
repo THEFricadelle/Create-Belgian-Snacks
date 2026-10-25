@@ -84,6 +84,8 @@ Dessinées par `tools/draw_textures.py` (M11) : quatre bâtonnets de deux pixels
 | `cone_of_fries.png` | The same cone, filled with golden fries sticking out of the top. |
 | `cone_of_fries_beef_tallow.png` | Same, with the deeper gold tallow fries. |
 
+Cornets sauce (M12) : le même cornet de frites, avec un ruban de sauce sur les frites dans la couleur de la sauce : mayonnaise crème `#F3EBC4`, curry ketchup rouge-brun `#A8321E`, andalouse orange `#E8862A`, samouraï rouge orangé `#D9542B`, américaine rose `#E89A7A`. Les nouveaux fluides suivent le gabarit des fluides v1 (`LIQUIDS` dans `draw_textures.py`).
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

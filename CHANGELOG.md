@@ -12,6 +12,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 - **Belgian fries** — Potatoes cut by a mechanical saw, blanched in a fryer on a lit burner, then fried again on a seething one. Fried in melted beef tallow they become beef tallow fries, a better snack. A deployer puts them in a paper cone (three paper on a crafting table or a mechanical crafter). Fries and cones count for the Supreme Grinder.
 
+- **Friterie sauces** — Andalouse, samurai and américaine, mixed from mayonnaise in a mixer (samurai over a lit burner), with a bucket each. Without tomatoes, onions or hot peppers in the pack, beetroot or blaze powder stand in.
+- **Sauced cones** — A spout puts 50 mB of mayonnaise, curry ketchup, andalouse, samurai or américaine on a cone of fries or of beef tallow fries: ten cones, all counted by the Supreme Grinder.
+
 ### Changed
 
 - **The fryer's recipe** — Of the recipes an item has, the fryer now takes one its heat and the fat in its tank allow, the most specific fat first.
@@ -22,6 +25,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Retrait sans danger** — `/belgiansnacks uninstall scan` liste ce qui reste du mod chez les joueurs en ligne et dans les chunks chargés ; `uninstall prepare true` nettoie chaque joueur qui se connecte, et `uninstall purge-references` les joueurs en ligne. Ils retirent les aliments de ce mod de l'historique de Spice of Life: Onion, qui sinon empêche un joueur de se connecter une fois le mod retiré. Un monde rempli du mod est désormais testé ouvert sans lui, puis à nouveau avec.
 
 - **Les frites belges** — Des pommes de terre coupées par une scie mécanique, blanchies dans une friteuse sur un brûleur allumé, puis frites une seconde fois sur un brûleur ardent. Frites au blanc de bœuf fondu, elles deviennent des frites au blanc, un meilleur en-cas. Un deployer les met en cornet de papier (trois papiers à l'établi ou au mechanical crafter). Les frites et les cornets comptent pour le Hachoir Suprême.
+
+- **Les sauces de friterie** — Andalouse, samouraï et américaine, à base de mayonnaise au mixer (la samouraï sur un brûleur allumé), chacune avec son seau. Sans tomates, oignons ou piments dans le pack, la betterave ou la poudre de blaze les remplacent.
+- **Les cornets sauce** — Un spout verse 50 mB de mayonnaise, curry ketchup, andalouse, samouraï ou américaine sur un cornet de frites ou de frites au blanc : dix cornets, tous comptés par le Hachoir Suprême.
 
 ### Modifications
 

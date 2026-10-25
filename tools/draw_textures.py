@@ -397,7 +397,7 @@ def main():
         # A flow texture holds two stacked frames: the game animates it only with this file beside it.
         meta = path.with_name(path.name + '.mcmeta')
         if path.name.endswith('_flow.png') and not meta.exists():
-            meta.write_text('{"animation": {"frametime": 8}}' + chr(10), encoding='utf-8')
+            meta.write_text('{"animation": {"frametime": 8}}' + chr(10), encoding='utf-8', newline=chr(10))
             written += 1
     preview(outputs)
     print(f'{len(outputs)} textures verified; {written} written; preview: build/texture-preview.html')
