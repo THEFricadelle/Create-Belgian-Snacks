@@ -173,7 +173,9 @@ public final class ClientSmokeTest {
     private static final List<? extends FluidEntry<?>> FLUIDS = BSFluids.ALL;
 
     // Names spelt the same in English and French: checked against this list, not let through silently.
-    private static final Set<String> SAME_IN_BOTH = Set.of("cassonade", "maton", "malt", "pistolet", "lardons", "meringue", "chicon", "bouchot");
+    private static final Set<String> SAME_IN_BOTH = Set.of("cassonade", "maton", "malt", "pistolet", "lardons", "meringue", "chicon", "bouchot",
+        // M16: friterie names, spelt the same in Belgian French and English.
+        "mitraillette", "boulet", "lucifer", "cervelas", "mexicano", "viandelle", "loempia", "gyros", "pita", "brochette", "bami_disc", "nasi_disc");
 
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
