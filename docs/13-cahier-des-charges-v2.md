@@ -2,7 +2,7 @@
 
 Rédigé le 25/10/2026. Base : la v1 publiée (1.0.0, jalons M0 à M9), le rapport de bug Solonion du 20/10/2026 et les choix de THEFricadelle du 25/10/2026.
 
-La v2 transforme la friterie industrielle en **cuisine belge complète** : frites, sauces, snacks de friterie, plats, douceurs et gaufres, avec leurs ingrédients (chicons, poireaux, houblon, moules, sirop de Liège, fromage de Herve, bières de cuisine), un Gaufrier, l'huile usagée à filtrer et de quoi décorer sa friterie. La vente passe par les boutiques de Create 6 (Stock Keeper et nappes), sans code de notre côté. Elle reste sur Arcadia V2 (Minecraft 1.21.1, NeoForge 21.1.x, Create 6.0.10) et garde tous les principes de la v1. Une exigence passe avant tout le reste : **retirer le mod ne doit jamais bloquer une sauvegarde ni un monde.**
+La v2 transforme la friterie industrielle en **cuisine belge complète** : frites, sauces, snacks de friterie, plats, douceurs et gaufres, avec leurs ingrédients (chicons, asperges, choux de Bruxelles, poireaux, sarrasin, moutarde, houblon, moules, sirop de Liège, fromage de Herve, jambon d'Ardenne, bières de cuisine), un Gaufrier, l'huile usagée à filtrer et de quoi décorer sa friterie. La vente passe par les boutiques de Create 6 (Stock Keeper et nappes), sans code de notre côté. Elle reste sur Arcadia V2 (Minecraft 1.21.1, NeoForge 21.1.x, Create 6.0.10) et garde tous les principes de la v1. Une exigence passe avant tout le reste : **retirer le mod ne doit jamais bloquer une sauvegarde ni un monde.**
 
 Conventions du document :
 - **Doit** = exigence ferme, vérifiée par un test ou une checklist. **Devrait** = attendu, abandonnable avec une raison écrite. **Peut** = bonus.
@@ -18,7 +18,7 @@ Conventions du document :
 | # | Objectif | Mesure de réussite |
 |---|---|---|
 | O1 | Retirer le mod laisse tout monde jouable | Test de retrait (section 3.6) vert en environnement minimal **et** dans Arcadia |
-| O2 | Coller au nom : une vraie carte belge | 58 aliments finis (section 5) : friterie, plats, douceurs, gaufres ; chacun produit par une ligne entièrement automatisable, ingrédients compris |
+| O2 | Coller au nom : une vraie carte belge | 99 aliments finis (section 5) : friterie, plats, douceurs, gaufres ; chacun produit par une ligne entièrement automatisable, ingrédients compris |
 | O3 | Pouvoir tenir une friterie avec Create | Nos snacks se vendent dans une boutique Create 6 (Stock Keeper + nappe) sans réglage particulier ; décor de friterie disponible |
 | O4 | Rester léger sur un serveur de 464 mods | Part du mod sous 1 % du thread serveur dans le scénario spark v2 (section 12.4) |
 | O5 | Tout rester réglable sans toucher au jar | Chaque recette et chaque seuil passe par datapack, tag ou config serveur |
@@ -134,7 +134,7 @@ Toute exception future **doit** être listée ici, avec un test de retrait qui l
 | Conteneur | Ce qu'on y met |
 |---|---|
 | Inventaire et ender chest du joueur | un exemplaire de chaque item du mod |
-| Champ et rivage | les 3 cultures plantées, des bouchots sous l'eau |
+| Champ et rivage | les 7 cultures plantées, des bouchots sous l'eau |
 | Coffre, tonneau, Depot, tapis, Toolbox, Vault de Create | nos items, dont les blocs-items qui portent un data component |
 | Réservoir, Spout, Basin, tuyaux de Create | chacun de nos fluides |
 | Filtres et Stock Ticker de Create | un de nos items comme filtre |
@@ -205,12 +205,12 @@ flowchart LR
 | Sauce | Spout, 50 mB d'une sauce | `cone_of_fries` | `cone_of_fries_<sauce>` | `filling/cone_of_fries_<sauce>` |
 | Cornet au blanc | Deployer, puis Spout | `fries_beef_tallow` | `cone_of_fries_beef_tallow`, puis `cone_of_fries_beef_tallow_<sauce>` | `deploying/cone_of_fries_beef_tallow`, `filling/cone_of_fries_beef_tallow_<sauce>` |
 
-- **Frites au blanc** (V-D4) : la 2e cuisson au blanc de bœuf fondu donne `fries_beef_tallow`, meilleure saturation que `fries`, et ses propres cornets (nature + 6 sauces). Elles ne sont pas dans `#create_belgian_snacks:fries`, pour ne jamais tomber dans un cornet normal.
+- **Frites au blanc** (V-D4) : la 2e cuisson au blanc de bœuf fondu donne `fries_beef_tallow`, meilleure saturation que `fries`, et ses propres cornets (nature + 9 sauces). Elles ne sont pas dans `#create_belgian_snacks:fries`, pour ne jamais tomber dans un cornet normal.
 - **Choix de la recette par la Friteuse** (nouveau, M11) : `frying/fries` accepte toute graisse `#frying_oils`, blanc de bœuf compris. La Friteuse choisit donc parmi les recettes de l'item celles que la chaleur **et la graisse du réservoir** permettent, la plus spécifique d'abord (ingrédient fluide le plus restreint). Avec du blanc de bœuf fondu : frites au blanc ; avec toute autre huile : frites normales. GameTest dédié.
 - Compat : `fries` rejoint un tag `c:foods/fries` ; nos recettes de cornet lisent `#create_belgian_snacks:fries`, qui contient nos frites et `burgermod:fries` (présent dans Arcadia, entrée optionnelle).
 - Secours sans pomme de terre de mod : la pomme de terre vanilla est dans `c:crops/potato`, aucun secours nécessaire.
 
-### 5.2 Sauces (4 nouveaux fluides)
+### 5.2 Sauces (7 nouveaux fluides)
 
 | ID | FR / EN | Couleur | Recette (Mixer) | Condition / secours |
 |---|---|---|---|---|
@@ -218,9 +218,13 @@ flowchart LR
 | `samourai` | Sauce samouraï / Samurai Sauce | rouge orangé `#D9542B` | 250 mB `mayonnaise` + 1 piment (`#create_belgian_snacks:hot_peppers`) + 1 `belgian_spices`, **chauffé** → 250 mB | secours : poudre de blaze à la place du piment (V-D5) |
 | `americaine` | Sauce américaine / Américaine Sauce | rose `#E89A7A` | 250 mB `mayonnaise` + 50 mB `curry_ketchup` + 1 oignon (`c:crops/onion`) → 300 mB | betterave si tag oignon vide |
 | `sauce_lapin` | Sauce lapin / Liège Sauce | brun `#5A3218` | 250 mB `liege_syrup` + 1 oignon + 1 `belgian_spices`, **chauffé** → 250 mB | betterave si tag oignon vide |
+| `tartare` | Sauce tartare / Tartar Sauce | vert pâle `#D8DDB0` | 250 mB `mayonnaise` + 50 mB `pickles` + 1 oignon → 300 mB | betterave si tag oignon vide |
+| `pickles` | Pickles (piccalilli) / Piccalilli | jaune moutarde `#D9B23A` | **chauffé** : 250 mB `vinegar` + 50 mB `mustard` + 1 carotte + 1 oignon + 1 `brussels_sprout` + 1 `belgian_spices` → 250 mB | betterave si tag oignon vide |
+| `brazil` | Sauce brazil / Brazil Sauce | jaune `#F2C14E` | 250 mB `mayonnaise` + 50 mB `curry_ketchup` + 1 ananas (`#create_belgian_snacks:pineapples` = `c:foods/pineapple` optionnel) → 300 mB | tranche de pastèque si aucun ananas |
 
 - `#create_belgian_snacks:hot_peppers` : vide par défaut, entrées optionnelles des mods de piment du pack (`mynethersdelight:bullet_pepper` dans Arcadia 2.0.32 ; à compléter par l'export).
-- Nouveau tag fluide `create_belgian_snacks:sauces` = les 6 sauces (mayonnaise, curry ketchup et les 4 nouvelles). Sert à la mitraillette.
+- Nouveau tag fluide `create_belgian_snacks:sauces` = les 9 sauces (mayonnaise, curry ketchup et les 7 nouvelles). Sert à la mitraillette, au burger, à la pita.
+- Tartare, pickles et brazil dépendent du vinaigre et de la moutarde : elles arrivent au jalon M16, avec leurs cornets.
 - Chaque fluide : `still`, `flow` animé, seau dans `c:buckets`, comme la v1.
 
 ### 5.3 Mitraillette
@@ -249,10 +253,11 @@ Valeur proposée : 14 de nutrition, saturation 1.2. THE_Fricadelle et THE_FRICAD
 | Étape | Machine | Détail |
 |---|---|---|
 | Farce | Mixer | 2 crevettes (`#create_belgian_snacks:shrimps`) + 250 mB de lait (fluide de NeoForge, activé par Create) + 1 `#c:bread_crumbs` → `shrimp_croquette_mix` |
-| Panure | Sequenced Assembly, 1 boucle | Deployer œuf (`#c:eggs`, V-D6) → Deployer `#c:bread_crumbs` → Press → `raw_shrimp_croquette` |
+| Panure | Sequenced Assembly, 1 boucle, item de transition partagé `incomplete_croquette` | Deployer œuf (`#c:eggs`, V-D6) → Deployer `#c:bread_crumbs` → Press → `raw_shrimp_croquette` |
 | Friture | Friteuse chauffée | → `shrimp_croquette` (100 ticks, 10 mB) |
 
 - `#create_belgian_snacks:shrimps` : `crabbersdelight:shrimp` (présent dans Arcadia) en optionnel + tags `c:` de crevettes existants. Sans aucune crevette chargée : recette de secours au cabillaud (`minecraft:cod`), derrière `neoforge:tag_empty`.
+- **Items de transition partagés** : toutes nos croquettes (crevettes, fromage, poulet, lucifer) passent par `incomplete_croquette`, et toutes nos tartes (sucre, flamiche, mattentaart) par `incomplete_tart`. Create garde l'identifiant de la recette dans l'item en cours, ce qui rend le partage possible : **à vérifier dans les sources de Create 6.0.10** au jalon M16, sinon un item par recette.
 
 ### 5.6 Gaufres
 
@@ -274,7 +279,8 @@ Tous produits par des machines de Create. Deux procédés natifs servent beaucou
 | `pearl_sugar` | Sucre perlé / Pearl Sugar | Compacting : 4 sucre → 2 | `compacting/pearl_sugar` |
 | `cassonade` | Cassonade / Cassonade | Mixer **chauffé** : 2 sucre → 1 (caramélisation) | `mixing/cassonade` |
 | `powdered_sugar` | Sucre glace / Powdered Sugar | Meule : 1 sucre → 1 | `milling/powdered_sugar` |
-| `butter` | Beurre / Butter | Mixer : 1000 mB de lait → 2. Tag `butters` = le nôtre + `c:foods/butter` + `c:butter` (optionnels) ; recette désactivée si le scan trouve déjà une baratte au Mixer dans le pack | `mixing/butter` |
+| `cream` (fluide) | Crème / Cream | Mixer (froid) : 1000 mB de lait, 600 ticks → 250 mB | `mixing/cream` |
+| `butter` | Beurre / Butter | Mixer : 250 mB `cream` → 1 (barattage). Tag `butters` = le nôtre + `c:foods/butter` + `c:butter` (optionnels) ; recette désactivée si le scan trouve déjà une baratte au Mixer dans le pack | `mixing/butter` |
 | `young_herve_cheese` → `herve_cheese` | Fromage de Herve / Herve Cheese | Compacting : 1000 mB de lait → 1 jeune ; **lavage** au ventilateur (croûte lavée) → `herve_cheese`. Mangeable : Nausée 3 s, tooltip sur l'odeur. Rejoint `c:foods/cheese` | `compacting/young_herve_cheese`, `splashing/herve_cheese` |
 | `pistolet_dough` → `pistolet` | Pistolet / Pistolet (petit pain belge) | Mechanical Saw : 1 `create:dough` → 2 pâtons ; **fumage** (ou four) → `pistolet` | `cutting/pistolet_dough`, `smoking/pistolet`, `smelting/pistolet` |
 | `puff_pastry` | Pâte feuilletée / Puff Pastry | Compacting : 1 `create:dough` + 1 beurre → 1 | `compacting/puff_pastry` |
@@ -282,21 +288,41 @@ Tous produits par des machines de Create. Deux procédés natifs servent beaucou
 | `liege_syrup` (fluide) | Sirop de Liège / Liège Syrup | Mixer **chauffé** : 3 pommes + 1 sucre + 1 baie (`#c:foods/berry`, à la place des dattes) → 250 mB | `mixing/liege_syrup` |
 | `brewers_yeast` | Levure de bière / Brewer's Yeast | Mixer : 1 pain + 1 sucre + 250 mB d'eau → 2 | `mixing/brewers_yeast` |
 | `sprouted_grain` → `malt` | Malt / Malt | **Lavage** : 1 grain (`#create_belgian_snacks:malting_grains` = blé + `c:crops/barley`) → `sprouted_grain` ; **fumage** → `malt` | `splashing/sprouted_grain`, `smoking/malt` |
+| `salt` | Sel / Salt | Mixer **chauffé** : 1000 mB d'eau, 400 ticks → 1 (évaporation). Tag `salts` = le nôtre + `c:dusts/salt` + `c:salt` (optionnels) | `mixing/salt` |
+| `vinegar` (fluide) | Vinaigre / Vinegar | Mixer : 3 pommes + 250 mB d'eau, 1200 ticks → 250 mB ; ou 1000 mB `blonde_beer`, 2400 ticks → 1000 mB (vinaigre de bière) | `mixing/vinegar`, `mixing/vinegar_from_beer` |
+| `mustard` (fluide) | Moutarde / Mustard | Meule : 1 `mustard_seeds` → 1 `mustard_powder` ; Mixer : 2 poudres + 100 mB `vinegar` + 100 mB d'eau → 250 mB | `milling/mustard_powder`, `mixing/mustard` |
+| `buckwheat_flour` | Farine de sarrasin / Buckwheat Flour | Meule : 1 `buckwheat` → 1 | `milling/buckwheat_flour` |
+| `lardons` | Lardons / Lardons | Mechanical Saw : 1 porc cru → 3. Tag `lardons` = les nôtres + `c:foods/raw_bacon` (optionnel). Avec Slice & Dice (Arcadia), la scie coupe déjà le porc en bacon de Farmer's Delight : notre recette se désactive (`neoforge:not` + `mod_loaded`) et le bacon de FD sert | `cutting/lardons` |
+| `brined_ham` → `ardennes_ham` | Jambon d'Ardenne / Ardennes Ham | Mixer : 1 porc cru + 1 sel → `brined_ham` ; **fumage** → `ardennes_ham` (mangeable, rejoint `#hams`) | `mixing/brined_ham`, `smoking/ardennes_ham` |
+| `raw_meringue` → `meringue` | Meringue / Meringue | Mixer : 1 œuf + 1 sucre → 2 `raw_meringue` ; **fumage** (séchage doux) → `meringue` | `mixing/raw_meringue`, `smoking/meringue` |
+| `raisins` | Raisins secs / Raisins | **Fumage** : 1 raisin (`c:foods/grape`, optionnel) → 1 ; secours : baies sucrées, derrière `tag_empty` | `smoking/raisins` |
+| `apple_compote` | Compote de pommes / Apple Compote | Mixer **chauffé** : 3 pommes + 1 sucre + 1 bol → 1 (en bol) | `mixing/apple_compote` |
+| `maton` | Maton / Maton (caillé) | Mixer : 500 mB de lait + 50 mB `vinegar` → 1 | `mixing/maton` |
+| `brioche_dough` | Pâte à brioche / Brioche Dough | Mixer : 1 `create:wheat_flour` + 1 beurre + 1 œuf + 1 sucre + 1 levure → 2 | `mixing/brioche_dough` |
+| `burger_bun_dough` → `burger_bun` | Pain à burger / Burger Bun | Mechanical Saw : 1 `brioche_dough` → 2 pâtons ; **fumage** → `burger_bun` | `cutting/burger_bun_dough`, `smoking/burger_bun` |
+| `pita_dough` → `raw_pita` → `pita_bread` | Pain pita / Pita Bread | Mixer : 1 `create:wheat_flour` + 1 levure + 250 mB d'eau → 2 `pita_dough` ; Press → `raw_pita` ; **fumage** → `pita_bread` | `mixing/pita_dough`, `pressing/pita_dough`, `smoking/pita_bread` |
+| `noodles` | Nouilles / Noodles | Mixer : 1 `create:wheat_flour` + 1 œuf + 250 mB d'eau → 2. Tag `noodles` = les nôtres + pâtes crues d'autres mods (optionnel) | `mixing/noodles` |
+| `chocolate_shavings` | Copeaux de chocolat / Chocolate Shavings | Crushing : 1 `create:bar_of_chocolate` → 2 | `crushing/chocolate_shavings` |
+| `vanilla_ice_cream` | Glace vanille / Vanilla Ice Cream | Compacting : 250 mB `cream` + 1 sucre + 1 glace (`minecraft:ice`) → 2. Tag `vanilla_ice_creams` = la nôtre + glaces vanille de Create Ice Creams (optionnel) | `compacting/vanilla_ice_cream` |
 
-Fluides `bechamel` et `liege_syrup` : `still`, `flow` animé, seau, comme les autres. Le sirop de Liège remplace aussi le sucre et la baie dans la sauce lapin (section 5.2).
+Fluides `cream`, `bechamel`, `liege_syrup`, `vinegar` et `mustard` : `still`, `flow` animé, seau, comme les autres. Le sirop de Liège remplace aussi le sucre et la baie dans la sauce lapin (section 5.2).
 
 ### 5.8 Cultures et moules
 
 | Culture | Bloc | Comment l'obtenir | Pousse | Récolte |
 |---|---|---|---|---|
-| **Chicon** (endive) | `chicon_crop`, âge 0 à 3, sur terre labourée | Racine `chicory_root` : 3 % des hautes herbes (loot modifier) | **Seulement dans le noir** : lumière ≤ `crops.chiconMaxLight` (4), comme le vrai chicon forcé en cave. À la lumière, rien ne pousse (particules de fumée au tick aléatoire, rien d'autre) | 2 à 3 `chicon` + 50 % de racine |
+| **Chicon** (endive) | `chicon_crop`, âge 0 à 3, sur terre labourée | Racine `chicory_root` : 3 % des hautes herbes (loot modifier) | **Seulement dans le noir** : lumière ≤ `crops.darkMaxLight` (4), comme le vrai chicon forcé en cave. À la lumière, rien ne pousse (particules de fumée au tick aléatoire, rien d'autre) | 2 à 3 `chicon` + 50 % de racine |
 | **Poireau** | `leek_crop`, âge 0 à 7 | `leek` se plante comme une carotte : 3 % des hautes herbes, coffres de village (loot modifier) | Normale | 1 à 3 `leek`. Tag `c:crops/leek` |
-| **Houblon** | `hops_crop`, âge 0 à 7 | `hop_seeds` : 3 % des hautes herbes | Normale | 1 à 2 `hops` + graines |
+| **Houblon** | `hops_crop`, âge 0 à 7 | `hop_seeds` : 3 % des hautes herbes | Normale | 1 à 2 `hops` + graines ; 50 % de `hop_shoots` (jets de houblon, un mets de saison) |
+| **Choux de Bruxelles** | `brussels_sprouts_crop`, âge 0 à 7 | `brussels_sprout` se plante tel quel : 3 % des hautes herbes | Normale | 2 à 4 `brussels_sprout` |
+| **Asperges** | `asparagus_crop`, âge 0 à 3 | Griffe `asparagus_crown` : 2 % des hautes herbes | Normale | **À la lumière** : `green_asparagus` ; **dans le noir** (lumière ≤ `crops.darkMaxLight`) : `white_asparagus`, l'« or blanc » de la cuisine flamande. Même culture, deux récoltes : c'est l'éclairage qui décide |
+| **Sarrasin** | `buckwheat_crop`, âge 0 à 7 | `buckwheat` : 3 % des hautes herbes | Normale | 2 à 3 `buckwheat` |
+| **Moutarde** | `mustard_crop`, âge 0 à 7 | `mustard_seeds` : 3 % des hautes herbes | Normale | 2 à 4 `mustard_seeds` |
 | **Moules** | `bouchot` (pieu de bouchot, sous l'eau, sur sable ou gravier), âge 0 à 3 | Moules : 5 % des prises de pêche en océan et plage (loot modifier). Le pieu : établi, 3 bâtons + 1 ficelle + 1 `mussel` | Tick aléatoire, seulement immergé | Mûr : 2 à 4 `mussel` par clic droit ou Mechanical Harvester ; le pieu revient à l'âge 0 |
 
-- **Automatisation** : les trois cultures étendent `CropBlock`, donc le Mechanical Harvester de Create et les Deployers les récoltent. Le bouchot n'est pas une culture : son comportement avec le Harvester est **à vérifier dans les sources de Create 6.0.10** au jalon (règle du `CLAUDE.md`) ; à défaut, récolte par Deployer (clic droit simulé).
+- **Automatisation** : les sept cultures étendent `CropBlock`, donc le Mechanical Harvester de Create et les Deployers les récoltent. Le bouchot n'est pas une culture : son comportement avec le Harvester est **à vérifier dans les sources de Create 6.0.10** au jalon (règle du `CLAUDE.md`) ; à défaut, récolte par Deployer (clic droit simulé).
 - **Loot modifiers** : `data/create_belgian_snacks/loot_modifiers/*.json`, générés, modifiables ou désactivables par datapack ou LootJS. Rien n'est écrit dans le monde : sans danger pour la règle E1.
-- **Compat** : Botany Pots (présent dans Arcadia) reçoit nos trois cultures par datapack derrière `neoforge:mod_loaded` ; tags `c:crops/*` et `c:seeds/*` remplis.
+- **Compat** : Botany Pots (présent dans Arcadia) reçoit nos sept cultures par datapack derrière `neoforge:mod_loaded` ; tags `c:crops/*` et `c:seeds/*` remplis.
 - **Retrait du mod** : cultures et bouchots deviennent de l'air (règle R3), testé par `uninstall_smoke.py`.
 
 ### 5.9 Bières (ingrédient de cuisine)
@@ -326,6 +352,13 @@ Décidé le 25/10/2026 : la bière n'existe qu'en **fluide pour cuisiner**. Aucu
 | **Filet américain** | Mixer (froid, pas de cuisson : c'est la recette) : 2 `#bs:minced_meats/beef` + 100 mB `mayonnaise` + 1 oignon + 1 épices → `filet_americain` (en bol) | `mixing/filet_americain` |
 | **Pistolet américain** | Deployer `filet_americain` sur `pistolet` → `pistolet_americain` (le bol revient au Deployer) | `deploying/pistolet_americain` |
 | **Américain-frites** | Deployer `#bs:fries` sur `filet_americain` → `americain_frites` | `deploying/americain_frites` |
+| **Burger de friterie** | Press : 1 `#bs:minced_meats/beef` → `raw_patty` ; Friteuse → `patty` ; Sequenced Assembly sur `burger_bun`, 1 boucle : Deployer `patty` → Deployer oignon → Spout 50 mB `#sauces` → `friterie_burger` | `pressing/raw_patty`, `frying/patty`, `sequenced_assembly/friterie_burger` |
+| **Pita** | Mixer **chauffé** : 2 `#bs:minced_meats/pork` + 1 épices → `gyros` ; Sequenced Assembly sur `pita_bread`, 1 boucle : Deployer `gyros` → Deployer oignon → Deployer tomate (`c:crops/tomato`, betterave sans tomate) → Spout 50 mB `#sauces` → `pita` | `mixing/gyros`, `sequenced_assembly/pita` |
+| **Brochette** | Sequenced Assembly sur `minecraft:stick`, 1 boucle : Deployer porc cru → Deployer oignon → Deployer porc cru → `raw_brochette` ; Friteuse → `brochette` | `sequenced_assembly/raw_brochette`, `frying/brochette` |
+| **Croquette de poulet** | Mixer : 2 `#bs:minced_meats/chicken` + 250 mB `bechamel` → `chicken_croquette_mix` ; Sequenced Assembly des croquettes → `raw_chicken_croquette` ; Friteuse → `chicken_croquette` | `mixing/chicken_croquette_mix`, `sequenced_assembly/raw_chicken_croquette`, `frying/chicken_croquette` |
+| **Lucifer** (croquette pimentée) | Mixer : 1 `#bs:minced_meats/pork` + 50 mB `samourai` + 100 mB `bechamel` → `lucifer_mix` ; Sequenced Assembly des croquettes → `raw_lucifer` ; Friteuse → `lucifer` | `mixing/lucifer_mix`, `sequenced_assembly/raw_lucifer`, `frying/lucifer` |
+| **Bamischijf** (galette de bami) | Mixer : 2 `#create_belgian_snacks:noodles` + 1 `#bs:minced_meats/pork` + 1 `leek` + 1 épices → `bami_mix` ; Press → `raw_bami_disc` ; Friteuse → `bami_disc` | `mixing/bami_mix`, `pressing/bami_mix`, `frying/bami_disc` |
+| **Calamars à la romaine** | Mechanical Saw : 1 calmar (`#create_belgian_snacks:squids` = `c:foods/raw_squid`, optionnel) → 3 `squid_rings` ; Friteuse → `calamars`. Sans aucun calmar chargé : pas de recette | `cutting/squid_rings`, `frying/calamars` |
 
 `#create_belgian_snacks:mitraillette_meats` (section 5.3) s'étend à `cervelas`, `mexicano`, `viandelle` et `filet_americain`.
 
@@ -344,6 +377,16 @@ Plats en bol : le bol est consommé par le Mixer et rendu en mangeant, comme les
 | **Waterzooi** | Mixer **chauffé** : 1 poulet cru (`#c:foods/raw_chicken`) + 1 `leek` + 1 carotte + 250 mB de lait + 1 bol → `waterzooi` | `mixing/waterzooi` |
 | **Vol-au-vent** | Mechanical Saw : 1 `puff_pastry` → 2 `raw_vol_au_vent_shell` ; **fumage** → `vol_au_vent_shell` ; Sequenced Assembly, 1 boucle : Deployer poulet cuit (`#c:foods/cooked_chicken`) → Deployer champignon (`#c:mushrooms`) → Spout 100 mB `bechamel` → `vol_au_vent` | `cutting/raw_vol_au_vent_shell`, `smoking/vol_au_vent_shell`, `sequenced_assembly/vol_au_vent` |
 | **Lapin à la gueuze** | Mixer **chauffé** : 1 lapin cru + 2 pruneaux (`#create_belgian_snacks:prunes` = `c:foods/plum` optionnel ; secours baies sucrées) + 1 oignon + 250 mB `gueuze` + 1 bol → `lapin_a_la_gueuze` | `mixing/lapin_a_la_gueuze` |
+| **Steak-frites** | Deployer `#bs:fries` sur un steak cuit (`c:foods/cooked_beef`) → `steak_frites` | `deploying/steak_frites` |
+| **Boudin-compote** | Mixer : 1 `#bs:minced_meats/pork` + 250 mB de lait + 1 `#c:bread_crumbs` → `raw_boudin` ; **fumage** (poché) → `boudin` ; Deployer `apple_compote` → `boudin_compote` | `mixing/raw_boudin`, `smoking/boudin`, `deploying/boudin_compote` |
+| **Choux de Bruxelles au lard** | Mixer **chauffé** : 4 `brussels_sprout` + 1 `#lardons` + 1 beurre + 1 bol → `brussels_sprouts_bacon` | `mixing/brussels_sprouts_bacon` |
+| **Asperges à la flamande** | Mixer **chauffé** : 3 `white_asparagus` + 1 œuf + 1 beurre + 1 bol → `asparagus_flemish` | `mixing/asparagus_flemish` |
+| **Flamiche** (tarte aux poireaux, Dinant) | Sequenced Assembly sur `tart_shell` (item `incomplete_tart`), 1 boucle : Deployer `leek` → Spout 250 mB `cream` → Deployer œuf → `raw_flamiche` ; **fumage** → `flamiche` | `sequenced_assembly/raw_flamiche`, `smoking/flamiche` |
+| **Jets de houblon à la crème** | Mixer **chauffé** : 3 `hop_shoots` + 250 mB `cream` + 1 bol → `hop_shoots_cream` | `mixing/hop_shoots_cream` |
+| **Salade liégeoise** | Mixer (froid) : 2 pommes de terre cuites + 1 `#lardons` + 1 oignon + 50 mB `vinegar` + 1 bol → `salade_liegeoise` | `mixing/salade_liegeoise` |
+| **Hochepot** | Mixer **chauffé** : 1 bœuf cru + 1 porc cru + 2 `brussels_sprout` + 1 carotte + 1 `leek` + 500 mB d'eau + 1 bol → `hochepot` | `mixing/hochepot` |
+| **Escavèche** | Mixer (froid), 600 ticks (marinade) : 1 poisson cuit (`c:foods/cooked_fish`) + 100 mB `vinegar` + 1 oignon + 1 bol → `escaveche` | `mixing/escaveche` |
+| **Croque-monsieur** | Sequenced Assembly sur `minecraft:bread`, 1 boucle : Deployer jambon (`#hams`, jambon d'Ardenne compris) → Deployer fromage (`#c:foods/cheese`) → Press → `raw_croque_monsieur` ; **fumage** → `croque_monsieur` | `sequenced_assembly/raw_croque_monsieur`, `smoking/croque_monsieur` |
 
 ### 5.12 Douceurs
 
@@ -359,7 +402,16 @@ Plats en bol : le bol est consommé par le Mixer et rendu en mangeant, comme les
 | **Croustillons** | Mixer : 1 `create:wheat_flour` + 1 œuf + 1 sucre + 250 mB `blonde_beer` → 4 `croustillon_dough` ; Friteuse chauffée (par lot) → `croustillons` ; Deployer `powdered_sugar` → `croustillons_sugared` | `mixing/croustillon_dough`, `frying/croustillons`, `deploying/croustillons_sugared` |
 | **Couque de Dinant** | Mixer : 1 `create:wheat_flour` + 250 mB `create:honey` → `couque_dough` ; Press (moule) → `raw_couque` ; **fumage** → `couque_de_dinant`. Très dure : temps pour manger × 4, tooltip « Ne pas croquer. Laisser fondre. » | `mixing/couque_dough`, `pressing/couque_dough`, `smoking/couque_de_dinant` |
 | **Tarte au riz** | Press : 1 `puff_pastry` → `tart_shell` ; Mixer **chauffé** : 1 riz (`#c:crops/rice`) + 250 mB de lait + 1 sucre → `rice_filling` ; Deployer `rice_filling` sur `tart_shell` → `raw_tarte_au_riz` ; **fumage** → `tarte_au_riz`. Sans aucun riz chargé : pas de tarte au riz (la tarte au sucre reste) | `pressing/tart_shell`, `mixing/rice_filling`, `deploying/raw_tarte_au_riz`, `smoking/tarte_au_riz` |
-| **Tarte au sucre** | Sequenced Assembly sur `tart_shell`, 1 boucle : Deployer `cassonade` → Deployer œuf → `raw_tarte_au_sucre` ; **fumage** → `tarte_au_sucre` | `sequenced_assembly/raw_tarte_au_sucre`, `smoking/tarte_au_sucre` |
+| **Tarte au sucre** | Sequenced Assembly sur `tart_shell` (item `incomplete_tart`), 1 boucle : Deployer `cassonade` → Deployer œuf → `raw_tarte_au_sucre` ; **fumage** → `tarte_au_sucre` | `sequenced_assembly/raw_tarte_au_sucre`, `smoking/tarte_au_sucre` |
+| **Mattentaart** (Grammont) | Sequenced Assembly sur `tart_shell` (item `incomplete_tart`), 1 boucle : Deployer `maton` → Deployer œuf → `raw_mattentaart` ; **fumage** → `mattentaart` | `sequenced_assembly/raw_mattentaart`, `smoking/mattentaart` |
+| **Craquelin** | Mixer : 1 `brioche_dough` + 2 `pearl_sugar` → `raw_craquelin` ; **fumage** → `craquelin` | `mixing/raw_craquelin`, `smoking/craquelin` |
+| **Cramique** | Mixer : 1 `brioche_dough` + 2 `raisins` → `raw_cramique` ; **fumage** → `cramique` | `mixing/raw_cramique`, `smoking/cramique` |
+| **Pain à la grecque** | Press : 1 `brioche_dough` → `flat_brioche` ; Deployer `cassonade` → `raw_pain_a_la_grecque` ; **fumage** → `pain_a_la_grecque` | `pressing/flat_brioche`, `deploying/raw_pain_a_la_grecque`, `smoking/pain_a_la_grecque` |
+| **Merveilleux** | Sequenced Assembly sur `meringue`, 1 boucle : Spout 100 mB `cream` → Deployer `meringue` → Deployer `chocolate_shavings` → `merveilleux` | `sequenced_assembly/merveilleux` |
+| **Bouquettes** (Liège) | Mixer : 1 `buckwheat_flour` + 250 mB de lait + 1 œuf + 1 levure + 1 `raisins` → 4 `bouquette_batter` ; Friteuse chauffée (cuites dans la graisse) → `bouquette` ; Deployer `cassonade` → `bouquette_cassonade` | `mixing/bouquette_batter`, `frying/bouquette`, `deploying/bouquette_cassonade` |
+| **Dame blanche** | Spout 50 mB `create:chocolate` sur `#vanilla_ice_creams` → `dame_blanche` | `filling/dame_blanche` |
+| **Babelutte** (Flandre) | Mixer **chauffé** : 2 `cassonade` + 1 beurre → 4 `babelutte` | `mixing/babelutte` |
+| **Chocolat chaud** (boisson, sans alcool) | Mixer **chauffé** : 250 mB de lait + 100 mB `create:chocolate` → 250 mB fluide `hot_chocolate` ; Spout 250 mB sur une bouteille en verre → `hot_chocolate_bottle` (se boit, rend la bouteille) | `mixing/hot_chocolate`, `filling/hot_chocolate_bottle` |
 
 Le lacquemant est avec les gaufres (section 5.6), puisqu'il passe au Gaufrier.
 
@@ -367,22 +419,23 @@ Le lacquemant est avec les gaufres (section 5.6), puisqu'il passe au Gaufrier.
 
 | Famille | Items | Dont mangeables (comptent pour le Hachoir, V-D1) |
 |---|---|---|
-| Frites et cornets | `raw_fries`, `blanched_fries`, `fries`, `fries_beef_tallow`, `paper_cone`, `cone_of_fries` + 6 sauces, `cone_of_fries_beef_tallow` + 6 sauces | 16 |
-| Mitraillette, boulets, croquettes de crevettes | `half_baguette`, `incomplete_mitraillette`, `mitraillette`, `boulet_paste`, `raw_boulet`, `boulet`, `boulets_liegeois`, `shrimp_croquette_mix`, `incomplete_shrimp_croquette`, `raw_shrimp_croquette`, `shrimp_croquette` | 4 |
+| Frites et cornets | `raw_fries`, `blanched_fries`, `fries`, `fries_beef_tallow`, `paper_cone`, `cone_of_fries` + 9 sauces, `cone_of_fries_beef_tallow` + 9 sauces | 22 |
+| Mitraillette, boulets, croquettes de crevettes | `half_baguette`, `incomplete_mitraillette`, `mitraillette`, `boulet_paste`, `raw_boulet`, `boulet`, `boulets_liegeois`, `shrimp_croquette_mix`, `incomplete_croquette` (partagé), `raw_shrimp_croquette`, `shrimp_croquette` | 4 |
 | Gaufres | `liege_waffle_dough`, `brussels_waffle_batter`, `lacquemant_batter`, `lacquemant_wafer`, `liege_waffle`, `brussels_waffle`, `brussels_waffle_sugared`, `brussels_waffle_chocolate`, `brussels_waffle_speculoos`, `lacquemant` | 6 |
-| Ingrédients de base | `pearl_sugar`, `cassonade`, `powdered_sugar`, `butter`, `young_herve_cheese`, `herve_cheese`, `pistolet_dough`, `pistolet`, `puff_pastry`, `brewers_yeast`, `sprouted_grain`, `malt` | 2 (`herve_cheese`, `pistolet`) |
-| Cultures et moules | `chicory_root`, `chicon`, `leek`, `hop_seeds`, `hops`, `mussel` | 0 (ingrédients crus) |
-| Snacks de friterie | `cervelas_mix`, `raw_cervelas`, `cervelas`, `mexicano_mix`, `raw_mexicano`, `mexicano`, `viandelle_mix`, `raw_viandelle`, `viandelle`, `cheese_croquette_mix`, `incomplete_cheese_croquette`, `raw_cheese_croquette`, `cheese_croquette`, `loempia_wrapper`, `incomplete_loempia`, `raw_loempia`, `loempia`, `filet_americain`, `pistolet_americain`, `americain_frites` | 8 |
-| Plats belges | `moules_marinieres`, `moules_a_la_biere`, `moules_frites`, `carbonnade`, `carbonnade_frites`, `stoemp`, `stoemp_saucisse`, `incomplete_chicons_au_gratin`, `raw_chicons_au_gratin`, `chicons_au_gratin`, `waterzooi`, `raw_vol_au_vent_shell`, `vol_au_vent_shell`, `incomplete_vol_au_vent`, `vol_au_vent`, `lapin_a_la_gueuze` | 11 |
-| Douceurs | `speculoos_dough`, `raw_speculoos`, `speculoos`, `speculoos_crumbs`, `pistolet_speculoos`, `cuberdon`, `praline`, `praline_kriek`, `ballotin`, `croustillon_dough`, `croustillons`, `croustillons_sugared`, `couque_dough`, `raw_couque`, `couque_de_dinant`, `tart_shell`, `rice_filling`, `raw_tarte_au_riz`, `tarte_au_riz`, `incomplete_tarte_au_sucre`, `raw_tarte_au_sucre`, `tarte_au_sucre` | 11 |
+| Ingrédients de base | `pearl_sugar`, `cassonade`, `powdered_sugar`, `butter`, `young_herve_cheese`, `herve_cheese`, `pistolet_dough`, `pistolet`, `puff_pastry`, `brewers_yeast`, `sprouted_grain`, `malt`, `salt`, `mustard_powder`, `buckwheat_flour`, `lardons`, `brined_ham`, `ardennes_ham`, `raw_meringue`, `meringue`, `raisins`, `apple_compote`, `maton`, `brioche_dough`, `burger_bun_dough`, `burger_bun`, `pita_dough`, `raw_pita`, `pita_bread`, `noodles`, `chocolate_shavings`, `vanilla_ice_cream` | 7 (`herve_cheese`, `pistolet`, `ardennes_ham`, `meringue`, `raisins`, `apple_compote`, `vanilla_ice_cream`) |
+| Cultures et moules | `chicory_root`, `chicon`, `leek`, `hop_seeds`, `hops`, `hop_shoots`, `brussels_sprout`, `asparagus_crown`, `white_asparagus`, `green_asparagus`, `buckwheat`, `mustard_seeds`, `mussel` | 0 (ingrédients crus) |
+| Snacks de friterie | les 20 de la première carte (cervelas, mexicano, viandelle, croquette au fromage, loempia, américain et leurs intermédiaires, sans `incomplete_cheese_croquette`) + `raw_patty`, `patty`, `incomplete_friterie_burger`, `friterie_burger`, `gyros`, `incomplete_pita`, `pita`, `incomplete_brochette`, `raw_brochette`, `brochette`, `chicken_croquette_mix`, `raw_chicken_croquette`, `chicken_croquette`, `lucifer_mix`, `raw_lucifer`, `lucifer`, `bami_mix`, `raw_bami_disc`, `bami_disc`, `squid_rings`, `calamars` | 17 |
+| Plats belges | les 16 de la première carte + `steak_frites`, `raw_boudin`, `boudin`, `boudin_compote`, `brussels_sprouts_bacon`, `asparagus_flemish`, `raw_flamiche`, `flamiche`, `hop_shoots_cream`, `salade_liegeoise`, `hochepot`, `escaveche`, `raw_croque_monsieur`, `croque_monsieur` (+ `incomplete_croque_monsieur`) | 22 |
+| Douceurs et boissons | les 22 de la première carte (`incomplete_tarte_au_sucre` devient `incomplete_tart`, partagé) + `raw_mattentaart`, `mattentaart`, `raw_craquelin`, `craquelin`, `raw_cramique`, `cramique`, `flat_brioche`, `raw_pain_a_la_grecque`, `pain_a_la_grecque`, `incomplete_merveilleux`, `merveilleux`, `bouquette_batter`, `bouquette`, `bouquette_cassonade`, `dame_blanche`, `babelutte`, `hot_chocolate_bottle` | 21 |
 | Huile usagée | `oil_filter`, `used_oil_filter` | 0 |
 
-**Total v2** : environ **118 items** (dont 58 aliments finis), **13 fluides** et leurs seaux (4 sauces, huile usagée, béchamel, sirop de Liège, pâte de speculoos, moût, 4 bières), **12 blocs** (Gaufrier, 3 enseignes, 4 néons, 3 cultures, bouchot).
+**Total v2** : environ **203 items** (dont **99 aliments finis**), **20 fluides** et leurs seaux (7 sauces, huile usagée, crème, béchamel, sirop de Liège, vinaigre, moutarde, pâte de speculoos, chocolat chaud, moût, 4 bières), **16 blocs** (Gaufrier, 3 enseignes, 4 néons, 7 cultures, bouchot).
 
-- **Hachoir** : les 58 aliments finis portent le total du FoodIndex d'Arcadia d'environ 1804 à environ 1862. Un Hachoir en cours en mode ULTIME perd environ 3 points de pourcentage à la mise à jour : à annoncer dans le CHANGELOG.
-- **Mangeables par erreur** : les intermédiaires crus (pâtes, `raw_*`, `chicon`, `leek`, `mussel`) ne sont pas mangeables, sauf décision contraire au jalon.
+- **Hachoir** : les 99 aliments finis portent le total du FoodIndex d'Arcadia d'environ 1804 à environ 1903. Un Hachoir en cours en mode ULTIME perd environ 5 points de pourcentage à la mise à jour : à annoncer dans le CHANGELOG. Le palier 2 (10 %) passe d'environ 181 à 191 aliments.
+- **Mangeables par erreur** : les intermédiaires crus (pâtes, `raw_*`, légumes, `mussel`) ne sont pas mangeables, sauf décision contraire au jalon.
 - **Valeurs nutritives** : fixées au jalon qui introduit chaque famille, dans un tableau ajouté à `08-decisions-ouvertes.md`. Règle de départ : un plat en bol vaut plus qu'un snack, et chaque étape de chaîne en plus rapporte de la saturation.
-- **Textures** : environ 118 textures d'items, 13 couples de textures de fluide et 13 seaux, plus les stades des cultures (4 + 8 + 8 + 4). Les intermédiaires partagent des gabarits (pâte, cru, en cours) pour alléger le dessin (section 11).
+- **Textures** : environ 203 textures d'items, 20 couples de textures de fluide et 20 seaux, plus les stades des 7 cultures et du bouchot (environ 44). Les intermédiaires partagent des gabarits (pâte, cru, en cours, en bol) : environ 60 textures se déclinent d'un gabarit par changement de palette (section 11).
+- **Conflits** : plusieurs recettes passent par la pâte de Create (scie, presse, compacteur) et par le porc cru (scie). Le scan des conflits du jalon M13 les vérifie contre tout le pack, Slice & Dice compris.
 
 ---
 
@@ -468,7 +521,7 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | `fryer.usedOilCapacity` | `2000` mB | Réservoir d'huile usagée |
 | `waffleIron.maxBatch` | `4` | Pâtes cuites ensemble |
 | `waffleIron.speedMultiplier` | `1.0` | Divise les temps de cuisson |
-| `crops.chiconMaxLight` | `4` | Lumière maximale où le chicon pousse |
+| `crops.darkMaxLight` | `4` | Lumière maximale du « noir » : le chicon n'y pousse que là, l'asperge y devient blanche |
 | `uninstall.prepare` | `false` | Mode préparation au retrait (section 3.5) |
 
 ---
@@ -517,10 +570,10 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 
 | Type | Quantité estimée | Note |
 |---|---|---|
-| Textures d'items 16×16 | ~118 (gabarits partagés pour les intermédiaires : pâte, cru, en cours) | Placeholders par `tools/gen_placeholders.py`, puis vraies textures par THEFricadelle (`06-assets.md`, `12-prompts-textures.md` à compléter) |
-| Fluides | 13 × (still + flow animé) + 13 seaux | Même gabarit que les 4 fluides v1 |
+| Textures d'items 16×16 | ~203, dont ~60 déclinées d'un gabarit (pâte, cru, en cours, en bol) | Placeholders par `tools/gen_placeholders.py`, puis vraies textures par THEFricadelle (`06-assets.md`, `12-prompts-textures.md` à compléter) |
+| Fluides | 20 × (still + flow animé) + 20 seaux | Même gabarit que les 4 fluides v1 |
 | Blocs | Gaufrier (corps + plaque partielle), 3 enseignes, néon (4 couleurs), bouchot (4 stades) |
-| Cultures | Chicon (4 stades), poireau (8), houblon (8) : textures `crop` en croix | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
+| Cultures | Chicon (4 stades), poireau (8), houblon (8), choux de Bruxelles (8), asperges (4), sarrasin (8), moutarde (8) : textures `crop` en croix | Modèles Blockbench faits main, même contrat que la v1 (`models/block/custom/`) |
 | Sons | Gaufrier (fermeture, cuisson) | Enregistrements CC0 ou faits maison, listés dans `NOTICE.md` |
 | Lang | Toutes les nouvelles clés en `en_us` et `fr_fr` ; tooltips d'humour | `ResourceConsistencyTest` couvre déjà la parité |
 
@@ -535,7 +588,7 @@ Toutes dans `create_belgian_snacks-server.toml`, synchronisées, avec repli sur 
 | Suite | Nouveaux contrats |
 |---|---|
 | JUnit | `frozen-ids.txt` (R1) ; aucun data component de notre namespace hors de nos items dans les fichiers générés (R2) ; parité des langues ; recettes v2 : IDs exacts, conditions et jumelles de secours |
-| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé ; frites au blanc avec du blanc de bœuf fondu, frites normales avec toute autre huile) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout pour chaque aliment fini (une ligne par famille, qui part des ingrédients de base) ; chicon qui ne pousse qu'à lumière ≤ 4 ; bouchot qui ne pousse qu'immergé ; Harvester sur les 3 cultures ; loot modifiers chargés ; fumage et lavage au ventilateur de nos recettes ; snacks finis dans un paquet de Create (section 7.1) ; C1 : aucun PNJ |
+| GameTest | Double cuisson (chauffé puis super-chauffé, refus de la 2e cuisson sur brûleur chauffé ; frites au blanc avec du blanc de bœuf fondu, frites normales avec toute autre huile) ; huile usagée (production, blocage plein, extraction, ratio 0 = v1) ; filtration au Mixer ; Gaufrier (comme la Friteuse : cuit, pause, refus) ; lignes de bout en bout pour chaque aliment fini (une ligne par famille, qui part des ingrédients de base) ; chicon qui ne pousse qu'à lumière ≤ 4 et asperge blanche ou verte selon la lumière ; bouchot qui ne pousse qu'immergé ; Harvester sur les 7 cultures ; loot modifiers chargés ; fumage et lavage au ventilateur de nos recettes ; snacks finis dans un paquet de Create (section 7.1) ; C1 : aucun PNJ |
 | GameTest compat (FD) | Recettes tomate / oignon actives, secours inactifs |
 | Client smoke | Modèles, fluides, JEI (nouvelles catégories), Ponder (nouvelles scènes) |
 | Multijoueur smoke | 2 clients voient le même Gaufrier en marche ; l'un le charge, l'autre récupère la gaufre |
@@ -599,14 +652,14 @@ flowchart LR
 |---|---|---|
 | **M10 — Socle** | C6 (fusion `main` → `dev`), C1 (PNJ débranché) et C2, R1 (`frozen-ids.txt`), R2 (test), `uninstall_smoke.py` en minimal, commande `/belgiansnacks uninstall`, compat Solonion | Test de retrait vert en minimal ; PNJ absent ; build cassé par un ID retiré |
 | **M11 — Frites** | `raw_fries`, double cuisson, cornet, `cone_of_fries`, recettes, tags `fries` | Une ligne automatique produit des cornets de frites depuis des pommes de terre |
-| **M12 — Sauces** | 4 fluides + seaux, recettes et secours, tag `sauces`, cornets sauce (nature et au blanc) | Les cornets sauce sortent d'une ligne ; testé avec et sans FD |
-| **M13 — Ingrédients de base** | Sucres, beurre, fromage de Herve, pistolet, pâte feuilletée, béchamel, sirop de Liège, levure, malt ; scan des conflits avec le pack (baratte, presse ou scie sur la pâte de Create) | Chaque ingrédient sort d'une machine Create ; aucun conflit de recette |
-| **M14 — Cultures et moules** | Chicon, poireau, houblon, bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
+| **M12 — Sauces** | Andalouse, samouraï, américaine, sauce lapin : 4 fluides + seaux, recettes et secours, tag `sauces`, cornets sauce (nature et au blanc) | Les cornets sauce sortent d'une ligne ; testé avec et sans FD |
+| **M13 — Ingrédients de base** | Sucres, crème et beurre, sel, vinaigre, fromage de Herve, maton, pistolet, pâtes (feuilletée, brioche, pita, burger, nouilles), béchamel, sirop de Liège, levure, malt, lardons, jambon d'Ardenne, meringue, raisins secs, compote, copeaux de chocolat, glace vanille ; scan des conflits avec le pack (baratte, presse ou scie sur la pâte de Create) | Chaque ingrédient sort d'une machine Create ; aucun conflit de recette |
+| **M14 — Cultures et moules** | Chicon, poireau, houblon (et ses jets), choux de Bruxelles, asperges, sarrasin, moutarde (et le fluide moutarde), bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
 | **M15 — Bières** | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
-| **M16 — Snacks de friterie** | Mitraillette, boulets, croquettes (crevettes, fromage), cervelas, mexicano, viandelle, loempia, filet américain et dérivés | Chacun produit par une ligne automatique (GameTest) |
-| **M17 — Plats belges** | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze | Idem |
+| **M16 — Snacks de friterie** | Sauces tartare, pickles et brazil et leurs cornets ; mitraillette, boulets, croquettes (crevettes, fromage, poulet, lucifer), cervelas, mexicano, viandelle, loempia, filet américain et dérivés, burger de friterie, pita, brochette, bamischijf, calamars | Chacun produit par une ligne automatique (GameTest) |
+| **M17 — Plats belges** | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
 | **M18 — Gaufrier et gaufres** | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |
-| **M19 — Douceurs** | Speculoos et pâte (dont la gaufre et le pistolet au speculoos), cuberdons, pralines et ballotin, croustillons, couque de Dinant, tartes au riz et au sucre | Chacune produite par une ligne automatique |
+| **M19 — Douceurs** | Speculoos et pâte (dont la gaufre et le pistolet au speculoos), cuberdons, pralines et ballotin, croustillons, couque de Dinant, tartes (riz, sucre, mattentaart), craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud | Chacune produite par une ligne automatique |
 | **M20 — Huile usagée** | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |
 | **M21 — Finitions de contenu** | Enseignes, néons, Ponder (lignes types et une friterie vendue par Create), catégories JEI, plugins Jade, advancements (« Cave à chicons », « Brasseur », « Ballotin », « Tour de Belgique » : un aliment de chaque famille), schéma KubeJS (si fait) | Client smoke et multijoueur smoke verts |
 | **M22 — Arcadia** | Arcadia smoke étendu, `uninstall_smoke.py` dans le pack, scénario Solonion, export FoodIndex | Tous verts sur le pack à jour, 2 joueurs en LAN |
@@ -623,7 +676,7 @@ Toutes tranchées par THEFricadelle le 25/10/2026. Les numéros V-D11 et V-D12 (
 | V-D1 | Nos snacks v2 comptent-ils pour le Hachoir ? | ✅ **Oui** pour les snacks finis ; non pour fricadelles, pâtes et intermédiaires |
 | V-D2 | 2e cuisson des frites | ✅ **Super-chauffée** |
 | V-D3 | Ratio frites → cornet | ✅ **1 portion + 1 cornet → 1 cornet de frites** (Deployer) ; 1 pomme de terre donne 4 portions |
-| V-D4 | Frites au blanc de bœuf | ✅ **Oui** : `fries_beef_tallow` et ses propres cornets (nature + 6 sauces), meilleure saturation |
+| V-D4 | Frites au blanc de bœuf | ✅ **Oui** : `fries_beef_tallow` et ses propres cornets (nature + 9 sauces), meilleure saturation |
 | V-D5 | Samouraï sans piment dans le pack | ✅ **Poudre de blaze** en secours |
 | V-D6 | Panure des croquettes | ✅ **Œuf au Deployer** |
 | V-D7 | Huile usagée | ✅ **Activée par défaut, ratio 0.5** |
