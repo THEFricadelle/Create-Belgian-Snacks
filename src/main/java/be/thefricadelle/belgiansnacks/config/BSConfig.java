@@ -33,6 +33,7 @@ public final class BSConfig {
     private static final ModConfigSpec.DoubleValue GRINDER_STRESS_IMPACT;
     private static final ModConfigSpec.BooleanValue ULTIMATE_ANNOUNCE;
     private static final ModConfigSpec.BooleanValue UNINSTALL_PREPARE;
+    private static final ModConfigSpec.IntValue CROPS_DARK_MAX_LIGHT;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -81,6 +82,12 @@ public final class BSConfig {
             .define("announceInChat", true);
         builder.pop();
 
+        builder.push("crops");
+        CROPS_DARK_MAX_LIGHT = builder
+            .comment("Highest light level counted as dark: chicons grow only at or below it, asparagus growing there comes out white.")
+            .defineInRange("darkMaxLight", 4, 0, 15);
+        builder.pop();
+
         builder.push("uninstall");
         UNINSTALL_PREPARE = builder
             .comment("Removal preparation: each player who logs in has this mod's entries removed from other mods' data",
@@ -102,6 +109,10 @@ public final class BSConfig {
     public static void setAnnounceUltimate(boolean announce) {
         ULTIMATE_ANNOUNCE.set(announce);
         ULTIMATE_ANNOUNCE.save();
+    }
+
+    public static int cropsDarkMaxLight() {
+        return SPEC.isLoaded() ? CROPS_DARK_MAX_LIGHT.get() : CROPS_DARK_MAX_LIGHT.getDefault();
     }
 
     public static boolean uninstallPrepare() {

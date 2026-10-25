@@ -11,6 +11,7 @@ package be.thefricadelle.belgiansnacks.data;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
+import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
@@ -86,6 +87,29 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.VANILLA_ICE_CREAM.get(), "Glace vanille");
         add(BSItems.SAUCED_CONES.get("sauce_lapin").get(), "Cornet de frites sauce lapin");
         add(BSItems.SAUCED_TALLOW_CONES.get("sauce_lapin").get(), "Cornet de frites au blanc, sauce lapin");
+        add(BSCrops.CHICORY_ROOT.get(), "Racine de chicorée");
+        add(BSCrops.CHICON.get(), "Chicon");
+        add(BSCrops.LEEK.get(), "Poireau");
+        add(BSCrops.HOP_SEEDS.get(), "Graines de houblon");
+        add(BSCrops.HOPS.get(), "Cônes de houblon");
+        add(BSCrops.HOP_SHOOTS.get(), "Jets de houblon");
+        add(BSCrops.BRUSSELS_SPROUT.get(), "Chou de Bruxelles");
+        add(BSCrops.ASPARAGUS_CROWN.get(), "Griffe d'asperge");
+        add(BSCrops.WHITE_ASPARAGUS.get(), "Asperge blanche");
+        add(BSCrops.GREEN_ASPARAGUS.get(), "Asperge verte");
+        add(BSCrops.BUCKWHEAT.get(), "Sarrasin");
+        add(BSCrops.BUCKWHEAT_FLOUR.get(), "Farine de sarrasin");
+        add(BSCrops.MUSTARD_SEEDS.get(), "Graines de moutarde");
+        add(BSCrops.MUSTARD_POWDER.get(), "Poudre de moutarde");
+        add(BSCrops.MUSSEL.get(), "Moule");
+        add(BSCrops.CHICON_CROP.get(), "Chicons");
+        add(BSCrops.LEEK_CROP.get(), "Poireaux");
+        add(BSCrops.HOPS_CROP.get(), "Houblon");
+        add(BSCrops.BRUSSELS_SPROUTS_CROP.get(), "Choux de Bruxelles");
+        add(BSCrops.ASPARAGUS_CROP.get(), "Asperges");
+        add(BSCrops.BUCKWHEAT_CROP.get(), "Sarrasin");
+        add(BSCrops.MUSTARD_CROP.get(), "Moutarde");
+        add(BSCrops.BOUCHOT.get(), "Bouchot");
         add(BSItems.RAW_FRIES.get(), "Frites crues");
         add(BSItems.BLANCHED_FRIES.get(), "Frites blanchies");
         add(BSItems.FRIES.get(), "Frites");
@@ -116,6 +140,7 @@ public class BSFrenchLangProvider extends LanguageProvider {
         fluid(BSFluids.LIEGE_SYRUP, "Sirop de Liège", "Seau de sirop de Liège");
         fluid(BSFluids.VINEGAR, "Vinaigre", "Seau de vinaigre");
         fluid(BSFluids.SAUCE_LAPIN, "Sauce lapin", "Seau de sauce lapin");
+        fluid(BSFluids.MUSTARD, "Moutarde", "Seau de moutarde");
 
         add(BSBlocks.FRYER.get(), "Friteuse");
         add(BSBlocks.SUPREME_GRINDER.get(), "Hachoir Suprême");

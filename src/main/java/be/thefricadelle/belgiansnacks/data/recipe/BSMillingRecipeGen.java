@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import com.simibubi.create.api.data.recipe.MillingRecipeGen;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -29,6 +30,12 @@ public class BSMillingRecipeGen extends MillingRecipeGen {
     GeneratedRecipe POWDERED_SUGAR = create("powdered_sugar", b -> b.duration(100).require(Items.SUGAR)
         .output(BSItems.POWDERED_SUGAR.get())
         .whenModMissing("createfood"));
+
+    // v2 crops (section 5.8).
+    GeneratedRecipe BUCKWHEAT_FLOUR = create("buckwheat_flour", b -> b.duration(100).require(BSCrops.BUCKWHEAT.get())
+        .output(BSCrops.BUCKWHEAT_FLOUR.get()));
+    GeneratedRecipe MUSTARD_POWDER = create("mustard_powder", b -> b.duration(100).require(BSCrops.MUSTARD_SEEDS.get())
+        .output(BSCrops.MUSTARD_POWDER.get()));
 
     public BSMillingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

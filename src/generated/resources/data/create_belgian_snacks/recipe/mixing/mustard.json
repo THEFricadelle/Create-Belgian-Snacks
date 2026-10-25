@@ -1,0 +1,27 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:mustard_powder"
+    },
+    {
+      "item": "create_belgian_snacks:mustard_powder"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 100,
+      "fluid": "create_belgian_snacks:vinegar"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 100,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_belgian_snacks:mustard"
+    }
+  ]
+}

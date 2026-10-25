@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0,blanched=false": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage0"
+    },
+    "age=0,blanched=true": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage0"
+    },
+    "age=1,blanched=false": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage1"
+    },
+    "age=1,blanched=true": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage1"
+    },
+    "age=2,blanched=false": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage2"
+    },
+    "age=2,blanched=true": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage2"
+    },
+    "age=3,blanched=false": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage3_green"
+    },
+    "age=3,blanched=true": {
+      "model": "create_belgian_snacks:block/crop/asparagus_stage3_white"
+    }
+  }
+}

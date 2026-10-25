@@ -11,6 +11,7 @@
     "create_belgian_snacks:bechamel_bucket",
     "create_belgian_snacks:liege_syrup_bucket",
     "create_belgian_snacks:vinegar_bucket",
-    "create_belgian_snacks:sauce_lapin_bucket"
+    "create_belgian_snacks:sauce_lapin_bucket",
+    "create_belgian_snacks:mustard_bucket"
   ]
 }

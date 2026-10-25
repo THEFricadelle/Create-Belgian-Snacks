@@ -95,6 +95,14 @@
     {
       "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/sauce_lapin_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/mustard_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/mustard_flow"
     }
   ]
 }

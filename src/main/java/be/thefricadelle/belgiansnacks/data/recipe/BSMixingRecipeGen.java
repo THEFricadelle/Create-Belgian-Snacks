@@ -19,6 +19,7 @@ import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.AllItems;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
@@ -149,6 +150,12 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
         RAW_MERINGUE = create("raw_meringue", b -> b
             .require(Tags.Items.EGGS).require(Items.SUGAR)
             .output(BSItems.RAW_MERINGUE.get(), 2)),
+
+        // v2 crops (section 5.8): two powders, vinegar and water.
+        MUSTARD = create("mustard", b -> b
+            .require(BSCrops.MUSTARD_POWDER.get()).require(BSCrops.MUSTARD_POWDER.get())
+            .require(BSFluids.VINEGAR.get(), 100).require(Fluids.WATER, 100)
+            .output(BSFluids.MUSTARD.get().getSource(), 250)),
 
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)

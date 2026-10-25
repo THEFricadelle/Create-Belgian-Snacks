@@ -260,6 +260,118 @@ def heap(palette, sparkle=None):
     return px
 
 
+# v2 crops (docs/12, section 2 quater): leaves rise with the stage; the last stages show what is
+# harvested. Stems are a pixel wide, leaves fan out from them.
+LEAF = ['2E5A1C', '4A8028', '6AA03A', '9ACC5A']
+
+
+def plant(stage, produce=None):
+    px = canvas()
+    height = [4, 7, 10, 12][stage]
+    for x in (4, 8, 12):
+        for dy in range(height - (x % 3)):
+            y = 15 - dy
+            px[y][x] = colour(LEAF[1])
+            if dy > 1 and dy % 2 == 0:
+                px[y][x - 1] = colour(LEAF[2])
+                px[y - 1][x + 1] = colour(LEAF[3] if dy % 4 == 0 else LEAF[2])
+    if produce and stage >= 2:
+        produce(px, stage)
+    return px
+
+
+def spots(points, value):
+    def draw(px, stage):
+        for x, y in points[:len(points) if stage == 3 else len(points) // 2]:
+            px[y][x] = colour(value)
+    return draw
+
+
+def heads(palette, tall=3):
+    def draw(px, stage):
+        for x in (4, 8, 12):
+            for dy in range(tall if stage == 3 else tall - 1):
+                px[12 - dy][x] = colour(palette[2])
+                px[12 - dy][x - 1] = colour(palette[3])
+            px[12 - tall][x] = colour(palette[1])
+    return draw
+
+
+def crop_stages():
+    out = {}
+    produce = {
+        'chicon': heads(['B8A860', 'D8CC88', 'F0E8B8', 'FFFAE0'], tall=4),
+        'leek': heads(['B8B8A0', 'DCDCC8', 'F0F0E2', 'FFFFFF'], tall=4),
+        'hops': spots([(3, 6), (9, 5), (13, 7), (5, 9), (11, 10), (7, 4)], 'B8D878'),
+        'brussels_sprouts': spots([(4, 8), (8, 7), (12, 9), (4, 11), (8, 10), (12, 12)], '5A9A2E'),
+        'buckwheat': spots([(3, 4), (8, 3), (12, 5), (5, 6), (10, 6), (7, 5)], 'F4D8E0'),
+        'mustard': spots([(3, 4), (8, 3), (12, 5), (5, 6), (10, 6), (7, 5)], 'F4D23A'),
+    }
+    for name, draw in produce.items():
+        for stage in range(4):
+            out[f'crop/{name}_stage{stage}'] = plant(stage, draw)
+    for stage in range(3):
+        out[f'crop/asparagus_stage{stage}'] = plant(stage)
+    for colour_name, spear in [('white', ['B8B09A', 'DCD6C2', 'F0ECD8', 'FFFFF2']), ('green', ['2E5A1C', '4A8028', '6AA03A', '9ACC5A'])]:
+        px = canvas()
+        for x in (4, 7, 10, 13):
+            for y in range(4 + x % 3, 16):
+                px[y][x] = colour(spear[2])
+                px[y][x - 1] = colour(spear[3] if y < 8 else spear[1])
+            px[3 + x % 3][x] = colour(spear[0])
+        out[f'crop/asparagus_stage3_{colour_name}'] = px
+    for stage in range(4):
+        px = canvas()
+        for y in range(16):
+            px[y][7] = colour('6E4A2C')
+            px[y][8] = colour('8C6038')
+        clusters = [(6, 13), (9, 12), (6, 10), (9, 9), (6, 7), (9, 6), (6, 4), (9, 3)][:stage * 3]
+        for x, y in clusters:
+            px[y][x] = colour('20202E')
+            px[y + 1][x] = colour('3A3A52')
+        out[f'bouchot/stage{stage}'] = px
+    return {gen.BLOCK_DIR / f'{name}.png': px for name, px in out.items()}
+
+
+def crops_items():
+    out = {
+        'chicory_root': canvas(),
+        'chicon': peak(['B8A860', 'D8CC88', 'F0E8B8', 'FFFAE0']),
+        'leek': canvas(),
+        'hop_seeds': heap(['3A2814', '5A4024', '8A6A3A', 'AC8A54']),
+        'hops': peak(['4A7028', '6E9A3A', '9AC05A', 'C4E088']),
+        'hop_shoots': canvas(),
+        'brussels_sprout': shape(ellipse(8, 8.5, 5, 5.5), ['2E5A1C', '4A8028', '6AA03A', '9ACC5A']),
+        'asparagus_crown': heap(['4E3424', '6E4C34', '8A6A4A', 'AC8C68']),
+        'white_asparagus': canvas(),
+        'green_asparagus': canvas(),
+        'buckwheat': heap(['2A1C10', '42301E', '5A402A', '7C5C40']),
+        'buckwheat_flour': heap(['807464', 'A09484', 'BCB0A0', 'DAD0C2']),
+        'mustard_seeds': heap(['7A5A18', 'A07A24', 'C8A03A', 'E6C66A']),
+        'mustard_powder': heap(['A07A10', 'C89E1E', 'E8C03A', 'FFE07A']),
+        'mussel': shape(ellipse(8, 9, 6, 3.5), ['14141E', '20202E', '2E2E44', '58587A']),
+        'bouchot': canvas(),
+    }
+    # Long vegetables: the thick sticks of the fries, along the diagonal.
+    WHITE = ['8C8672', 'DCD6C2', 'F0ECD8', 'FFFFF2']
+    GREEN = ['2E5A1C', '4A8028', '6AA03A', '9ACC5A']
+    draw_sticks(out['white_asparagus'], [(3, 13, 11, 2)], WHITE)
+    draw_sticks(out['green_asparagus'], [(3, 13, 11, 2)], GREEN)
+    draw_sticks(out['hop_shoots'], [(2, 14, 7, 4), (7, 15, 12, 3)], GREEN)
+    draw_sticks(out['chicory_root'], [(6, 14, 9, 3)], ['4E3018', '7A5028', '9A6A3A', 'C08A50'])
+    draw_sticks(out['leek'], [(3, 13, 11, 2)], WHITE)
+    draw_sticks(out['leek'], [(8, 7, 12, 1)], GREEN)
+    for x, y in [(6, 5), (8, 7), (10, 9)]:
+        out['brussels_sprout'][y][x] = colour('4A8028')
+    px = out['bouchot']
+    for y in range(1, 16):
+        px[y][7] = colour('6E4A2C')
+        px[y][8] = colour('8C6038')
+    for x, y in [(6, 12), (9, 10), (6, 8), (9, 6)]:
+        px[y][x] = colour('20202E')
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 def base_ingredients():
     WHITE = ['B8B4A8', 'DCD8CC', 'F2F0E8', 'FFFFFF']
     DOUGH = ['B8A47C', 'D8C49C', 'ECDCB8', 'FAF0DA']
@@ -345,6 +457,7 @@ LIQUIDS = {
     'liege_syrup': ['24120A', '3A1E0E', '4A2A14', '74482A'],
     'vinegar': ['8C6A2C', 'AC8840', 'C8A458', 'E6C67C'],
     'sauce_lapin': ['2E180A', '442410', '5A3218', '83542E'],
+    'mustard': ['8A6A10', 'B08A18', 'D8A828', 'F4D25C'],
 }
 CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin']
 
@@ -502,6 +615,8 @@ def artwork():
         out[gen.FLUID_DIR / f'{name}_still.png'] = fluid(palette)
         out[gen.FLUID_DIR / f'{name}_flow.png'] = fluid(palette, True)
     out.update(base_ingredients())
+    out.update(crops_items())
+    out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     return out
 
@@ -548,6 +663,7 @@ def main():
     for path, px in outputs.items():
         data = gen.png_bytes(px)
         if not path.exists() or path.read_bytes() != data:
+            path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(data)
             written += 1
         # A flow texture holds two stacked frames: the game animates it only with this file beside it.

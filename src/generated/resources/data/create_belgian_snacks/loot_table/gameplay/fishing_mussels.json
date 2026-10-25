@@ -1,0 +1,21 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.05,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:mussel"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "create_belgian_snacks:gameplay/fishing_mussels"
+}

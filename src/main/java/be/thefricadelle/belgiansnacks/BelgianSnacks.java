@@ -29,6 +29,7 @@ import be.thefricadelle.belgiansnacks.registry.BSAdvancements;
 import be.thefricadelle.belgiansnacks.registry.BSTriggers;
 import be.thefricadelle.belgiansnacks.registry.BSEntities;
 import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
+import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
@@ -62,6 +63,7 @@ public class BelgianSnacks {
         BSItems.register();
         BSFluids.register();
         BSBlocks.register();
+        BSCrops.register();
         BSBlockEntities.register();
         BSEntities.register();
         BSTriggers.register(modEventBus);

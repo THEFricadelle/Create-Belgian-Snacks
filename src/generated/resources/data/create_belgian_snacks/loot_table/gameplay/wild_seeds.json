@@ -1,0 +1,45 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.15,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:chicory_root"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:leek"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:hop_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:brussels_sprout"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:asparagus_crown"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:buckwheat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:mustard_seeds"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "create_belgian_snacks:gameplay/wild_seeds"
+}

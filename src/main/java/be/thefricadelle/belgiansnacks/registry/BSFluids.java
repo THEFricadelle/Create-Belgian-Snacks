@@ -41,12 +41,14 @@ public final class BSFluids {
         BECHAMEL = fluid("bechamel", "Béchamel", MapColor.SAND),
         LIEGE_SYRUP = fluid("liege_syrup", "Liège Syrup", MapColor.TERRACOTTA_BROWN),
         VINEGAR = fluid("vinegar", "Vinegar", MapColor.TERRACOTTA_YELLOW),
-        SAUCE_LAPIN = fluid("sauce_lapin", "Liège Sauce", MapColor.COLOR_BROWN);
+        SAUCE_LAPIN = fluid("sauce_lapin", "Liège Sauce", MapColor.COLOR_BROWN),
+        // v2 crops (section 5.8): mustard from mustard seeds.
+        MUSTARD = fluid("mustard", "Mustard", MapColor.COLOR_YELLOW);
 
     /** Every fluid of the mod, in registration order. */
     public static final List<FluidEntry<BaseFlowingFluid.Flowing>> ALL =
         List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE,
-            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN);
+            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN, MUSTARD);
 
     /** The sauces a Spout puts on a cone, by the name their cones carry (BSItems.CONE_SAUCES). */
     public static final Map<String, FluidEntry<BaseFlowingFluid.Flowing>> CONE_SAUCES = orderedSauces();
