@@ -24,6 +24,8 @@ Plonger des items dans l'huile chaude. Seule machine qui exécute les recettes `
 
 ### Recette `frying`
 
+**Choix de la recette** : Parmi les recettes `frying` de l'item, celles que la chaleur **et la graisse du réservoir** permettent, la graisse la plus spécifique d'abord (le moins de fluides acceptés ; une recette sans graisse en dernier ; à égalité, le plus petit ID de recette) : des frites blanchies dans le blanc de bœuf donnent des frites au blanc, bien que la recette normale accepte toute graisse (v2, M11). Sans recette possible : la première que la chaleur permet (le statut dit « pas assez de graisse »), sinon la première (le statut dit « pas assez chaud »). L'entrée accepte tout item qui a une recette de friture, même avant la graisse ; un lot déjà dans le panier garde sa recette.
+
 Format des recettes de traitement Create 6 ; la graisse est l'ingrédient fluide, sa quantité s'entend **par item frit**. Exemple et détails : `03-architecture.md`. Palier 3 : l'ingrédient fluide sera `melted_beef_tallow` seul (D16).
 
 ### Recette de craft (provisoire, D11)

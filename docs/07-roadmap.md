@@ -103,3 +103,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] `tools/uninstall_smoke.py` : monde rempli du mod, ouvert sans lui, puis avec lui, 3 phases vertes
 - [ ] Dans le pack : purge Solonion sur un vrai joueur et scénario sans purge (reporté au M22, le pack complet ne tourne pas dans ce jalon)
 - **Accepté si** : test de retrait vert en environnement minimal ; PNJ absent ; build cassé par un ID retiré.
+
+### M11 — Frites ✅ (25/10/2026)
+- [x] `raw_fries`, `blanched_fries`, `fries`, `fries_beef_tallow`, `paper_cone`, `cone_of_fries`, `cone_of_fries_beef_tallow` : textures originales, noms et tooltips en/fr, valeurs nutritives provisoires (`08`)
+- [x] Recettes : scie, double cuisson (chauffée puis super-chauffée), frites au blanc, cornet à l'établi (conflit de presse dans Arcadia), mise en cornet au Deployer
+- [x] La Friteuse choisit sa recette par la chaleur **et** la graisse du réservoir, la plus spécifique d'abord
+- [x] Les frites et les cornets comptent pour le Hachoir (V-D1) ; tags `fries` et `c:foods/fries`
+- [x] Ligne automatique pomme de terre → cornet (GameTest), mutations attrapées
+- **Accepté si** : une ligne automatique produit des cornets de frites depuis des pommes de terre. ✅

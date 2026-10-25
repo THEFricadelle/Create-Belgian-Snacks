@@ -66,4 +66,15 @@ Nutrition, saturation et temps : valeurs gardées, « on reviendra sûrement des
 
 ## Décisions v2
 
-Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, section 14. Les valeurs nutritives des nouveaux snacks seront ajoutées ici au jalon qui les introduit.
+Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, section 14. Les valeurs nutritives des nouveaux snacks sont ajoutées ici au jalon qui les introduit.
+
+### Valeurs nutritives v2 (provisoires, dans `BSFoods`)
+
+Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seules un en-cas ; le blanc de bœuf est la meilleure graisse.
+
+| Aliment | Nutrition | Saturation (modificateur) | Jalon |
+|---|---|---|---|
+| `fries` | 3 | 0.4 | M11 |
+| `fries_beef_tallow` | 3 | 0.6 | M11 |
+| `cone_of_fries` | 6 | 0.6 | M11 |
+| `cone_of_fries_beef_tallow` | 6 | 0.8 | M11 |

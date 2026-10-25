@@ -153,3 +153,10 @@
 **Root cause:** A run loads every mod of the `mods { }` block unless told otherwise, so the probe ran in every client run and stopped the game once a player stood in a world.
 **Fix:** All runs default to `loadedMods = [mods."${mod_id}"]`; only `uninstallWithout` and `uninstallBack` load the probe, and the probe stays idle without its `uninstall_probe.phase` property.
 **Prevention:** A test-only mod added to `mods { }` must be opted into by its own runs, never loaded by default.
+
+## [2026-10-25 20:20] - Fries line: saw sending items back, depot jamming the belt, a neighbour's grinder
+**Context:** First run of `FriesLineGameTests` (potato -> saw -> fryers -> deployer with cones).
+**Error:** (1) Nothing left the saw: "in the saw: 4 raw_fries" forever. (2) The deployer used its cones but no cone was counted on the belt; with a depot at the end, the belt stopped behind one cone. (3) `aGrinderAtHalfwayRewardsThePlayersAround` failed with "awarded one food early" in the same run.
+**Root cause:** (1) An upward saw ejects towards the side its rotation sends items (`SawBlockEntity.getItemMovementVec`): with a positive speed and its shaft along x, that is -z, back onto the incoming belt. (2) A Create belt drops what reaches its end, and a depot takes a single stack, so a depot at the end blocks the belt as soon as it holds one item. (3) GameTests of one batch run side by side: the new test shifted the layout and put another test's full grinder within 16 blocks of that test's player.
+**Fix:** Negative motor speed on the saw; the test empties the depot each tick, as a funnel would; the halfway test runs in its own batch `grinder_halfway`.
+**Prevention:** In a GameTest line, set a saw's speed sign from the flow direction and catch a belt's end with a depot emptied by the test; any test that rewards players by proximity runs in its own batch.

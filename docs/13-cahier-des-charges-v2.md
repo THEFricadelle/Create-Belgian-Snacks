@@ -190,7 +190,7 @@ flowchart LR
   R -->|Friteuse chauffée<br/>1re cuisson| B[Frites blanchies]
   B -->|Friteuse super-chauffée<br/>2e cuisson| F[Frites]
   B -->|Friteuse super-chauffée<br/>au blanc de bœuf| FT[Frites au blanc]
-  C[Papier] -->|Mechanical Press| K[Cornet]
+  C[Papier] -->|Établi| K[Cornet]
   F & K -->|Deployer| N((Cornet de frites))
   N -->|Spout + sauce| S((Cornet de frites + sauce))
 ```
@@ -201,7 +201,7 @@ flowchart LR
 | 1re cuisson | Friteuse **chauffée** | `raw_fries` | `blanched_fries` | `frying/blanched_fries` (100 ticks, 5 mB `#frying_oils` par item) |
 | 2e cuisson | Friteuse **super-chauffée** (V-D2) | `blanched_fries` | `fries` | `frying/fries` (60 ticks, 5 mB) |
 | 2e cuisson au blanc | Friteuse **super-chauffée** | `blanched_fries` | `fries_beef_tallow` | `frying/fries_beef_tallow` (60 ticks, 5 mB de `melted_beef_tallow` seul) |
-| Cornet | Mechanical Press | 1 `minecraft:paper` | 1 `paper_cone` | `pressing/paper_cone` |
+| Cornet | Établi ou Mechanical Crafter | 3 `minecraft:paper` en V | 4 `paper_cone` | `crafting/paper_cone` (pas la presse : Arcadia presse déjà le papier en ticket, décidé au M11) |
 | Mise en cornet | Deployer (tient le cornet) | 1 `#create_belgian_snacks:fries` | `cone_of_fries` | `deploying/cone_of_fries` (V-D3) |
 | Sauce | Spout, 50 mB d'une sauce | `cone_of_fries` | `cone_of_fries_<sauce>` | `filling/cone_of_fries_<sauce>` |
 | Cornet au blanc | Deployer, puis Spout | `fries_beef_tallow` | `cone_of_fries_beef_tallow`, puis `cone_of_fries_beef_tallow_<sauce>` | `deploying/cone_of_fries_beef_tallow`, `filling/cone_of_fries_beef_tallow_<sauce>` |

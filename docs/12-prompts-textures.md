@@ -70,6 +70,20 @@ Même famille pour les trois hachis : un petit tas conique posé en bas de l'ima
 | `belgian_spices.png` | A small flat pile of spice powder: orange-red paprika and curry tones with a few dark grains and a couple of loose grains above the pile. |
 | `beef_tallow.png` | A small block of solid beef tallow: a rounded brick, creamy off-white, waxy, soft yellowish shadow on the right and bottom. |
 
+## 2 bis. Les frites (v2, items, 16×16)
+
+Dessinées par `tools/draw_textures.py` (M11) : quatre bâtonnets de deux pixels, espacés, éclairés à gauche, contour dans leur teinte la plus sombre ; le cornet en papier aux rayures rouges et blanches d'une friterie, pointe en bas.
+
+| Fichier `textures/item/…` | Prompt |
+|---|---|
+| `raw_fries.png` | Four upright potato sticks side by side, pale cream raw potato, slightly leaning, a light tip on each. The reference shape for the next three. |
+| `blanched_fries.png` | Same sticks, pale yellow, matte: cooked through, no crust yet. |
+| `fries.png` | Same sticks, golden with a crisp darker outline: Belgian fries after the second fry. |
+| `fries_beef_tallow.png` | Same sticks, deeper gold with two small shine dots: fried in beef tallow. |
+| `paper_cone.png` | An empty paper cone, tip down, red and white vertical stripes like a Belgian friterie, its opening seen from slightly above. |
+| `cone_of_fries.png` | The same cone, filled with golden fries sticking out of the top. |
+| `cone_of_fries_beef_tallow.png` | Same, with the deeper gold tallow fries. |
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

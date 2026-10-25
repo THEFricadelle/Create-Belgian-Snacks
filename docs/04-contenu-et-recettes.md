@@ -117,6 +117,25 @@ Le blanc de bœuf fondu est la graisse des vraies frites belges : il sert aux pa
    - Boucles : **5** : 1250 mB de chaque fluide, 5 épices et 5 oignons ; **100 %** de réussite
 3. **Friteuse** **super-chauffée** (`frying/ultimate_fricadelle`) : → `ultimate_fricadelle`, 600 ticks, 250 mB de `melted_beef_tallow` uniquement (aucune autre huile), une pièce à la fois.
 
+## v2 — Frites belges (M11, 25/10/2026)
+
+Détail et schéma : `13-cahier-des-charges-v2.md`, section 5.1.
+
+| ID de recette | Machine | Entrée | Sortie |
+|---|---|---|---|
+| `cutting/raw_fries` | Mechanical Saw | 1 `#c:crops/potato` | 4 `raw_fries` |
+| `frying/blanched_fries` | Friteuse **chauffée**, 100 ticks, 5 mB `#frying_oils` par item | `raw_fries` | `blanched_fries` |
+| `frying/fries` | Friteuse **super-chauffée**, 60 ticks, 5 mB `#frying_oils` | `blanched_fries` | `fries` |
+| `frying/fries_beef_tallow` | Friteuse **super-chauffée**, 60 ticks, 5 mB `melted_beef_tallow` seul | `blanched_fries` | `fries_beef_tallow` |
+| `crafting/paper_cone` | Établi (ou Mechanical Crafter) : 3 papiers en V | `P P` / ` P ` | 4 `paper_cone` |
+| `deploying/cone_of_fries` | Deployer tenant un `paper_cone` (consommé) | 1 `#create_belgian_snacks:fries` | `cone_of_fries` |
+| `deploying/cone_of_fries_beef_tallow` | Deployer tenant un `paper_cone` | 1 `fries_beef_tallow` | `cone_of_fries_beef_tallow` |
+
+- Les deux recettes de 2e cuisson acceptent le blanc de bœuf : la Friteuse prend la plus spécifique (voir `05-machines.md`). Avec une autre huile : frites normales.
+- Le cornet se fait à l'établi et non à la presse : dans Arcadia, `create_things_and_misc` presse déjà le papier en ticket vide (`create:pressing` sur `minecraft:paper`), une 2e recette de presse sur le même item serait en conflit.
+- Tags : `create_belgian_snacks:fries` = `fries` + `burgermod:fries` (optionnel, Arcadia) ; les frites au blanc n'y sont pas, pour ne jamais finir dans un cornet normal. `c:foods/fries` (dans `c:foods`) = les frites et les deux cornets.
+- Les frites et les cornets sont des aliments finis : ils **comptent** pour le Hachoir Suprême (V-D1), donc ne sont pas dans `grinder/blacklist`. Les intermédiaires ne se mangent pas.
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.
