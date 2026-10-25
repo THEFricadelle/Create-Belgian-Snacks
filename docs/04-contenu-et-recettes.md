@@ -255,6 +255,31 @@ Les trois rejoignent `#sauces` et les cornets : 6 cornets sauce de plus (`fillin
 
 Tags : `mitraillette_meats` (fricadelle, boulet, cervelas, mexicano, viandelle, filet américain, chicken fingers, brochette), `sausages` (fricadelle, cervelas, mexicano, viandelle + `c:foods/sausage`), `shrimps`, `squids`, `pineapples`. Snacks finis dans `c:foods`, les viandes dans `c:foods/cooked_meat`, le poisson dans `c:foods/cooked_fish`.
 
+## v2 — Plats belges (M17, 26/10/2026)
+
+Les plats en bol prennent leur bol dans le bassin et le rendent quand on les mange (empilables par 16). `#onions` = `c:crops/onion` + notre poireau : jamais vide, donc aucune jumelle betterave. Fumage = ventilateur sur feu de camp, ou four.
+
+| Plat | Machine | Recette |
+|---|---|---|
+| `moules_marinieres` / `moules_a_la_biere` | Mixer chauffé | 4 moules + poireau + `#onions` + bol + 250 mB d'eau / de bière blonde |
+| `moules_frites` | Deployer | `#fries` sur l'un ou l'autre (`deploying/moules_frites`, `..._from_beer`) |
+| `carbonnade` | Mixer chauffé | 2 bœuf cru + `#onions` + pistolet + cassonade + bol + 250 mB bière brune ; `#fries` dessus → `carbonnade_frites` |
+| `stoemp` | Mixer chauffé | 2 pommes de terre + poireau + carotte + beurre + bol + 250 mB de lait ; `#sausages` dessus → `stoemp_saucisse` |
+| `waterzooi` | Mixer chauffé | poulet cru + poireau + carotte + bol + 250 mB de lait |
+| `lapin_a_la_gueuze` | Mixer chauffé | lapin cru + 2 `#prunes` (jumelle : baies sucrées) + `#onions` + bol + 250 mB gueuze |
+| `brussels_sprouts_bacon` | Mixer chauffé | 4 choux de Bruxelles + `#lardons` + beurre + bol |
+| `asparagus_flemish` | Mixer chauffé | 3 asperges blanches + beurre + épices + bol (sans œuf : règle 4 des bassins) |
+| `hop_shoots_cream` | Mixer chauffé | 3 jets de houblon + bol + 250 mB crème |
+| `salade_liegeoise` | Mixer froid | 2 pommes de terre cuites + `#lardons` + `#onions` + bol + 50 mB vinaigre |
+| `hochepot` | Mixer chauffé | bœuf + côtelette + 2 choux de Bruxelles + carotte + poireau + bol + 500 mB d'eau |
+| `escaveche` | Mixer froid, 600 ticks | poisson cuit (`c:foods/cooked_fish`) + `#onions` + bol + 100 mB vinaigre |
+| `steak_frites` | Deployer | `#fries` sur un steak cuit |
+| `boudin`, `boudin_compote` | Mixer froid : porc haché + chapelure + 250 mB lait → `raw_boudin` ; fumage → `boudin` ; Deployer compote dessus |
+| `chicons_au_gratin` | Assemblage sur un chicon (`incomplete_chicons_au_gratin`) : `#hams` → 250 mB béchamel → fromage ; fumage |
+| `vol_au_vent` | Scie : pâte feuilletée → 2 bouchées crues ; fumage → `vol_au_vent_shell` ; assemblage : poulet cuit → champignon (`c:mushrooms`) → 100 mB béchamel |
+| `flamiche` | Presse : pâte feuilletée → `tart_shell` ; assemblage (`incomplete_tart`, partagé avec les tartes du M19) : poireau → 250 mB crème → œuf ; fumage |
+| `croque_monsieur` | Assemblage sur du pain (`incomplete_croque_monsieur`) : `#hams` → fromage → Presse ; fumage |
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

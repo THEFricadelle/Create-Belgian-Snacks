@@ -107,4 +107,8 @@ Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seu
 | `lucifer`, `cervelas`, `mexicano`, `viandelle`, `loempia`, `bami_disc`, `nasi_disc` | 6 | 0.6 | M16 |
 | croquettes (crevettes, fromage, poulet), `chicken_fingers`, `fish_sticks`, `squid_rings`, `fried_chicken_wings`, `filet_americain` | 5 | 0.6 | M16 |
 | `potato_croquette`, `cheese_sticks`, `chicken_nuggets`, `onion_rings` | 4 | 0.5 | M16 |
+| `moules_frites`, `carbonnade_frites`, `stoemp_saucisse`, `steak_frites` | 14 | 1.2 | M17 |
+| moules (2), `carbonnade`, `waterzooi`, `lapin_a_la_gueuze`, `hochepot`, `vol_au_vent`, `chicons_au_gratin` | 10 | 1.0 | M17 |
+| `stoemp`, `flamiche`, `croque_monsieur`, `boudin_compote` | 8 | 0.8 | M17 |
+| choux au lard, asperges, jets de houblon, salade liégeoise, escavèche, `boudin` | 6 | 0.6 | M17 |
 | `vanilla_ice_cream` | 4 | 0.4 | M13 |

@@ -92,6 +92,8 @@ Bières (M15) : moût brun `#8A5A1E`, blonde dorée `#E8B83A` à reflets crème,
 
 Snacks de friterie (M16, dessinés par `tools/draw_textures.py`, à remplacer par les vraies) : panés en capsule dorée piquée de chapelure (crus pâles, item de transition doré à l'œuf sans chapelure) ; saucisses en capsule diagonale (cervelas et mexicano épais, viandelle fine) ; boulets en boule, boulets liégeois dans un bol de sauce lapin ; sandwiches en couches (demi-baguette, burger avec steak et fromage, hot-dog, pita en demi-lune) ; rondelles d'oignon et calamars en anneaux ; ailes en pilon à os ; brochette en cubes sur un bâton ; galettes bami (points jaunes) et nasi (points blancs). Sauces : tartare crème verdâtre `#E8E6C4`, pickles jaune moutarde `#CCBC30`, brazil orangé `#EEA040`.
 
+Plats belges (M17, dessinés par `tools/draw_textures.py`) : bols du fond de compote, garnis selon le plat (coquilles de moules, frites dressées, saucisse) ; plats à gratin ovales en céramique grise ; tartes de profil ; bouchée à la reine en tour de pâte feuilletée ; croque en sandwich pressé (fromage jaune, jambon rose) ; boudin noir en saucisse sombre.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

@@ -140,6 +140,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
 
+### M17 — Plats belges ✅ (26/10/2026)
+- [x] 19 plats (22 aliments finis), 33 items : moules, carbonnade, stoemp, waterzooi, lapin à la gueuze, légumes, salade liégeoise, hochepot, escavèche, steak-frites, boudin-compote, chicons au gratin, vol-au-vent, flamiche, croque-monsieur
+- [x] Bols rendus en mangeant ; tag `onions` (oignon ou poireau)
+- **Accepté si** : chaque plat sort d'une ligne automatique. ✅ (recettes et bassins réels testés ; trois assemblages sur de vraies machines : croque-monsieur, chicons au gratin, flamiche ; fumage au ventilateur)
+
 ### M16 — Snacks de friterie ✅ (25/10/2026)
 - [x] Sauces tartare, pickles, brazil et leurs 6 cornets
 - [x] 33 snacks finis (mitraillette, boulets, croquettes, saucisses, loempia, américain, burgers, hot-dog, pita, brochette, galettes, calamars, poulet, rondelles d'oignon), 82 items

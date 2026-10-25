@@ -212,6 +212,8 @@ Le Mixer lit `processing_time` des recettes `mixing` et le met à l'échelle de 
 
 4. **Pas d'œuf dans un bassin froid de nos snacks** (M16) : Create: Food change un œuf seul (`minecraft:egg`) en œuf liquide dans n'importe quel bassin. L'œuf passe au Deployer (panure). La mayonnaise, la brioche, les nouilles et la meringue (M13) gardent leur œuf : leur bassin le reçoit avec ses autres ingrédients, à vérifier dans le pack au M22.
 
+Contrôle JUnit (M17) : deux de nos recettes de bassin sans condition n'ont jamais exactement les mêmes ingrédients (`RecipeFilesTest.noBasinRecipeHasTheSameIngredientsAsAnother`).
+
 **Items de transition partagés** (M16) : une fois un item entré dans un assemblage, Create l'identifie par son item de transition **et** l'identifiant de recette rangé dans son composant `SEQUENCED_ASSEMBLY` (`SequencedAssemblyRecipe.appliesTo`) ; le premier pas se choisit par l'ingrédient d'entrée. Un seul `incomplete_breaded` sert donc aux huit snacks panés, chacun partant de son appareil (vérifié sur une vraie ligne : deux croquettes différentes à la suite).
 
 ## Ponder (M9)

@@ -389,6 +389,8 @@ Décidé le 25/10/2026 : la bière n'existe qu'en **fluide pour cuisiner**. Aucu
 
 ### 5.11 Plats belges
 
+> **Livré au M17 (26/10/2026)** (recettes réelles dans `04-contenu-et-recettes.md`). Écarts : les asperges à la flamande perdent leur œuf (règle 4 des bassins) et prennent les épices (muscade) ; l'oignon est lu par `#create_belgian_snacks:onions`, qui contient aussi notre poireau, donc jamais de jumelle betterave ; moules à 4 moules + poireau + oignon, sans changement. Le fond de tarte (`pressing/tart_shell`) et l'item `incomplete_tart` arrivent dès ce jalon pour la flamiche.
+
 Plats en bol : le bol est consommé par le Mixer et rendu en mangeant, comme les soupes vanilla.
 
 | Plat | Chaîne | IDs |
@@ -682,7 +684,7 @@ flowchart LR
 | **M14 — Cultures et moules** ✅ | Chicon, poireau, houblon (et ses jets), choux de Bruxelles, asperges, sarrasin, moutarde (et le fluide moutarde), bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
 | **M15 — Bières** ✅ | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
 | **M16 — Snacks de friterie** ✅ | Sauces tartare, pickles et brazil et leurs cornets ; mitraillette, boulets, croquettes (crevettes, fromage, poulet, lucifer), cervelas, mexicano, viandelle, loempia, filet américain et dérivés, burger et cheeseburger de friterie, hot-dog, pita, brochette, bamischijf, nasischijf, calamars, chicken fingers, nuggets, croquant de poulet, ailes épicées, fish sticks, rondelles d'oignon, bâtonnets de fromage, croquettes de pommes de terre | Chacun produit par une ligne automatique (GameTest) |
-| **M17 — Plats belges** | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
+| **M17 — Plats belges** ✅ | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
 | **M18 — Gaufrier et gaufres** | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |
 | **M19 — Douceurs** | Speculoos et pâte (dont la gaufre et le pistolet au speculoos), cuberdons, pralines et ballotin, croustillons, couque de Dinant, tartes (riz, sucre, mattentaart), craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud | Chacune produite par une ligne automatique |
 | **M20 — Huile usagée** | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |

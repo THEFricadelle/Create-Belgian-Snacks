@@ -77,6 +77,8 @@ Scan du 25/10/2026 sur les jars d'Arcadia 2.0.32 : Create: Food moud le sucre en
 
 Snacks de friterie (M16, scan du 25/10/2026) : Create: Food change **un œuf seul** en œuf liquide au Mixer (`createfood:egg`), dans n'importe quel bassin ; nos bassins de snacks n'ont donc pas d'œuf (règle 4 de `03-architecture.md`). Delightful Creators cuit le riz seul dans un bassin **chauffé** : notre nasi se mélange à froid. Personne ne scie le pain, le poulet, le poisson, le fromage, l'oignon ou le maïs, ni ne presse la pâte de Create : nos recettes de scie et de presse sont seules. Cultural Delights apporte calmar et calamar (`c:foods/raw_squid`, `c:foods/raw_calamari`, lus par `#squids`) et le maïs (`c:crops/corn`) ; Create: Food l'ananas (`c:pineapple`, lu par `#pineapples`). Aucune crevette dans le pack : la croquette de crevettes y est au cabillaud. À vérifier en jeu au M22 : l'œuf de la mayonnaise et de la brioche (M13) face à l'œuf liquide de Create: Food.
 
+Plats belges (M17, scan du 26/10/2026) : dans nos bassins de plats, seul l'œuf seul de Create: Food pourrait partir avant (d'où les asperges sans œuf) ; le ragoût de champignons de Create: Food demande les deux champignons au bassin, notre champignon passe au Deployer. Les assemblages sur pain du pack commencent par du poulet cuit, un œuf frit ou du bœuf cuit, le croque-monsieur par du jambon ; personne ne pose rien sur un steak cuit au Deployer.
+
 À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
 
 ### Botany Pots (cultures v2)
