@@ -35,6 +35,10 @@ sourceSets {
     // Empty on purpose: the arcadiaJar run loads the built jar and the pack's own jars, nothing from here.
     packJar {
     }
+    // The removal smoke run's probe (tools/uninstall_smoke.py): a test-only mod of its own, never shipped,
+    // that references nothing of this mod, so it can run where the mod is absent.
+    uninstallProbe {
+    }
 }
 
 configurations {
@@ -51,10 +55,21 @@ neoForge {
     addModdingDependenciesTo sourceSets.gametest
     addModdingDependenciesTo sourceSets.gametestCompat
     addModdingDependenciesTo sourceSets.packJar
+    addModdingDependenciesTo sourceSets.uninstallProbe
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
         minecraftVersion = project.parchment_minecraft_version
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+            sourceSet(sourceSets.gametest)
+        }
+        uninstall_probe {
+            sourceSet(sourceSets.uninstallProbe)
+        }
     }
 
     runs {
@@ -177,6 +192,33 @@ neoForge {
             systemProperty 'create_belgian_snacks.showcase', 'check'
         }
 
+        // Removal smoke run (spec v2, rule R5), driven by tools/uninstall_smoke.py. Seed: the mod in dev
+        // fills a fresh world with everything of ours. Without: the probe and Create's jars only (copied
+        // into mods/ by the script), no class of this mod. Back: the same plus the release jar.
+        uninstallSeed {
+            client()
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run/uninstall/seed')
+            programArguments.addAll '--username', 'UninstallSmoke'
+            systemProperty 'create_belgian_snacks.uninstallSmoke', 'seed'
+        }
+        uninstallWithout {
+            client()
+            sourceSet = sourceSets.uninstallProbe
+            loadedMods = [mods.uninstall_probe]
+            gameDirectory = project.file('run/uninstall/without')
+            programArguments.addAll '--username', 'UninstallSmoke', '--quickPlaySingleplayer', 'belgian-snacks-uninstall'
+            systemProperty 'uninstall_probe.phase', 'without'
+        }
+        uninstallBack {
+            client()
+            sourceSet = sourceSets.uninstallProbe
+            loadedMods = [mods.uninstall_probe]
+            gameDirectory = project.file('run/uninstall/back')
+            programArguments.addAll '--username', 'UninstallSmoke', '--quickPlaySingleplayer', 'belgian-snacks-uninstall'
+            systemProperty 'uninstall_probe.phase', 'back'
+        }
+
         // Two real clients on a real dedicated server, launched together by tools/mp_smoke.py.
         serverSmoke {
             server()
@@ -210,12 +252,6 @@ neoForge {
         }
     }
 
-    mods {
-        "${mod_id}" {
-            sourceSet(sourceSets.main)
-            sourceSet(sourceSets.gametest)
-        }
-    }
 }
 
 // Every third-party repository is restricted to the groups it actually serves, so an artefact
@@ -248,6 +284,12 @@ repositories {
 }
 
 configurations {
+    // Create and the libraries it embeds, as jars for the removal smoke run's mods/ folder: the same
+    // coordinates as the dependencies below, nothing more.
+    uninstallMods {
+        canBeConsumed = false
+        transitive = false
+    }
     runtimeClasspath.extendsFrom localRuntime
     gametestRuntimeClasspath.extendsFrom localRuntime
     gametestCompatRuntimeClasspath.extendsFrom localRuntime
@@ -261,6 +303,11 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    uninstallMods("com.simibubi.create:create-${minecraft_version}:${create_version}:slim")
+    uninstallMods("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    uninstallMods("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    uninstallMods("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // Optional integrations: API at compile time, full mod only in the dev runtime.
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
@@ -392,10 +439,23 @@ tasks.register('runMultiplayerSmoke', Exec) {
 
 // Everything automated, in order: unit tests, GameTests without then with compat mods, live client,
 // then two clients on a dedicated server.
+tasks.register('prepareUninstallMods', Sync) {
+    group = 'verification'
+    description = 'Copies the Create jars the removal smoke run puts in mods/ when this mod is absent.'
+    from configurations.uninstallMods
+    into layout.buildDirectory.dir('uninstall/mods')
+}
+
+tasks.register('runUninstallSmoke', Exec) {
+    group = 'verification'
+    description = 'A world full of this mod opened without it, then with it again (opens three windows in turn).'
+    commandLine 'python', 'tools/uninstall_smoke.py'
+}
+
 tasks.register('testAll') {
     group = 'verification'
-    description = 'Unit tests, GameTests (plain and with compat mods), the client smoke run and the two-client run.'
-    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke', 'runMultiplayerSmoke'
+    description = 'Unit tests, GameTests (plain and with compat mods), the client smoke run, the two-client run and the removal run.'
+    dependsOn 'build', 'runGameTestServer', 'runGameTestServerCompat', 'runClientSmoke', 'runMultiplayerSmoke', 'runUninstallSmoke'
 }
 tasks.configureEach { Task task ->
     if (task.name == 'runGameTestServer') {
@@ -406,6 +466,8 @@ tasks.configureEach { Task task ->
         task.mustRunAfter 'runGameTestServerCompat'
     } else if (task.name == 'runMultiplayerSmoke') {
         task.mustRunAfter 'runClientSmoke'
+    } else if (task.name == 'runUninstallSmoke') {
+        task.mustRunAfter 'runMultiplayerSmoke'
     }
 }
 

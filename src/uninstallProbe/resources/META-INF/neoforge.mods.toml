@@ -1,0 +1,19 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+# Test-only mod of the removal smoke run (tools/uninstall_smoke.py). Never shipped: it lives in its
+# own source set and does not reference Create: Belgian Snacks.
+[[mods]]
+modId="uninstall_probe"
+version="1.0.0"
+displayName="Belgian Snacks removal probe"
+authors="THEFricadelle"
+description='''Joins the quick-play world, checks the player is in, writes a report and quits.'''
+
+[[dependencies.uninstall_probe]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1,)"
+    ordering="NONE"
+    side="CLIENT"
