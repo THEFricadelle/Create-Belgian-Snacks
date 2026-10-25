@@ -67,6 +67,7 @@ class RecipeFilesTest {
             String expected = switch (folder) {
                 case "crafting" -> "minecraft:crafting_shaped";
                 case "smoking", "smelting" -> "minecraft:" + folder;
+                case "botanypots" -> "botanypots:block_derived_crop";
                 default -> namespace + ":" + folder;
             };
             assertEquals(expected, json.get("type").getAsString(), id + " type");

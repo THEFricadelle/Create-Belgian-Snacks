@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M14 crops; the Botany Pots crops load only with that mod.
+        "milling/buckwheat_flour", "milling/mustard_powder", "mixing/mustard", "crafting/bouchot",
         // M13 base ingredients; salt, butter, powdered sugar, raisins and the Liège sauce follow the pack below.
         "mixing/cassonade",
         "mixing/cream",
