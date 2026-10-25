@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:foods/plum",
+      "required": false
+    },
+    {
+      "id": "#c:crops/plum",
+      "required": false
+    }
+  ]
+}

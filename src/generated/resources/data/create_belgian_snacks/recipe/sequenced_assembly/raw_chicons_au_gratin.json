@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:chicon"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_chicons_au_gratin"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        },
+        {
+          "tag": "create_belgian_snacks:hams"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 250,
+          "fluid": "create_belgian_snacks:bechamel"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        },
+        {
+          "tag": "c:foods/cheese"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_chicons_au_gratin"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_chicons_au_gratin"
+  }
+}

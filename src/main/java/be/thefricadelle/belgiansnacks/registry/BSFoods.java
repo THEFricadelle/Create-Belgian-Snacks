@@ -84,6 +84,18 @@ public final class BSFoods {
     public static final FoodProperties NUGGETS = snack(4, 0.5f);
     public static final FoodProperties CHICKEN_CRUNCH = snack(6, 0.7f);
 
+    // v2 Belgian dishes (M17, provisional): a plate with fries is a feast, a stew a meal, a side a snack.
+    public static final FoodProperties DISH_WITH_FRIES = snack(14, 1.2f);
+    public static final FoodProperties DISH = snack(10, 1.0f);
+    public static final FoodProperties SIDE_DISH_LARGE = snack(8, 0.8f);
+    public static final FoodProperties SIDE_DISH = snack(6, 0.6f);
+
+    /** The same food, eaten from a bowl that comes back. */
+    public static FoodProperties inBowl(FoodProperties food) {
+        return new FoodProperties(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.eatSeconds(),
+            java.util.Optional.of(new net.minecraft.world.item.ItemStack(Items.BOWL)), food.effects());
+    }
+
     private static FoodProperties snack(int nutrition, float saturation) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();
     }

@@ -1,0 +1,40 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:prunes"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:prunes"
+    },
+    {
+      "tag": "create_belgian_snacks:prunes"
+    },
+    {
+      "item": "minecraft:rabbit"
+    },
+    {
+      "tag": "create_belgian_snacks:onions"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:gueuze"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:lapin_a_la_gueuze"
+    }
+  ]
+}

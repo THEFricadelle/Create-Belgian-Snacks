@@ -26,6 +26,10 @@
     "create_belgian_snacks:incomplete_burger",
     "create_belgian_snacks:incomplete_hot_dog",
     "create_belgian_snacks:incomplete_pita",
-    "create_belgian_snacks:incomplete_brochette"
+    "create_belgian_snacks:incomplete_brochette",
+    "create_belgian_snacks:incomplete_chicons_au_gratin",
+    "create_belgian_snacks:incomplete_vol_au_vent",
+    "create_belgian_snacks:incomplete_tart",
+    "create_belgian_snacks:incomplete_croque_monsieur"
   ]
 }

@@ -23,6 +23,7 @@ import be.thefricadelle.belgiansnacks.registry.BSCrops;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -301,6 +302,79 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             .require(AllItems.WHEAT_FLOUR.get()).require(BSFluids.BLONDE_BEER.get(), 250)
             .output(BSSnacks.BATTERED_ONION_RINGS.get(), 3)),
 
+        // v2 Belgian dishes (section 5.11). Each bowl dish takes its bowl in the basin and gives it back
+        // when eaten. #onions holds our leek, so it is never empty: no beetroot twin needed.
+        MOULES_MARINIERES = create("moules_marinieres", b -> moules(b).require(Fluids.WATER, 250)
+            .output(BSDishes.MOULES_MARINIERES.get())),
+        MOULES_A_LA_BIERE = create("moules_a_la_biere", b -> moules(b).require(BSFluids.BLONDE_BEER.get(), 250)
+            .output(BSDishes.MOULES_A_LA_BIERE.get())),
+
+        // The slice of bread (mustard-spread, in the recipe) thickens the stew.
+        CARBONNADE = create("carbonnade", b -> b
+            .require(Items.BEEF).require(Items.BEEF).require(BSTags.ONIONS).require(BSItems.PISTOLET.get()).require(BSItems.CASSONADE.get())
+            .require(Items.BOWL).require(BSFluids.BROWN_BEER.get(), 250)
+            .output(BSDishes.CARBONNADE.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        STOEMP = create("stoemp", b -> b
+            .require(BSTags.C_POTATOES).require(BSTags.C_POTATOES).require(BSCrops.LEEK.get()).require(Items.CARROT).require(BSTags.BUTTERS)
+            .require(Items.BOWL).require(Tags.Fluids.MILK, 250)
+            .output(BSDishes.STOEMP.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        WATERZOOI = create("waterzooi", b -> b
+            .require(Items.CHICKEN).require(BSCrops.LEEK.get()).require(Items.CARROT).require(Items.BOWL).require(Tags.Fluids.MILK, 250)
+            .output(BSDishes.WATERZOOI.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        LAPIN_A_LA_GUEUZE = create("lapin_a_la_gueuze", b -> lapin(b.require(BSTags.PRUNES).require(BSTags.PRUNES))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.PRUNES)))),
+        // No plum in the pack: sweet berries stand in for the prunes.
+        LAPIN_A_LA_GUEUZE_FROM_SWEET_BERRIES = create("lapin_a_la_gueuze_from_sweet_berries", b ->
+            lapin(b.require(Items.SWEET_BERRIES).require(Items.SWEET_BERRIES))
+            .withCondition(new TagEmptyCondition(BSTags.PRUNES))),
+
+        BRUSSELS_SPROUTS_BACON = create("brussels_sprouts_bacon", b -> b
+            .require(BSCrops.BRUSSELS_SPROUT.get()).require(BSCrops.BRUSSELS_SPROUT.get()).require(BSCrops.BRUSSELS_SPROUT.get())
+            .require(BSCrops.BRUSSELS_SPROUT.get()).require(BSTags.LARDONS).require(BSTags.BUTTERS).require(Items.BOWL)
+            .output(BSDishes.BRUSSELS_SPROUTS_BACON.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        // Melted butter and nutmeg; the chopped egg of the recipe is left out: Create: Food turns a lone
+        // egg into liquid egg in any basin (docs/03, basin rule 4).
+        ASPARAGUS_FLEMISH = create("asparagus_flemish", b -> b
+            .require(BSCrops.WHITE_ASPARAGUS.get()).require(BSCrops.WHITE_ASPARAGUS.get()).require(BSCrops.WHITE_ASPARAGUS.get())
+            .require(BSTags.BUTTERS).require(BSItems.BELGIAN_SPICES.get()).require(Items.BOWL)
+            .output(BSDishes.ASPARAGUS_FLEMISH.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        HOP_SHOOTS_CREAM = create("hop_shoots_cream", b -> b
+            .require(BSCrops.HOP_SHOOTS.get()).require(BSCrops.HOP_SHOOTS.get()).require(BSCrops.HOP_SHOOTS.get()).require(Items.BOWL)
+            .require(BSFluids.CREAM.get(), 250)
+            .output(BSDishes.HOP_SHOOTS_CREAM.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        SALADE_LIEGEOISE = create("salade_liegeoise", b -> b
+            .require(Items.BAKED_POTATO).require(Items.BAKED_POTATO).require(BSTags.LARDONS).require(BSTags.ONIONS).require(Items.BOWL)
+            .require(BSFluids.VINEGAR.get(), 50)
+            .output(BSDishes.SALADE_LIEGEOISE.get())),
+
+        HOCHEPOT = create("hochepot", b -> b
+            .require(Items.BEEF).require(Items.PORKCHOP).require(BSCrops.BRUSSELS_SPROUT.get()).require(BSCrops.BRUSSELS_SPROUT.get())
+            .require(Items.CARROT).require(BSCrops.LEEK.get()).require(Items.BOWL).require(Fluids.WATER, 500)
+            .output(BSDishes.HOCHEPOT.get())
+            .requiresHeat(HeatCondition.HEATED)),
+
+        // A cold marinade: it takes its time.
+        ESCAVECHE = create("escaveche", b -> b
+            .require(Tags.Items.FOODS_COOKED_FISH).require(BSTags.ONIONS).require(Items.BOWL).require(BSFluids.VINEGAR.get(), 100)
+            .output(BSDishes.ESCAVECHE.get())
+            .duration(600)),
+
+        RAW_BOUDIN = create("raw_boudin", b -> b
+            .require(BSTags.MINCED_PORK).require(BSTags.C_BREAD_CRUMBS).require(Tags.Fluids.MILK, 250)
+            .output(BSDishes.RAW_BOUDIN.get())),
+
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
             .output(BSItems.APPLE_COMPOTE.get())
@@ -321,6 +395,19 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             }
         }
         return b.output(BSFluids.KRIEK.get().getSource(), 1000).duration(600);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> moules(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        for (int i = 0; i < 4; i++) {
+            b.require(BSCrops.MUSSEL.get());
+        }
+        return b.require(BSCrops.LEEK.get()).require(BSTags.ONIONS).require(Items.BOWL).requiresHeat(HeatCondition.HEATED);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> lapin(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(Items.RABBIT).require(BSTags.ONIONS).require(Items.BOWL).require(BSFluids.GUEUZE.get(), 250)
+            .output(BSDishes.LAPIN_A_LA_GUEUZE.get())
+            .requiresHeat(HeatCondition.HEATED);
     }
 
     private static StandardProcessingRecipe.Builder<MixingRecipe> brazil(StandardProcessingRecipe.Builder<MixingRecipe> b) {

@@ -1,0 +1,29 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:white_asparagus"
+    },
+    {
+      "item": "create_belgian_snacks:white_asparagus"
+    },
+    {
+      "item": "create_belgian_snacks:white_asparagus"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    },
+    {
+      "item": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:asparagus_flemish"
+    }
+  ]
+}

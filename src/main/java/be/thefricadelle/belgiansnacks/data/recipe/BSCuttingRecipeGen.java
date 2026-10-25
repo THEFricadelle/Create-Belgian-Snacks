@@ -17,6 +17,7 @@ import com.simibubi.create.api.data.recipe.CuttingRecipeGen;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -60,6 +61,10 @@ public class BSCuttingRecipeGen extends CuttingRecipeGen {
         // Without corn, the chicken crunch takes bread crumbs (mixing/raw_chicken_crunch_from_bread_crumbs).
         CORN_FLAKES = create("corn_flakes", b -> b.require(BSTags.C_CORN).output(BSSnacks.CORN_FLAKES.get(), 2).duration(50)
             .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_CORN))));
+
+    // v2 dishes: puff pastry cut into two vol-au-vent shells (the press makes tart shells from it).
+    GeneratedRecipe RAW_VOL_AU_VENT_SHELL = create("raw_vol_au_vent_shell", b -> b
+        .require(BSItems.PUFF_PASTRY.get()).output(BSDishes.RAW_VOL_AU_VENT_SHELL.get(), 2).duration(50));
 
     public BSCuttingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

@@ -1,0 +1,30 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:baked_potato"
+    },
+    {
+      "item": "minecraft:baked_potato"
+    },
+    {
+      "tag": "create_belgian_snacks:lardons"
+    },
+    {
+      "tag": "create_belgian_snacks:onions"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:vinegar"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:salade_liegeoise"
+    }
+  ]
+}

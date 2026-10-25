@@ -1,0 +1,25 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:foods/cooked_fish"
+    },
+    {
+      "tag": "create_belgian_snacks:onions"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 100,
+      "fluid": "create_belgian_snacks:vinegar"
+    }
+  ],
+  "processing_time": 600,
+  "results": [
+    {
+      "id": "create_belgian_snacks:escaveche"
+    }
+  ]
+}

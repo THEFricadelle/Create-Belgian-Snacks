@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:vol_au_vent_shell"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:vol_au_vent"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_vol_au_vent"
+        },
+        {
+          "item": "minecraft:cooked_chicken"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_vol_au_vent"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_vol_au_vent"
+        },
+        {
+          "tag": "c:mushrooms"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_vol_au_vent"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_vol_au_vent"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 100,
+          "fluid": "create_belgian_snacks:bechamel"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_vol_au_vent"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_vol_au_vent"
+  }
+}

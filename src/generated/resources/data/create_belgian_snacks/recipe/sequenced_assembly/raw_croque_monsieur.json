@@ -1,0 +1,61 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:bread"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_croque_monsieur"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_croque_monsieur"
+        },
+        {
+          "tag": "create_belgian_snacks:hams"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_croque_monsieur"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_croque_monsieur"
+        },
+        {
+          "tag": "c:foods/cheese"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_croque_monsieur"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_croque_monsieur"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_croque_monsieur"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_croque_monsieur"
+  }
+}

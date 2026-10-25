@@ -1,0 +1,9 @@
+{
+  "values": [
+    "create_belgian_snacks:leek",
+    {
+      "id": "#c:crops/onion",
+      "required": false
+    }
+  ]
+}

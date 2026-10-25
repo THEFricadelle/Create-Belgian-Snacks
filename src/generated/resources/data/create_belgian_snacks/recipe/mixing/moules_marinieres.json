@@ -1,0 +1,37 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:mussel"
+    },
+    {
+      "item": "create_belgian_snacks:mussel"
+    },
+    {
+      "item": "create_belgian_snacks:mussel"
+    },
+    {
+      "item": "create_belgian_snacks:mussel"
+    },
+    {
+      "item": "create_belgian_snacks:leek"
+    },
+    {
+      "tag": "create_belgian_snacks:onions"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:moules_marinieres"
+    }
+  ]
+}

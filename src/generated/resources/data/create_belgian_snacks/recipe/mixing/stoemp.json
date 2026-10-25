@@ -1,0 +1,34 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "c:crops/potato"
+    },
+    {
+      "tag": "c:crops/potato"
+    },
+    {
+      "item": "create_belgian_snacks:leek"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 250,
+      "tag": "c:milk"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:stoemp"
+    }
+  ]
+}

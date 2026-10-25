@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:tart_shell"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_flamiche"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_tart"
+        },
+        {
+          "item": "create_belgian_snacks:leek"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_tart"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_tart"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 250,
+          "fluid": "create_belgian_snacks:cream"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_tart"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_tart"
+        },
+        {
+          "tag": "c:eggs"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_tart"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_tart"
+  }
+}

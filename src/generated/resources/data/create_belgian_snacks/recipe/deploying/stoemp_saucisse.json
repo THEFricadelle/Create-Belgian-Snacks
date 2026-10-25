@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:stoemp"
+    },
+    {
+      "tag": "create_belgian_snacks:sausages"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:stoemp_saucisse"
+    }
+  ]
+}

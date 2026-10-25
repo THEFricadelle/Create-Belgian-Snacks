@@ -834,6 +834,112 @@ def friterie():
     return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
 
 
+# v2 Belgian dishes (docs/12): bowls with their stew and a topping, oval baking dishes, tarts seen
+# from the side, a puff pastry cup, a pressed sandwich.
+STEW_BROWN = ['3E200E', '5A3018', '7A4424', 'A0643A']
+CERAMIC = ['8A8A92', 'B8B8C0', 'D8D8E0', 'F4F4FA']
+MUSSEL_SHELL = '20202E'
+PASTRY = ['8E5E1C', 'C48A30', 'E0AC4C', 'FAD278']
+PASTRY_RAW = ['B8A068', 'D8C490', 'ECDCB0', 'FAF0D4']
+
+
+def topped_bowl(content, toppings=(), fries_on=False, sausage_on=None):
+    px = bowl(content, content[3])
+    for x, y in toppings:
+        px[y][x] = colour(MUSSEL_SHELL)
+        px[y][x + 1] = colour('3A3A52')
+    if fries_on:
+        draw_sticks(px, [(4, 7, 5, 2), (9, 7, 10, 3)], FRIES_GOLDEN, clip=7)
+    if sausage_on:
+        shape(capsule(3, 5, 12, 5, 1.4), sausage_on, px)
+    return px
+
+
+def baking_dish(top, spots_value=None):
+    px = shape(ellipse(8, 10, 7.2, 4), CERAMIC)
+    shape(ellipse(8, 9.2, 5.6, 2.6), top, px)
+    if spots_value:
+        dots(px, [(5, 9), (8, 8), (10, 10), (7, 10)], spots_value)
+    return px
+
+
+def tart(filling=None, spots_value=None):
+    px = shape({(x, y) for x in range(2, 14) for y in range(9, 13)}, PASTRY_RAW if filling is None else PASTRY)
+    if filling:
+        shape(ellipse(8, 9.5, 5.6, 1.8), filling, px)
+        if spots_value:
+            dots(px, [(5, 9), (8, 9), (10, 9)], spots_value)
+    return px
+
+
+def pastry_cup(palette, filling=None):
+    px = shape({(x, y) for x in range(4, 12) for y in range(5, 14)}, palette)
+    if filling:
+        shape(ellipse(8, 5, 4.2, 1.8), filling, px)
+        dots(px, [(6, 4), (9, 5)], 'D8C8A8')
+    return px
+
+
+def croque(bread, toasted):
+    px = canvas()
+    shape({(x, y) for x in range(2, 14) for y in (11, 12)}, bread, px)
+    for x in range(2, 14):
+        px[10][x] = colour('F4C430' if x % 3 else 'E8A0A0')
+    shape({(x, y) for x in range(2, 14) for y in range(6, 10)}, bread, px)
+    if toasted:
+        dots(px, [(4, 7), (7, 8), (10, 7), (12, 8)], '6E3E14')
+    return px
+
+
+def dishes():
+    MUSSELS = ['6A5A3A', '8E7A50', 'B09A6A', 'D4C08E']
+    BEER_BROTH = ['8A6420', 'B08430', 'D0A448', 'F0CC78']
+    MASH = ['A89A6A', 'CCBE8C', 'E6DAAE', 'FAF2D4']
+    CREAM_SOUP = ['B0A888', 'D0C8A8', 'E8E2C8', 'FCF8E8']
+    shells = [(4, 6), (7, 5), (10, 6), (6, 7)]
+    out = {
+        'moules_marinieres': topped_bowl(MUSSELS, shells),
+        'moules_a_la_biere': topped_bowl(BEER_BROTH, shells),
+        'moules_frites': topped_bowl(MUSSELS, shells, fries_on=True),
+        'carbonnade': topped_bowl(STEW_BROWN),
+        'carbonnade_frites': topped_bowl(STEW_BROWN, fries_on=True),
+        'stoemp': topped_bowl(MASH, [(5, 7), (9, 7)]),
+        'stoemp_saucisse': topped_bowl(MASH, sausage_on=['5A2418', '8E3C28', 'B85C3C', 'E08A64']),
+        'waterzooi': topped_bowl(CREAM_SOUP),
+        'lapin_a_la_gueuze': topped_bowl(['5A3014', '7E4820', 'A0602C', 'C88448']),
+        'brussels_sprouts_bacon': topped_bowl(['2E5A1C', '4A8028', '6AA03A', '9ACC5A']),
+        'asparagus_flemish': topped_bowl(['B8A848', 'D8C868', 'F0E08C', 'FFF4C0']),
+        'hop_shoots_cream': topped_bowl(['8A9A5A', 'AAB878', 'CCD49C', 'ECF0C8']),
+        'salade_liegeoise': topped_bowl(['8A7A3A', 'B09A50', 'D0BA6A', 'ECD898']),
+        'hochepot': topped_bowl(['4A3018', '6A4824', '8A6034', 'B08048']),
+        'escaveche': topped_bowl(['A8A070', 'C8C090', 'E0DAB0', 'F6F2D8']),
+        'boudin_compote': topped_bowl(['8C7C30', 'B0A048', 'D8C86A', 'F0E498'], sausage_on=['3A3030', '585050', '787070', 'A09898']),
+        'steak_frites': fries(FRIES_GOLDEN),
+        'incomplete_chicons_au_gratin': peak(['C8A8A0', 'E0C4BC', 'F0E0D8', 'FFF4F0']),
+        'raw_chicons_au_gratin': baking_dish(['C8BC98', 'E0D6B6', 'F0E6C8', 'FFF8E4'], 'F4C430'),
+        'chicons_au_gratin': baking_dish(['8E5E1C', 'C48A30', 'E0AC4C', 'FAD278'], '6E3E14'),
+        'raw_vol_au_vent_shell': pastry_cup(PASTRY_RAW),
+        'vol_au_vent_shell': pastry_cup(PASTRY),
+        'incomplete_vol_au_vent': pastry_cup(PASTRY, ['B0A888', 'D0C8A8', 'E8E2C8', 'FCF8E8']),
+        'vol_au_vent': pastry_cup(PASTRY, ['C8BC98', 'E0D6B6', 'F0E6C8', 'FFF8E4']),
+        'raw_boudin': sausage(['8A8080', 'B0A8A8', 'D0C8C8', 'ECE6E6']),
+        'boudin': sausage(['3A3030', '585050', '787070', 'A09898']),
+        'tart_shell': tart(),
+        'incomplete_tart': tart(['B8B088', 'D8D0A8', 'ECE6C4', 'FCF8E4'], '6AA03A'),
+        'raw_flamiche': tart(['C8B868', 'E0D488', 'F0E6A8', 'FFF6D0'], '6AA03A'),
+        'flamiche': tart(['A87A20', 'D0A030', 'E8C04C', 'FFE080'], '4A8028'),
+        'incomplete_croque_monsieur': croque(['B8A47C', 'D8C49C', 'ECDCB8', 'FAF0DA'], False),
+        'raw_croque_monsieur': croque(['B8A47C', 'D8C49C', 'ECDCB8', 'FAF0DA'], False),
+        'croque_monsieur': croque(['8E5E1C', 'C48A30', 'E0AC4C', 'FAD278'], True),
+    }
+    # The plate of steak-frites: a steak beside the fries.
+    shape(ellipse(5.5, 11, 4, 2.6), ['3A1A0E', '5A2A16', '7A3C20', '9A5430'], out['steak_frites'])
+    # The unfinished croque has no cheese yet.
+    for x in range(2, 14):
+        out['incomplete_croque_monsieur'][10][x] = colour('E8A0A0')
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 def artwork():
     out = {}
     for name, palette, topped, thick, unfinished in [
@@ -880,6 +986,7 @@ def artwork():
     out.update(base_ingredients())
     out.update(crops_items())
     out.update(friterie())
+    out.update(dishes())
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     return out

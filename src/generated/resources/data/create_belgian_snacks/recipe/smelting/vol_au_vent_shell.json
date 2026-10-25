@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "create_belgian_snacks:raw_vol_au_vent_shell"
+  },
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:vol_au_vent_shell"
+  }
+}

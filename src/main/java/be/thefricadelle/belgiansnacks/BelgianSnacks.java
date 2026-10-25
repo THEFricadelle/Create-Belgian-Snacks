@@ -36,6 +36,7 @@ import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.createmod.catnip.lang.FontHelper;
@@ -66,6 +67,7 @@ public class BelgianSnacks {
         BSBlocks.register();
         BSCrops.register();
         BSSnacks.register();
+        BSDishes.register();
         BSBlockEntities.register();
         BSEntities.register();
         BSTriggers.register(modEventBus);

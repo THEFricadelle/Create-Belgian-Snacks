@@ -1,0 +1,28 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:hop_shoots"
+    },
+    {
+      "item": "create_belgian_snacks:hop_shoots"
+    },
+    {
+      "item": "create_belgian_snacks:hop_shoots"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:cream"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:hop_shoots_cream"
+    }
+  ]
+}

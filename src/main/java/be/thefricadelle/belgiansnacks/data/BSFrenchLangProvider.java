@@ -20,6 +20,7 @@ import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -188,6 +189,12 @@ public class BSFrenchLangProvider extends LanguageProvider {
             add(BSItems.tooltipKey("cone_of_fries_beef_tallow_" + sauce), line);
         }
         BSSnacks.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        BSDishes.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        add(BSItems.tooltipKey("moules_frites"), "Le plat national. Des moules, des frites, un bol de coquilles.");
+        add(BSItems.tooltipKey("carbonnade"), "Du bœuf mijoté à la bière brune, avec une tranche de pain pour lier.");
+        add(BSItems.tooltipKey("stoemp"), "De la purée avec ce que le potager donne.");
+        add(BSItems.tooltipKey("waterzooi"), "De Gand. Soupe ou ragoût, les Gantois en débattent encore.");
+        add(BSItems.tooltipKey("chicons_au_gratin"), "Amer, crémeux, gratiné. Les enfants s'enfuient.");
         add(BSItems.tooltipKey("mitraillette"), "Une demi-baguette, une viande, des frites, une sauce. Le dîner.");
         add(BSItems.tooltipKey("boulets_liegeois"), "Des boulets noyés dans leur sauce.");
         add(BSItems.tooltipKey("lucifer"), "Une croquette qui mord.");

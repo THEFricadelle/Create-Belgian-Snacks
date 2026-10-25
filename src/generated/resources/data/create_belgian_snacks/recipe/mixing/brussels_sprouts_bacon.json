@@ -1,0 +1,32 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:brussels_sprout"
+    },
+    {
+      "item": "create_belgian_snacks:brussels_sprout"
+    },
+    {
+      "item": "create_belgian_snacks:brussels_sprout"
+    },
+    {
+      "item": "create_belgian_snacks:brussels_sprout"
+    },
+    {
+      "tag": "create_belgian_snacks:lardons"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:brussels_sprouts_bacon"
+    }
+  ]
+}

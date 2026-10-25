@@ -16,6 +16,7 @@ import com.simibubi.create.api.data.recipe.DeployingRecipeGen;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -58,6 +59,25 @@ public class BSDeployingRecipeGen extends DeployingRecipeGen {
         .require(Items.SHEARS)
         .output(BSSnacks.RAW_CHICKEN_WINGS.get(), 2)
         .toolNotConsumed());
+
+    // v2 Belgian dishes (section 5.11): fries, a sausage or compote on a finished dish.
+    GeneratedRecipe MOULES_FRITES = create("moules_frites", b -> b
+        .require(BSDishes.MOULES_MARINIERES.get()).require(BSTags.FRIES).output(BSDishes.MOULES_FRITES.get()));
+
+    GeneratedRecipe MOULES_FRITES_FROM_BEER = create("moules_frites_from_beer", b -> b
+        .require(BSDishes.MOULES_A_LA_BIERE.get()).require(BSTags.FRIES).output(BSDishes.MOULES_FRITES.get()));
+
+    GeneratedRecipe CARBONNADE_FRITES = create("carbonnade_frites", b -> b
+        .require(BSDishes.CARBONNADE.get()).require(BSTags.FRIES).output(BSDishes.CARBONNADE_FRITES.get()));
+
+    GeneratedRecipe STOEMP_SAUCISSE = create("stoemp_saucisse", b -> b
+        .require(BSDishes.STOEMP.get()).require(BSTags.SAUSAGES).output(BSDishes.STOEMP_SAUCISSE.get()));
+
+    GeneratedRecipe STEAK_FRITES = create("steak_frites", b -> b
+        .require(Items.COOKED_BEEF).require(BSTags.FRIES).output(BSDishes.STEAK_FRITES.get()));
+
+    GeneratedRecipe BOUDIN_COMPOTE = create("boudin_compote", b -> b
+        .require(BSDishes.BOUDIN.get()).require(BSItems.APPLE_COMPOTE.get()).output(BSDishes.BOUDIN_COMPOTE.get()));
 
     public BSDeployingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

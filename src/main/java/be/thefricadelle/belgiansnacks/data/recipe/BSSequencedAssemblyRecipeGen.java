@@ -21,6 +21,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -123,6 +124,49 @@ public class BSSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.PORKCHOP))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.LARDONS))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.PORKCHOP))
+            .build(output));
+
+    // v2 Belgian dishes (section 5.11): one pass each.
+    GeneratedRecipe
+        RAW_CHICONS_AU_GRATIN = register(output -> new SequencedAssemblyRecipeBuilder(asResource("raw_chicons_au_gratin"))
+            .require(be.thefricadelle.belgiansnacks.registry.BSCrops.CHICON.get())
+            .transitionTo(BSDishes.INCOMPLETE_CHICONS_AU_GRATIN.get())
+            .addOutput(BSDishes.RAW_CHICONS_AU_GRATIN.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.HAMS))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSFluids.BECHAMEL.get(), 250))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.C_FOODS_CHEESE))
+            .build(output)),
+
+        VOL_AU_VENT = register(output -> new SequencedAssemblyRecipeBuilder(asResource("vol_au_vent"))
+            .require(BSDishes.VOL_AU_VENT_SHELL.get())
+            .transitionTo(BSDishes.INCOMPLETE_VOL_AU_VENT.get())
+            .addOutput(BSDishes.VOL_AU_VENT.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Items.COOKED_CHICKEN))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Tags.Items.MUSHROOMS))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSFluids.BECHAMEL.get(), 100))
+            .build(output)),
+
+        // Tarts share incomplete_tart: the sugar tart and the mattentaart join it in M19.
+        RAW_FLAMICHE = register(output -> new SequencedAssemblyRecipeBuilder(asResource("raw_flamiche"))
+            .require(BSDishes.TART_SHELL.get())
+            .transitionTo(BSDishes.INCOMPLETE_TART.get())
+            .addOutput(BSDishes.RAW_FLAMICHE.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(be.thefricadelle.belgiansnacks.registry.BSCrops.LEEK.get()))
+            .addStep(FillingRecipe::new, rb -> rb.require(BSFluids.CREAM.get(), 250))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Tags.Items.EGGS))
+            .build(output)),
+
+        RAW_CROQUE_MONSIEUR = register(output -> new SequencedAssemblyRecipeBuilder(asResource("raw_croque_monsieur"))
+            .require(Items.BREAD)
+            .transitionTo(BSDishes.INCOMPLETE_CROQUE_MONSIEUR.get())
+            .addOutput(BSDishes.RAW_CROQUE_MONSIEUR.get(), 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.HAMS))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSTags.C_FOODS_CHEESE))
+            .addStep(PressingRecipe::new, rb -> rb)
             .build(output));
 
     public BSSequencedAssemblyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

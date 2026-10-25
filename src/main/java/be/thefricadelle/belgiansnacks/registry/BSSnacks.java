@@ -241,7 +241,7 @@ public final class BSSnacks {
     }
 
     // Baked like the other breads: a fan on a campfire, or a furnace.
-    private static void cook(RegistrateRecipeProvider provider, Item result, Ingredient input, String name) {
+    static void cook(RegistrateRecipeProvider provider, Item result, Ingredient input, String name) {
         SimpleCookingRecipeBuilder.smoking(input, RecipeCategory.FOOD, result, 0.1f, 100)
             .unlockedBy("has_" + name, RegistrateRecipeProvider.has(result))
             .save(provider, BelgianSnacks.asResource("smoking/" + name));

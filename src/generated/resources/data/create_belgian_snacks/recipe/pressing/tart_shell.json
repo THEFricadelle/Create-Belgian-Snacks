@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:puff_pastry"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:tart_shell"
+    }
+  ]
+}
