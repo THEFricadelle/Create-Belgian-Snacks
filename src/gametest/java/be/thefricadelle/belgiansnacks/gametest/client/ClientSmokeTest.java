@@ -169,6 +169,9 @@ public final class ClientSmokeTest {
         "filling/cone_of_fries_americaine", "filling/cone_of_fries_beef_tallow_americaine");
     private static final List<? extends FluidEntry<?>> FLUIDS = BSFluids.ALL;
 
+    // Names spelt the same in English and French: checked against this list, not let through silently.
+    private static final Set<String> SAME_IN_BOTH = Set.of("cassonade", "maton", "malt", "pistolet", "lardons", "meringue");
+
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
     private static boolean planned;
@@ -434,7 +437,9 @@ public final class ClientSmokeTest {
                 // The three fricadelle names are a brand, identical in every language.
                 boolean brand = item == BSItems.FRICADELLE.get() || item == BSItems.THE_FRICADELLE.get()
                     || item == BSItems.ULTIMATE_FRICADELLE.get();
-                if (!brand && fr.getOrDefault(key).equals(en.getOrDefault(key))) {
+                // French words English kept as they are (the Belgian names of the v2 menu).
+                boolean sameWord = SAME_IN_BOTH.contains(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).getPath());
+                if (!brand && !sameWord && fr.getOrDefault(key).equals(en.getOrDefault(key))) {
                     untranslated.add(key);
                 }
             }
