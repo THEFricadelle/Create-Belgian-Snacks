@@ -138,6 +138,9 @@ class RecipeFilesTest {
             assertTrue(conditions(recipes.get(id)).contains(condition), id + " must carry " + condition + ", has " + conditions(recipes.get(id))));
     }
 
+    // Tags with no sensible stand-in: without squid there are simply no calamari (M16).
+    private static final Set<String> NO_FALLBACK = Set.of(MOD_ID + ":squids");
+
     @Test
     void everyGuardedRecipeHasAFallbackTwin() throws IOException {
         // Any tag a recipe needs filled, ours included (hot_peppers), has a twin for when it is empty.
@@ -146,6 +149,9 @@ class RecipeFilesTest {
             for (String condition : conditions(json)) {
                 if (condition.startsWith("not tag_empty ")) {
                     String tag = condition.substring("not tag_empty ".length());
+                    if (NO_FALLBACK.contains(tag)) {
+                        continue;
+                    }
                     boolean twin = recipes.values().stream().anyMatch(other -> conditions(other).contains("tag_empty " + tag));
                     assertTrue(twin, id + " needs " + tag + " filled but no fallback recipe covers it being empty");
                 }
@@ -253,7 +259,14 @@ class RecipeFilesTest {
         }
         for (String key : List.of("ingredients", "results")) {
             if (recipe.has(key)) {
-                recipe.getAsJsonArray(key).forEach(e -> entries.add(e.getAsJsonObject()));
+                // An ingredient accepting several items is a plain array of them.
+                recipe.getAsJsonArray(key).forEach(e -> {
+                    if (e.isJsonArray()) {
+                        e.getAsJsonArray().forEach(alternative -> entries.add(alternative.getAsJsonObject()));
+                    } else {
+                        entries.add(e.getAsJsonObject());
+                    }
+                });
             }
         }
         if (recipe.has("key")) {

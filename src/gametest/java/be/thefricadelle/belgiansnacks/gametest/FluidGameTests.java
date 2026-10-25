@@ -88,7 +88,7 @@ public final class FluidGameTests {
         // Written out, not read from the code that fills the tag.
         List<FluidEntry<BaseFlowingFluid.Flowing>> sauces =
             List.of(BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP, BSFluids.ANDALOUSE, BSFluids.SAMOURAI, BSFluids.AMERICAINE,
-                BSFluids.SAUCE_LAPIN);
+                BSFluids.SAUCE_LAPIN, BSFluids.TARTARE, BSFluids.PICKLES, BSFluids.BRAZIL);
         for (var entry : FLUIDS) {
             boolean sauce = sauces.contains(entry);
             helper.assertValueEqual(entry.get().getSource().defaultFluidState().is(BSTags.SAUCES), sauce, entry.getId() + " in sauces");

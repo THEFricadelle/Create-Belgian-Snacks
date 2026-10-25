@@ -20,6 +20,7 @@ import be.thefricadelle.belgiansnacks.registry.BSCreativeTabs;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSFoods;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -80,6 +81,11 @@ public final class ItemGameTests {
         return snacks;
     }
 
+    // M16 friterie snacks, written out.
+    private static List<Item> friterieSnacks() {
+        return List.of(BSSnacks.MITRAILLETTE.get(), BSSnacks.BOULET.get(), BSSnacks.BOULETS_LIEGEOIS.get(), BSSnacks.SHRIMP_CROQUETTE.get(), BSSnacks.CHEESE_CROQUETTE.get(), BSSnacks.CHICKEN_CROQUETTE.get(), BSSnacks.LUCIFER.get(), BSSnacks.POTATO_CROQUETTE.get(), BSSnacks.CHICKEN_FINGERS.get(), BSSnacks.FISH_STICKS.get(), BSSnacks.CHEESE_STICKS.get(), BSSnacks.CERVELAS.get(), BSSnacks.MEXICANO.get(), BSSnacks.VIANDELLE.get(), BSSnacks.LOEMPIA.get(), BSSnacks.FILET_AMERICAIN.get(), BSSnacks.PISTOLET_AMERICAIN.get(), BSSnacks.AMERICAIN_FRITES.get(), BSSnacks.PATTY.get(), BSSnacks.FRITERIE_BURGER.get(), BSSnacks.FRITERIE_CHEESEBURGER.get(), BSSnacks.HOT_DOG.get(), BSSnacks.GYROS.get(), BSSnacks.PITA.get(), BSSnacks.BROCHETTE.get(), BSSnacks.BAMI_DISC.get(), BSSnacks.NASI_DISC.get(), BSSnacks.SQUID_RINGS.get(), BSSnacks.CHICKEN_NUGGETS.get(), BSSnacks.CHICKEN_CRUNCH.get(), BSSnacks.FRIED_CHICKEN_WINGS.get(), BSSnacks.SPICY_CHICKEN_WINGS.get(), BSSnacks.ONION_RINGS.get());
+    }
+
     // v2 base ingredients that can be eaten as they are (M13).
     private static List<Item> edibleIngredients() {
         return List.of(BSItems.HERVE_CHEESE.get(), BSItems.PISTOLET.get(), BSItems.ARDENNES_HAM.get(), BSItems.MERINGUE.get(), BSItems.RAISINS.get(), BSItems.APPLE_COMPOTE.get(), BSItems.VANILLA_ICE_CREAM.get());
@@ -89,7 +95,8 @@ public final class ItemGameTests {
     public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            boolean expected = fricadelles().contains(item) || snacks().contains(item) || edibleIngredients().contains(item);
+            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item)
+                || edibleIngredients().contains(item);
             helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
         }
@@ -114,6 +121,12 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.RAISINS.get(), BSFoods.RAISINS);
         assertFood(helper, BSItems.APPLE_COMPOTE.get(), BSFoods.APPLE_COMPOTE);
         assertFood(helper, BSItems.VANILLA_ICE_CREAM.get(), BSFoods.VANILLA_ICE_CREAM);
+        assertFood(helper, BSSnacks.MITRAILLETTE.get(), BSFoods.MITRAILLETTE);
+        assertFood(helper, BSSnacks.BOULETS_LIEGEOIS.get(), BSFoods.BOULETS_LIEGEOIS);
+        assertFood(helper, BSSnacks.FRITERIE_CHEESEBURGER.get(), BSFoods.CHEESEBURGER);
+        assertFood(helper, BSSnacks.AMERICAIN_FRITES.get(), BSFoods.AMERICAIN_FRITES);
+        helper.assertTrue(BSSnacks.BOULETS_LIEGEOIS.asStack().get(net.minecraft.core.component.DataComponents.FOOD).usingConvertsTo()
+            .map(stack -> stack.is(Items.BOWL)).orElse(false), "boulets liegeois give their bowl back");
         // Every sauce a cone carries has its fluid, and the other way round.
         helper.assertValueEqual(BSItems.CONE_SAUCES.keySet(), BSFluids.CONE_SAUCES.keySet(), "cone sauces");
         helper.succeed();
@@ -199,6 +212,16 @@ public final class ItemGameTests {
             helper.assertTrue(stack.is(BSTags.C_FOODS_FRIES), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/fries");
             helper.assertTrue(stack.is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
             helper.assertFalse(stack.is(Tags.Items.FOODS_COOKED_MEAT), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/cooked_meat");
+        }
+        for (Item item : friterieSnacks()) {
+            helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
+            helper.assertFalse(new ItemStack(item).is(BSTags.C_FOODS_FRIES), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/fries");
+        }
+        helper.assertTrue(BSSnacks.BOULET.asStack().is(Tags.Items.FOODS_COOKED_MEAT), "boulet in c:foods/cooked_meat");
+        helper.assertTrue(BSSnacks.FISH_STICKS.asStack().is(Tags.Items.FOODS_COOKED_FISH), "fish sticks in c:foods/cooked_fish");
+        for (var meat : List.of(BSItems.FRICADELLE, BSSnacks.BOULET, BSSnacks.CERVELAS, BSSnacks.MEXICANO, BSSnacks.VIANDELLE,
+            BSSnacks.FILET_AMERICAIN, BSSnacks.CHICKEN_FINGERS, BSSnacks.BROCHETTE)) {
+            helper.assertTrue(meat.asStack().is(BSTags.MITRAILLETTE_MEATS), meat.getId() + " in mitraillette_meats");
         }
         helper.assertTrue(BSItems.FRIES.asStack().is(BSTags.FRIES), "fries in #fries");
         helper.assertFalse(BSItems.FRIES_BEEF_TALLOW.asStack().is(BSTags.FRIES), "tallow fries in #fries: a plain cone would take them");

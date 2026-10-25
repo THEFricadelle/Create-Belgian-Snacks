@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M16 friterie snacks; the twins follow pineapples, shrimps, rice, corn, onions and tomatoes below.
+        "mixing/tartare", "mixing/pickles", "mixing/boulet_paste", "mixing/boulets_liegeois", "mixing/cheese_croquette_mix", "mixing/chicken_croquette_mix", "mixing/lucifer_mix", "mixing/potato_croquette_mix", "mixing/cervelas_mix", "mixing/mexicano_mix", "mixing/viandelle_mix", "mixing/filet_americain", "mixing/gyros", "mixing/bami_mix", "mixing/raw_chicken_nuggets", "mixing/raw_chicken_crunch", "mixing/battered_onion_rings", "pressing/raw_boulet", "pressing/raw_cervelas", "pressing/raw_mexicano", "pressing/raw_viandelle", "pressing/raw_bami_disc", "pressing/raw_nasi_disc", "pressing/loempia_wrapper", "pressing/hot_dog_bun_dough", "pressing/raw_patty", "cutting/half_baguette", "cutting/chicken_strips", "cutting/fish_strips", "cutting/cheese_strips", "deploying/pistolet_americain", "deploying/americain_frites", "deploying/friterie_cheeseburger", "deploying/raw_chicken_wings", "filling/spicy_chicken_wings", "filling/cone_of_fries_tartare", "filling/cone_of_fries_pickles", "filling/cone_of_fries_brazil", "filling/cone_of_fries_beef_tallow_tartare", "filling/cone_of_fries_beef_tallow_pickles", "filling/cone_of_fries_beef_tallow_brazil", "frying/boulet", "frying/shrimp_croquette", "frying/cheese_croquette", "frying/chicken_croquette", "frying/lucifer", "frying/potato_croquette", "frying/chicken_fingers", "frying/fish_sticks", "frying/cheese_sticks", "frying/cervelas", "frying/mexicano", "frying/viandelle", "frying/loempia", "frying/patty", "frying/brochette", "frying/bami_disc", "frying/nasi_disc", "frying/chicken_nuggets", "frying/chicken_crunch", "frying/fried_chicken_wings", "frying/onion_rings", "smoking/hot_dog_bun", "smelting/hot_dog_bun", "sequenced_assembly/mitraillette", "sequenced_assembly/raw_shrimp_croquette", "sequenced_assembly/raw_cheese_croquette", "sequenced_assembly/raw_chicken_croquette", "sequenced_assembly/raw_lucifer", "sequenced_assembly/raw_potato_croquette", "sequenced_assembly/raw_chicken_fingers", "sequenced_assembly/raw_fish_sticks", "sequenced_assembly/raw_cheese_sticks", "sequenced_assembly/raw_loempia", "sequenced_assembly/friterie_burger", "sequenced_assembly/hot_dog", "sequenced_assembly/raw_brochette",
         // M15 beers; the kriek follows the cherries below.
         "mixing/wort", "mixing/blonde_beer", "mixing/brown_beer", "mixing/gueuze", "mixing/vinegar_from_beer",
         // M14 crops; the Botany Pots crops load only with that mod.
@@ -150,6 +152,14 @@ public final class RecipeGameTests {
         twins(helper, "mixing/sauce_lapin", "mixing/sauce_lapin_from_beetroot", onions);
         twins(helper, "smoking/raisins", "smoking/raisins_from_sweet_berries", false);
         twins(helper, "mixing/kriek", "mixing/kriek_from_sweet_berries", false);
+        // M16: Farmer's Delight brings rice, onions and tomatoes; no runtime here has pineapple, shrimp, corn or squid.
+        twins(helper, "mixing/brazil", "mixing/brazil_from_melon", false);
+        twins(helper, "mixing/shrimp_croquette_mix", "mixing/shrimp_croquette_mix_from_cod", false);
+        twins(helper, "mixing/nasi_mix", "mixing/nasi_mix_from_wheat", farmersDelight());
+        twins(helper, "cutting/raw_onion_rings", "cutting/raw_onion_rings_from_beetroot", onions);
+        twins(helper, "sequenced_assembly/pita", "sequenced_assembly/pita_from_beetroot", tomatoes);
+        twins(helper, "cutting/corn_flakes", "mixing/raw_chicken_crunch_from_bread_crumbs", false);
+        helper.assertTrue(find(helper, "cutting/raw_squid_rings") == null, "no squid here: no calamari");
         // M13 rule 2: ours only where the pack does not make it (no runtime here has Create: Food).
         helper.assertTrue((find(helper, "mixing/salt") != null) == tagEmpty(BSTags.C_SALT), "mixing/salt follows c:salt");
         helper.assertTrue((find(helper, "mixing/butter") != null) == tagEmpty(BSTags.C_BUTTER), "mixing/butter follows c:butter");
@@ -159,6 +169,36 @@ public final class RecipeGameTests {
 
     private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M16 on a real basin. Overlaps inside our menu: with everything for a boulet paste in the basin,
+    // the cervelas mix matches too, and Create picks the recipe with more items. Gyros cooks on a burner;
+    // the nasi mix stays cold (in Arcadia a heated basin turns lone rice into a fluid).
+    @GameTest(template = TEMPLATE)
+    public static void friterieMixesOnARealBasin(GameTestHelper helper) {
+        List<ItemStack> boulet = List.of(BSItems.MINCED_PORK.asStack(), BSItems.MINCED_BEEF.asStack(), BSItems.BREAD_CRUMBS.asStack(),
+            BSItems.BELGIAN_SPICES.asStack(), BSItems.SALT.asStack());
+        BasinBlockEntity full = basin(helper, new BlockPos(0, 1, 0), false, boulet, null);
+        helper.assertTrue(BasinRecipe.match(full, recipe(helper, "mixing/boulet_paste")), "boulet paste");
+        helper.assertTrue(BasinRecipe.match(full, recipe(helper, "mixing/cervelas_mix")), "the cervelas mix hides inside the boulet paste");
+        helper.assertTrue(recipe(helper, "mixing/boulet_paste").getIngredients().size() > recipe(helper, "mixing/cervelas_mix").getIngredients().size(),
+            "the boulet paste must have more items than the cervelas mix, so Create prefers it");
+        helper.assertTrue(recipe(helper, "mixing/viandelle_mix").getIngredients().size() > recipe(helper, "mixing/fricadelle_paste").getIngredients().size(),
+            "the viandelle mix must have more items than the fricadelle paste");
+        List<ItemStack> gyros = List.of(BSItems.MINCED_PORK.asStack(), BSItems.MINCED_PORK.asStack(), BSItems.BELGIAN_SPICES.asStack());
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), false, gyros, null), recipe(helper, "mixing/gyros")), "gyros cooked cold");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 2), true, gyros, null), recipe(helper, "mixing/gyros")), "gyros on a burner");
+        String nasi = farmersDelight() ? "mixing/nasi_mix" : "mixing/nasi_mix_from_wheat";
+        ItemStack grain = farmersDelight() ? new ItemStack(item("farmersdelight", "rice")) : new ItemStack(Items.WHEAT);
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 2), false, List.of(grain, grain.copy(), BSItems.MINCED_PORK.asStack(),
+            be.thefricadelle.belgiansnacks.registry.BSCrops.LEEK.asStack(), BSItems.BELGIAN_SPICES.asStack()), null), recipe(helper, nasi)), nasi + " mixes cold");
+        // Tartare: two sauces and the spices.
+        BasinBlockEntity tartare = basin(helper, new BlockPos(1, 1, 4), false, List.of(BSItems.BELGIAN_SPICES.asStack()),
+            new FluidStack(BSFluids.MAYONNAISE.get().getSource(), 250));
+        helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(new BlockPos(1, 1, 4)), null)
+            .fill(new FluidStack(BSFluids.PICKLES.get().getSource(), 50), IFluidHandler.FluidAction.EXECUTE);
+        helper.assertTrue(BasinRecipe.match(tartare, recipe(helper, "mixing/tartare")), "tartare from mayonnaise, pickles and spices");
+        helper.succeed();
     }
 
     // M15 on a real basin: wort needs heat; with cassonade beside the yeast, Create picks the brown
