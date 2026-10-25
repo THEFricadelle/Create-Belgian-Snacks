@@ -315,9 +315,13 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
 
     /**
-     * Like Create's basin: of the frying recipes for this item, the first the heat below allows, else
-     * the first one (its heat is what the status reports). Not cached: a pack has a handful of frying
-     * recipes, and one a /reload or a KubeJS script adds must apply at once.
+     * Of the frying recipes for this item, those the heat below and the fat in the tank allow, the one
+     * whose fat is the most specific first: blanched fries in beef tallow become tallow fries although
+     * the plain recipe takes any frying fat (v2, section 5.1). The fewer fluids an ingredient accepts,
+     * the more specific; a recipe without fat comes last; ties go to the smaller recipe id.
+     * Without such a recipe: the first one the heat allows (the status then reports the fat), else the
+     * first one (the status reports the heat). Not cached: a pack has a handful of frying recipes, and
+     * one a /reload or a KubeJS script adds must apply at once.
      */
     @Nullable
     RecipeHolder<FryingRecipe> findRecipe(ItemStack stack) {
@@ -330,12 +334,31 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
             return null;
         }
         HeatLevel heat = heatBelow();
+        FluidStack inTank = tank == null ? FluidStack.EMPTY : tank.getPrimaryHandler().getFluid();
+        RecipeHolder<FryingRecipe> hot = null;
+        RecipeHolder<FryingRecipe> best = null;
+        int bestBreadth = Integer.MAX_VALUE;
         for (RecipeHolder<FryingRecipe> holder : matching) {
-            if (heatAllows(holder.value().getRequiredHeat(), heat)) {
-                return holder;
+            if (!heatAllows(holder.value().getRequiredHeat(), heat)) {
+                continue;
+            }
+            if (hot == null) {
+                hot = holder;
+            }
+            SizedFluidIngredient fat = holder.value().getFat();
+            if (fat != null && !fat.ingredient().test(inTank)) {
+                continue;
+            }
+            int breadth = fat == null ? Integer.MAX_VALUE : fat.ingredient().getStacks().length;
+            if (best == null || breadth < bestBreadth || breadth == bestBreadth && holder.id().compareTo(best.id()) < 0) {
+                best = holder;
+                bestBreadth = breadth;
             }
         }
-        return matching.get(0);
+        if (best != null) {
+            return best;
+        }
+        return hot != null ? hot : matching.get(0);
     }
 
     /**
