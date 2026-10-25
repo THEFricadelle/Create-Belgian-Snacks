@@ -12,6 +12,9 @@ package be.thefricadelle.belgiansnacks.registry;
 import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.builders.ItemBuilder;
@@ -104,6 +107,22 @@ public final class BSItems {
         CONE_OF_FRIES_BEEF_TALLOW = snack("cone_of_fries_beef_tallow", "Cone of Beef Tallow Fries", BSFoods.CONE_OF_FRIES_BEEF_TALLOW)
             .register();
 
+    /** The sauces a cone can carry, id suffix -> English name; the fluids are BSFluids.CONE_SAUCES. */
+    public static final Map<String, String> CONE_SAUCES = new LinkedHashMap<>();
+
+    static {
+        CONE_SAUCES.put("mayonnaise", "Mayonnaise");
+        CONE_SAUCES.put("curry_ketchup", "Curry Ketchup");
+        CONE_SAUCES.put("andalouse", "Andalouse");
+        CONE_SAUCES.put("samourai", "Samurai");
+        CONE_SAUCES.put("americaine", "Américaine");
+    }
+
+    // v2 sauced cones (section 5.2): a Spout puts 50 mB of sauce on a plain cone.
+    public static final Map<String, ItemEntry<Item>> SAUCED_CONES = sauced("cone_of_fries", "Cone of Fries", BSFoods.CONE_OF_FRIES_SAUCED);
+    public static final Map<String, ItemEntry<Item>> SAUCED_TALLOW_CONES =
+        sauced("cone_of_fries_beef_tallow", "Cone of Beef Tallow Fries", BSFoods.CONE_OF_FRIES_BEEF_TALLOW_SAUCED);
+
     private BSItems() {
     }
 
@@ -117,6 +136,13 @@ public final class BSItems {
             .lang(englishName)
             .properties(p -> p.food(food))
             .tag(Tags.Items.FOODS_COOKED_MEAT, BSTags.GRINDER_BLACKLIST);
+    }
+
+    private static Map<String, ItemEntry<Item>> sauced(String cone, String englishCone, FoodProperties food) {
+        Map<String, ItemEntry<Item>> cones = new LinkedHashMap<>();
+        CONE_SAUCES.forEach((sauce, englishSauce) ->
+            cones.put(sauce, snack(cone + "_" + sauce, englishCone + " with " + englishSauce, food).register()));
+        return Collections.unmodifiableMap(cones);
     }
 
     // A snack of the v2 menu: food, in c:foods/fries, counted by the Supreme Grinder.
@@ -144,5 +170,16 @@ public final class BSItems {
         REGISTRATE.addRawLang(tooltipKey("fries_beef_tallow"), "Fried in beef fat, the way grandma did.");
         REGISTRATE.addRawLang(tooltipKey("cone_of_fries"), "Mayonnaise sold separately.");
         REGISTRATE.addRawLang(tooltipKey("cone_of_fries_beef_tallow"), "The real deal. Your cardiologist disagrees.");
+        sauceTooltip("mayonnaise", "The Belgian classic. Yes, on fries.");
+        sauceTooltip("curry_ketchup", "Sweet, spicy, very Belgian.");
+        sauceTooltip("andalouse", "Mayonnaise that went on holiday to Spain.");
+        sauceTooltip("samourai", "Hot. Keep a drink at hand.");
+        sauceTooltip("americaine", "Not from America. Nobody knows why.");
+    }
+
+    // One line per sauce, on both cones that carry it.
+    private static void sauceTooltip(String sauce, String line) {
+        REGISTRATE.addRawLang(tooltipKey("cone_of_fries_" + sauce), line);
+        REGISTRATE.addRawLang(tooltipKey("cone_of_fries_beef_tallow_" + sauce), line);
     }
 }

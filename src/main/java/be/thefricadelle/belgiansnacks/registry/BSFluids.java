@@ -11,6 +11,11 @@ package be.thefricadelle.belgiansnacks.registry;
 
 import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
@@ -26,9 +31,30 @@ public final class BSFluids {
         // Only made from beef tallow; the one fat THE_FRICADELLE accepts.
         MELTED_BEEF_TALLOW = fluid("melted_beef_tallow", "Melted Beef Tallow", MapColor.SAND),
         MAYONNAISE = fluid("mayonnaise", "Mayonnaise", MapColor.SAND),
-        CURRY_KETCHUP = fluid("curry_ketchup", "Curry Ketchup", MapColor.COLOR_RED);
+        CURRY_KETCHUP = fluid("curry_ketchup", "Curry Ketchup", MapColor.COLOR_RED),
+        // v2 friterie sauces (docs/13, section 5.2), all mayonnaise-based.
+        ANDALOUSE = fluid("andalouse", "Andalouse Sauce", MapColor.COLOR_ORANGE),
+        SAMOURAI = fluid("samourai", "Samurai Sauce", MapColor.COLOR_RED),
+        AMERICAINE = fluid("americaine", "Américaine Sauce", MapColor.COLOR_PINK);
+
+    /** Every fluid of the mod, in registration order. */
+    public static final List<FluidEntry<BaseFlowingFluid.Flowing>> ALL =
+        List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE);
+
+    /** The sauces a Spout puts on a cone, by the name their cones carry (BSItems.CONE_SAUCES). */
+    public static final Map<String, FluidEntry<BaseFlowingFluid.Flowing>> CONE_SAUCES = orderedSauces();
 
     private BSFluids() {
+    }
+
+    private static Map<String, FluidEntry<BaseFlowingFluid.Flowing>> orderedSauces() {
+        Map<String, FluidEntry<BaseFlowingFluid.Flowing>> sauces = new LinkedHashMap<>();
+        sauces.put("mayonnaise", MAYONNAISE);
+        sauces.put("curry_ketchup", CURRY_KETCHUP);
+        sauces.put("andalouse", ANDALOUSE);
+        sauces.put("samourai", SAMOURAI);
+        sauces.put("americaine", AMERICAINE);
+        return Collections.unmodifiableMap(sauces);
     }
 
     private static FluidEntry<BaseFlowingFluid.Flowing> fluid(String name, String englishName, MapColor mapColor) {
@@ -52,5 +78,9 @@ public final class BSFluids {
             .add(FRYING_OIL.get().getSource(), FRYING_OIL.get(), MELTED_BEEF_TALLOW.get().getSource(), MELTED_BEEF_TALLOW.get())
             .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "plantoil"))
             .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "vegetable_oil")));
+        REGISTRATE.addDataGenerator(ProviderType.FLUID_TAGS, prov -> {
+            var sauces = prov.addTag(BSTags.SAUCES);
+            CONE_SAUCES.values().forEach(sauce -> sauces.add(sauce.get().getSource(), sauce.get()));
+        });
     }
 }

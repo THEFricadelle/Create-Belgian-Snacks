@@ -50,6 +50,13 @@ ITEMS = {
     "paper_cone": ("heap", (0xF2, 0xEE, 0xE2), "K"),
     "cone_of_fries": ("heap", (0xEE, 0xC1, 0x5A), "K"),
     "cone_of_fries_beef_tallow": ("heap", (0xE6, 0xAE, 0x4E), "K"),
+    # v2 sauced cones (docs/13, section 5.2), in the colour of their sauce.
+    **{f"cone_of_fries_{s}": ("heap", c, "K") for s, c in [
+        ("mayonnaise", (0xF3, 0xEB, 0xC4)), ("curry_ketchup", (0xA8, 0x32, 0x1E)), ("andalouse", (0xE8, 0x86, 0x2A)),
+        ("samourai", (0xD9, 0x54, 0x2B)), ("americaine", (0xE8, 0x9A, 0x7A))]},
+    **{f"cone_of_fries_beef_tallow_{s}": ("heap", c, "K") for s, c in [
+        ("mayonnaise", (0xF3, 0xEB, 0xC4)), ("curry_ketchup", (0xA8, 0x32, 0x1E)), ("andalouse", (0xE8, 0x86, 0x2A)),
+        ("samourai", (0xD9, 0x54, 0x2B)), ("americaine", (0xE8, 0x9A, 0x7A))]},
 }
 
 # Fluid id -> colour. Each gets still/flow textures and a bucket item texture.
@@ -58,6 +65,9 @@ FLUIDS = {
     "melted_beef_tallow": (0xFB, 0xFA, 0xF4),
     "mayonnaise": (0xF3, 0xEB, 0xC4),
     "curry_ketchup": (0xA8, 0x32, 0x1E),
+    "andalouse": (0xE8, 0x86, 0x2A),
+    "samourai": (0xD9, 0x54, 0x2B),
+    "americaine": (0xE8, 0x9A, 0x7A),
 }
 
 # Block faces: "block/face" -> colour. Stainless steel for the fryer (docs/06).

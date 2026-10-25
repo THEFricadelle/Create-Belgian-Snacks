@@ -47,6 +47,9 @@ public final class BSFoods {
     public static final FoodProperties FRIES_BEEF_TALLOW = snack(3, 0.6f);
     public static final FoodProperties CONE_OF_FRIES = snack(6, 0.6f);
     public static final FoodProperties CONE_OF_FRIES_BEEF_TALLOW = snack(6, 0.8f);
+    // A sauce adds a little (M12, provisional).
+    public static final FoodProperties CONE_OF_FRIES_SAUCED = snack(7, 0.7f);
+    public static final FoodProperties CONE_OF_FRIES_BEEF_TALLOW_SAUCED = snack(7, 0.9f);
 
     private static FoodProperties snack(int nutrition, float saturation) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();

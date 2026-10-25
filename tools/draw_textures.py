@@ -134,10 +134,19 @@ def paper_cone():
     return px
 
 
-def cone_of_fries(palette):
+def cone_of_fries(palette, sauce=None):
     px = canvas()
     draw_sticks(px, [(3, 8, 4, 1), (11, 8, 12, 2), (5, 8, 6, 0), (8, 8, 9, 1)], palette, clip=8)
-    return cone(px, top=7)
+    px = cone(px, top=7)
+    if sauce:
+        # A ribbon of sauce over the fries, light on top, darker underneath.
+        for x in range(3, 14):
+            y = 4 + (1 if x % 4 in (1, 2) else 0)
+            px[y][x] = colour(sauce[2])
+            px[y + 1][x] = colour(sauce[1])
+            if x % 3 == 0:
+                px[y][x] = colour(sauce[3])
+    return px
 
 
 BALL = [
@@ -178,7 +187,11 @@ LIQUIDS = {
     'melted_beef_tallow': ['D3C6A9', 'E8DFC9', 'FBFAF4', 'FFFFFF'],
     'mayonnaise': ['C3AD79', 'DED09D', 'F3EBC4', 'FFF8DD'],
     'curry_ketchup': ['722B23', '8C2C21', 'A8321E', 'D65A36'],
+    'andalouse': ['9C4F12', 'C46A1C', 'E8862A', 'FFB062'],
+    'samourai': ['8A2A12', 'B03C1C', 'D9542B', 'F58358'],
+    'americaine': ['A85A45', 'C9786A', 'E89A7A', 'FFC0A8'],
 }
+CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine']
 
 
 def fluid(palette, flow=False):
@@ -314,6 +327,9 @@ def artwork():
     out[gen.ITEM_DIR / 'paper_cone.png'] = paper_cone()
     out[gen.ITEM_DIR / 'cone_of_fries.png'] = cone_of_fries(FRIES_GOLDEN)
     out[gen.ITEM_DIR / 'cone_of_fries_beef_tallow.png'] = cone_of_fries(FRIES_TALLOW)
+    for sauce in CONE_SAUCES:
+        out[gen.ITEM_DIR / f'cone_of_fries_{sauce}.png'] = cone_of_fries(FRIES_GOLDEN, LIQUIDS[sauce])
+        out[gen.ITEM_DIR / f'cone_of_fries_beef_tallow_{sauce}.png'] = cone_of_fries(FRIES_TALLOW, LIQUIDS[sauce])
     out[gen.ITEM_DIR / 'beef_tallow.png'] = bitmap([
         '................', '................', '................', '................',
         '.....000000.....', '...0033333300...', '..033333332220..', '..033333322220..',
@@ -377,6 +393,11 @@ def main():
         data = gen.png_bytes(px)
         if not path.exists() or path.read_bytes() != data:
             path.write_bytes(data)
+            written += 1
+        # A flow texture holds two stacked frames: the game animates it only with this file beside it.
+        meta = path.with_name(path.name + '.mcmeta')
+        if path.name.endswith('_flow.png') and not meta.exists():
+            meta.write_text('{"animation": {"frametime": 8}}' + chr(10), encoding='utf-8')
             written += 1
     preview(outputs)
     print(f'{len(outputs)} textures verified; {written} written; preview: build/texture-preview.html')

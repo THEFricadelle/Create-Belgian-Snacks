@@ -61,11 +61,24 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.PAPER_CONE.get(), "Cornet en papier");
         add(BSItems.CONE_OF_FRIES.get(), "Cornet de frites");
         add(BSItems.CONE_OF_FRIES_BEEF_TALLOW.get(), "Cornet de frites au blanc");
+        add(BSItems.SAUCED_CONES.get("mayonnaise").get(), "Cornet de frites mayonnaise");
+        add(BSItems.SAUCED_TALLOW_CONES.get("mayonnaise").get(), "Cornet de frites au blanc, mayonnaise");
+        add(BSItems.SAUCED_CONES.get("curry_ketchup").get(), "Cornet de frites curry ketchup");
+        add(BSItems.SAUCED_TALLOW_CONES.get("curry_ketchup").get(), "Cornet de frites au blanc, curry ketchup");
+        add(BSItems.SAUCED_CONES.get("andalouse").get(), "Cornet de frites andalouse");
+        add(BSItems.SAUCED_TALLOW_CONES.get("andalouse").get(), "Cornet de frites au blanc, andalouse");
+        add(BSItems.SAUCED_CONES.get("samourai").get(), "Cornet de frites samouraï");
+        add(BSItems.SAUCED_TALLOW_CONES.get("samourai").get(), "Cornet de frites au blanc, samouraï");
+        add(BSItems.SAUCED_CONES.get("americaine").get(), "Cornet de frites américaine");
+        add(BSItems.SAUCED_TALLOW_CONES.get("americaine").get(), "Cornet de frites au blanc, américaine");
 
         fluid(BSFluids.FRYING_OIL, "Huile de friture", "Seau d'huile de friture");
         fluid(BSFluids.MELTED_BEEF_TALLOW, "Blanc de bœuf fondu", "Seau de blanc de bœuf fondu");
         fluid(BSFluids.MAYONNAISE, "Mayonnaise", "Seau de mayonnaise");
         fluid(BSFluids.CURRY_KETCHUP, "Curry ketchup", "Seau de curry ketchup");
+        fluid(BSFluids.ANDALOUSE, "Sauce andalouse", "Seau de sauce andalouse");
+        fluid(BSFluids.SAMOURAI, "Sauce samouraï", "Seau de sauce samouraï");
+        fluid(BSFluids.AMERICAINE, "Sauce américaine", "Seau de sauce américaine");
 
         add(BSBlocks.FRYER.get(), "Friteuse");
         add(BSBlocks.SUPREME_GRINDER.get(), "Hachoir Suprême");
@@ -78,6 +91,16 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.tooltipKey("fries_beef_tallow"), "Frites dans la graisse de bœuf, comme chez bobonne.");
         add(BSItems.tooltipKey("cone_of_fries"), "Mayonnaise non comprise.");
         add(BSItems.tooltipKey("cone_of_fries_beef_tallow"), "La vraie. Ton cardiologue n'est pas d'accord.");
+        add(BSItems.tooltipKey("cone_of_fries_mayonnaise"), "Le classique belge. Oui, sur des frites.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_mayonnaise"), "Le classique belge. Oui, sur des frites.");
+        add(BSItems.tooltipKey("cone_of_fries_curry_ketchup"), "Sucré, épicé, très belge.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_curry_ketchup"), "Sucré, épicé, très belge.");
+        add(BSItems.tooltipKey("cone_of_fries_andalouse"), "Une mayonnaise partie en vacances en Espagne.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_andalouse"), "Une mayonnaise partie en vacances en Espagne.");
+        add(BSItems.tooltipKey("cone_of_fries_samourai"), "Ça pique. Garde une boisson à portée de main.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_samourai"), "Ça pique. Garde une boisson à portée de main.");
+        add(BSItems.tooltipKey("cone_of_fries_americaine"), "Ne vient pas d'Amérique. Personne ne sait pourquoi.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow_americaine"), "Ne vient pas d'Amérique. Personne ne sait pourquoi.");
     }
 
     // A fluid shows up under three keys: the fluid type, its placed block and its bucket.

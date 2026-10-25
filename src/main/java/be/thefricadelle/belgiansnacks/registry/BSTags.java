@@ -31,6 +31,8 @@ public final class BSTags {
     public static final TagKey<Item> GRINDER_BLACKLIST = item("grinder/blacklist");
     // What a plain cone takes: our fries and other mods' (v2, section 5.1).
     public static final TagKey<Item> FRIES = item("fries");
+    // What makes a samurai sauce hot; blaze powder stands in when no mod brings one (V-D5).
+    public static final TagKey<Item> HOT_PEPPERS = item("hot_peppers");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -47,6 +49,8 @@ public final class BSTags {
 
     // Any fat tiers 1 and 2 can fry in, including other mods' plant and vegetable oils (D13).
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
+    // Every sauce of the friterie (v2, section 5.2): what a mitraillette or a burger takes.
+    public static final TagKey<Fluid> SAUCES = FluidTags.create(BelgianSnacks.asResource("sauces"));
 
     private BSTags() {
     }
@@ -71,6 +75,10 @@ public final class BSTags {
             prov.addTag(MINCED_CHICKEN).addOptionalTag(C_GROUND_CHICKEN.location());
             // c:foods gathers the food subtags; ours joins it like NeoForge's own.
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_FRIES);
+            // My Nether's Delight (Arcadia) grows bullet peppers.
+            prov.addTag(HOT_PEPPERS)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("mynethersdelight", "bullet_pepper"))
+                .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "crops/chili_pepper"));
             // Burger Mod (Arcadia) makes fries too.
             prov.addTag(FRIES).addOptional(ResourceLocation.fromNamespaceAndPath("burgermod", "fries"));
             prov.addTag(GRINDER_EXTRA_FOODS)

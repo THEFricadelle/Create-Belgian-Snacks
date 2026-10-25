@@ -31,6 +31,30 @@
     {
       "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/curry_ketchup_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/andalouse_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/andalouse_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/samourai_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/samourai_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/americaine_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/americaine_flow"
     }
   ]
 }

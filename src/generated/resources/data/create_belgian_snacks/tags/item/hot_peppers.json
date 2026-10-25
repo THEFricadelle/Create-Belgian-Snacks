@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "mynethersdelight:bullet_pepper",
+      "required": false
+    },
+    {
+      "id": "#c:crops/chili_pepper",
+      "required": false
+    }
+  ]
+}

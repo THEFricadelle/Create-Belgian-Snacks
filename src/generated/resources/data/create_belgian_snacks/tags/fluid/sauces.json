@@ -1,0 +1,14 @@
+{
+  "values": [
+    "create_belgian_snacks:mayonnaise",
+    "create_belgian_snacks:flowing_mayonnaise",
+    "create_belgian_snacks:curry_ketchup",
+    "create_belgian_snacks:flowing_curry_ketchup",
+    "create_belgian_snacks:andalouse",
+    "create_belgian_snacks:flowing_andalouse",
+    "create_belgian_snacks:samourai",
+    "create_belgian_snacks:flowing_samourai",
+    "create_belgian_snacks:americaine",
+    "create_belgian_snacks:flowing_americaine"
+  ]
+}

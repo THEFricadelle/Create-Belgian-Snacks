@@ -36,7 +36,8 @@ public class BSSpriteSourceProvider extends SpriteSourceProvider {
     @Override
     protected void gather() {
         SourceList blocks = atlas(BLOCKS_ATLAS);
-        for (FluidEntry<?> fluid : List.of(BSFluids.FRYING_OIL, BSFluids.MELTED_BEEF_TALLOW, BSFluids.MAYONNAISE, BSFluids.CURRY_KETCHUP)) {
+        // Every fluid, or a new one renders as the missing texture.
+        for (FluidEntry<?> fluid : BSFluids.ALL) {
             String id = BuiltInRegistries.FLUID.getKey(fluid.getSource()).getPath();
             for (String suffix : List.of("_still", "_flow")) {
                 blocks.addSource(new SingleFile(BelgianSnacks.asResource("fluid/" + id + suffix), Optional.empty()));

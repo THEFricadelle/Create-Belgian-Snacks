@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "create_belgian_snacks:hot_peppers"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:hot_peppers"
+    },
+    {
+      "item": "create_belgian_snacks:belgian_spices"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:mayonnaise"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_belgian_snacks:samourai"
+    }
+  ]
+}

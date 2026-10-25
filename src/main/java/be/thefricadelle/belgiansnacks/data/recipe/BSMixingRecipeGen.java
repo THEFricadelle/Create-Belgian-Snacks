@@ -53,10 +53,46 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
 
         // Fallback (D7, provisional) for packs without any tomato.
         CURRY_KETCHUP_FROM_BEETROOT = create("curry_ketchup_from_beetroot", b -> curryKetchup(b.require(Items.BEETROOT))
-            .withCondition(new TagEmptyCondition(BSTags.C_TOMATOES)));
+            .withCondition(new TagEmptyCondition(BSTags.C_TOMATOES))),
+
+        // v2 sauces (section 5.2), each with a vanilla twin for packs without the ingredient.
+        ANDALOUSE = create("andalouse", b -> andalouse(b.require(BSTags.C_TOMATOES))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_TOMATOES)))),
+        ANDALOUSE_FROM_BEETROOT = create("andalouse_from_beetroot", b -> andalouse(b.require(Items.BEETROOT))
+            .withCondition(new TagEmptyCondition(BSTags.C_TOMATOES))),
+
+        SAMOURAI = create("samourai", b -> samourai(b.require(BSTags.HOT_PEPPERS))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.HOT_PEPPERS)))),
+        // V-D5: no pepper in the pack, blaze powder brings the burn.
+        SAMOURAI_FROM_BLAZE_POWDER = create("samourai_from_blaze_powder", b -> samourai(b.require(Items.BLAZE_POWDER))
+            .withCondition(new TagEmptyCondition(BSTags.HOT_PEPPERS))),
+
+        AMERICAINE = create("americaine", b -> americaine(b.require(BSTags.C_ONIONS))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.C_ONIONS)))),
+        AMERICAINE_FROM_BEETROOT = create("americaine_from_beetroot", b -> americaine(b.require(Items.BEETROOT))
+            .withCondition(new TagEmptyCondition(BSTags.C_ONIONS)));
 
     public BSMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> andalouse(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.MAYONNAISE.get(), 250)
+            .require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.ANDALOUSE.get().getSource(), 250);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> samourai(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.MAYONNAISE.get(), 250)
+            .require(BSItems.BELGIAN_SPICES.get())
+            .output(BSFluids.SAMOURAI.get().getSource(), 250)
+            .requiresHeat(HeatCondition.HEATED);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> americaine(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(BSFluids.MAYONNAISE.get(), 250)
+            .require(BSFluids.CURRY_KETCHUP.get(), 50)
+            .output(BSFluids.AMERICAINE.get().getSource(), 300);
     }
 
     private static StandardProcessingRecipe.Builder<MixingRecipe> curryKetchup(StandardProcessingRecipe.Builder<MixingRecipe> b) {
