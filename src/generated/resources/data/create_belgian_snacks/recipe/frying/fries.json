@@ -1,0 +1,20 @@
+{
+  "type": "create_belgian_snacks:frying",
+  "heat_requirement": "superheated",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:blanched_fries"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 5,
+      "tag": "create_belgian_snacks:frying_oils"
+    }
+  ],
+  "processing_time": 60,
+  "results": [
+    {
+      "id": "create_belgian_snacks:fries"
+    }
+  ]
+}

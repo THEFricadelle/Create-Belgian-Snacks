@@ -19,6 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.Tags;
 
 public final class BSTags {
     public static final TagKey<Item> MINCED_MEATS = item("minced_meats");
@@ -28,6 +29,8 @@ public final class BSTags {
     public static final TagKey<Item> MINCED_CHICKEN = item("minced_meats/chicken");
     public static final TagKey<Item> GRINDER_EXTRA_FOODS = item("grinder/extra_foods");
     public static final TagKey<Item> GRINDER_BLACKLIST = item("grinder/blacklist");
+    // What a plain cone takes: our fries and other mods' (v2, section 5.1).
+    public static final TagKey<Item> FRIES = item("fries");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -39,6 +42,8 @@ public final class BSTags {
     public static final TagKey<Item> C_BREAD_CRUMBS = common("bread_crumbs");
     public static final TagKey<Item> C_TOMATOES = common("crops/tomato");
     public static final TagKey<Item> C_ONIONS = common("crops/onion");
+    public static final TagKey<Item> C_POTATOES = common("crops/potato");
+    public static final TagKey<Item> C_FOODS_FRIES = common("foods/fries");
 
     // Any fat tiers 1 and 2 can fry in, including other mods' plant and vegetable oils (D13).
     public static final TagKey<Fluid> FRYING_OILS = FluidTags.create(BelgianSnacks.asResource("frying_oils"));
@@ -64,6 +69,10 @@ public final class BSTags {
                 .addOptionalTag(C_GROUND_BEEF.location())
                 .addOptionalTag(C_MINCED_BEEF.location());
             prov.addTag(MINCED_CHICKEN).addOptionalTag(C_GROUND_CHICKEN.location());
+            // c:foods gathers the food subtags; ours joins it like NeoForge's own.
+            prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_FRIES);
+            // Burger Mod (Arcadia) makes fries too.
+            prov.addTag(FRIES).addOptional(ResourceLocation.fromNamespaceAndPath("burgermod", "fries"));
             prov.addTag(GRINDER_EXTRA_FOODS)
                 .add(Items.CAKE);
             // D8: one-off or cosmetic items, not foods anyone farms. Optional, so harmless outside Arcadia.

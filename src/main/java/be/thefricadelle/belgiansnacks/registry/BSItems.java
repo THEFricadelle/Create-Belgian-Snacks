@@ -11,6 +11,8 @@ package be.thefricadelle.belgiansnacks.registry;
 
 import static be.thefricadelle.belgiansnacks.BelgianSnacks.REGISTRATE;
 
+import java.util.Arrays;
+
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -20,8 +22,12 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.food.FricadelleItem;
 import be.thefricadelle.belgiansnacks.content.food.UltimateFricadelleItem;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.Tags;
 
@@ -75,6 +81,29 @@ public final class BSItems {
             .properties(p -> p.rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true))
             .register();
 
+    // v2, Belgian fries (docs/13, section 5.1): cut, blanched, fried again, served in a cone.
+    // Finished snacks count for the Supreme Grinder (V-D1): they are not blacklisted.
+    public static final ItemEntry<Item>
+        RAW_FRIES = ingredient("raw_fries", "Raw Fries").register(),
+        BLANCHED_FRIES = ingredient("blanched_fries", "Blanched Fries").register(),
+        FRIES = snack("fries", "Fries", BSFoods.FRIES, BSTags.FRIES).register(),
+        // Not in #fries: they never end up in a plain cone.
+        FRIES_BEEF_TALLOW = snack("fries_beef_tallow", "Beef Tallow Fries", BSFoods.FRIES_BEEF_TALLOW).register(),
+        // A crafting recipe, not the press: in Arcadia the press already turns paper into tickets.
+        // Mechanical crafters run it too.
+        PAPER_CONE = ingredient("paper_cone", "Paper Cone")
+            .recipe((context, provider) -> ShapedRecipeBuilder
+                .shaped(RecipeCategory.FOOD, context.get(), 4)
+                .pattern("P P")
+                .pattern(" P ")
+                .define('P', Items.PAPER)
+                .unlockedBy("has_paper", provider.has(Items.PAPER))
+                .save(provider, BelgianSnacks.asResource("crafting/paper_cone")))
+            .register(),
+        CONE_OF_FRIES = snack("cone_of_fries", "Cone of Fries", BSFoods.CONE_OF_FRIES).register(),
+        CONE_OF_FRIES_BEEF_TALLOW = snack("cone_of_fries_beef_tallow", "Cone of Beef Tallow Fries", BSFoods.CONE_OF_FRIES_BEEF_TALLOW)
+            .register();
+
     private BSItems() {
     }
 
@@ -90,6 +119,18 @@ public final class BSItems {
             .tag(Tags.Items.FOODS_COOKED_MEAT, BSTags.GRINDER_BLACKLIST);
     }
 
+    // A snack of the v2 menu: food, in c:foods/fries, counted by the Supreme Grinder.
+    @SafeVarargs
+    private static ItemBuilder<Item, ?> snack(String name, String englishName, FoodProperties food,
+                                              TagKey<Item>... extraTags) {
+        ItemBuilder<Item, ?> builder = REGISTRATE.item(name, Item::new)
+            .lang(englishName)
+            .properties(p -> p.food(food));
+        TagKey<Item>[] tags = Arrays.copyOf(extraTags, extraTags.length + 1);
+        tags[extraTags.length] = BSTags.C_FOODS_FRIES;
+        return builder.tag(tags);
+    }
+
     // Create's ItemDescription reads "<description id>.tooltip.summary" and shows it behind [Shift].
     public static String tooltipKey(String name) {
         return "item." + BelgianSnacks.MOD_ID + "." + name + ".tooltip.summary";
@@ -99,5 +140,9 @@ public final class BSItems {
         REGISTRATE.addRawLang(tooltipKey("fricadelle"), "Nobody really knows what's inside.");
         REGISTRATE.addRawLang(tooltipKey("the_fricadelle"), "Make it a spéciale, please.");
         REGISTRATE.addRawLang(tooltipKey("ultimate_fricadelle"), "It literally contains everything.");
+        REGISTRATE.addRawLang(tooltipKey("fries"), "Fried twice, as the law demands.");
+        REGISTRATE.addRawLang(tooltipKey("fries_beef_tallow"), "Fried in beef fat, the way grandma did.");
+        REGISTRATE.addRawLang(tooltipKey("cone_of_fries"), "Mayonnaise sold separately.");
+        REGISTRATE.addRawLang(tooltipKey("cone_of_fries_beef_tallow"), "The real deal. Your cardiologist disagrees.");
     }
 }

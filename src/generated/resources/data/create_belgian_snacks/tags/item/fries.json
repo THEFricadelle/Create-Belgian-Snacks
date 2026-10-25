@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "burgermod:fries",
+      "required": false
+    },
+    "create_belgian_snacks:fries"
+  ]
+}

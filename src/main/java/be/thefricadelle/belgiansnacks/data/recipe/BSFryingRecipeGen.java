@@ -49,6 +49,30 @@ public class BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>
         .duration(600)
         .requiresHeat(HeatCondition.SUPERHEATED));
 
+    // v2 fries (section 5.1, V-D2): a first fry cooks them through, a hotter second one makes the crust.
+    GeneratedRecipe BLANCHED_FRIES = create("blanched_fries", b -> b
+        .require(BSItems.RAW_FRIES.get())
+        .require(BSTags.FRYING_OILS, 5)
+        .output(BSItems.BLANCHED_FRIES.get())
+        .duration(100)
+        .requiresHeat(HeatCondition.HEATED));
+
+    GeneratedRecipe FRIES = create("fries", b -> b
+        .require(BSItems.BLANCHED_FRIES.get())
+        .require(BSTags.FRYING_OILS, 5)
+        .output(BSItems.FRIES.get())
+        .duration(60)
+        .requiresHeat(HeatCondition.SUPERHEATED));
+
+    // V-D4: the same second fry in beef tallow alone gives the better fries. Both recipes accept tallow:
+    // the fryer takes the one whose fat is the most specific (FryerBlockEntity.findRecipe).
+    GeneratedRecipe FRIES_BEEF_TALLOW = create("fries_beef_tallow", b -> b
+        .require(BSItems.BLANCHED_FRIES.get())
+        .require(BSFluids.MELTED_BEEF_TALLOW.get(), 5)
+        .output(BSItems.FRIES_BEEF_TALLOW.get())
+        .duration(60)
+        .requiresHeat(HeatCondition.SUPERHEATED));
+
     public BSFryingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

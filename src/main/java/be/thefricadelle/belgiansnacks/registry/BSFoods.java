@@ -42,6 +42,16 @@ public final class BSFoods {
         .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300 * SECONDS, 0), 1.0f)
         .build();
 
+    // v2 fries (docs/08, provisional): a cone is a meal, fries alone a snack; beef tallow is the better fat.
+    public static final FoodProperties FRIES = snack(3, 0.4f);
+    public static final FoodProperties FRIES_BEEF_TALLOW = snack(3, 0.6f);
+    public static final FoodProperties CONE_OF_FRIES = snack(6, 0.6f);
+    public static final FoodProperties CONE_OF_FRIES_BEEF_TALLOW = snack(6, 0.8f);
+
+    private static FoodProperties snack(int nutrition, float saturation) {
+        return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();
+    }
+
     private BSFoods() {
     }
 }

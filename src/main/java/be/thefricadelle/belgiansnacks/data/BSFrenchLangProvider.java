@@ -54,6 +54,14 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSEntities.THE_FRICADELLE_NPC.get(), "THEFricadelle");
         add(BSItems.ULTIMATE_FRICADELLE.get(), "THE_FRICADELLE");
 
+        add(BSItems.RAW_FRIES.get(), "Frites crues");
+        add(BSItems.BLANCHED_FRIES.get(), "Frites blanchies");
+        add(BSItems.FRIES.get(), "Frites");
+        add(BSItems.FRIES_BEEF_TALLOW.get(), "Frites au blanc de bœuf");
+        add(BSItems.PAPER_CONE.get(), "Cornet en papier");
+        add(BSItems.CONE_OF_FRIES.get(), "Cornet de frites");
+        add(BSItems.CONE_OF_FRIES_BEEF_TALLOW.get(), "Cornet de frites au blanc");
+
         fluid(BSFluids.FRYING_OIL, "Huile de friture", "Seau d'huile de friture");
         fluid(BSFluids.MELTED_BEEF_TALLOW, "Blanc de bœuf fondu", "Seau de blanc de bœuf fondu");
         fluid(BSFluids.MAYONNAISE, "Mayonnaise", "Seau de mayonnaise");
@@ -66,6 +74,10 @@ public class BSFrenchLangProvider extends LanguageProvider {
         add(BSItems.tooltipKey("fricadelle"), "Personne ne sait vraiment ce qu'il y a dedans.");
         add(BSItems.tooltipKey("the_fricadelle"), "Avec une spéciale, s'il vous plaît.");
         add(BSItems.tooltipKey("ultimate_fricadelle"), "Elle contient littéralement tout.");
+        add(BSItems.tooltipKey("fries"), "Cuites deux fois, comme le veut la loi.");
+        add(BSItems.tooltipKey("fries_beef_tallow"), "Frites dans la graisse de bœuf, comme chez bobonne.");
+        add(BSItems.tooltipKey("cone_of_fries"), "Mayonnaise non comprise.");
+        add(BSItems.tooltipKey("cone_of_fries_beef_tallow"), "La vraie. Ton cardiologue n'est pas d'accord.");
     }
 
     // A fluid shows up under three keys: the fluid type, its placed block and its bucket.
