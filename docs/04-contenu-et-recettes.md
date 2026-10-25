@@ -207,6 +207,21 @@ Détail : `13-cahier-des-charges-v2.md`, section 5.8.
 - Tags : produits dans `c:crops` et `c:crops/<nom>`, graines dans `c:seeds` et `c:seeds/<nom>`. Rien ne se mange cru.
 - Botany Pots : `recipe/botanypots/<culture>.json`, `botanypots:block_derived_crop`, chargées seulement avec le mod.
 
+## v2 — Bières de cuisine (M15, 25/10/2026)
+
+Fluides de cuisine seulement : aucune bouteille, aucun effet. Le Mixer de Create respecte la durée de la recette, mise à l'échelle par sa vitesse (`03-architecture.md`).
+
+| Fluide | Mixer | Durée |
+|---|---|---|
+| `wort` (moût) | chauffé : 2 `malt` + 1 `hops` + 1000 mB d'eau → 1000 mB | normale |
+| `blonde_beer` | 1000 mB de moût + 1 levure → 1000 mB | 600 |
+| `brown_beer` | 1000 mB de moût + 1 cassonade + 1 levure → 1000 mB (plus d'items que la blonde : avec de la cassonade, Create fait la brune) | 600 |
+| `gueuze` | 1000 mB de moût + 1 blé (le lambic se brasse avec du froment non malté, sans levure) → 1000 mB | 2400 |
+| `kriek` | 1000 mB de gueuze + 4 cerises (`#cherries`) → 1000 mB ; jumelle aux baies sucrées sans cerise | 600 |
+| vinaigre de bière | 1000 mB de bière blonde + 1 pomme (la « mère » du vinaigre) → 1000 mB de vinaigre (`mixing/vinegar_from_beer`) | 2400 |
+
+Tag fluide `create_belgian_snacks:beers` : les quatre bières.
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

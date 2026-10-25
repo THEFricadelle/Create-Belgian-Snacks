@@ -134,3 +134,8 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Harvester de Create : cultures et bouchot récoltés et replantés, sans duplication du pieu
 - [x] Botany Pots (si présent)
 - **Accepté si** : une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot. ✅ (le Harvester est vérifié par sa propre logique, pas sur un contraption en mouvement)
+
+### M15 — Bières ✅ (25/10/2026)
+- [x] Moût, blonde, brune, gueuze, kriek (fluides, seaux, textures), tag `beers`, vinaigre de bière
+- [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
+- **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)

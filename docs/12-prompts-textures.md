@@ -88,6 +88,8 @@ Cornets sauce (M12) : le même cornet de frites, avec un ruban de sauce sur les 
 
 Cultures (M14) : stades `block/crop/<culture>_stage0..3` (tiges et feuilles qui montent, la récolte visible aux stades 2 et 3 : têtes pâles de chicon et de poireau, cônes de houblon, choux, fleurs roses du sarrasin, fleurs jaunes de la moutarde ; l'asperge mûre a deux dessins, `_white` et `_green`), `block/bouchot/stage0..3` (un pieu, des grappes de moules de plus en plus nombreuses). Items : racine, chicon, poireau, asperges et jets de houblon dans la forme épaisse des frites, chou rond, moule noire bleutée.
 
+Bières (M15) : moût brun `#8A5A1E`, blonde dorée `#E8B83A` à reflets crème, brune `#5A2E14` à mousse beige, gueuze ambrée `#D89A3A`, kriek rouge cerise `#9A1E2A` à mousse rosée ; même gabarit de fluide et de seau.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

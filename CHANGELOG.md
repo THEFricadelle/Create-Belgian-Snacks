@@ -21,6 +21,8 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Belgian crops** — Chicon (it grows only in the dark, as in a cellar), asparagus (white if grown in the dark, green in daylight), leek, hops (with hop shoots), Brussels sprouts, buckwheat and mustard. Their seeds come out of wild grass; Create's mechanical harvester picks and replants them; Botany Pots grows them when present. Buckwheat and mustard seeds go to the millstone, mustard to the mixer.
 - **Mussels** — Caught while fishing, then grown on a mussel pole (bouchot) standing underwater, picked by hand or by a harvester.
 
+- **Cooking beers** — Wort from malt and hops, then blonde and brown beer with brewer's yeast, gueuze from wort and wheat left to wild yeasts (a long wait in the mixer), and kriek from gueuze and cherries. Beer turns into vinegar with an apple. They cook; nobody drinks them.
+
 ### Changed
 
 - **The fryer's recipe** — Of the recipes an item has, the fryer now takes one its heat and the fat in its tank allow, the most specific fat first.
@@ -40,6 +42,8 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 - **Les cultures belges** — Chicon (il ne pousse que dans le noir, comme en cave), asperge (blanche si elle pousse dans le noir, verte au jour), poireau, houblon (avec ses jets), choux de Bruxelles, sarrasin et moutarde. Leurs graines tombent de l'herbe sauvage ; le harvester de Create les récolte et les replante ; Botany Pots les fait pousser s'il est là. Le sarrasin et les graines de moutarde passent à la meule, la moutarde au mixer.
 - **Les moules** — Pêchées, puis élevées sur un pieu de bouchot posé sous l'eau, récoltées à la main ou au harvester.
+
+- **Les bières de cuisine** — Le moût, au malt et au houblon, puis la blonde et la brune à la levure de bière, la gueuze au moût et au blé laissés aux levures sauvages (une longue attente au mixer), et la kriek à la gueuze et aux cerises. La bière tourne en vinaigre avec une pomme. Elles servent à cuisiner ; personne ne les boit.
 
 ### Modifications
 

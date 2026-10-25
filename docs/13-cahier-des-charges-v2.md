@@ -332,6 +332,8 @@ Fluides `cream`, `bechamel`, `liege_syrup`, `vinegar` et `mustard` : `still`, `f
 
 ### 5.9 Bières (ingrédient de cuisine)
 
+> **Livré au M15 (25/10/2026)** : la gueuze prend 1 blé (le lambic se brasse avec du froment non malté) et le vinaigre de bière 1 pomme : sans item, ces recettes de bassin prendraient le moût ou la bière de n'importe quel bassin (règle 1 du M13). Le Mixer respecte bien les durées (vérifié dans les sources et en jeu).
+
 Décidé le 25/10/2026 : la bière n'existe qu'en **fluide pour cuisiner**. Aucune bouteille à boire, aucun effet. Le seau ne se boit pas.
 
 | ID | FR / EN | Chaîne | Sert à |
@@ -671,7 +673,7 @@ flowchart LR
 | **M12 — Sauces** ✅ | Andalouse, samouraï, américaine (la sauce lapin passe au M13, avec le sirop de Liège qu'elle demande) : 3 fluides + seaux, recettes et secours, tag `sauces`, cornets sauce (nature et au blanc) | Les cornets sauce sortent d'une ligne ; testé avec et sans FD |
 | **M13 — Ingrédients de base** ✅ | Sucres, crème et beurre, sel, vinaigre, fromage de Herve, maton, pistolet, pâtes (feuilletée, brioche, pita, burger, nouilles), béchamel, sirop de Liège, levure, malt, lardons, jambon d'Ardenne, meringue, raisins secs, compote, copeaux de chocolat, glace vanille ; scan des conflits avec le pack (baratte, presse ou scie sur la pâte de Create) | Chaque ingrédient sort d'une machine Create ; aucun conflit de recette |
 | **M14 — Cultures et moules** ✅ | Chicon, poireau, houblon (et ses jets), choux de Bruxelles, asperges, sarrasin, moutarde (et le fluide moutarde), bouchot, loot modifiers, compat Botany Pots | Une ferme automatique (Harvester) de chaque culture ; chicon refusé à la lumière ; moules au bouchot |
-| **M15 — Bières** | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
+| **M15 — Bières** ✅ | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
 | **M16 — Snacks de friterie** | Sauces tartare, pickles et brazil et leurs cornets ; mitraillette, boulets, croquettes (crevettes, fromage, poulet, lucifer), cervelas, mexicano, viandelle, loempia, filet américain et dérivés, burger et cheeseburger de friterie, hot-dog, pita, brochette, bamischijf, nasischijf, calamars, chicken fingers, nuggets, croquant de poulet, ailes épicées, fish sticks, rondelles d'oignon, bâtonnets de fromage, croquettes de pommes de terre | Chacun produit par une ligne automatique (GameTest) |
 | **M17 — Plats belges** | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
 | **M18 — Gaufrier et gaufres** | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |

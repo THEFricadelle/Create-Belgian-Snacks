@@ -198,6 +198,10 @@ Exigence E1 du cahier des charges v2 (`13-cahier-des-charges-v2.md`, section 3).
 - `content/crop/BSCropBlock` (âges 0-7, vanilla), `ShortCropBlock` (âges 0-3, pousse à toute lumière et survit dans le noir, contrairement à `CropBlock` qui exige 9), `ChiconCropBlock` (ne pousse qu'à lumière ≤ `crops.darkMaxLight`), `AsparagusCropBlock` (propriété `blanched` fixée à chaque pas de croissance), `BouchotBlock` (immergeable, sans collision, `age` 0-3 : le Harvester de Create le reconnaît, `HarvesterMovementBehaviour.isValidCrop`, vérifié dans les sources 6.0.10).
 - `data/BSLootProviders` : deux tables et trois modificateurs `neoforge:add_table` (rien d'enregistré chez nous, règle R2) ; `data/BSBotanyPotsProvider` : JSON brut, Botany Pots n'est pas une dépendance.
 
+## Durée au Mixer de Create (v2, M15)
+
+Le Mixer lit `processing_time` des recettes `mixing` et le met à l'échelle de sa vitesse (`MechanicalMixerBlockEntity`, Create 6.0.10) : ticks ≈ log2(512 / tr/min) × ⌈durée / 100 × 15⌉ + 1. La gueuze (2400) dure environ 1081 ticks à 64 tr/min et 361 à 256 tr/min ; une recette sans durée environ 46 ticks à 64 tr/min. Vérifié sur un vrai Mixer (`BreweryGameTests`).
+
 ## Recettes de bassin : trois règles (v2, M13)
 
 Établies au jalon M13 après un scan de toutes les recettes de traitement d'Arcadia 2.0.32 et la lecture de `BasinOperatingBlockEntity.getMatchingRecipes` dans Create 6.0.10 : quand plusieurs recettes de bassin correspondent, **Create prend celle qui a le plus d'items** (les fluides ne comptent pas).
