@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M15 beers; the kriek follows the cherries below.
+        "mixing/wort", "mixing/blonde_beer", "mixing/brown_beer", "mixing/gueuze", "mixing/vinegar_from_beer",
         // M14 crops; the Botany Pots crops load only with that mod.
         "milling/buckwheat_flour", "milling/mustard_powder", "mixing/mustard", "crafting/bouchot",
         // M13 base ingredients; salt, butter, powdered sugar, raisins and the Liège sauce follow the pack below.
@@ -147,6 +149,7 @@ public final class RecipeGameTests {
         twins(helper, "mixing/samourai", "mixing/samourai_from_blaze_powder", false);
         twins(helper, "mixing/sauce_lapin", "mixing/sauce_lapin_from_beetroot", onions);
         twins(helper, "smoking/raisins", "smoking/raisins_from_sweet_berries", false);
+        twins(helper, "mixing/kriek", "mixing/kriek_from_sweet_berries", false);
         // M13 rule 2: ours only where the pack does not make it (no runtime here has Create: Food).
         helper.assertTrue((find(helper, "mixing/salt") != null) == tagEmpty(BSTags.C_SALT), "mixing/salt follows c:salt");
         helper.assertTrue((find(helper, "mixing/butter") != null) == tagEmpty(BSTags.C_BUTTER), "mixing/butter follows c:butter");
@@ -156,6 +159,24 @@ public final class RecipeGameTests {
 
     private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M15 on a real basin: wort needs heat; with cassonade beside the yeast, Create picks the brown
+    // beer (the recipe with more items); the gueuze needs its wheat.
+    @GameTest(template = TEMPLATE)
+    public static void beersBrewOnARealBasin(GameTestHelper helper) {
+        List<ItemStack> mash = List.of(BSItems.MALT.asStack(), BSItems.MALT.asStack(), be.thefricadelle.belgiansnacks.registry.BSCrops.HOPS.asStack());
+        FluidStack water = new FluidStack(net.minecraft.world.level.material.Fluids.WATER, 1000);
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, mash, water), recipe(helper, "mixing/wort")), "wort brewed cold");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), true, mash, water), recipe(helper, "mixing/wort")), "wort over a burner");
+        FluidStack wort = new FluidStack(BSFluids.WORT.get().getSource(), 1000);
+        BasinBlockEntity both = basin(helper, new BlockPos(0, 1, 2), false, List.of(BSItems.BREWERS_YEAST.asStack(), BSItems.CASSONADE.asStack()), wort);
+        helper.assertTrue(BasinRecipe.match(both, recipe(helper, "mixing/brown_beer")), "brown beer with cassonade");
+        helper.assertTrue(recipe(helper, "mixing/brown_beer").getIngredients().size() > recipe(helper, "mixing/blonde_beer").getIngredients().size(),
+            "the brown beer must have more items than the blonde, so Create prefers it");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 2), false, List.of(), wort), recipe(helper, "mixing/gueuze")),
+            "gueuze from wort alone would take any basin's wort");
+        helper.succeed();
     }
 
     // M13 on a real basin: dairy and doughs need their item, béchamel needs heat and its three items.

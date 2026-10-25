@@ -127,6 +127,7 @@ public final class ClientSmokeTest {
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
         "mixing/andalouse_from_beetroot", "mixing/samourai_from_blaze_powder", "mixing/americaine_from_beetroot",
         "milling/buckwheat_flour", "milling/mustard_powder", "mixing/mustard", "crafting/bouchot",
+        "mixing/wort", "mixing/blonde_beer", "mixing/brown_beer", "mixing/gueuze", "mixing/vinegar_from_beer", "mixing/kriek_from_sweet_berries",
         "mixing/sauce_lapin_from_beetroot", "smoking/raisins_from_sweet_berries", "mixing/salt", "mixing/butter", "milling/powdered_sugar",
         "mixing/cassonade",
         "mixing/cream",

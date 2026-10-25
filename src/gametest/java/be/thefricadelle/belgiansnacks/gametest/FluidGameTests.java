@@ -70,6 +70,18 @@ public final class FluidGameTests {
         helper.succeed();
     }
 
+    // v2 (section 5.9): the four beers, flowing too, and nothing else.
+    @GameTest(template = TEMPLATE)
+    public static void theBeersTagHoldsTheFourBeers(GameTestHelper helper) {
+        List<FluidEntry<BaseFlowingFluid.Flowing>> beers = List.of(BSFluids.BLONDE_BEER, BSFluids.BROWN_BEER, BSFluids.GUEUZE, BSFluids.KRIEK);
+        for (var entry : FLUIDS) {
+            boolean beer = beers.contains(entry);
+            helper.assertValueEqual(entry.get().getSource().defaultFluidState().is(BSTags.BEERS), beer, entry.getId() + " in beers");
+            helper.assertValueEqual(entry.get().getFlowing().defaultFluidState().is(BSTags.BEERS), beer, entry.getId() + " flowing in beers");
+        }
+        helper.succeed();
+    }
+
     // v2 (section 5.2): every sauce, flowing too, and nothing else.
     @GameTest(template = TEMPLATE)
     public static void theSaucesTagHoldsEverySauceAndOnlyThem(GameTestHelper helper) {
@@ -88,15 +100,15 @@ public final class FluidGameTests {
 
     @GameTest(template = TEMPLATE)
     public static void emptyingABucketPlacesASourceBlock(GameTestHelper helper) {
-        for (int i = 0; i < FLUIDS.size(); i++) {
-            var entry = FLUIDS.get(i);
-            // Corners of the 3x3 floor, so no two fluids touch.
-            BlockPos pos = new BlockPos((i % 2) * 2, 1, (i / 2) * 2);
+        // One spot, one fluid at a time, cleared in between: the structure holds any number of fluids.
+        BlockPos pos = new BlockPos(1, 1, 1);
+        for (var entry : FLUIDS) {
             BucketItem bucket = (BucketItem) entry.getBucket().orElseThrow();
             boolean placed = bucket.emptyContents(null, helper.getLevel(), helper.absolutePos(pos), null, new ItemStack(bucket));
             FluidState state = helper.getLevel().getFluidState(helper.absolutePos(pos));
             helper.assertTrue(placed, entry.getId() + " bucket could not be emptied");
             helper.assertTrue(state.isSource() && state.getType() == entry.get().getSource(), entry.getId() + " did not place its source");
+            helper.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR);
         }
         helper.succeed();
     }
