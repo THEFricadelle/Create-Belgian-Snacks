@@ -90,6 +90,8 @@ Cultures (M14) : stades `block/crop/<culture>_stage0..3` (tiges et feuilles qui 
 
 Bières (M15) : moût brun `#8A5A1E`, blonde dorée `#E8B83A` à reflets crème, brune `#5A2E14` à mousse beige, gueuze ambrée `#D89A3A`, kriek rouge cerise `#9A1E2A` à mousse rosée ; même gabarit de fluide et de seau.
 
+Snacks de friterie (M16, dessinés par `tools/draw_textures.py`, à remplacer par les vraies) : panés en capsule dorée piquée de chapelure (crus pâles, item de transition doré à l'œuf sans chapelure) ; saucisses en capsule diagonale (cervelas et mexicano épais, viandelle fine) ; boulets en boule, boulets liégeois dans un bol de sauce lapin ; sandwiches en couches (demi-baguette, burger avec steak et fromage, hot-dog, pita en demi-lune) ; rondelles d'oignon et calamars en anneaux ; ailes en pilon à os ; brochette en cubes sur un bâton ; galettes bami (points jaunes) et nasi (points blancs). Sauces : tartare crème verdâtre `#E8E6C4`, pickles jaune moutarde `#CCBC30`, brazil orangé `#EEA040`.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

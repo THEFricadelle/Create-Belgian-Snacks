@@ -202,13 +202,17 @@ Exigence E1 du cahier des charges v2 (`13-cahier-des-charges-v2.md`, section 3).
 
 Le Mixer lit `processing_time` des recettes `mixing` et le met à l'échelle de sa vitesse (`MechanicalMixerBlockEntity`, Create 6.0.10) : ticks ≈ log2(512 / tr/min) × ⌈durée / 100 × 15⌉ + 1. La gueuze (2400) dure environ 1081 ticks à 64 tr/min et 361 à 256 tr/min ; une recette sans durée environ 46 ticks à 64 tr/min. Vérifié sur un vrai Mixer (`BreweryGameTests`).
 
-## Recettes de bassin : trois règles (v2, M13)
+## Recettes de bassin : quatre règles (v2, M13 et M16)
 
 Établies au jalon M13 après un scan de toutes les recettes de traitement d'Arcadia 2.0.32 et la lecture de `BasinOperatingBlockEntity.getMatchingRecipes` dans Create 6.0.10 : quand plusieurs recettes de bassin correspondent, **Create prend celle qui a le plus d'items** (les fluides ne comptent pas).
 
 1. **Toute recette de Mixer ou de Compacting a au moins un item** (`RecipeFilesTest.basinRecipesNeedAnItem`). Une recette de fluides seuls correspondrait à tout bassin qui contient ce fluide et le volerait à une autre ligne qui attend encore ses items (par exemple le lait d'une ligne de chocolat de Create). D'où le sel dans la crème, le beurre, le fromage de Herve et le maton.
 2. **Quand le pack fabrique déjà un ingrédient sous un tag `c:`, notre recette se coupe** et nos recettes lisent un tag qui contient le sien (`RecipeFilesTest.packIngredientsTurnOurRecipeOff`) : sel (`c:salt`, `#salts`), beurre (`c:butter`, `#butters`), sucre glace (Create: Food, `#powdered_sugars`).
 3. **Une recette qui en recoupe une du pack a strictement plus d'items**, ou part d'un autre ingrédient : nos pâtes partent de la pâte de Create (`create:dough`), jamais de farine + eau (que Create mélange déjà en pâte) ; la béchamel porte trois items (farine, beurre, épices) pour passer devant la pâte au beurre de Create: Food.
+
+4. **Pas d'œuf dans un bassin froid de nos snacks** (M16) : Create: Food change un œuf seul (`minecraft:egg`) en œuf liquide dans n'importe quel bassin. L'œuf passe au Deployer (panure). La mayonnaise, la brioche, les nouilles et la meringue (M13) gardent leur œuf : leur bassin le reçoit avec ses autres ingrédients, à vérifier dans le pack au M22.
+
+**Items de transition partagés** (M16) : une fois un item entré dans un assemblage, Create l'identifie par son item de transition **et** l'identifiant de recette rangé dans son composant `SEQUENCED_ASSEMBLY` (`SequencedAssemblyRecipe.appliesTo`) ; le premier pas se choisit par l'ingrédient d'entrée. Un seul `incomplete_breaded` sert donc aux huit snacks panés, chacun partant de son appareil (vérifié sur une vraie ligne : deux croquettes différentes à la suite).
 
 ## Ponder (M9)
 

@@ -222,6 +222,39 @@ Fluides de cuisine seulement : aucune bouteille, aucun effet. Le Mixer de Create
 
 Tag fluide `create_belgian_snacks:beers` : les quatre bières.
 
+## v2 — Snacks de friterie (M16, 25/10/2026)
+
+Aucun œuf et aucun oignon dans nos bassins : Create: Food change un œuf seul en œuf liquide dans n'importe quel bassin, et chaque oignon demanderait une jumelle à la betterave. Toute friture : Friteuse chauffée, 100 ticks, 10 mB de `#frying_oils` par pièce.
+
+| Sauce (Mixer) | Recette |
+|---|---|
+| `tartare` | 250 mB mayonnaise + 50 mB pickles + 1 épices → 300 mB |
+| `pickles` | chauffé : 250 mB vinaigre + 50 mB moutarde + 1 carotte + 1 chou de Bruxelles + 1 épices → 250 mB |
+| `brazil` | 250 mB mayonnaise + 50 mB curry ketchup + 1 ananas (`#pineapples`) → 300 mB ; jumelle à la tranche de pastèque |
+
+Les trois rejoignent `#sauces` et les cornets : 6 cornets sauce de plus (`filling/cone_of_fries_<sauce>`, `..._beef_tallow_<sauce>`).
+
+| Snack | Chaîne |
+|---|---|
+| `mitraillette` | Scie : pain → 2 `half_baguette` ; assemblage (`incomplete_mitraillette`) : Deployer `#mitraillette_meats` → Deployer `#fries` → Spout 100 mB `#sauces` |
+| `boulet`, `boulets_liegeois` | Mixer : porc + bœuf + chapelure + épices + sel → 2 `boulet_paste` ; Presse → `raw_boulet` ; Friteuse ; Mixer chauffé : 2 boulets + 250 mB sauce lapin + 1 bol → `boulets_liegeois` (rend le bol) |
+| croquettes | Mixer : 2 crevettes (`#shrimps`, jumelle 2 cabillauds) + 250 mB béchamel ; 1 fromage (`c:foods/cheese`) + 250 mB béchamel ; 2 poulet haché + 250 mB béchamel ; lucifer : porc + 50 mB samouraï + 100 mB béchamel ; pommes de terre, chauffé : 2 pommes de terre + beurre + sel. Chaque appareil sort par 2 |
+| panure (8 snacks) | Assemblage partagé `incomplete_breaded` : Deployer œuf → Deployer chapelure → Presse. Entrées : les 5 appareils de croquette, `chicken_strips` (scie : poulet → 3), `fish_strips` (scie : cabillaud ou saumon → 3), `cheese_strips` (scie : fromage → 3) |
+| `cervelas`, `mexicano`, `viandelle` | Mixer : porc + bœuf + épices ; 2 bœuf + 50 mB samouraï + épices ; porc + poulet + chapelure + épices + sel → mix ×2 ; Presse → cru ; Friteuse |
+| `loempia` | Presse : `create:dough` → `loempia_wrapper` ; assemblage : Deployer poulet haché → poireau → carotte → Presse |
+| `filet_americain` | Mixer : 2 bœuf + épices + 100 mB mayonnaise + 25 mB moutarde → 2 ; Deployer sur un pistolet → `pistolet_americain` ; Deployer `#fries` dessus → `americain_frites` |
+| burgers | Presse : bœuf haché → `raw_patty` ; Friteuse → `patty` ; assemblage sur `burger_bun` : Deployer `patty` → Spout 50 mB pickles → Spout 50 mB `#sauces` → `friterie_burger` ; Deployer fromage dessus → `friterie_cheeseburger` |
+| `hot_dog` | Presse : `burger_bun_dough` → `hot_dog_bun_dough` ; fumage ou four → `hot_dog_bun` ; assemblage : Deployer `#sausages` → Deployer `onion_rings` → Spout 50 mB `#sauces` |
+| `pita` | Mixer chauffé : 2 porc + épices → 2 `gyros` ; assemblage sur `pita_bread` : Deployer `gyros` → Deployer tomate (jumelle betterave) → Spout 50 mB `#sauces` |
+| `brochette` | Assemblage sur un bâton : Deployer côtelette crue → lardons → côtelette crue → `raw_brochette` ; Friteuse |
+| `bami_disc`, `nasi_disc` | Mixer (froid) : 2 nouilles / 2 riz (`c:crops/rice`, jumelle 2 blés) + porc + poireau + épices → 2 mix ; Presse → galette crue ; Friteuse |
+| `squid_rings` | Scie : calmar (`#squids` : `c:foods/raw_squid`, `c:foods/raw_calamari` de Cultural Delights) → 3 ; Friteuse. Sans calmar, pas de recette |
+| `chicken_nuggets`, `chicken_crunch` | Mixer : 2 poulet + chapelure + sel → 4 nuggets crus ; scie : maïs (`c:crops/corn`) → 2 `corn_flakes` ; Mixer : 2 poulet + épices + 2 flocons → 2 croquants crus (sans maïs : 2 chapelure) ; Friteuse |
+| ailes | Deployer qui **garde** ses cisailles (`keep_held_item`) sur un poulet cru → 2 ailes crues ; Friteuse → `fried_chicken_wings` ; Spout 25 mB samouraï → `spicy_chicken_wings` |
+| `onion_rings` | Scie : oignon (jumelle betterave) → 3 rondelles ; Mixer : 3 rondelles + farine + 250 mB bière blonde → 3 en pâte ; Friteuse |
+
+Tags : `mitraillette_meats` (fricadelle, boulet, cervelas, mexicano, viandelle, filet américain, chicken fingers, brochette), `sausages` (fricadelle, cervelas, mexicano, viandelle + `c:foods/sausage`), `shrimps`, `squids`, `pineapples`. Snacks finis dans `c:foods`, les viandes dans `c:foods/cooked_meat`, le poisson dans `c:foods/cooked_fish`.
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

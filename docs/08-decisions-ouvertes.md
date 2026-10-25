@@ -93,4 +93,18 @@ Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seu
 | `meringue` | 2 | 0.2 | M13 |
 | `raisins` | 2 | 0.3 | M13 |
 | `apple_compote` (rend le bol) | 5 | 0.5 | M13 |
+| cornets tartare, pickles, brazil | 7 | 0.7 / 0.9 | M16 |
+| `mitraillette` | 14 | 1.2 | M16 |
+| `americain_frites` | 12 | 1.0 | M16 |
+| `boulets_liegeois` (rend le bol) | 12 | 1.0 | M16 |
+| `friterie_cheeseburger` | 11 | 1.0 | M16 |
+| `friterie_burger`, `pita` | 10 | 0.9 | M16 |
+| `pistolet_americain` | 9 | 0.9 | M16 |
+| `hot_dog` | 8 | 0.8 | M16 |
+| `brochette` | 7 | 0.8 | M16 |
+| `boulet`, `patty`, `gyros` | 6 | 0.7 | M16 |
+| `chicken_crunch`, `spicy_chicken_wings` | 6 | 0.7 | M16 |
+| `lucifer`, `cervelas`, `mexicano`, `viandelle`, `loempia`, `bami_disc`, `nasi_disc` | 6 | 0.6 | M16 |
+| croquettes (crevettes, fromage, poulet), `chicken_fingers`, `fish_sticks`, `squid_rings`, `fried_chicken_wings`, `filet_americain` | 5 | 0.6 | M16 |
+| `potato_croquette`, `cheese_sticks`, `chicken_nuggets`, `onion_rings` | 4 | 0.5 | M16 |
 | `vanilla_ice_cream` | 4 | 0.4 | M13 |

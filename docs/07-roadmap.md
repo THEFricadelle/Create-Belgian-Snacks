@@ -139,3 +139,9 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Moût, blonde, brune, gueuze, kriek (fluides, seaux, textures), tag `beers`, vinaigre de bière
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
+
+### M16 — Snacks de friterie ✅ (25/10/2026)
+- [x] Sauces tartare, pickles, brazil et leurs 6 cornets
+- [x] 33 snacks finis (mitraillette, boulets, croquettes, saucisses, loempia, américain, burgers, hot-dog, pita, brochette, galettes, calamars, poulet, rondelles d'oignon), 82 items
+- [x] Un item de transition partagé pour les 8 panés ; Deployer qui garde ses cisailles
+- **Accepté si** : chaque snack sort d'une ligne automatique. ✅ en partie : chaque recette est chargée et testée (GameTests de recettes et de bassin) ; trois lignes réelles (mitraillette, panure de deux croquettes, ailes) tournent sur de vraies machines ; les autres chaînes utilisent les mêmes machines et seront montrées en Ponder au M21

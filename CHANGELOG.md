@@ -23,6 +23,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 
 - **Cooking beers** — Wort from malt and hops, then blonde and brown beer with brewer's yeast, gueuze from wort and wheat left to wild yeasts (a long wait in the mixer), and kriek from gueuze and cherries. Beer turns into vinegar with an apple. They cook; nobody drinks them.
 
+- **Friterie snacks** — The rest of the frituur menu, all made on Create lines: the mitraillette (half a baguette, a meat, fries and a sauce), boulets and Liège-style boulets in their sauce, shrimp, cheese, chicken and potato croquettes and the spicy lucifer, chicken fingers, fish sticks and cheese sticks, cervelas, mexicano and viandelle, loempia, filet américain on a pistolet and with fries, the friterie burger and cheeseburger, hot dog, pita, brochette, bamischijf and nasischijf, calamari rings (where the pack has squid), chicken nuggets, chicken crunch, plain and spicy chicken wings (a deployer with shears keeps them), and onion rings in a blonde beer batter. Every breaded snack goes through one breading line: egg, crumbs, press.
+- **Three more sauces** — Tartare, pickles (piccalilli) and brazil, with their sauced cones.
+
 ### Changed
 
 - **The fryer's recipe** — Of the recipes an item has, the fryer now takes one its heat and the fat in its tank allow, the most specific fat first.
@@ -44,6 +47,9 @@ All notable changes to Create: Belgian Snacks are documented here.
 - **Les moules** — Pêchées, puis élevées sur un pieu de bouchot posé sous l'eau, récoltées à la main ou au harvester.
 
 - **Les bières de cuisine** — Le moût, au malt et au houblon, puis la blonde et la brune à la levure de bière, la gueuze au moût et au blé laissés aux levures sauvages (une longue attente au mixer), et la kriek à la gueuze et aux cerises. La bière tourne en vinaigre avec une pomme. Elles servent à cuisiner ; personne ne les boit.
+
+- **Les snacks de friterie** — Le reste de la carte de la friterie, tout fait sur des lignes de Create : la mitraillette (une demi-baguette, une viande, des frites et une sauce), les boulets et les boulets à la liégeoise dans leur sauce, les croquettes de crevettes, au fromage, de poulet et de pommes de terre et le lucifer pimenté, les chicken fingers, les bâtonnets de poisson et de fromage, le cervelas, le mexicano et la viandelle, le loempia, le filet américain sur un pistolet et avec des frites, le burger et le cheeseburger de friterie, le hot-dog, la pita, la brochette, la bamischijf et la nasischijf, les calamars (si le pack a du calmar), les nuggets, le croquant de poulet, les ailes de poulet nature et épicées (un deployer à cisailles les garde) et les rondelles d'oignon en pâte à la bière blonde. Tous les panés passent par une seule ligne de panure : œuf, chapelure, presse.
+- **Trois sauces de plus** — Tartare, pickles (piccalilli) et brazil, avec leurs cornets sauce.
 
 ### Modifications
 
