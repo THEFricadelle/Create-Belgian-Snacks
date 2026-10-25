@@ -33,6 +33,8 @@ import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndex;
 import be.thefricadelle.belgiansnacks.content.food.FoodIndexRules;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
+import be.thefricadelle.belgiansnacks.content.uninstall.Uninstall;
+import be.thefricadelle.belgiansnacks.content.uninstall.UninstallScan;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -42,6 +44,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -49,11 +52,15 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-/** /belgiansnacks foods count|export (op level 2): the numbers behind the grinder rate and blacklist. */
+/**
+ * /belgiansnacks (op level 2): foods count|export, the numbers behind the grinder rate and blacklist;
+ * announce; grinder fill|clear; uninstall scan|purge-references|prepare, to remove the mod safely.
+ */
 public final class BSCommands {
     private static final String KEY = BelgianSnacks.MOD_ID + ".command.foods.";
     private static final String GRINDER_KEY = BelgianSnacks.MOD_ID + ".command.grinder.";
     private static final String ANNOUNCE_KEY = BelgianSnacks.MOD_ID + ".command.announce.";
+    private static final String UNINSTALL_KEY = BelgianSnacks.MOD_ID + ".command.uninstall.";
 
     private BSCommands() {
     }
@@ -75,7 +82,13 @@ public final class BSCommands {
                         .then(Commands.argument("percent", IntegerArgumentType.integer(0, 100))
                             .executes(context -> fill(context, IntegerArgumentType.getInteger(context, "percent"))))))
                 .then(Commands.literal("clear")
-                    .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(BSCommands::clear)))));
+                    .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(BSCommands::clear))))
+            .then(Commands.literal("uninstall")
+                .then(Commands.literal("scan").executes(BSCommands::scan))
+                .then(Commands.literal("purge-references").executes(BSCommands::purgeReferences))
+                .then(Commands.literal("prepare")
+                    .executes(BSCommands::showPrepare)
+                    .then(Commands.argument("enabled", BoolArgumentType.bool()).executes(BSCommands::setPrepare)))));
     }
 
     // Deterministic: the first foods of the sorted index, so a test knows exactly what is in.
@@ -122,6 +135,52 @@ public final class BSCommands {
         BSConfig.setAnnounceUltimate(announce);
         context.getSource().sendSuccess(() -> Component.translatable(ANNOUNCE_KEY + (announce ? "on" : "off")), true);
         return announce ? 1 : 0;
+    }
+
+    // What a removal would leave behind, written to config/create_belgian_snacks/uninstall_scan.txt.
+    private static int scan(CommandContext<CommandSourceStack> context) {
+        UninstallScan.Report report = UninstallScan.run(context.getSource().getServer());
+        Path file = FMLPaths.CONFIGDIR.get().resolve(BelgianSnacks.MOD_ID).resolve("uninstall_scan.txt");
+        List<String> lines = new ArrayList<>();
+        lines.add("# Create: Belgian Snacks removal scan: online players and loaded chunks only");
+        lines.add("items " + report.items() + ", fluids " + report.fluidMillibuckets() + " mB, blocks " + report.blocks()
+            + ", references in other mods " + report.references());
+        lines.addAll(report.lines());
+        try {
+            Files.createDirectories(file.getParent());
+            Files.write(file, lines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            BelgianSnacks.LOGGER.error("Could not write {}", file, e);
+            context.getSource().sendFailure(Component.translatable(UNINSTALL_KEY + "scan.failed", file.toString()));
+            return 0;
+        }
+        context.getSource().sendSuccess(() -> Component.translatable(UNINSTALL_KEY + "scan", report.items(),
+            report.fluidMillibuckets(), report.blocks(), report.references(), file.toString()), false);
+        return report.items() + report.blocks() + report.references();
+    }
+
+    private static int purgeReferences(CommandContext<CommandSourceStack> context) {
+        List<ServerPlayer> players = context.getSource().getServer().getPlayerList().getPlayers();
+        int removed = 0;
+        for (ServerPlayer player : players) {
+            removed += Uninstall.purge(player);
+        }
+        int total = removed;
+        context.getSource().sendSuccess(() -> Component.translatable(UNINSTALL_KEY + "purged", total, players.size()), true);
+        return removed;
+    }
+
+    private static int showPrepare(CommandContext<CommandSourceStack> context) {
+        boolean prepare = BSConfig.uninstallPrepare();
+        context.getSource().sendSuccess(() -> Component.translatable(UNINSTALL_KEY + "prepare." + (prepare ? "on" : "off")), false);
+        return prepare ? 1 : 0;
+    }
+
+    private static int setPrepare(CommandContext<CommandSourceStack> context) {
+        boolean prepare = BoolArgumentType.getBool(context, "enabled");
+        BSConfig.setUninstallPrepare(prepare);
+        context.getSource().sendSuccess(() -> Component.translatable(UNINSTALL_KEY + "prepare." + (prepare ? "on" : "off")), true);
+        return prepare ? 1 : 0;
     }
 
     private static int count(CommandContext<CommandSourceStack> context) {

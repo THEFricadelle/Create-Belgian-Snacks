@@ -32,6 +32,7 @@ public final class BSConfig {
     private static final ModConfigSpec.IntValue GRINDER_MIN_SPEED;
     private static final ModConfigSpec.DoubleValue GRINDER_STRESS_IMPACT;
     private static final ModConfigSpec.BooleanValue ULTIMATE_ANNOUNCE;
+    private static final ModConfigSpec.BooleanValue UNINSTALL_PREPARE;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -79,6 +80,14 @@ public final class BSConfig {
                 "Operators can also switch it in game: /belgiansnacks announce true|false.")
             .define("announceInChat", true);
         builder.pop();
+
+        builder.push("uninstall");
+        UNINSTALL_PREPARE = builder
+            .comment("Removal preparation: each player who logs in has this mod's entries removed from other mods' data",
+                "(Spice of Life: Onion's food history), so that removing the mod later cannot block their login.",
+                "Turn it on some days before removing the mod: /belgiansnacks uninstall prepare true.")
+            .define("prepare", false);
+        builder.pop();
         SPEC = builder.build();
     }
 
@@ -93,6 +102,16 @@ public final class BSConfig {
     public static void setAnnounceUltimate(boolean announce) {
         ULTIMATE_ANNOUNCE.set(announce);
         ULTIMATE_ANNOUNCE.save();
+    }
+
+    public static boolean uninstallPrepare() {
+        return SPEC.isLoaded() ? UNINSTALL_PREPARE.get() : UNINSTALL_PREPARE.getDefault();
+    }
+
+    /** Switches the removal preparation and writes it to the server config file. */
+    public static void setUninstallPrepare(boolean prepare) {
+        UNINSTALL_PREPARE.set(prepare);
+        UNINSTALL_PREPARE.save();
     }
 
     public static int fryerTankCapacity() {

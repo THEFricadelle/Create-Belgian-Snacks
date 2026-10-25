@@ -72,6 +72,14 @@ public final class BSLang {
         add(ID + ".command.announce.off", "Eating THE_FRICADELLE is no longer announced in chat",
             "Manger THE_FRICADELLE n'est plus annoncé dans le chat");
         add(ID + ".command.grinder.not_found", "No supreme grinder at %s", "Pas de hachoir suprême en %s");
+        add(ID + ".command.uninstall.scan", "Removal scan: %s of our items, %s mB of our fluids, %s of our blocks, %s entries in other mods' data. Report: %s",
+            "Analyse avant retrait : %s de nos items, %s mB de nos fluides, %s de nos blocs, %s entrées dans les données d'autres mods. Rapport : %s");
+        add(ID + ".command.uninstall.scan.failed", "Could not write the removal report to %s", "Impossible d'écrire le rapport de retrait dans %s");
+        add(ID + ".command.uninstall.purged", "%s entries of this mod removed from other mods' data (%s players online)",
+            "%s entrées de ce mod retirées des données d'autres mods (%s joueurs en ligne)");
+        add(ID + ".command.uninstall.prepare.on", "Removal preparation on: each player who logs in is cleaned",
+            "Préparation au retrait active : chaque joueur qui se connecte est nettoyé");
+        add(ID + ".command.uninstall.prepare.off", "Removal preparation off", "Préparation au retrait désactivée");
         add(ID + ".ultimate.eaten", "%s ate THE_FRICADELLE. It literally contained everything.",
             "%s a mangé THE_FRICADELLE. Elle contenait littéralement tout.");
         add(ID + ".npc.phrase.0", "One fricadelle, coming up!", "Une fricadelle, une !");
