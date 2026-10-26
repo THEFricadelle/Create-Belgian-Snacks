@@ -1,0 +1,38 @@
+{
+  "parent": "create_belgian_snacks:root",
+  "criteria": {
+    "brewer": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "create_belgian_snacks:blonde_beer_bucket",
+              "create_belgian_snacks:brown_beer_bucket",
+              "create_belgian_snacks:gueuze_bucket",
+              "create_belgian_snacks:kriek_bucket"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.brewer.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:kriek_bucket"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.brewer"
+    }
+  },
+  "requirements": [
+    [
+      "brewer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

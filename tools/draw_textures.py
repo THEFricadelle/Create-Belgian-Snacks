@@ -1120,6 +1120,88 @@ def sweets():
     return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
 
 
+# v2 decoration (docs/12): signs in white capitals on a black board with a red and white friterie
+# stripe; neons as a cone of fries in glowing tubes on a dark panel.
+FONT = {
+    'C': ['01110', '10001', '10000', '10000', '10000', '10001', '01110'],
+    'E': ['11111', '10000', '10000', '11110', '10000', '10000', '11111'],
+    'F': ['11111', '10000', '10000', '11110', '10000', '10000', '10000'],
+    'H': ['10001', '10001', '10001', '11111', '10001', '10001', '10001'],
+    'I': ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
+    'O': ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
+    'P': ['11110', '10001', '10001', '11110', '10000', '10000', '10000'],
+    'R': ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
+    'S': ['01111', '10000', '10000', '01110', '00001', '00001', '11110'],
+    'T': ['11111', '00100', '00100', '00100', '00100', '00100', '00100'],
+    'U': ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
+    ' ': ['000', '000', '000', '000', '000', '000', '000'],
+}
+
+
+def sign_face(text):
+    width, height = 64, 32
+    px = [[colour('1C1C1E') for _ in range(width)] for _ in range(height)]
+    for x in range(width):
+        for y in (0, height - 1):
+            px[y][x] = colour('6E4A2C')
+        # A red and white stripe along the bottom, as on a friterie awning.
+        for y in (25, 26, 27):
+            px[y][x] = colour('C8352B' if (x // 4) % 2 == 0 else 'F2EEE2')
+    for y in range(height):
+        for x in (0, width - 1):
+            px[y][x] = colour('6E4A2C')
+    glyphs = [FONT[c] for c in text]
+    total = sum(len(g[0]) for g in glyphs) + len(glyphs) - 1
+    x0, y0 = (width - total) // 2, 9
+    for glyph in glyphs:
+        for dy, row in enumerate(glyph):
+            for dx, bit in enumerate(row):
+                if bit == '1':
+                    px[y0 + dy][x0 + dx] = colour('FFFFFF')
+                    if y0 + dy + 1 < height and dy == len(glyph) - 1 or (dy + 1 < len(glyph) and glyph[dy + 1][dx] == '0'):
+                        px[y0 + dy + 1][x0 + dx] = colour('8A8A90')
+        x0 += len(glyph[0]) + 1
+    return px
+
+
+def neon_face(tube, glow):
+    width, height = 32, 16
+    px = [[colour('141418') for _ in range(width)] for _ in range(height)]
+    for x in range(width):
+        px[0][x] = px[height - 1][x] = colour('2A2A30')
+    for y in range(height):
+        px[y][0] = px[y][width - 1] = colour('2A2A30')
+    # The cone, tip at the bottom, and three fries standing in it.
+    for y in range(7, 14):
+        half = (14 - y) * 0.75 + 0.5
+        for x in (round(16 - half), round(15 + half)):
+            px[y][x] = colour(tube)
+    for x in range(10, 22):
+        px[7][x] = colour(tube)
+    for x, top in [(12, 2), (16, 1), (20, 3)]:
+        for y in range(top, 7):
+            px[y][x] = colour(tube)
+    # A soft halo around the tubes.
+    for y in range(1, height - 1):
+        for x in range(1, width - 1):
+            if px[y][x] == colour('141418') and any(px[y + dy][x + dx] == colour(tube) for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]):
+                px[y][x] = colour(glow)
+    return px
+
+
+def decor_faces():
+    out = {
+        'decor/friterie_sign': sign_face('FRITERIE'),
+        'decor/frituur_sign': sign_face('FRITUUR'),
+        'decor/chip_shop_sign': sign_face('CHIP SHOP'),
+        'decor/red_friterie_neon': neon_face('FF6A6A', '5A1C1C'),
+        'decor/yellow_friterie_neon': neon_face('FFF080', '5A5018'),
+        'decor/blue_friterie_neon': neon_face('80C8FF', '1C3A5A'),
+        'decor/green_friterie_neon': neon_face('80FF9A', '1C5A28'),
+    }
+    return {gen.BLOCK_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 def artwork():
     out = {}
     for name, palette, topped, thick, unfinished in [
@@ -1178,6 +1260,7 @@ def artwork():
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in waffle_iron_faces().items()})
+    out.update(decor_faces())
     return out
 
 
@@ -1214,7 +1297,7 @@ def main():
     assert outputs.keys() == placeholders.keys()
     written = 0
     for path, px in outputs.items():
-        assert len({p for row in px for p in row if p}) <= 16, path
+        assert len({p for row in px for p in row if p}) <= 16 or '/decor/' in path.as_posix(), path
         expected = placeholders[path]()
         assert (len(px), len(px[0])) == (len(expected), len(expected[0])), path
         data = gen.png_bytes(px)

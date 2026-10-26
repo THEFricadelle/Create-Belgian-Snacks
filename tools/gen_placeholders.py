@@ -441,6 +441,24 @@ def render_fluid(colour, frame):
     return px
 
 
+# v2 decoration faces (docs/13, section 7.2): id -> (width, height, colour). The face of a 16 x 8 board,
+# twice as wide as high; signs carry text, so they get four times the usual resolution.
+DECOR_FACES = {
+    "friterie_sign": (64, 32, (0x20, 0x20, 0x20)),
+    "frituur_sign": (64, 32, (0x20, 0x20, 0x20)),
+    "chip_shop_sign": (64, 32, (0x20, 0x20, 0x20)),
+    "red_friterie_neon": (32, 16, (0xE0, 0x30, 0x30)),
+    "yellow_friterie_neon": (32, 16, (0xF0, 0xD0, 0x30)),
+    "blue_friterie_neon": (32, 16, (0x30, 0x80, 0xF0)),
+    "green_friterie_neon": (32, 16, (0x30, 0xD0, 0x50)),
+}
+
+
+def render_decor_face(width, height, colour):
+    return [[(shade(colour, 0.7) if x in (0, width - 1) or y in (0, height - 1) else colour) + (255,)
+             for x in range(width)] for y in range(height)]
+
+
 def render_block_face(colour):
     # Brushed-metal fill with a darker one-pixel border, so block edges read in game.
     px = [[None] * SIZE for _ in range(SIZE)]
@@ -521,6 +539,8 @@ def planned():
         outputs[BLOCK_DIR / f"{face}.png"] = lambda c=colour: render_block_face(c)
     for fill in range(5):
         outputs[BLOCK_DIR / f"supreme_grinder/side_{fill}.png"] = lambda f=fill: render_grinder_side(f)
+    for name, (width, height, colour) in DECOR_FACES.items():
+        outputs[BLOCK_DIR / f"decor/{name}.png"] = lambda w=width, h=height, c=colour: render_decor_face(w, h, c)
     return outputs
 
 

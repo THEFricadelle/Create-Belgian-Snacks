@@ -23,6 +23,7 @@ import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import be.thefricadelle.belgiansnacks.registry.BSSweets;
+import be.thefricadelle.belgiansnacks.registry.BSDecor;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -194,6 +195,7 @@ public class BSFrenchLangProvider extends LanguageProvider {
         BSDishes.FRENCH.forEach((entry, name) -> add(entry.get(), name));
         BSWaffles.FRENCH.forEach((entry, name) -> add(entry.get(), name));
         BSSweets.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        BSDecor.FRENCH.forEach((entry, name) -> add(entry.get(), name));
         fluid(BSFluids.SPECULOOS_SPREAD, "Pâte de speculoos", "Seau de pâte de speculoos");
         fluid(BSFluids.HOT_CHOCOLATE, "Chocolat chaud", "Seau de chocolat chaud");
         fluid(BSFluids.USED_FRYING_OIL, "Huile de friture usagée", "Seau d'huile de friture usagée");

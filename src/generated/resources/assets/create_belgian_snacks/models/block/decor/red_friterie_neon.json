@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#edge"
+        },
+        "east": {
+          "texture": "#edge"
+        },
+        "north": {
+          "texture": "#face",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#edge"
+        },
+        "up": {
+          "texture": "#edge"
+        },
+        "west": {
+          "texture": "#edge"
+        }
+      },
+      "from": [
+        0,
+        4,
+        15
+      ],
+      "to": [
+        16,
+        12,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "edge": "minecraft:block/black_concrete",
+    "face": "create_belgian_snacks:block/decor/red_friterie_neon",
+    "particle": "minecraft:block/black_concrete"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "create_belgian_snacks:root",
+  "criteria": {
+    "chicon_cellar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:chicon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.chicon_cellar.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:chicon"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.chicon_cellar"
+    }
+  },
+  "requirements": [
+    [
+      "chicon_cellar"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

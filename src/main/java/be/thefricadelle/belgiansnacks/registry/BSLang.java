@@ -110,6 +110,14 @@ public final class BSLang {
             "À mi-chemin", "Remplir un Hachoir Suprême avec la moitié de tous les aliments du pack");
         advancement("absolute_paste", "Absolute", "Get an Absolute Paste: every food of the pack in one paste",
             "Absolue", "Obtenir une Pâte absolue : tous les aliments du pack en une seule pâte");
+        advancement("chicon_cellar", "Chicon Cellar", "Grow a chicon, in the dark as it should be", "Cave à chicons",
+            "Faire pousser un chicon, dans le noir comme il se doit");
+        advancement("brewer", "Brewer", "Brew a bucket of beer: blonde, brown, gueuze or kriek", "Brasseur",
+            "Brasser un seau de bière : blonde, brune, gueuze ou kriek");
+        advancement("ballotin", "Ballotin", "Fill a ballotin with eight pralines", "Ballotin", "Remplir un ballotin de huit pralines");
+        advancement("waffle_iron", "Waffle Iron", "Place a Waffle Iron", "Le Gaufrier", "Poser un Gaufrier");
+        advancement("tour_de_belgique", "Tour of Belgium", "Eat fries, a friterie snack, a Belgian dish, a waffle and a sweet",
+            "Tour de Belgique", "Manger des frites, un snack de friterie, un plat belge, une gaufre et une douceur");
         advancement("ultimate_fricadelle", "I Ate Everything", "Eat THE_FRICADELLE", "J'ai tout mangé", "Manger THE_FRICADELLE");
         // Ponder: the keys it reads, both languages from one table.
         BSPonderText.TITLES.forEach((scene, line) -> add(BSPonderText.titleKey(scene), line.english(), line.french()));

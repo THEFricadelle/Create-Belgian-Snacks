@@ -1,0 +1,26 @@
+{
+  "values": [
+    "create_belgian_snacks:speculoos",
+    "create_belgian_snacks:pistolet_speculoos",
+    "create_belgian_snacks:brussels_waffle_speculoos",
+    "create_belgian_snacks:cuberdon",
+    "create_belgian_snacks:praline",
+    "create_belgian_snacks:praline_kriek",
+    "create_belgian_snacks:babelutte",
+    "create_belgian_snacks:ballotin",
+    "create_belgian_snacks:croustillons",
+    "create_belgian_snacks:croustillons_sugared",
+    "create_belgian_snacks:bouquette",
+    "create_belgian_snacks:bouquette_cassonade",
+    "create_belgian_snacks:couque_de_dinant",
+    "create_belgian_snacks:tarte_au_riz",
+    "create_belgian_snacks:tarte_au_sucre",
+    "create_belgian_snacks:mattentaart",
+    "create_belgian_snacks:craquelin",
+    "create_belgian_snacks:cramique",
+    "create_belgian_snacks:pain_a_la_grecque",
+    "create_belgian_snacks:merveilleux",
+    "create_belgian_snacks:dame_blanche",
+    "create_belgian_snacks:hot_chocolate_bottle"
+  ]
+}

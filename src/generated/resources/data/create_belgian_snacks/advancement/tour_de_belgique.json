@@ -1,0 +1,76 @@
+{
+  "parent": "create_belgian_snacks:root",
+  "criteria": {
+    "dishes": {
+      "conditions": {
+        "item": {
+          "items": "#create_belgian_snacks:menu/dishes"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "fries": {
+      "conditions": {
+        "item": {
+          "items": "#create_belgian_snacks:menu/fries"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "friterie": {
+      "conditions": {
+        "item": {
+          "items": "#create_belgian_snacks:menu/friterie"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "sweets": {
+      "conditions": {
+        "item": {
+          "items": "#create_belgian_snacks:menu/sweets"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "waffles": {
+      "conditions": {
+        "item": {
+          "items": "#create_belgian_snacks:menu/waffles"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.tour_de_belgique.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:mitraillette"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.tour_de_belgique"
+    }
+  },
+  "requirements": [
+    [
+      "fries"
+    ],
+    [
+      "friterie"
+    ],
+    [
+      "dishes"
+    ],
+    [
+      "waffles"
+    ],
+    [
+      "sweets"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

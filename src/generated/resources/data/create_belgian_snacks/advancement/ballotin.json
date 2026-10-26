@@ -1,0 +1,33 @@
+{
+  "parent": "create_belgian_snacks:root",
+  "criteria": {
+    "ballotin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:ballotin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.create_belgian_snacks.ballotin.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create_belgian_snacks:ballotin"
+    },
+    "title": {
+      "translate": "advancement.create_belgian_snacks.ballotin"
+    }
+  },
+  "requirements": [
+    [
+      "ballotin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

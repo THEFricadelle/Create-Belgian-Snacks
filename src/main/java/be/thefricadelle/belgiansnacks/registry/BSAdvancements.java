@@ -62,6 +62,30 @@ public final class BSAdvancements {
         node(out, exceptional, "the_fricadelle", BSItems.THE_FRICADELLE.get(), AdvancementType.GOAL,
             ConsumeItemTrigger.TriggerInstance.usedItem(BSItems.THE_FRICADELLE.get()));
 
+        // v2 (M21): the Belgian menu, children of the root.
+        node(out, root, "chicon_cellar", BSCrops.CHICON.get(), AdvancementType.TASK,
+            InventoryChangeTrigger.TriggerInstance.hasItems(BSCrops.CHICON.get()));
+        node(out, root, "brewer", BSFluids.KRIEK.getBucket().orElseThrow(), AdvancementType.TASK,
+            InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(
+                BSFluids.BLONDE_BEER.getBucket().orElseThrow(), BSFluids.BROWN_BEER.getBucket().orElseThrow(),
+                BSFluids.GUEUZE.getBucket().orElseThrow(), BSFluids.KRIEK.getBucket().orElseThrow())));
+        node(out, root, "ballotin", BSSweets.BALLOTIN.get(), AdvancementType.TASK,
+            InventoryChangeTrigger.TriggerInstance.hasItems(BSSweets.BALLOTIN.get()));
+        node(out, root, "waffle_iron", BSBlocks.WAFFLE_IRON.get(), AdvancementType.TASK,
+            ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(BSBlocks.WAFFLE_IRON.get()));
+        // One food of each family: five criteria, all needed.
+        AdvancementHolder tour = Advancement.Builder.advancement()
+            .parent(root)
+            .display(BSSnacks.MITRAILLETTE.get(), title("tour_de_belgique"), description("tour_de_belgique"), null, AdvancementType.GOAL,
+                true, true, false)
+            .addCriterion("fries", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(BSTags.MENU_FRIES)))
+            .addCriterion("friterie", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(BSTags.MENU_FRITERIE)))
+            .addCriterion("dishes", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(BSTags.MENU_DISHES)))
+            .addCriterion("waffles", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(BSTags.MENU_WAFFLES)))
+            .addCriterion("sweets", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(BSTags.MENU_SWEETS)))
+            .build(id("tour_de_belgique"));
+        out.accept(tour);
+
         AdvancementHolder halfway = node(out, grinder, "grinder_half", BSBlocks.SUPREME_GRINDER.get(), AdvancementType.GOAL,
             BSTriggers.GRINDER_HALF.get().criterion());
         AdvancementHolder absolute = node(out, halfway, "absolute_paste", BSItems.ABSOLUTE_PASTE.get(), AdvancementType.CHALLENGE,

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_belgian_snacks:yellow_friterie_neon"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "create_belgian_snacks:blocks/yellow_friterie_neon"
+}

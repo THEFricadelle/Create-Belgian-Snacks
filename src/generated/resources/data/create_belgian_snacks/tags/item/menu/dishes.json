@@ -1,0 +1,26 @@
+{
+  "values": [
+    "create_belgian_snacks:moules_marinieres",
+    "create_belgian_snacks:moules_a_la_biere",
+    "create_belgian_snacks:moules_frites",
+    "create_belgian_snacks:carbonnade",
+    "create_belgian_snacks:carbonnade_frites",
+    "create_belgian_snacks:stoemp",
+    "create_belgian_snacks:stoemp_saucisse",
+    "create_belgian_snacks:waterzooi",
+    "create_belgian_snacks:lapin_a_la_gueuze",
+    "create_belgian_snacks:brussels_sprouts_bacon",
+    "create_belgian_snacks:asparagus_flemish",
+    "create_belgian_snacks:hop_shoots_cream",
+    "create_belgian_snacks:salade_liegeoise",
+    "create_belgian_snacks:hochepot",
+    "create_belgian_snacks:escaveche",
+    "create_belgian_snacks:steak_frites",
+    "create_belgian_snacks:chicons_au_gratin",
+    "create_belgian_snacks:vol_au_vent",
+    "create_belgian_snacks:boudin",
+    "create_belgian_snacks:boudin_compote",
+    "create_belgian_snacks:flamiche",
+    "create_belgian_snacks:croque_monsieur"
+  ]
+}

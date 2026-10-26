@@ -1,0 +1,9 @@
+{
+  "values": [
+    "create_belgian_snacks:liege_waffle",
+    "create_belgian_snacks:brussels_waffle",
+    "create_belgian_snacks:brussels_waffle_sugared",
+    "create_belgian_snacks:brussels_waffle_chocolate",
+    "create_belgian_snacks:lacquemant"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "c:dyes/blue"
+    },
+    "G": {
+      "tag": "c:glass_panes"
+    },
+    "S": {
+      "item": "minecraft:glowstone_dust"
+    }
+  },
+  "pattern": [
+    "GDG",
+    "GSG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:blue_friterie_neon"
+  }
+}

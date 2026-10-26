@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "create_belgian_snacks:block/decor/chip_shop_sign",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "create_belgian_snacks:block/decor/chip_shop_sign"
+    },
+    "facing=south": {
+      "model": "create_belgian_snacks:block/decor/chip_shop_sign",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "create_belgian_snacks:block/decor/chip_shop_sign",
+      "y": 270
+    }
+  }
+}

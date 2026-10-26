@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "create_belgian_snacks:block/decor/yellow_friterie_neon",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "create_belgian_snacks:block/decor/yellow_friterie_neon"
+    },
+    "facing=south": {
+      "model": "create_belgian_snacks:block/decor/yellow_friterie_neon",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "create_belgian_snacks:block/decor/yellow_friterie_neon",
+      "y": 270
+    }
+  }
+}

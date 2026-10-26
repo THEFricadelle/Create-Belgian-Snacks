@@ -87,6 +87,47 @@ public final class BSPonderText {
         line("line3.press", "A Press shapes it", "Une Presse lui donne sa forme");
         line("line3.loops", "Five times round, then fry it superheated, in melted beef tallow only",
             "Cinq tours, puis friture super-chauffée, au blanc de bœuf fondu uniquement");
+
+        // v2 (M21).
+        title("fries_line", "Belgian Fries, Fried Twice", "Les frites belges, cuites deux fois");
+        line("fries.saw", "A Mechanical Saw cuts potatoes into raw fries", "Une Mechanical Saw coupe les pommes de terre en frites crues");
+        line("fries.blanch", "A first fry on a lit burner blanches them", "Une première friture sur un brûleur allumé les blanchit");
+        line("fries.second", "The second fry needs a seething burner: that makes the crust",
+            "La deuxième friture demande un brûleur super-chauffé : c'est elle qui fait la croûte");
+        line("fries.tallow", "Fried again in melted beef tallow, they become beef tallow fries",
+            "Refrites dans le blanc de bœuf fondu, elles deviennent des frites au blanc");
+        line("fries.cone", "A Deployer holding paper cones serves them", "Un Deployer qui tient des cornets en papier les sert");
+        line("fries.sauce", "A Spout then adds 50 mB of any friterie sauce", "Un Spout ajoute ensuite 50 mB de n'importe quelle sauce de friterie");
+
+        title("waffle_iron", "Baking in the Waffle Iron", "Cuire au Gaufrier");
+        line("waffle.heat", "The Waffle Iron bakes on a lit Blaze Burner", "Le Gaufrier cuit sur un Blaze Burner allumé");
+        line("waffle.input", "Batter arrives by belt, funnel or by hand", "La pâte arrive par tapis, funnel ou à la main");
+        line("waffle.bake", "Up to 4 bake together under the closed lid; without heat it waits and loses nothing",
+            "Jusqu'à 4 cuisent ensemble sous le couvercle fermé ; sans chaleur il attend sans rien perdre");
+        line("waffle.output", "Take the waffles by hand or with a funnel", "Récupérez les gaufres à la main ou au funnel");
+        line("waffle.toppings", "Top them on a belt: powdered sugar from a Deployer, chocolate from a Spout",
+            "Garnissez-les sur un tapis : sucre glace au Deployer, chocolat au Spout");
+
+        title("used_oil", "Used Frying Oil", "L'huile de friture usagée");
+        line("oil.used", "Half the fat a Fryer uses comes back as used oil, in a second tank",
+            "La moitié de la graisse qu'une Friteuse utilise revient en huile usagée, dans un second réservoir");
+        line("oil.full", "When that tank is full, the Fryer stops until it is drained",
+            "Quand ce réservoir est plein, la Friteuse s'arrête jusqu'à ce qu'on le vide");
+        line("oil.pipe", "Pipes and buckets pour fat in and take the used oil out",
+            "Tuyaux et seaux versent la graisse et retirent l'huile usagée");
+        line("oil.filter", "A Mixer filters 1000 mB of used oil with an Oil Filter", "Un Mixer filtre 1000 mB d'huile usagée avec un Filtre à huile");
+        line("oil.clean", "800 mB of frying oil come out: pipe it back to the Fryer",
+            "Il en sort 800 mB d'huile de friture : renvoyez-la à la Friteuse");
+        line("oil.biodiesel", "With Create Diesel Generators, used oil, ethanol and salt make biodiesel",
+            "Avec Create Diesel Generators, huile usagée, éthanol et sel font du biodiesel");
+
+        title("friterie_shop", "Opening a Friterie", "Ouvrir une friterie");
+        line("shop.decor", "Signs and neons name the friterie", "Enseignes et néons donnent son nom à la friterie");
+        line("shop.keeper", "Create's Stock Keeper runs the counter, seated beside a Stock Ticker",
+            "Le Stock Keeper de Create tient le comptoir, assis à côté d'un Stock Ticker");
+        line("shop.cloth", "Each Table Cloth shows a dish and its price", "Chaque nappe montre un plat et son prix");
+        line("shop.buy", "Players buy there; the dishes come from your lines through the logistics network",
+            "Les joueurs y achètent ; les plats viennent de vos lignes par le réseau logistique");
     }
 
     private BSPonderText() {

@@ -15,6 +15,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
+import be.thefricadelle.belgiansnacks.registry.BSDecor;
 import be.thefricadelle.belgiansnacks.registry.BSPonderText;
 import net.createmod.ponder.api.registration.PonderPlugin;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
@@ -39,6 +40,15 @@ public class BSPonderPlugin implements PonderPlugin {
         scenes.forComponents(BSBlocks.SUPREME_GRINDER)
             .addStoryBoard("supreme_grinder", GrinderScenes::collect, TAG)
             .addStoryBoard("supreme_grinder", GrinderScenes::modes);
+        scenes.forComponents(BSItems.RAW_FRIES, BSItems.BLANCHED_FRIES, BSItems.CONE_OF_FRIES, BSItems.PAPER_CONE)
+            .addStoryBoard("fries_line", MenuScenes::friesLine, TAG);
+        scenes.forComponents(BSBlocks.WAFFLE_IRON)
+            .addStoryBoard("waffle_iron", MenuScenes::waffleIron, TAG);
+        scenes.forComponents(BSBlocks.FRYER, BSItems.OIL_FILTER)
+            .addStoryBoard("used_oil", MenuScenes::usedOil, TAG);
+        scenes.forComponents(BSDecor.FRITERIE_SIGN, BSDecor.FRITUUR_SIGN, BSDecor.CHIP_SHOP_SIGN, BSDecor.RED_NEON, BSDecor.YELLOW_NEON,
+            BSDecor.BLUE_NEON, BSDecor.GREEN_NEON)
+            .addStoryBoard("friterie_shop", MenuScenes::friterieShop, TAG);
         scenes.forComponents(BSItems.EXCEPTIONAL_PASTE, BSItems.INCOMPLETE_THE_FRICADELLE, BSItems.RAW_THE_FRICADELLE)
             .addStoryBoard("the_fricadelle_line", AssemblyScenes::theFricadelle, TAG);
         scenes.forComponents(BSItems.ABSOLUTE_PASTE, BSItems.INCOMPLETE_ULTIMATE_FRICADELLE, BSItems.RAW_ULTIMATE_FRICADELLE)
@@ -57,6 +67,9 @@ public class BSPonderPlugin implements PonderPlugin {
         tags.addToTag(TAG)
             .add(BSBlocks.FRYER)
             .add(BSBlocks.SUPREME_GRINDER)
+            .add(BSBlocks.WAFFLE_IRON)
+            .add(BSDecor.FRITERIE_SIGN)
+            .add(BSItems.CONE_OF_FRIES)
             .add(BSItems.EXCEPTIONAL_PASTE)
             .add(BSItems.ABSOLUTE_PASTE);
     }

@@ -60,6 +60,12 @@ public final class BSTags {
     public static final TagKey<Item> PRALINES = item("pralines");
     // No fallback: without rice there is no rice tart (RecipeFilesTest.NO_FALLBACK).
     public static final TagKey<Item> RICE = item("rice");
+    // v2 (M21): the five families of the menu, one food of each for the Tour of Belgium advancement.
+    public static final TagKey<Item> MENU_FRIES = item("menu/fries");
+    public static final TagKey<Item> MENU_FRITERIE = item("menu/friterie");
+    public static final TagKey<Item> MENU_DISHES = item("menu/dishes");
+    public static final TagKey<Item> MENU_WAFFLES = item("menu/waffles");
+    public static final TagKey<Item> MENU_SWEETS = item("menu/sweets");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -96,6 +102,14 @@ public final class BSTags {
 
     private static TagKey<Item> common(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
+    }
+
+    // The foods among these entries: raw items and doughs never count for a family.
+    private static void menu(net.minecraft.data.tags.TagsProvider.TagAppender<Item> tag,
+                             java.util.Collection<? extends com.tterrag.registrate.util.entry.ItemEntry<? extends Item>> entries) {
+        entries.stream().map(com.tterrag.registrate.util.entry.ItemEntry::get)
+            .filter(item -> item.getDefaultInstance().has(net.minecraft.core.component.DataComponents.FOOD))
+            .forEach(item -> tag.add(net.minecraft.core.registries.BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow()));
     }
 
     // Entries that do not belong to one of our items; ours are tagged on their builder in BSItems.
@@ -135,6 +149,13 @@ public final class BSTags {
             prov.addTag(RASPBERRIES).addOptionalTag(common("foods/raspberry").location()).addOptionalTag(common("crops/raspberry").location());
             prov.addTag(PRALINE_FILLINGS).add(Items.COCOA_BEANS).addOptionalTag(common("nuts").location());
             prov.addTag(RICE).addOptionalTag(C_RICE.location());
+            menu(prov.addTag(MENU_FRIES), java.util.stream.Stream.concat(
+                java.util.stream.Stream.of(BSItems.CONE_OF_FRIES, BSItems.CONE_OF_FRIES_BEEF_TALLOW),
+                java.util.stream.Stream.concat(BSItems.SAUCED_CONES.values().stream(), BSItems.SAUCED_TALLOW_CONES.values().stream())).toList());
+            menu(prov.addTag(MENU_FRITERIE), BSSnacks.FRENCH.keySet());
+            menu(prov.addTag(MENU_DISHES), BSDishes.FRENCH.keySet());
+            menu(prov.addTag(MENU_WAFFLES), BSWaffles.FRENCH.keySet());
+            menu(prov.addTag(MENU_SWEETS), BSSweets.FRENCH.keySet());
             prov.addTag(GRAPES).addOptionalTag(common("foods/grape").location()).addOptionalTag(common("crops/grape").location());
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_CHEESE);
             // My Nether's Delight (Arcadia) grows bullet peppers.

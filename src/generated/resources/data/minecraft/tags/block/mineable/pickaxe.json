@@ -2,6 +2,10 @@
   "values": [
     "create_belgian_snacks:fryer",
     "create_belgian_snacks:supreme_grinder",
-    "create_belgian_snacks:waffle_iron"
+    "create_belgian_snacks:waffle_iron",
+    "create_belgian_snacks:red_friterie_neon",
+    "create_belgian_snacks:yellow_friterie_neon",
+    "create_belgian_snacks:blue_friterie_neon",
+    "create_belgian_snacks:green_friterie_neon"
   ]
 }
