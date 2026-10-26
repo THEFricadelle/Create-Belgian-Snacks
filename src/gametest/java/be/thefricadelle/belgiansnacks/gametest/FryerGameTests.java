@@ -488,7 +488,10 @@ public final class FryerGameTests {
     public static void ratioZeroIsTheV1Fryer(GameTestHelper helper) {
         net.neoforged.neoforge.common.ModConfigSpec.DoubleValue ratio = usedOilRatio();
         double before = ratio.get();
+        // Saved too: a test that saved the config file before this one makes NeoForge reload it from
+        // disk a moment later, which would put the file's ratio back in the middle of this test.
         ratio.set(0.0);
+        ratio.save();
         FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
         fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
         fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
@@ -499,6 +502,7 @@ public final class FryerGameTests {
                 FluidStack out = fryer.getFluidCapability().drain(100, IFluidHandler.FluidAction.EXECUTE);
                 helper.assertTrue(out.getFluid().isSame(BSFluids.FRYING_OIL.get()) && out.getAmount() == 100, "at ratio 0 a pipe drains the fat, got " + out);
                 ratio.set(before);
+                ratio.save();
             })
             .thenSucceed();
     }

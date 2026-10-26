@@ -167,3 +167,10 @@
 **Root cause:** (1) A Registrate `FluidEntry.get()` is the flowing fluid; the stacks hold the source. `FluidStack.is(Fluid)` compares the exact fluid, so the tank's validator refused every used oil. (2) The loop runs a fryer, a burner and a mixer for 2400 ticks in the main batch, beside tests that wait on light updates.
 **Fix:** The validator and the tests use `getFluid().isSame(...)`; the loop test runs in its own batch `used_oil_loop`.
 **Prevention:** Compare a fluid stack with `isSame` (or `is` on the source), never `is(entry.get())`; any test longer than a few hundred ticks gets its own batch.
+
+## [2026-10-26 05:20] - A config value set by a test, undone by a reload from disk
+**Context:** `testAll` after M20; `ratioZeroIsTheV1Fryer` sets `fryer.usedOilRatio` to 0 for its own batch.
+**Error:** "Expected used oil at ratio 0 to be 0, but was 80", once in five runs.
+**Root cause:** `uninstall_prepare`, which ran just before, saves the server config (`BSConfig.setUninstallPrepare`). NeoForge watches the file and reloads it from disk shortly after, which put the file's ratio (0.5) back while the ratio test was running.
+**Fix:** The test sets and saves its value, and restores it the same way.
+**Prevention:** A GameTest that changes a config value saves it to the file (`set` then `save`), so a reload from disk keeps it.

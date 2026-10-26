@@ -380,12 +380,14 @@ public final class GrinderGameTests {
             .thenExecute(() -> {
                 ModConfigSpec.BooleanValue reject = config("GRINDER_REJECT_DUPLICATES");
                 reject.set(false);
+                reject.save();
                 try {
                     grinder.insert(new ItemStack(Items.APPLE), false);
                     helper.assertValueEqual(grinder.insert(new ItemStack(Items.APPLE, 2), false).getCount(), 1, "duplicate destroyed");
                     helper.assertValueEqual(grinder.getConsumed().size(), 1, "a destroyed duplicate counted");
                 } finally {
                     reject.set(true);
+                    reject.save();
                 }
             })
             .thenSucceed();
@@ -404,6 +406,7 @@ public final class GrinderGameTests {
             .thenWaitUntil(() -> helper.assertValueEqual(grinder.getCount(), 3, "counted"))
             .thenExecute(() -> {
                 mods.set(List.of("minecraft"));
+                mods.save();
                 FoodIndex.recompute(server);
             })
             .thenWaitUntil(() -> helper.assertValueEqual(grinder.getCount(), 0, "count without the mod"))
@@ -411,6 +414,7 @@ public final class GrinderGameTests {
                 helper.assertValueEqual(grinder.getConsumed().size(), 3, "collection kept while the mod is gone");
                 helper.assertTrue(grinder.getOutput().getStackInSlot(0).isEmpty(), "an empty index produced a paste");
                 mods.set(before);
+                mods.save();
                 FoodIndex.recompute(server);
             })
             .thenWaitUntil(() -> helper.assertValueEqual(grinder.getCount(), 3, "count with the mod back"))
