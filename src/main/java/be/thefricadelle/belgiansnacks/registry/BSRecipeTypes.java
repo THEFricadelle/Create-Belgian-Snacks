@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.content.fryer.FryingRecipe;
+import be.thefricadelle.belgiansnacks.content.waffle.WaffleBakingRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * and JEI helpers accept them. The JSON format is that of Create's processing recipes.
  */
 public enum BSRecipeTypes implements IRecipeTypeInfo {
-    FRYING(FryingRecipe::new);
+    FRYING(FryingRecipe::new),
+    // v2 (section 6.1): the waffle iron's plates.
+    WAFFLE_BAKING(WaffleBakingRecipe::new);
 
     public final ResourceLocation id;
     private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializer;

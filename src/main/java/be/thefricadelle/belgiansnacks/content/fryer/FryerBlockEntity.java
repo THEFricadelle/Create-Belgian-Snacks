@@ -19,7 +19,6 @@ import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehavi
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -296,22 +295,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
 
     private boolean outputFits(FryingRecipe recipe, int count) {
-        ItemStackHandler simulated = new ItemStackHandler(output.getSlots());
-        for (int slot = 0; slot < output.getSlots(); slot++) {
-            simulated.setStackInSlot(slot, output.getStackInSlot(slot).copy());
-        }
-        for (ProcessingOutput result : recipe.getRollableResults()) {
-            ItemStack stack = result.getStack();
-            int total = stack.getCount() * count;
-            while (total > 0) {
-                int part = Math.min(total, stack.getMaxStackSize());
-                if (!ItemHandlerHelper.insertItemStacked(simulated, stack.copyWithCount(part), false).isEmpty()) {
-                    return false;
-                }
-                total -= part;
-            }
-        }
-        return true;
+        return be.thefricadelle.belgiansnacks.content.processing.OutputSpace.fits(output, recipe.getRollableResults(), count);
     }
 
     /**

@@ -15,6 +15,7 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 /** Models drawn on their own, rotated by Flywheel or the block entity renderer. */
 public final class BSPartialModels {
     public static final PartialModel GRINDER_BLADES = PartialModel.of(BelgianSnacks.asResource("block/supreme_grinder/blades"));
+    public static final PartialModel WAFFLE_IRON_LID = PartialModel.of(BelgianSnacks.asResource("block/waffle_iron/lid"));
 
     private BSPartialModels() {
     }

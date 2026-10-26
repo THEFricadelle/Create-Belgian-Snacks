@@ -21,6 +21,7 @@ import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import net.minecraft.data.PackOutput;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -190,6 +191,11 @@ public class BSFrenchLangProvider extends LanguageProvider {
         }
         BSSnacks.FRENCH.forEach((entry, name) -> add(entry.get(), name));
         BSDishes.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        BSWaffles.FRENCH.forEach((entry, name) -> add(entry.get(), name));
+        add(BSBlocks.WAFFLE_IRON.get(), "Gaufrier");
+        add(BSItems.tooltipKey("liege_waffle"), "Le sucre perlé caramélise dans les alvéoles. Se mange en marchant.");
+        add(BSItems.tooltipKey("brussels_waffle"), "Légère, croustillante, rectangulaire. La préférée des touristes.");
+        add(BSItems.tooltipKey("lacquemant"), "Une fine gaufrette fourrée de sirop de Liège. De la foire de Liège.");
         add(BSItems.tooltipKey("moules_frites"), "Le plat national. Des moules, des frites, un bol de coquilles.");
         add(BSItems.tooltipKey("carbonnade"), "Du bœuf mijoté à la bière brune, avec une tranche de pain pour lier.");
         add(BSItems.tooltipKey("stoemp"), "De la purée avec ce que le potager donne.");

@@ -17,6 +17,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
@@ -26,6 +27,15 @@ public class BSFillingRecipeGen extends FillingRecipeGen {
 
     public BSFillingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+        // v2 waffles (section 5.6): Create's chocolate on a Brussels waffle, Liège syrup in the lacquemant.
+        create("brussels_waffle_chocolate", b -> b
+            .require(BSWaffles.BRUSSELS_WAFFLE.get())
+            .require(com.simibubi.create.AllFluids.CHOCOLATE.get(), SAUCE)
+            .output(BSWaffles.BRUSSELS_WAFFLE_CHOCOLATE.get()));
+        create("lacquemant", b -> b
+            .require(BSWaffles.LACQUEMANT_WAFER.get())
+            .require(BSFluids.LIEGE_SYRUP.get(), SAUCE)
+            .output(BSWaffles.LACQUEMANT.get()));
         create("spicy_chicken_wings", b -> b
             .require(BSSnacks.FRIED_CHICKEN_WINGS.get())
             .require(BSFluids.SAMOURAI.get(), 25)

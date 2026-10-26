@@ -1,0 +1,45 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#bottom"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#plate"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        6,
+        15
+      ]
+    }
+  ],
+  "textures": {
+    "bottom": "create_belgian_snacks:block/waffle_iron/bottom",
+    "particle": "create_belgian_snacks:block/waffle_iron/side",
+    "plate": "create_belgian_snacks:block/waffle_iron/plate",
+    "side": "create_belgian_snacks:block/waffle_iron/side",
+    "top": "create_belgian_snacks:block/waffle_iron/top"
+  }
+}

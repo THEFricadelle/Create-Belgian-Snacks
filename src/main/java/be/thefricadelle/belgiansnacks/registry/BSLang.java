@@ -39,6 +39,14 @@ public final class BSLang {
         add(ID + ".recipe.frying", "Frying", "Friture");
         add(ID + ".recipe.frying.fat", "Fat per item", "Graisse par item");
         add("subtitles." + ID + ".fryer.sizzle", "Fryer sizzles", "La friteuse grésille");
+        add(ID + ".waffle_iron.status.idle", "Idle", "Au repos");
+        add(ID + ".waffle_iron.status.baking", "Baking: %s%%", "Cuisson : %s %%");
+        add(ID + ".waffle_iron.status.no_recipe", "Nothing to bake", "Rien à cuire");
+        add(ID + ".waffle_iron.status.no_heat", "Needs more heat", "Pas assez chaud");
+        add(ID + ".waffle_iron.status.output_full", "Output full", "Sortie pleine");
+        add("subtitles." + ID + ".waffle_iron.sizzle", "Waffle iron sizzles", "Le gaufrier grésille");
+        add("config.jade.plugin_" + ID + ".waffle_iron", "Waffle Iron", "Gaufrier");
+        add(ID + ".recipe.waffle_baking", "Waffle Iron", "Gaufrier");
         add("config.jade.plugin_" + ID + ".fryer", "Fryer", "Friteuse");
         add(ID + ".command.foods.count", "%s foods (%s from the extra tag), %s excluded, computed in %s ms",
             "%s aliments (dont %s par le tag extra), %s exclus, calculés en %s ms");

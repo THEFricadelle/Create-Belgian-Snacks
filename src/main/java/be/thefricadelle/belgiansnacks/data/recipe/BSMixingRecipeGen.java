@@ -24,6 +24,7 @@ import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -374,6 +375,21 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
         RAW_BOUDIN = create("raw_boudin", b -> b
             .require(BSTags.MINCED_PORK).require(BSTags.C_BREAD_CRUMBS).require(Tags.Fluids.MILK, 250)
             .output(BSDishes.RAW_BOUDIN.get())),
+
+        // v2 waffles (section 5.6). No egg in the basin (rule 4): the Liège dough starts from our brioche
+        // dough, which has its egg already; the two batters never hold the same items.
+        LIEGE_WAFFLE_DOUGH = create("liege_waffle_dough", b -> b
+            .require(BSItems.BRIOCHE_DOUGH.get()).require(BSItems.PEARL_SUGAR.get()).require(BSTags.BUTTERS)
+            .output(BSWaffles.LIEGE_WAFFLE_DOUGH.get(), 2)),
+
+        BRUSSELS_WAFFLE_BATTER = create("brussels_waffle_batter", b -> b
+            .require(AllItems.WHEAT_FLOUR.get()).require(Items.SUGAR).require(BSItems.BREWERS_YEAST.get()).require(Tags.Fluids.MILK, 250)
+            .output(BSWaffles.BRUSSELS_WAFFLE_BATTER.get(), 2)),
+
+        LACQUEMANT_BATTER = create("lacquemant_batter", b -> b
+            .require(AllItems.WHEAT_FLOUR.get()).require(BSTags.BUTTERS).require(BSItems.CASSONADE.get()).require(BSItems.BREWERS_YEAST.get())
+            .require(Tags.Fluids.MILK, 250)
+            .output(BSWaffles.LACQUEMANT_BATTER.get(), 2)),
 
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)

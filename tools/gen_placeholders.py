@@ -215,6 +215,16 @@ ITEMS = {
     "incomplete_croque_monsieur": ("heap", (0xA0, 0x64, 0x3A), "K"),
     "raw_croque_monsieur": ("heap", (0xA0, 0x64, 0x3A), "K"),
     "croque_monsieur": ("heap", (0xA0, 0x64, 0x3A), "K"),
+    # v2 waffles (docs/13, section 5.6).
+    "liege_waffle_dough": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "brussels_waffle_batter": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "lacquemant_batter": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "lacquemant_wafer": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "liege_waffle": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "brussels_waffle": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "brussels_waffle_sugared": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "brussels_waffle_chocolate": ("heap", (0xE0, 0xA8, 0x4C), "K"),
+    "lacquemant": ("heap", (0xE0, 0xA8, 0x4C), "K"),
     # v2 sauced cones (docs/13, section 5.2), in the colour of their sauce.
     **{f"cone_of_fries_{s}": ("heap", c, "K") for s, c in [
         ("mayonnaise", (0xF3, 0xEB, 0xC4)), ("curry_ketchup", (0xA8, 0x32, 0x1E)), ("andalouse", (0xE8, 0x86, 0x2A)),
@@ -296,6 +306,11 @@ BLOCK_FACES = {
     "bouchot/stage1": (0x8A, 0x6A, 0x4A),
     "bouchot/stage2": (0x8A, 0x6A, 0x4A),
     "bouchot/stage3": (0x8A, 0x6A, 0x4A),
+    # v2 waffle iron (docs/13, section 6.1): cast iron.
+    "waffle_iron/side": (0x5E, 0x64, 0x69),
+    "waffle_iron/top": (0x5E, 0x64, 0x69),
+    "waffle_iron/bottom": (0x3A, 0x3E, 0x42),
+    "waffle_iron/plate": (0x44, 0x49, 0x4E),
 }
 
 # 3x5 bitmap glyphs, one string per row.

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "create_belgian_snacks:block/waffle_iron/base",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "create_belgian_snacks:block/waffle_iron/base"
+    },
+    "facing=south": {
+      "model": "create_belgian_snacks:block/waffle_iron/base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "create_belgian_snacks:block/waffle_iron/base",
+      "y": 270
+    }
+  }
+}

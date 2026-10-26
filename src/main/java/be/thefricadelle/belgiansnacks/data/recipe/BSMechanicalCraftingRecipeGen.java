@@ -48,6 +48,16 @@ public class BSMechanicalCraftingRecipeGen extends MechanicalCraftingRecipeGen {
         .patternLine("WCW")
         .patternLine("GIG"));
 
+    // V-D9: two iron plates for the waffle grid, a basin for the base, a precision mechanism for the hinge.
+    GeneratedRecipe WAFFLE_IRON = create(BSBlocks.WAFFLE_IRON::get).recipe(b -> b
+        .key('I', ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "plates/iron")))
+        .key('P', AllItems.PRECISION_MECHANISM.get())
+        .key('B', AllBlocks.BASIN.get())
+        .patternLine("I")
+        .patternLine("P")
+        .patternLine("I")
+        .patternLine("B"));
+
     public BSMechanicalCraftingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

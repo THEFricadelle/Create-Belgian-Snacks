@@ -37,6 +37,7 @@ import be.thefricadelle.belgiansnacks.registry.BSLang;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.createmod.catnip.lang.FontHelper;
@@ -68,6 +69,7 @@ public class BelgianSnacks {
         BSCrops.register();
         BSSnacks.register();
         BSDishes.register();
+        BSWaffles.register();
         BSBlockEntities.register();
         BSEntities.register();
         BSTriggers.register(modEventBus);
@@ -78,6 +80,7 @@ public class BelgianSnacks {
         BSLang.register();
 
         modEventBus.addListener(FryerBlockEntity::registerCapabilities);
+        modEventBus.addListener(be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity::registerCapabilities);
         modEventBus.addListener(SupremeGrinderBlockEntity::registerCapabilities);
         modEventBus.addListener(BSNetwork::register);
         FoodIndexEvents.register(modEventBus);

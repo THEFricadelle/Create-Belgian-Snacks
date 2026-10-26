@@ -17,6 +17,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -78,6 +79,10 @@ public class BSDeployingRecipeGen extends DeployingRecipeGen {
 
     GeneratedRecipe BOUDIN_COMPOTE = create("boudin_compote", b -> b
         .require(BSDishes.BOUDIN.get()).require(BSItems.APPLE_COMPOTE.get()).output(BSDishes.BOUDIN_COMPOTE.get()));
+
+    // v2 waffles (section 5.6).
+    GeneratedRecipe BRUSSELS_WAFFLE_SUGARED = create("brussels_waffle_sugared", b -> b
+        .require(BSWaffles.BRUSSELS_WAFFLE.get()).require(BSTags.POWDERED_SUGARS).output(BSWaffles.BRUSSELS_WAFFLE_SUGARED.get()));
 
     public BSDeployingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

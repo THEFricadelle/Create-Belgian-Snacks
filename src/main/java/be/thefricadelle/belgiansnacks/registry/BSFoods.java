@@ -90,6 +90,13 @@ public final class BSFoods {
     public static final FoodProperties SIDE_DISH_LARGE = snack(8, 0.8f);
     public static final FoodProperties SIDE_DISH = snack(6, 0.6f);
 
+    // v2 waffles (M18, provisional): a topping adds a little, chocolate the most.
+    public static final FoodProperties LIEGE_WAFFLE = snack(7, 0.7f);
+    public static final FoodProperties BRUSSELS_WAFFLE = snack(6, 0.6f);
+    public static final FoodProperties BRUSSELS_WAFFLE_SUGARED = snack(7, 0.7f);
+    public static final FoodProperties BRUSSELS_WAFFLE_CHOCOLATE = snack(8, 0.8f);
+    public static final FoodProperties LACQUEMANT = snack(6, 0.7f);
+
     /** The same food, eaten from a bowl that comes back. */
     public static FoodProperties inBowl(FoodProperties food) {
         return new FoodProperties(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.eatSeconds(),

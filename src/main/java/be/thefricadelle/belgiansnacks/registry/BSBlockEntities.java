@@ -19,6 +19,8 @@ import be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerRenderer;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlockEntity;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderRenderer;
+import be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity;
+import be.thefricadelle.belgiansnacks.content.waffle.WaffleIronRenderer;
 
 public final class BSBlockEntities {
     // Registrate only touches the renderer and visual suppliers on the client.
@@ -26,6 +28,12 @@ public final class BSBlockEntities {
         .blockEntity("fryer", FryerBlockEntity::new)
         .validBlocks(BSBlocks.FRYER)
         .renderer(() -> FryerRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<WaffleIronBlockEntity> WAFFLE_IRON = REGISTRATE
+        .blockEntity("waffle_iron", WaffleIronBlockEntity::new)
+        .validBlocks(BSBlocks.WAFFLE_IRON)
+        .renderer(() -> WaffleIronRenderer::new)
         .register();
 
     public static final BlockEntityEntry<SupremeGrinderBlockEntity> SUPREME_GRINDER = REGISTRATE

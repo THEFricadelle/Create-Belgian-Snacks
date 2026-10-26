@@ -56,6 +56,11 @@
     "create_belgian_snacks:boudin",
     "create_belgian_snacks:boudin_compote",
     "create_belgian_snacks:flamiche",
-    "create_belgian_snacks:croque_monsieur"
+    "create_belgian_snacks:croque_monsieur",
+    "create_belgian_snacks:liege_waffle",
+    "create_belgian_snacks:brussels_waffle",
+    "create_belgian_snacks:brussels_waffle_sugared",
+    "create_belgian_snacks:brussels_waffle_chocolate",
+    "create_belgian_snacks:lacquemant"
   ]
 }

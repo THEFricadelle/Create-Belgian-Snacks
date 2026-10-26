@@ -31,6 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 @JeiPlugin
 public class BSJEIPlugin implements IModPlugin {
     private CreateRecipeCategory<FryingRecipe> frying;
+    private CreateRecipeCategory<be.thefricadelle.belgiansnacks.content.waffle.WaffleBakingRecipe> waffleBaking;
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -46,18 +47,27 @@ public class BSJEIPlugin implements IModPlugin {
             .doubleItemIcon(BSBlocks.FRYER.get(), BSItems.FRICADELLE.get())
             .emptyBackground(177, 100)
             .build(BelgianSnacks.asResource("frying"), FryingCategory::new);
-        registration.addRecipeCategories(frying, new GrindingGoalCategory(registration.getJeiHelpers().getGuiHelper()));
+        waffleBaking = new CreateRecipeCategory.Builder<>(be.thefricadelle.belgiansnacks.content.waffle.WaffleBakingRecipe.class)
+            .addTypedRecipes(BSRecipeTypes.WAFFLE_BAKING)
+            .catalyst(BSBlocks.WAFFLE_IRON::get)
+            .catalyst(AllBlocks.BLAZE_BURNER::get)
+            .doubleItemIcon(BSBlocks.WAFFLE_IRON.get(), be.thefricadelle.belgiansnacks.registry.BSWaffles.LIEGE_WAFFLE.get())
+            .emptyBackground(177, 70)
+            .build(BelgianSnacks.asResource("waffle_baking"), WaffleBakingCategory::new);
+        registration.addRecipeCategories(frying, waffleBaking, new GrindingGoalCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         frying.registerRecipes(registration);
+        waffleBaking.registerRecipes(registration);
         registration.addRecipes(GrindingGoalCategory.TYPE, List.of(GrinderMode.values()));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         frying.registerCatalysts(registration);
+        waffleBaking.registerCatalysts(registration);
         registration.addRecipeCatalyst(BSBlocks.SUPREME_GRINDER.asStack(), GrindingGoalCategory.TYPE);
     }
 }

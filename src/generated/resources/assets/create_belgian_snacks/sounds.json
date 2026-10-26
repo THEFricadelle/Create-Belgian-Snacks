@@ -28,5 +28,12 @@
       "create_belgian_snacks:npc/phrase_4"
     ],
     "subtitle": "subtitles.create_belgian_snacks.npc.speaks"
+  },
+  "waffle_iron.sizzle": {
+    "sounds": [
+      "block/campfire/crackle2",
+      "block/campfire/crackle4"
+    ],
+    "subtitle": "subtitles.create_belgian_snacks.waffle_iron.sizzle"
   }
 }

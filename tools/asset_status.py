@@ -26,6 +26,8 @@ OPTIONAL_MODELS = {
     "fryer.json": "Fryer (open vat; textures of your choice)",
     "supreme_grinder.json": "Supreme Grinder housing, must use the #side texture variable for the gauge",
     "supreme_grinder_blades.json": "Supreme Grinder blades, rotating about the vertical axis through the block centre",
+    "waffle_iron.json": "Waffle Iron base and bottom plate, handle side north (z = 0), plate top at y = 6",
+    "waffle_iron_lid.json": "Waffle Iron lid alone, shut, hinged at y = 6 and z = 15 (the code swings it open)",
 }
 
 SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
@@ -34,6 +36,7 @@ SOUNDS = gen.ROOT / "src/main/resources/assets/create_belgian_snacks/sounds"
 # text is in BSLang (npc.phrase.4).
 SOUNDS_USED = {
     "fryer/sizzle.ogg": "Fryer sizzling, played every 2 s while frying (about 2 s long)",
+    "waffle_iron/sizzle.ogg": "Waffle Iron sizzling softly, played every 2.5 s while baking (about 2 s long)",
     "grinder/grind.ogg": "Supreme Grinder taking a food (short, under 1 s)",
     "grinder/complete.ogg": "Supreme Grinder finishing a paste (1 to 2 s)",
     "grinder/running.ogg": "Supreme Grinder turning, played every 2 s while fast enough (about 2 s long)",

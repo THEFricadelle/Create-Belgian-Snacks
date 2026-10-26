@@ -20,6 +20,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.content.fryer.FryerBlock;
 import be.thefricadelle.belgiansnacks.content.grinder.SupremeGrinderBlock;
+import be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.SoundType;
@@ -63,6 +64,19 @@ public final class BSBlocks {
                 .include(BSDataComponents.GRINDER_CONTENTS.get()))))
         .item()
         .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/supreme_grinder/fill_0")))
+        .build()
+        .register();
+
+    // v2 (section 6.1): two hinged plates on a base, on a heat source like the fryer. The lid is a
+    // separate model the renderer swings; the item shows both halves shut.
+    public static final BlockEntry<WaffleIronBlock> WAFFLE_IRON = REGISTRATE.block("waffle_iron", WaffleIronBlock::new)
+        .initialProperties(SharedProperties::softMetal)
+        .properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.METAL).noOcclusion())
+        .transform(TagGen.pickaxeOnly())
+        .lang("Waffle Iron")
+        .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.get(), waffleIronModel(prov)))
+        .item()
+        .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/waffle_iron/item")))
         .build()
         .register();
 
@@ -134,6 +148,49 @@ public final class BSBlocks {
         model.element().from(2, 12.5f, 7).to(14, 14, 9).allFaces((direction, face) -> face.texture("#blade")).end();
         model.element().from(7, 12.5f, 2).to(9, 14, 14).allFaces((direction, face) -> face.texture("#blade")).end();
         model.element().from(6, 12, 6).to(10, 16, 10).allFaces((direction, face) -> face.texture("#blade")).end();
+    }
+
+    // Placeholder plates until a Blockbench model exists: the base with its bottom plate, the lid with
+    // the top plate and the handle (front, z = 0; the hinge is at the back), and both for the item.
+    private static ModelFile waffleIronModel(RegistrateBlockstateProvider prov) {
+        String dir = "block/waffle_iron/";
+        // Same path either way: the partial model keeps pointing at it.
+        if (handMade(prov, "waffle_iron_lid")) {
+            prov.models().withExistingParent(dir + "lid", prov.modLoc(HANDMADE + "waffle_iron_lid"));
+        } else {
+            waffleIronLid(waffleIronPart(prov, dir + "lid"));
+        }
+        BlockModelBuilder item = waffleIronPart(prov, dir + "item");
+        waffleIronBase(item);
+        waffleIronLid(item);
+        if (handMade(prov, "waffle_iron")) {
+            return prov.models().withExistingParent(dir + "base", prov.modLoc(HANDMADE + "waffle_iron"));
+        }
+        BlockModelBuilder base = waffleIronPart(prov, dir + "base");
+        waffleIronBase(base);
+        return base;
+    }
+
+    private static BlockModelBuilder waffleIronPart(RegistrateBlockstateProvider prov, String path) {
+        String dir = "block/waffle_iron/";
+        return prov.models().withExistingParent(path, "block/block")
+            .texture("side", prov.modLoc(dir + "side"))
+            .texture("top", prov.modLoc(dir + "top"))
+            .texture("bottom", prov.modLoc(dir + "bottom"))
+            .texture("plate", prov.modLoc(dir + "plate"))
+            .texture("particle", prov.modLoc(dir + "side"));
+    }
+
+    private static void waffleIronBase(BlockModelBuilder model) {
+        model.element().from(1, 0, 1).to(15, 6, 15).allFaces((direction, face) -> face
+            .texture(direction == Direction.UP ? "#plate" : direction == Direction.DOWN ? "#bottom" : "#side")
+            .cullface(direction == Direction.DOWN ? Direction.DOWN : null)).end();
+    }
+
+    private static void waffleIronLid(BlockModelBuilder model) {
+        model.element().from(1, 6, 1).to(15, 9, 15).allFaces((direction, face) -> face
+            .texture(direction == Direction.DOWN ? "#plate" : direction == Direction.UP ? "#top" : "#side")).end();
+        model.element().from(6, 7, 0).to(10, 8, 1).allFaces((direction, face) -> face.texture("#bottom")).end();
     }
 
     // Placeholder vat until a Blockbench model exists: a floor and four walls, open at the top.

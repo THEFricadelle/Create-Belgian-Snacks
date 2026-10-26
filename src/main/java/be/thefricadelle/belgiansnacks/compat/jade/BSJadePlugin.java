@@ -24,6 +24,7 @@ public class BSJadePlugin implements IWailaPlugin {
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(FryerStatusProvider.INSTANCE, FryerBlock.class);
+        registration.registerBlockComponent(WaffleIronStatusProvider.INSTANCE, be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlock.class);
         registration.registerBlockComponent(GrinderStatusProvider.INSTANCE, SupremeGrinderBlock.class);
     }
 }

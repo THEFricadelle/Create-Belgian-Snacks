@@ -1,0 +1,20 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:brioche_dough"
+    },
+    {
+      "item": "create_belgian_snacks:pearl_sugar"
+    },
+    {
+      "tag": "create_belgian_snacks:butters"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "create_belgian_snacks:liege_waffle_dough"
+    }
+  ]
+}

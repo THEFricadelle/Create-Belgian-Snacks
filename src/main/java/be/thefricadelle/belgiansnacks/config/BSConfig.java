@@ -34,6 +34,8 @@ public final class BSConfig {
     private static final ModConfigSpec.BooleanValue ULTIMATE_ANNOUNCE;
     private static final ModConfigSpec.BooleanValue UNINSTALL_PREPARE;
     private static final ModConfigSpec.IntValue CROPS_DARK_MAX_LIGHT;
+    private static final ModConfigSpec.IntValue WAFFLE_IRON_MAX_BATCH;
+    private static final ModConfigSpec.DoubleValue WAFFLE_IRON_SPEED_MULTIPLIER;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -47,6 +49,16 @@ public final class BSConfig {
         FRYER_MAX_BATCH = builder
             .comment("Items fried together in one batch. Items tagged create_belgian_snacks:fryer/one_at_a_time always fry alone.")
             .defineInRange("maxBatch", 16, 1, 64);
+        builder.pop();
+
+        // v2 (section 6.1).
+        builder.push("waffleIron");
+        WAFFLE_IRON_MAX_BATCH = builder
+            .comment("Batters baked together between the plates.")
+            .defineInRange("maxBatch", 4, 1, 64);
+        WAFFLE_IRON_SPEED_MULTIPLIER = builder
+            .comment("Divides every baking time. 2.0 bakes twice as fast.")
+            .defineInRange("speedMultiplier", 1.0, 0.1, 100.0);
         builder.pop();
 
         builder.push("grinder");
@@ -159,6 +171,14 @@ public final class BSConfig {
 
     public static double grinderStressImpact() {
         return SPEC.isLoaded() ? GRINDER_STRESS_IMPACT.get() : GRINDER_STRESS_IMPACT.getDefault();
+    }
+
+    public static int waffleIronMaxBatch() {
+        return SPEC.isLoaded() ? WAFFLE_IRON_MAX_BATCH.get() : WAFFLE_IRON_MAX_BATCH.getDefault();
+    }
+
+    public static double waffleIronSpeedMultiplier() {
+        return SPEC.isLoaded() ? WAFFLE_IRON_SPEED_MULTIPLIER.get() : WAFFLE_IRON_SPEED_MULTIPLIER.getDefault();
     }
 
     public static int fryerMaxBatch() {

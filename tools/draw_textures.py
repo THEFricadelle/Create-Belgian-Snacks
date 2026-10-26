@@ -940,6 +940,71 @@ def dishes():
     return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
 
 
+# v2 waffles (docs/12): a Liège waffle is a rounded slab with a shallow grid and pearls, a Brussels waffle a
+# rectangle of deep squares, the lacquemant a thin round wafer.
+WAFFLE = ['8A5418', 'C08030', 'E0A84C', 'FAD282']
+WAFFLE_PALE = ['A8864C', 'D0B070', 'E8CC90', 'FAE6B8']
+
+
+def waffle(palette, deep=False, rounded=False):
+    if rounded:
+        cells = ellipse(8, 9, 6.6, 4.8)
+    else:
+        cells = {(x, y) for x in range(2, 14) for y in range(4, 14)}
+    px = shape(cells, palette)
+    for x, y in cells:
+        if x % 3 == 1 or y % 3 == 0:
+            continue
+        if all((x + dx, y + dy) in cells for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]):
+            px[y][x] = colour(palette[0] if deep else palette[1])
+    return px
+
+
+def waffles():
+    choc = ['3A2010', '52301A', '6E4428', '8E5E3A']
+    out = {
+        'liege_waffle_dough': paste(['B89A50', 'D8BC70', 'ECD490', 'FFF0C0'], 0),
+        'brussels_waffle_batter': bowl(['C8B888', 'E0D4A8', 'F0E8C8', 'FFFAEC']),
+        'lacquemant_batter': bowl(['B89A60', 'D4B880', 'E8D0A0', 'FAEAC8']),
+        'lacquemant_wafer': shape(ellipse(8, 9, 6.4, 2.4), WAFFLE_PALE),
+        'liege_waffle': waffle(WAFFLE, rounded=True),
+        'brussels_waffle': waffle(WAFFLE, deep=True),
+        'brussels_waffle_sugared': waffle(WAFFLE, deep=True),
+        'brussels_waffle_chocolate': waffle(WAFFLE, deep=True),
+        'lacquemant': shape(ellipse(8, 9, 6.4, 2.4), WAFFLE_PALE),
+    }
+    # Pearl sugar caught in the Liège grid.
+    dots(out['liege_waffle'], [(5, 7), (9, 6), (11, 10), (6, 11), (8, 9)], 'FFFFFF')
+    # Powdered sugar dusted over the squares.
+    for x in range(3, 13):
+        for y in range(5, 13):
+            if (x * 5 + y * 3) % 7 == 0:
+                out['brussels_waffle_sugared'][y][x] = colour('FFFFFF')
+    # Chocolate poured across the top half.
+    for x in range(3, 13):
+        for y in range(5, 9 + (x % 3 == 0)):
+            out['brussels_waffle_chocolate'][y][x] = colour(choc[2] if (x + y) % 3 else choc[3])
+        out['brussels_waffle_chocolate'][4][x] = colour(choc[0])
+    # The syrup shows at the seam of the folded wafer.
+    for x in range(3, 13):
+        out['lacquemant'][9][x] = colour('5A3218' if x % 2 else '83542E')
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
+def waffle_iron_faces():
+    iron = ['2A2E32', '44494E', '5E6469', '858B90']
+    out = {'waffle_iron/side': panel(iron, False), 'waffle_iron/top': panel(iron), 'waffle_iron/bottom': panel(['1A1C1E', '2A2E32', '3A3E42', '4E5358'], False)}
+    plate = canvas(colour(iron[2]))
+    for y in range(16):
+        for x in range(16):
+            if x % 4 == 0 or y % 4 == 0:
+                plate[y][x] = colour(iron[0])
+            elif x % 4 == 1 or y % 4 == 1:
+                plate[y][x] = colour(iron[3])
+    out['waffle_iron/plate'] = plate
+    return out
+
+
 def artwork():
     out = {}
     for name, palette, topped, thick, unfinished in [
@@ -987,8 +1052,10 @@ def artwork():
     out.update(crops_items())
     out.update(friterie())
     out.update(dishes())
+    out.update(waffles())
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
+    out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in waffle_iron_faces().items()})
     return out
 
 

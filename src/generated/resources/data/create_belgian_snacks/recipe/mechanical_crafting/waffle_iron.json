@@ -1,0 +1,26 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "create:basin"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "pattern": [
+    "I",
+    "P",
+    "I",
+    "B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:waffle_iron"
+  }
+}

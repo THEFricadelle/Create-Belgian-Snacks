@@ -22,6 +22,7 @@ public final class BSSoundEvents {
     private static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(Registries.SOUND_EVENT, BelgianSnacks.MOD_ID);
 
     public static final DeferredHolder<SoundEvent, SoundEvent> FRYER_SIZZLE = sound("fryer.sizzle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WAFFLE_IRON_SIZZLE = sound("waffle_iron.sizzle");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_GRIND = sound("grinder.grind");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_COMPLETE = sound("grinder.complete");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRINDER_RUNNING = sound("grinder.running");
