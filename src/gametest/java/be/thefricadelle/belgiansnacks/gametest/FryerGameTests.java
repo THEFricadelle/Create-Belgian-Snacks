@@ -387,6 +387,132 @@ public final class FryerGameTests {
         helper.succeed();
     }
 
+    // ------------------------------------------------------------------ v2 used oil (section 6.2)
+
+    // A batch of 16 at 10 mB each: 160 mB of fat paid, half of it back as used oil once the batch ends.
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void aBatchGivesBackHalfItsFatAsUsedOil(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
+        helper.onEachTick(() -> {
+            if (!fryer.getBasket().isEmpty()) {
+                helper.assertValueEqual(fryer.getUsedOil().getPrimaryHandler().getFluidAmount(), 0, "used oil before the batch ends");
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertValueEqual(count(fryer, BSItems.FRICADELLE.asStack()), 16, "fried");
+            FluidStack used = fryer.getUsedOil().getPrimaryHandler().getFluid();
+            helper.assertTrue(used.getFluid().isSame(BSFluids.USED_FRYING_OIL.get()), "used oil is used frying oil, is " + used);
+            helper.assertValueEqual(used.getAmount(), 80, "used oil after 16 x 10 mB");
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void aFullUsedOilTankStopsTheFryer(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        var used = fryer.getUsedOil().getPrimaryHandler();
+        used.setFluid(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), used.getCapacity() - 40));
+        fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
+        helper.startSequence()
+            .thenIdle(30)
+            .thenExecute(() -> {
+                helper.assertTrue(fryer.getBasket().isEmpty(), "started with no room for its used oil");
+                helper.assertTrue(fryer.status() == FryerBlockEntity.Status.USED_OIL_FULL, "status " + fryer.status());
+                FluidStack drained = fryer.getFluidCapability().drain(500, IFluidHandler.FluidAction.EXECUTE);
+                helper.assertTrue(drained.getFluid().isSame(BSFluids.USED_FRYING_OIL.get()) && drained.getAmount() == 500, "a pipe drained " + drained);
+            })
+            .thenWaitUntil(() -> helper.assertValueEqual(count(fryer, BSItems.FRICADELLE.asStack()), 16, "fried once drained"))
+            .thenSucceed();
+    }
+
+    // Pipes and buckets: fat goes in, used oil comes out, nothing else either way.
+    @GameTest(template = TEMPLATE)
+    public static void pipesPourFatAndTakeUsedOil(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, null);
+        IFluidHandler pipe = fryer.getFluidCapability();
+        helper.assertValueEqual(pipe.getTanks(), 2, "fat and used oil tanks");
+        helper.assertValueEqual(pipe.fill(new FluidStack(BSFluids.FRYING_OIL.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE), 1000, "oil in");
+        helper.assertValueEqual(pipe.fill(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), 100), IFluidHandler.FluidAction.EXECUTE), 0,
+            "used oil poured back in");
+        helper.assertValueEqual(pipe.fill(new FluidStack(Fluids.WATER, 100), IFluidHandler.FluidAction.EXECUTE), 0, "water poured in");
+        helper.assertTrue(pipe.drain(1000, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "the fat came out with no used oil to take");
+        helper.assertValueEqual(fryer.getTank().getPrimaryHandler().getFluidAmount(), 1000, "fat kept");
+        fryer.getUsedOil().getPrimaryHandler().setFluid(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), 300));
+        FluidStack out = pipe.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+        helper.assertTrue(out.getFluid().isSame(BSFluids.USED_FRYING_OIL.get()) && out.getAmount() == 300, "drained " + out);
+        helper.assertValueEqual(fryer.getTank().getPrimaryHandler().getFluidAmount(), 1000, "fat still kept");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void breakingKeepsTheUsedOilToo(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, null);
+        fryer.getUsedOil().getPrimaryHandler().setFluid(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), 400));
+        helper.getLevel().destroyBlock(helper.absolutePos(FRYER), true);
+        ItemStack item = helper.findEntities(EntityType.ITEM, 1, 1, 1, 3).stream().map(ItemEntity::getItem)
+            .filter(s -> s.is(BSBlocks.FRYER.asItem())).findFirst().orElseThrow(() -> new AssertionError("no fryer item dropped"));
+        BlockPos again = new BlockPos(2, 1, 2);
+        helper.setBlock(again, BSBlocks.FRYER.getDefaultState());
+        FryerBlockEntity placed = helper.getBlockEntity(again);
+        placed.applyComponentsFromItemStack(item);
+        helper.assertValueEqual(placed.getUsedOil().getPrimaryHandler().getFluidAmount(), 400, "used oil restored on placement");
+        helper.succeed();
+    }
+
+    // A fryer saved by v1 has no used oil tank in its data: it loads with an empty one and fries.
+    @GameTest(template = TEMPLATE, timeoutTicks = 300)
+    public static void aV1FryerLoadsWithAnEmptyUsedOilTank(GameTestHelper helper) {
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        var registries = helper.getLevel().registryAccess();
+        net.minecraft.nbt.CompoundTag saved = fryer.saveWithFullMetadata(registries);
+        saved.remove("OutputTanks");
+        saved.remove("FatPaid");
+        // Loaded into a fresh block entity, as when the chunk loads.
+        FryerBlockEntity loaded = fryerAt(helper, new BlockPos(2, 1, 2), HeatLevel.KINDLED);
+        loaded.loadWithComponents(saved, registries);
+        helper.assertValueEqual(loaded.getUsedOil().getPrimaryHandler().getFluidAmount(), 0, "used oil of a v1 fryer");
+        helper.assertValueEqual(loaded.getTank().getPrimaryHandler().getFluidAmount(), 1000, "fat of a v1 fryer");
+        loaded.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(2), false);
+        helper.succeedWhen(() -> {
+            helper.assertValueEqual(count(loaded, BSItems.FRICADELLE.asStack()), 2, "fried");
+            helper.assertValueEqual(loaded.getUsedOil().getPrimaryHandler().getFluidAmount(), 10, "then makes used oil");
+        });
+    }
+
+    // fryer.usedOilRatio = 0 is the v1 fryer: no used oil, and pipes drain the fat. Its own batch: the
+    // config is shared with every test running at the same time.
+    @GameTest(template = TEMPLATE, timeoutTicks = 400, batch = "fryer_config_ratio")
+    public static void ratioZeroIsTheV1Fryer(GameTestHelper helper) {
+        net.neoforged.neoforge.common.ModConfigSpec.DoubleValue ratio = usedOilRatio();
+        double before = ratio.get();
+        ratio.set(0.0);
+        FryerBlockEntity fryer = fryer(helper, HeatLevel.KINDLED);
+        fill(helper, fryer, BSFluids.FRYING_OIL.get().getSource(), 1000);
+        fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
+        helper.startSequence()
+            .thenWaitUntil(() -> helper.assertValueEqual(count(fryer, BSItems.FRICADELLE.asStack()), 16, "fried"))
+            .thenExecute(() -> {
+                helper.assertValueEqual(fryer.getUsedOil().getPrimaryHandler().getFluidAmount(), 0, "used oil at ratio 0");
+                FluidStack out = fryer.getFluidCapability().drain(100, IFluidHandler.FluidAction.EXECUTE);
+                helper.assertTrue(out.getFluid().isSame(BSFluids.FRYING_OIL.get()) && out.getAmount() == 100, "at ratio 0 a pipe drains the fat, got " + out);
+                ratio.set(before);
+            })
+            .thenSucceed();
+    }
+
+    private static net.neoforged.neoforge.common.ModConfigSpec.DoubleValue usedOilRatio() {
+        try {
+            var field = be.thefricadelle.belgiansnacks.config.BSConfig.class.getDeclaredField("FRYER_USED_OIL_RATIO");
+            field.setAccessible(true);
+            return (net.neoforged.neoforge.common.ModConfigSpec.DoubleValue) field.get(null);
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError("no FRYER_USED_OIL_RATIO", e);
+        }
+    }
+
     // ------------------------------------------------------------------ helpers
 
     private static FryerBlockEntity fryer(GameTestHelper helper, HeatLevel heat) {

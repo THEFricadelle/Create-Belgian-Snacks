@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M20 used oil; the biodiesel needs Create Diesel Generators, in no runtime here.
+        "mixing/frying_oil_from_used_oil", "compacting/oil_filter",
         // M19 sweets; the cuberdon follows the raspberries, the rice filling the rice, below.
         "mixing/speculoos_dough", "mixing/speculoos_spread", "mixing/croustillon_dough", "mixing/couque_dough", "mixing/raw_craquelin", "mixing/raw_cramique", "mixing/bouquette_batter", "mixing/babelutte", "mixing/hot_chocolate", "pressing/raw_speculoos", "pressing/raw_couque", "pressing/flat_brioche", "crushing/speculoos_crumbs", "deploying/croustillons_sugared", "deploying/bouquette_cassonade", "deploying/raw_tarte_au_riz", "deploying/raw_pain_a_la_grecque", "filling/pistolet_speculoos", "filling/brussels_waffle_speculoos", "filling/praline", "filling/praline_kriek", "filling/dame_blanche", "filling/hot_chocolate_bottle", "frying/croustillons", "frying/bouquette", "crafting/ballotin", "sequenced_assembly/raw_tarte_au_sucre", "sequenced_assembly/raw_mattentaart", "sequenced_assembly/merveilleux", "smoking/speculoos", "smelting/speculoos", "smoking/couque_de_dinant", "smelting/couque_de_dinant", "smoking/tarte_au_riz", "smelting/tarte_au_riz", "smoking/tarte_au_sucre", "smelting/tarte_au_sucre", "smoking/mattentaart", "smelting/mattentaart", "smoking/craquelin", "smelting/craquelin", "smoking/cramique", "smelting/cramique", "smoking/pain_a_la_grecque", "smelting/pain_a_la_grecque",
         // M18 waffles and the waffle iron.
@@ -162,6 +164,7 @@ public final class RecipeGameTests {
         twins(helper, "mixing/brazil", "mixing/brazil_from_melon", false);
         twins(helper, "mixing/lapin_a_la_gueuze", "mixing/lapin_a_la_gueuze_from_sweet_berries", false);
         twins(helper, "mixing/cuberdon", "mixing/cuberdon_from_sweet_berries", false);
+        helper.assertTrue(find(helper, "mixing/biodiesel_from_used_oil") == null, "biodiesel without Create Diesel Generators");
         // Farmer's Delight brings rice; without it there is no rice tart.
         helper.assertTrue((find(helper, "mixing/rice_filling") != null) == farmersDelight(), "mixing/rice_filling follows the rice");
         twins(helper, "mixing/shrimp_croquette_mix", "mixing/shrimp_croquette_mix_from_cod", false);
@@ -179,6 +182,17 @@ public final class RecipeGameTests {
 
     private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M20 on a real basin: a filter cleans used oil; without one the used oil stays.
+    @GameTest(template = TEMPLATE)
+    public static void usedOilIsFilteredOnARealBasin(GameTestHelper helper) {
+        FluidStack used = new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), 1000);
+        Recipe<?> filter = recipe(helper, "mixing/frying_oil_from_used_oil");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, List.of(BSItems.OIL_FILTER.asStack()), used), filter), "filtered");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), false, List.of(), used.copy()), filter), "filtered without a filter");
+        assertFluidOutput(helper, "mixing/frying_oil_from_used_oil", BSFluids.FRYING_OIL.get().getSource(), 800);
+        helper.succeed();
     }
 
     // M19 on a real basin: the cuberdon needs heat and its honey; the croustillon dough (beer) and the

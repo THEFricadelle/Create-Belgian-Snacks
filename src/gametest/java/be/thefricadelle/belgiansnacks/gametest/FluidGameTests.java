@@ -64,6 +64,7 @@ public final class FluidGameTests {
         helper.assertFalse(BSFluids.MAYONNAISE.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), "mayonnaise is not a frying oil");
         helper.assertFalse(BSFluids.CURRY_KETCHUP.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), "curry ketchup is not a frying oil");
         helper.assertFalse(Fluids.WATER.defaultFluidState().is(BSTags.FRYING_OILS), "water is not a frying oil");
+        helper.assertFalse(BSFluids.USED_FRYING_OIL.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), "used oil fries nothing: filter it");
         for (var sauce : BSFluids.CONE_SAUCES.values()) {
             helper.assertFalse(sauce.get().getSource().defaultFluidState().is(BSTags.FRYING_OILS), sauce.getId() + " is not a frying oil");
         }

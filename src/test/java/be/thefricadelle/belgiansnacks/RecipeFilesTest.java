@@ -335,6 +335,22 @@ class RecipeFilesTest {
         }
     }
 
+    // V-D10: their biodiesel only with Create Diesel Generators, and with an item (basin rule 1).
+    @Test
+    void biodieselComesOnlyWithDieselGenerators() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("mixing/biodiesel_from_used_oil.json"));
+        assertTrue(conditions(recipe).contains("mod_loaded createdieselgenerators"), "biodiesel without its mod_loaded condition");
+        assertEquals("createdieselgenerators:biodiesel", recipe.getAsJsonArray("results").get(0).getAsJsonObject().get("id").getAsString());
+    }
+
+    // v2 used oil: a used filter burns for 200 ticks (NeoForge data map, not hard-coded).
+    @Test
+    void aUsedOilFilterIsFuel() throws IOException {
+        JsonObject map = json(GENERATED_DATA.resolve("neoforge/data_maps/item/furnace_fuels.json"));
+        JsonObject entry = map.getAsJsonObject("values").getAsJsonObject(MOD_ID + ":used_oil_filter");
+        assertEquals(200, entry.get("burn_time").getAsInt());
+    }
+
     @Test
     void supremeGrinderIsCraftedOnAMechanicalCrafter() throws IOException {
         JsonObject recipe = json(RECIPES.resolve("mechanical_crafting/supreme_grinder.json"));

@@ -150,7 +150,9 @@ public final class ClientMultiplayerSmoke {
             FryerBlockEntity fryer = fryer();
             require(fryer.getTank().getPrimaryHandler().getFluidAmount() == 2000 - 160,
                 "client sees " + fryer.getTank().getPrimaryHandler().getFluidAmount() + " mB, expected 1840");
-            pass("mp.batchSynced", "16 fricadelles and 1840 mB seen after the server fried the batch");
+            require(fryer.getUsedOil().getPrimaryHandler().getFluidAmount() == 80,
+                "client sees " + fryer.getUsedOil().getPrimaryHandler().getFluidAmount() + " mB of used oil, expected 80");
+            pass("mp.batchSynced", "16 fricadelles, 1840 mB of fat and 80 mB of used oil seen after the server fried the batch");
         });
         step("shot", 10, () -> true, () -> screenshot("mp-" + ROLE.toLowerCase() + "-fryer"));
         step("waffle.found", 0, () -> findWaffleIron() != null, () -> waffleIronPos = findWaffleIron());

@@ -61,6 +61,7 @@ data/recipe create_belgian_snacks:botanypots/hops
 data/recipe create_belgian_snacks:botanypots/leek
 data/recipe create_belgian_snacks:botanypots/mustard
 data/recipe create_belgian_snacks:compacting/frying_oil_from_seeds
+data/recipe create_belgian_snacks:compacting/oil_filter
 data/recipe create_belgian_snacks:compacting/pearl_sugar
 data/recipe create_belgian_snacks:compacting/puff_pastry
 data/recipe create_belgian_snacks:compacting/vanilla_ice_cream
@@ -178,6 +179,7 @@ data/recipe create_belgian_snacks:mixing/babelutte
 data/recipe create_belgian_snacks:mixing/bami_mix
 data/recipe create_belgian_snacks:mixing/battered_onion_rings
 data/recipe create_belgian_snacks:mixing/bechamel
+data/recipe create_belgian_snacks:mixing/biodiesel_from_used_oil
 data/recipe create_belgian_snacks:mixing/blonde_beer
 data/recipe create_belgian_snacks:mixing/boulet_paste
 data/recipe create_belgian_snacks:mixing/boulets_liegeois
@@ -206,6 +208,7 @@ data/recipe create_belgian_snacks:mixing/curry_ketchup_from_beetroot
 data/recipe create_belgian_snacks:mixing/escaveche
 data/recipe create_belgian_snacks:mixing/filet_americain
 data/recipe create_belgian_snacks:mixing/fricadelle_paste
+data/recipe create_belgian_snacks:mixing/frying_oil_from_used_oil
 data/recipe create_belgian_snacks:mixing/gueuze
 data/recipe create_belgian_snacks:mixing/gyros
 data/recipe create_belgian_snacks:mixing/hochepot
@@ -373,6 +376,7 @@ minecraft:block create_belgian_snacks:sauce_lapin
 minecraft:block create_belgian_snacks:speculoos_spread
 minecraft:block create_belgian_snacks:supreme_grinder
 minecraft:block create_belgian_snacks:tartare
+minecraft:block create_belgian_snacks:used_frying_oil
 minecraft:block create_belgian_snacks:vinegar
 minecraft:block create_belgian_snacks:waffle_iron
 minecraft:block create_belgian_snacks:wort
@@ -381,6 +385,7 @@ minecraft:block_entity_type create_belgian_snacks:supreme_grinder
 minecraft:block_entity_type create_belgian_snacks:waffle_iron
 minecraft:creative_mode_tab create_belgian_snacks:main
 minecraft:data_component_type create_belgian_snacks:fryer_fluid
+minecraft:data_component_type create_belgian_snacks:fryer_used_oil
 minecraft:data_component_type create_belgian_snacks:grinder_contents
 minecraft:entity_type create_belgian_snacks:thefricadelle
 minecraft:fluid create_belgian_snacks:americaine
@@ -412,6 +417,7 @@ minecraft:fluid create_belgian_snacks:flowing_samourai
 minecraft:fluid create_belgian_snacks:flowing_sauce_lapin
 minecraft:fluid create_belgian_snacks:flowing_speculoos_spread
 minecraft:fluid create_belgian_snacks:flowing_tartare
+minecraft:fluid create_belgian_snacks:flowing_used_frying_oil
 minecraft:fluid create_belgian_snacks:flowing_vinegar
 minecraft:fluid create_belgian_snacks:flowing_wort
 minecraft:fluid create_belgian_snacks:frying_oil
@@ -427,6 +433,7 @@ minecraft:fluid create_belgian_snacks:samourai
 minecraft:fluid create_belgian_snacks:sauce_lapin
 minecraft:fluid create_belgian_snacks:speculoos_spread
 minecraft:fluid create_belgian_snacks:tartare
+minecraft:fluid create_belgian_snacks:used_frying_oil
 minecraft:fluid create_belgian_snacks:vinegar
 minecraft:fluid create_belgian_snacks:wort
 minecraft:item create_belgian_snacks:absolute_paste
@@ -609,6 +616,7 @@ minecraft:item create_belgian_snacks:mustard_seeds
 minecraft:item create_belgian_snacks:nasi_disc
 minecraft:item create_belgian_snacks:nasi_mix
 minecraft:item create_belgian_snacks:noodles
+minecraft:item create_belgian_snacks:oil_filter
 minecraft:item create_belgian_snacks:onion_rings
 minecraft:item create_belgian_snacks:pain_a_la_grecque
 minecraft:item create_belgian_snacks:paper_cone
@@ -694,6 +702,8 @@ minecraft:item create_belgian_snacks:tarte_au_riz
 minecraft:item create_belgian_snacks:tarte_au_sucre
 minecraft:item create_belgian_snacks:the_fricadelle
 minecraft:item create_belgian_snacks:ultimate_fricadelle
+minecraft:item create_belgian_snacks:used_frying_oil_bucket
+minecraft:item create_belgian_snacks:used_oil_filter
 minecraft:item create_belgian_snacks:vanilla_ice_cream
 minecraft:item create_belgian_snacks:viandelle
 minecraft:item create_belgian_snacks:viandelle_mix
@@ -737,5 +747,6 @@ neoforge:fluid_type create_belgian_snacks:samourai
 neoforge:fluid_type create_belgian_snacks:sauce_lapin
 neoforge:fluid_type create_belgian_snacks:speculoos_spread
 neoforge:fluid_type create_belgian_snacks:tartare
+neoforge:fluid_type create_belgian_snacks:used_frying_oil
 neoforge:fluid_type create_belgian_snacks:vinegar
 neoforge:fluid_type create_belgian_snacks:wort
