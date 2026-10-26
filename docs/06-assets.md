@@ -49,6 +49,7 @@ Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder
 | `textures/fluid/<fluide>_flow.png` | 16×32, 2 frames, `.mcmeta` déjà présent | l'écoulement |
 | `textures/block/fryer/{side,top,bottom,inner}.png` | 16×16 | utilisées par le modèle généré ; un modèle fait main peut en utiliser d'autres |
 | `textures/block/supreme_grinder/{top,bottom,blade,mince}.png` | 16×16 | `mince` : le hachis vu de dessus, qui se répète sans couture |
+| `textures/block/waffle_iron/{side,top,bottom,plate}.png` | 16×16 | `plate` : les deux plaques quadrillées (dessus de la base, dessous du couvercle) |
 | `textures/block/supreme_grinder/side_0.png` … `side_4.png` | 16×16 | **la jauge** : la même face, remplie de 0 à 4 quarts. Les 5 fichiers sont obligatoires |
 
 ### Modèles (facultatifs : sans eux, le modèle généré reste)
@@ -57,6 +58,8 @@ Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder
 |---|---|
 | `models/block/custom/fryer.json` | Friteuse : une cuve ouverte sur quatre pieds (fond de cuve à y = 4). Le code dessine la graisse et les items flottants, x/z de 2 à 14 : dès la première goutte la graisse monte à y = 9, puis jusqu'à y = 15 cuve pleine ; jusqu'à 4 items flottent côte à côte et frémissent pendant la friture. Laisser cet intérieur vide. Livré le 27/09/2026 |
 | `models/block/custom/supreme_grinder.json` | (Livré le 27/09/2026 : quatre parois pleine hauteur autour d'une fosse profonde, fond à y = 2, la jauge sur les quatre faces.) Le code dessine le hachis (`supreme_grinder/mince`) dans la fosse, x/z de 2 à 14, de y = 2 à y = 10 selon la progression vers l'objectif : laisser la fosse vide sous les lames. Carter du Hachoir, **sans les lames**. Ses faces qui montrent la jauge utilisent la variable de texture `#side` : le datagen crée les 5 niveaux en ne changeant que `#side` (vers `side_0` … `side_4`). Arbre par le haut : laisser le centre du dessus ouvert pour l'arbre de Create |
+| `models/block/custom/waffle_iron.json` | Base du Gaufrier seule, poignée côté nord (z = 0), dessus de la plaque à y = 6. Le code pose la pâte ou la gaufre sur la plaque |
+| `models/block/custom/waffle_iron_lid.json` | Couvercle seul, fermé, charnière à y = 6 et z = 15 : le code l'ouvre de 70° autour de cette ligne |
 | `models/block/custom/supreme_grinder_blades.json` | Les lames seules. Le code les fait tourner autour de l'axe vertical passant par le centre du bloc (8, y, 8) : modéliser centré sur ce point. Livré le 27/09/2026 : deux lames opposées et courbées (3 segments chacune, tournés de 0, 22,5 et 45°) sur un moyeu, à y = 11-12 (moyeu de 10,5 à 12,5) |
 
 Rien d'autre à faire : blockstates, modèles d'items, variantes de jauge, rotation des lames et rendu de la graisse sont générés ou codés. Le PNJ THEFricadelle n'a besoin d'aucune texture (skin du compte, en ligne).
@@ -68,6 +71,7 @@ Chaque son joue l'enregistrement déposé dans `src/main/resources/assets/create
 | ID | Usage | Fichier à déposer | En attendant |
 |---|---|---|---|
 | `fryer.sizzle` | toutes les 2 s pendant la friture (environ 2 s) | `fryer/sizzle.ogg` | lave, feu de camp |
+| `waffle_iron.sizzle` | toutes les 2,5 s pendant la cuisson (environ 2 s, plus doux que la friteuse) | `waffle_iron/sizzle.ogg` | feu de camp |
 | `grinder.grind` | aliment accepté (court, moins d'1 s) | `grinder/grind.ogg` | meule |
 | `grinder.complete` | pâte terminée (1 à 2 s) | `grinder/complete.ogg` | niveau gagné |
 | `grinder.running` | toutes les 2 s tant que le hachoir tourne assez vite, plus aigu quand il tourne plus vite (environ 2 s, joué côté client) | `grinder/running.ogg` | wagonnet |

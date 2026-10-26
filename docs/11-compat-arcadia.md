@@ -79,6 +79,8 @@ Snacks de friterie (M16, scan du 25/10/2026) : Create: Food change **un œuf seu
 
 Plats belges (M17, scan du 26/10/2026) : dans nos bassins de plats, seul l'œuf seul de Create: Food pourrait partir avant (d'où les asperges sans œuf) ; le ragoût de champignons de Create: Food demande les deux champignons au bassin, notre champignon passe au Deployer. Les assemblages sur pain du pack commencent par du poulet cuit, un œuf frit ou du bœuf cuit, le croque-monsieur par du jambon ; personne ne pose rien sur un steak cuit au Deployer.
 
+Gaufres (M18, scan du 26/10/2026) : les pâtes du pack prennent 1000 mB d'eau ou d'œuf (Create, Create: Food) ou 3 farines et du lait (pâte à tarte de Farmer's Delight) ; caramel et toffee sont chauffés. Nos trois pâtes, froides avec 250 mB de lait, ne se recouvrent avec aucune. Le lacquemant est donc réglé : il a 4 items et ne recoupe plus la pâte au beurre de Create: Food.
+
 À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
 
 ### Botany Pots (cultures v2)

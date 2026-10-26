@@ -280,6 +280,19 @@ Les plats en bol prennent leur bol dans le bassin et le rendent quand on les man
 | `flamiche` | Presse : pâte feuilletée → `tart_shell` ; assemblage (`incomplete_tart`, partagé avec les tartes du M19) : poireau → 250 mB crème → œuf ; fumage |
 | `croque_monsieur` | Assemblage sur du pain (`incomplete_croque_monsieur`) : `#hams` → fromage → Presse ; fumage |
 
+## v2 — Gaufres et Gaufrier (M18, 26/10/2026)
+
+| Item | Recette |
+|---|---|
+| `liege_waffle_dough` | Mixer : pâte à brioche + sucre perlé + beurre → 2 (la brioche porte déjà l'œuf) |
+| `brussels_waffle_batter` | Mixer : farine + sucre + levure + 250 mB de lait → 2 |
+| `lacquemant_batter` | Mixer : farine + beurre + cassonade + levure + 250 mB de lait → 2 |
+| `liege_waffle` / `brussels_waffle` / `lacquemant_wafer` | Gaufrier chauffé : 200 / 160 / 120 ticks |
+| `brussels_waffle_sugared` | Deployer `#powdered_sugars` sur une gaufre de Bruxelles |
+| `brussels_waffle_chocolate` | Spout 50 mB de chocolat de Create |
+| `lacquemant` | Spout 50 mB de sirop de Liège sur la gaufrette |
+| `waffle_iron` (bloc) | Mechanical Crafter : 2 plaques de fer, Precision Mechanism, bassin |
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

@@ -94,6 +94,8 @@ Snacks de friterie (M16, dessinés par `tools/draw_textures.py`, à remplacer pa
 
 Plats belges (M17, dessinés par `tools/draw_textures.py`) : bols du fond de compote, garnis selon le plat (coquilles de moules, frites dressées, saucisse) ; plats à gratin ovales en céramique grise ; tartes de profil ; bouchée à la reine en tour de pâte feuilletée ; croque en sandwich pressé (fromage jaune, jambon rose) ; boudin noir en saucisse sombre.
 
+Gaufres et Gaufrier (M18, dessinés par `tools/draw_textures.py`) : gaufre de Liège arrondie, quadrillage peu profond et perles de sucre blanches ; gaufre de Bruxelles rectangulaire à cases profondes, saupoudrée ou nappée de chocolat ; lacquemant en gaufrette ronde fourrée de sirop. Bloc : fonte gris foncé, plaque quadrillée (`waffle_iron/plate`), poignée noire.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.

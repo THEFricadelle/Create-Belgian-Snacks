@@ -38,6 +38,34 @@ T B P      B = bassin             P = Precision Mechanism
 
 ---
 
+## Gaufrier (`waffle_iron`) — v2, M18
+
+### Rôle
+Cuire les pâtes à gaufres entre deux plaques chaudes. Seule machine qui exécute les recettes `create_belgian_snacks:waffle_baking` (V-D8 : une machine plutôt que le ventilateur).
+
+### Comportement
+
+| Aspect | Spéc |
+|---|---|
+| Taille | 1 bloc bas (9 px), posé **sur** une source de chaleur comme la Friteuse ; la poignée face au joueur qui le pose (`FACING`), la charnière derrière |
+| Cinétique | Aucune |
+| Chaleur | Mêmes règles que la Friteuse (`FryerBlockEntity.heatAllows`, compatible Create Heat JS) |
+| Entrée | 1 slot, `waffleIron.maxBatch` (4) pâtes ; funnel, tapis, clic droit ; refuse ce qui n'a pas de recette |
+| Sortie | 2 slots, extraction par funnel ou trémie, jamais l'entrée ; clic droit main vide : la sortie, puis l'entrée |
+| Traitement | Par lot : jusqu'à 4 pâtes passent sur les plaques au démarrage ; durée = `processing_time` ÷ `waffleIron.speedMultiplier`. Un lot ne démarre qu'avec la chaleur et la place en sortie ; chaleur perdue → pause sans perte |
+| Rendu | Couvercle (modèle partiel `block/waffle_iron/lid`) fermé pendant la cuisson, ouvert à 70° sinon, en 6 ticks ; la pâte ou la gaufre posée sur la plaque ; vapeur ; grésillement doux (`waffle_iron.sizzle`) toutes les 2,5 s |
+| Goggles / Jade | Statut (cuisson + %, rien à cuire, pas assez chaud, sortie pleine) et chaleur |
+| Casser | Pâtes en attente, pâtes sur les plaques et gaufres tombent |
+| Comparateur | Remplissage de la sortie |
+
+### Recette `waffle_baking`
+Même format que `frying`, sans fluide : un ingrédient, jusqu'à deux résultats avec chances, `processing_time`, `heat_requirement`. KubeJS par `event.custom`. Parmi les recettes de l'item, la première que la chaleur permet.
+
+### Recette de craft (V-D9)
+Mechanical Crafter, ID `create_belgian_snacks:mechanical_crafting/waffle_iron` : une colonne plaque de fer (`#c:plates/iron`), Precision Mechanism, plaque de fer, bassin.
+
+---
+
 ## Hachoir Suprême (`supreme_grinder`)
 
 ### Rôle

@@ -72,6 +72,8 @@ Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, s
 
 | Clé de config serveur | Défaut | Rôle | Jalon |
 |---|---|---|---|
+| `waffleIron.maxBatch` | 4 | Pâtes cuites ensemble | M18 |
+| `waffleIron.speedMultiplier` | 1.0 | Divise les temps de cuisson | M18 |
 | `crops.darkMaxLight` | 4 | Lumière la plus haute comptée comme « noir » : le chicon n'y pousse qu'en dessous, l'asperge y sort blanche | M14 |
 
 ### Valeurs nutritives v2 (provisoires, dans `BSFoods`)
@@ -111,4 +113,8 @@ Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seu
 | moules (2), `carbonnade`, `waterzooi`, `lapin_a_la_gueuze`, `hochepot`, `vol_au_vent`, `chicons_au_gratin` | 10 | 1.0 | M17 |
 | `stoemp`, `flamiche`, `croque_monsieur`, `boudin_compote` | 8 | 0.8 | M17 |
 | choux au lard, asperges, jets de houblon, salade liégeoise, escavèche, `boudin` | 6 | 0.6 | M17 |
+| `brussels_waffle_chocolate` | 8 | 0.8 | M18 |
+| `liege_waffle`, `brussels_waffle_sugared` | 7 | 0.7 | M18 |
+| `lacquemant` | 6 | 0.7 | M18 |
+| `brussels_waffle` | 6 | 0.6 | M18 |
 | `vanilla_ice_cream` | 4 | 0.4 | M13 |

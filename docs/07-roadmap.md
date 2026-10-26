@@ -140,6 +140,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
 
+### M18 — Gaufrier et gaufres ✅ (26/10/2026)
+- [x] Bloc `waffle_iron` (lot de 4, chaleur, pause, couvercle animé, vapeur, son), recette `waffle_baking`, JEI, Jade, Goggles, craft au Mechanical Crafter
+- [x] Gaufres de Liège et de Bruxelles, sucre glace et chocolat, lacquemant
+- **Accepté si** : checklist Gaufrier en solo et serveur dédié. ✅ (`WaffleIronGameTests`, smoke client avec captures couvercle fermé et ouvert, smoke multijoueur : deux clients voient les gaufres, l'un les prend, l'autre voit la sortie vide)
+
 ### M17 — Plats belges ✅ (26/10/2026)
 - [x] 19 plats (22 aliments finis), 33 items : moules, carbonnade, stoemp, waterzooi, lapin à la gueuze, légumes, salade liégeoise, hochepot, escavèche, steak-frites, boudin-compote, chicons au gratin, vol-au-vent, flamiche, croque-monsieur
 - [x] Bols rendus en mangeant ; tag `onions` (oignon ou poireau)

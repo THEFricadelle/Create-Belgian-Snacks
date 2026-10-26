@@ -262,6 +262,8 @@ Valeur proposée : 14 de nutrition, saturation 1.2. THE_Fricadelle et THE_FRICAD
 
 ### 5.6 Gaufres
 
+> **Livré au M18 (26/10/2026)**, avec des écarts : aucun œuf dans les bassins (règle 4 de `03-architecture.md`) ; la pâte de Liège part de notre pâte à brioche (qui a son œuf) avec sucre perlé et beurre, la pâte de Bruxelles prend farine, sucre, levure et lait, la pâte à lacquemant farine, beurre, cassonade, levure et lait (les deux pâtes ne se recouvrent jamais). La gaufre au speculoos passe au M19 avec la pâte de speculoos.
+
 | Snack | Chaîne |
 |---|---|
 | Gaufre de Liège (`liege_waffle`) | Mixer : 1 `create:dough` + 1 `pearl_sugar` + 1 beurre (`#create_belgian_snacks:butters`) + 1 œuf → `liege_waffle_dough` ; **Gaufrier** chauffé → `liege_waffle` |
@@ -469,6 +471,8 @@ Le lacquemant est avec les gaufres (section 5.6), puisqu'il passe au Gaufrier.
 ## 6. Nouvelles machines et mécaniques
 
 ### 6.1 Gaufrier (`waffle_iron`)
+
+> **Livré au M18 (26/10/2026)** : fiche réelle dans `05-machines.md`. Couvercle animé par le renderer (pas de visuel Flywheel : un seul modèle qui pivote, rendu seulement à l'écran).
 
 **Pourquoi une machine** : Create sait cuire en masse (ventilateur sur feu de camp), mais pas mouler une pâte entre deux plaques chaudes avec un temps précis par pièce. Le Gaufrier est aussi l'occasion d'un visuel propre (plaques qui s'ouvrent). Retenu face à la cuisson au ventilateur (V-D8).
 
@@ -685,7 +689,7 @@ flowchart LR
 | **M15 — Bières** ✅ | Moût et 4 bières, tag `beers` | Une brasserie automatique sort les 4 bières |
 | **M16 — Snacks de friterie** ✅ | Sauces tartare, pickles et brazil et leurs cornets ; mitraillette, boulets, croquettes (crevettes, fromage, poulet, lucifer), cervelas, mexicano, viandelle, loempia, filet américain et dérivés, burger et cheeseburger de friterie, hot-dog, pita, brochette, bamischijf, nasischijf, calamars, chicken fingers, nuggets, croquant de poulet, ailes épicées, fish sticks, rondelles d'oignon, bâtonnets de fromage, croquettes de pommes de terre | Chacun produit par une ligne automatique (GameTest) |
 | **M17 — Plats belges** ✅ | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
-| **M18 — Gaufrier et gaufres** | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |
+| **M18 — Gaufrier et gaufres** ✅ | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |
 | **M19 — Douceurs** | Speculoos et pâte (dont la gaufre et le pistolet au speculoos), cuberdons, pralines et ballotin, croustillons, couque de Dinant, tartes (riz, sucre, mattentaart), craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud | Chacune produite par une ligne automatique |
 | **M20 — Huile usagée** | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |
 | **M21 — Finitions de contenu** | Enseignes, néons, Ponder (lignes types et une friterie vendue par Create), catégories JEI, plugins Jade, advancements (« Cave à chicons », « Brasseur », « Ballotin », « Tour de Belgique » : un aliment de chaque famille), schéma KubeJS (si fait) | Client smoke et multijoueur smoke verts |
