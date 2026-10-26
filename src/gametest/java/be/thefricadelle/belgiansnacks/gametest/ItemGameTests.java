@@ -23,6 +23,7 @@ import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSWaffles;
+import be.thefricadelle.belgiansnacks.registry.BSSweets;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -93,6 +94,11 @@ public final class ItemGameTests {
         return List.of(BSDishes.MOULES_MARINIERES.get(), BSDishes.MOULES_A_LA_BIERE.get(), BSDishes.MOULES_FRITES.get(), BSDishes.CARBONNADE.get(), BSDishes.CARBONNADE_FRITES.get(), BSDishes.STOEMP.get(), BSDishes.STOEMP_SAUCISSE.get(), BSDishes.WATERZOOI.get(), BSDishes.LAPIN_A_LA_GUEUZE.get(), BSDishes.BRUSSELS_SPROUTS_BACON.get(), BSDishes.ASPARAGUS_FLEMISH.get(), BSDishes.HOP_SHOOTS_CREAM.get(), BSDishes.SALADE_LIEGEOISE.get(), BSDishes.HOCHEPOT.get(), BSDishes.ESCAVECHE.get(), BSDishes.STEAK_FRITES.get(), BSDishes.CHICONS_AU_GRATIN.get(), BSDishes.VOL_AU_VENT.get(), BSDishes.BOUDIN.get(), BSDishes.BOUDIN_COMPOTE.get(), BSDishes.FLAMICHE.get(), BSDishes.CROQUE_MONSIEUR.get());
     }
 
+    // M19 sweets, written out.
+    private static List<Item> sweets() {
+        return List.of(BSSweets.SPECULOOS.get(), BSSweets.PISTOLET_SPECULOOS.get(), BSSweets.BRUSSELS_WAFFLE_SPECULOOS.get(), BSSweets.CUBERDON.get(), BSSweets.PRALINE.get(), BSSweets.PRALINE_KRIEK.get(), BSSweets.BALLOTIN.get(), BSSweets.BABELUTTE.get(), BSSweets.CROUSTILLONS.get(), BSSweets.CROUSTILLONS_SUGARED.get(), BSSweets.BOUQUETTE.get(), BSSweets.BOUQUETTE_CASSONADE.get(), BSSweets.COUQUE_DE_DINANT.get(), BSSweets.TARTE_AU_RIZ.get(), BSSweets.TARTE_AU_SUCRE.get(), BSSweets.MATTENTAART.get(), BSSweets.CRAQUELIN.get(), BSSweets.CRAMIQUE.get(), BSSweets.PAIN_A_LA_GRECQUE.get(), BSSweets.MERVEILLEUX.get(), BSSweets.DAME_BLANCHE.get(), BSSweets.HOT_CHOCOLATE_BOTTLE.get());
+    }
+
     // M18 waffles, written out.
     private static List<Item> waffles() {
         return List.of(BSWaffles.LIEGE_WAFFLE.get(), BSWaffles.BRUSSELS_WAFFLE.get(), BSWaffles.BRUSSELS_WAFFLE_SUGARED.get(),
@@ -108,7 +114,7 @@ public final class ItemGameTests {
     public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item) || belgianDishes().contains(item) || waffles().contains(item)
+            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item) || belgianDishes().contains(item) || waffles().contains(item) || sweets().contains(item)
                 || edibleIngredients().contains(item);
             helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
@@ -137,6 +143,8 @@ public final class ItemGameTests {
         assertFood(helper, BSSnacks.MITRAILLETTE.get(), BSFoods.MITRAILLETTE);
         assertFood(helper, BSDishes.STEAK_FRITES.get(), BSFoods.DISH_WITH_FRIES);
         assertFood(helper, BSWaffles.LIEGE_WAFFLE.get(), BSFoods.LIEGE_WAFFLE);
+        assertFood(helper, BSSweets.BALLOTIN.get(), BSFoods.BALLOTIN);
+        assertFood(helper, BSSweets.TARTE_AU_SUCRE.get(), BSFoods.TART);
         assertFood(helper, BSWaffles.BRUSSELS_WAFFLE_CHOCOLATE.get(), BSFoods.BRUSSELS_WAFFLE_CHOCOLATE);
         assertFood(helper, BSDishes.FLAMICHE.get(), BSFoods.SIDE_DISH_LARGE);
         for (var bowl : List.of(BSDishes.MOULES_FRITES, BSDishes.CARBONNADE, BSDishes.WATERZOOI, BSDishes.BOUDIN_COMPOTE)) {
@@ -236,6 +244,11 @@ public final class ItemGameTests {
             helper.assertTrue(stack.is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
             helper.assertFalse(stack.is(Tags.Items.FOODS_COOKED_MEAT), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/cooked_meat");
         }
+        for (Item item : sweets()) {
+            helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
+        }
+        helper.assertTrue(BSSweets.PRALINE_KRIEK.asStack().is(BSTags.PRALINES), "kriek praline in #pralines");
+        helper.assertTrue(new ItemStack(Items.COCOA_BEANS).is(BSTags.PRALINE_FILLINGS), "cocoa beans fill a praline");
         for (Item item : waffles()) {
             helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
         }

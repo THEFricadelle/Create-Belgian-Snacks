@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M19 sweets; the cuberdon follows the raspberries, the rice filling the rice, below.
+        "mixing/speculoos_dough", "mixing/speculoos_spread", "mixing/croustillon_dough", "mixing/couque_dough", "mixing/raw_craquelin", "mixing/raw_cramique", "mixing/bouquette_batter", "mixing/babelutte", "mixing/hot_chocolate", "pressing/raw_speculoos", "pressing/raw_couque", "pressing/flat_brioche", "crushing/speculoos_crumbs", "deploying/croustillons_sugared", "deploying/bouquette_cassonade", "deploying/raw_tarte_au_riz", "deploying/raw_pain_a_la_grecque", "filling/pistolet_speculoos", "filling/brussels_waffle_speculoos", "filling/praline", "filling/praline_kriek", "filling/dame_blanche", "filling/hot_chocolate_bottle", "frying/croustillons", "frying/bouquette", "crafting/ballotin", "sequenced_assembly/raw_tarte_au_sucre", "sequenced_assembly/raw_mattentaart", "sequenced_assembly/merveilleux", "smoking/speculoos", "smelting/speculoos", "smoking/couque_de_dinant", "smelting/couque_de_dinant", "smoking/tarte_au_riz", "smelting/tarte_au_riz", "smoking/tarte_au_sucre", "smelting/tarte_au_sucre", "smoking/mattentaart", "smelting/mattentaart", "smoking/craquelin", "smelting/craquelin", "smoking/cramique", "smelting/cramique", "smoking/pain_a_la_grecque", "smelting/pain_a_la_grecque",
         // M18 waffles and the waffle iron.
         "mixing/liege_waffle_dough", "mixing/brussels_waffle_batter", "mixing/lacquemant_batter", "waffle_baking/liege_waffle", "waffle_baking/brussels_waffle", "waffle_baking/lacquemant_wafer", "deploying/brussels_waffle_sugared", "filling/brussels_waffle_chocolate", "filling/lacquemant", "mechanical_crafting/waffle_iron",
         // M17 Belgian dishes; the rabbit follows the plums below.
@@ -159,6 +161,9 @@ public final class RecipeGameTests {
         // M16: Farmer's Delight brings rice, onions and tomatoes; no runtime here has pineapple, shrimp, corn or squid.
         twins(helper, "mixing/brazil", "mixing/brazil_from_melon", false);
         twins(helper, "mixing/lapin_a_la_gueuze", "mixing/lapin_a_la_gueuze_from_sweet_berries", false);
+        twins(helper, "mixing/cuberdon", "mixing/cuberdon_from_sweet_berries", false);
+        // Farmer's Delight brings rice; without it there is no rice tart.
+        helper.assertTrue((find(helper, "mixing/rice_filling") != null) == farmersDelight(), "mixing/rice_filling follows the rice");
         twins(helper, "mixing/shrimp_croquette_mix", "mixing/shrimp_croquette_mix_from_cod", false);
         twins(helper, "mixing/nasi_mix", "mixing/nasi_mix_from_wheat", farmersDelight());
         twins(helper, "cutting/raw_onion_rings", "cutting/raw_onion_rings_from_beetroot", onions);
@@ -174,6 +179,30 @@ public final class RecipeGameTests {
 
     private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M19 on a real basin: the cuberdon needs heat and its honey; the croustillon dough (beer) and the
+    // Brussels batter (milk) never take each other's basin; the hot chocolate needs its sugar.
+    @GameTest(template = TEMPLATE)
+    public static void sweetsMixOnARealBasin(GameTestHelper helper) {
+        List<ItemStack> berries = List.of(new ItemStack(Items.SUGAR), new ItemStack(Items.SWEET_BERRIES), new ItemStack(Items.SWEET_BERRIES));
+        FluidStack honey = new FluidStack(com.simibubi.create.AllFluids.HONEY.get().getSource(), 100);
+        Recipe<?> cuberdon = recipe(helper, "mixing/cuberdon_from_sweet_berries");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 0), false, berries, honey), cuberdon), "cuberdon cooked cold");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(2, 1, 0), true, berries, honey.copy()), cuberdon), "cuberdon on a burner");
+        helper.assertFalse(BasinRecipe.match(basin(helper, new BlockPos(4, 1, 0), true, berries, null), cuberdon), "cuberdon without honey");
+        List<ItemStack> dough = List.of(new ItemStack(com.simibubi.create.AllItems.WHEAT_FLOUR.get()), new ItemStack(Items.SUGAR), BSItems.BREWERS_YEAST.asStack());
+        BasinBlockEntity beer = basin(helper, new BlockPos(0, 1, 2), false, dough, new FluidStack(BSFluids.BLONDE_BEER.get().getSource(), 250));
+        helper.assertTrue(BasinRecipe.match(beer, recipe(helper, "mixing/croustillon_dough")), "croustillon dough with beer");
+        helper.assertFalse(BasinRecipe.match(beer, recipe(helper, "mixing/brussels_waffle_batter")), "brussels batter from beer");
+        BasinBlockEntity milk = basin(helper, new BlockPos(2, 1, 2), false, dough, new FluidStack(net.neoforged.neoforge.common.NeoForgeMod.MILK.get(), 250));
+        helper.assertFalse(BasinRecipe.match(milk, recipe(helper, "mixing/croustillon_dough")), "croustillon dough from milk");
+        BasinBlockEntity chocolate = basin(helper, new BlockPos(4, 1, 2), true, List.of(),
+            new FluidStack(net.neoforged.neoforge.common.NeoForgeMod.MILK.get(), 250));
+        helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(new BlockPos(4, 1, 2)), null)
+            .fill(new FluidStack(com.simibubi.create.AllFluids.CHOCOLATE.get().getSource(), 100), IFluidHandler.FluidAction.EXECUTE);
+        helper.assertFalse(BasinRecipe.match(chocolate, recipe(helper, "mixing/hot_chocolate")), "hot chocolate without sugar");
+        helper.succeed();
     }
 
     // M18 on a real basin: the two batters never hide in each other's basin, the Liège dough starts

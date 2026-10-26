@@ -58,6 +58,23 @@ public final class EatingGameTests {
     private EatingGameTests() {
     }
 
+    // M19: the hot chocolate is drunk and gives its bottle back; the Dinant couque takes four times as long.
+    @GameTest(template = "empty")
+    public static void hotChocolateIsDrunkAndTheCouqueMelts(GameTestHelper helper) {
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        ItemStack chocolate = be.thefricadelle.belgiansnacks.registry.BSSweets.HOT_CHOCOLATE_BOTTLE.asStack();
+        helper.assertTrue(chocolate.getUseAnimation() == net.minecraft.world.item.UseAnim.DRINK, "hot chocolate is drunk");
+        player.getFoodData().setFoodLevel(10);
+        ItemStack left = chocolate.finishUsingItem(helper.getLevel(), player);
+        helper.assertTrue(left.is(net.minecraft.world.item.Items.GLASS_BOTTLE), "the bottle comes back, got " + left);
+        helper.assertValueEqual(player.getFoodData().getFoodLevel(), 14, "food after the hot chocolate");
+        int couque = be.thefricadelle.belgiansnacks.registry.BSSweets.COUQUE_DE_DINANT.asStack().getUseDuration(player);
+        int speculoos = be.thefricadelle.belgiansnacks.registry.BSSweets.SPECULOOS.asStack().getUseDuration(player);
+        helper.assertValueEqual(couque, 128, "ticks to eat a couque");
+        helper.assertValueEqual(speculoos, 32, "ticks to eat a speculoos");
+        helper.succeed();
+    }
+
     // ------------------------------------------------------------------ effects
 
     @GameTest(template = TEMPLATE)

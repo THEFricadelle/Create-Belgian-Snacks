@@ -66,6 +66,33 @@ public final class BelgianDishesLineGameTests {
             List.of(Station.spout(BSFluids.LIEGE_SYRUP.get().getSource())), 50);
     }
 
+    // M19: the sugar tart and the mattentaart take the same transitional item as the flamiche.
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void sugarTartIsAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(BSDishes.TART_SHELL.asStack()), List.of(be.thefricadelle.belgiansnacks.registry.BSSweets.RAW_TARTE_AU_SUCRE.get()),
+            List.of(Station.deployer(BSItems.CASSONADE.asStack(STOCK)), Station.deployer(new ItemStack(Items.EGG, STOCK))), 0);
+    }
+
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void mattentaartIsAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(BSDishes.TART_SHELL.asStack()), List.of(be.thefricadelle.belgiansnacks.registry.BSSweets.RAW_MATTENTAART.get()),
+            List.of(Station.deployer(BSItems.MATON.asStack(STOCK)), Station.deployer(new ItemStack(Items.EGG, STOCK))), 0);
+    }
+
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void merveilleuxIsAssembledOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(BSItems.MERINGUE.asStack()), List.of(be.thefricadelle.belgiansnacks.registry.BSSweets.MERVEILLEUX.get()),
+            List.of(Station.spout(BSFluids.CREAM.get().getSource()), Station.deployer(BSItems.MERINGUE.asStack(STOCK)),
+                Station.deployer(BSItems.CHOCOLATE_SHAVINGS.asStack(STOCK))), 100);
+    }
+
+    // Chocolate on a cocoa bean at one spout, kriek at the next: no press, which would turn the chocolate into bars.
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void pralinesAreFilledOnRealSpouts(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(new ItemStack(Items.COCOA_BEANS)), List.of(be.thefricadelle.belgiansnacks.registry.BSSweets.PRALINE_KRIEK.get()),
+            List.of(Station.spout(com.simibubi.create.AllFluids.CHOCOLATE.get().getSource()), Station.spout(BSFluids.KRIEK.get().getSource())), 50);
+    }
+
     @GameTest(template = "empty_large", timeoutTicks = 1200)
     public static void flamicheIsAssembledOnRealMachines(GameTestHelper helper) {
         FriterieLineGameTests.run(helper, List.of(BSDishes.TART_SHELL.asStack()), List.of(BSDishes.RAW_FLAMICHE.get()),

@@ -157,8 +157,8 @@ class RecipeFilesTest {
             assertTrue(conditions(recipes.get(id)).contains(condition), id + " must carry " + condition + ", has " + conditions(recipes.get(id))));
     }
 
-    // Tags with no sensible stand-in: without squid there are simply no calamari (M16).
-    private static final Set<String> NO_FALLBACK = Set.of(MOD_ID + ":squids");
+    // Tags with no sensible stand-in: without squid no calamari (M16), without rice no rice tart (M19).
+    private static final Set<String> NO_FALLBACK = Set.of(MOD_ID + ":squids", MOD_ID + ":rice");
 
     @Test
     void everyGuardedRecipeHasAFallbackTwin() throws IOException {
