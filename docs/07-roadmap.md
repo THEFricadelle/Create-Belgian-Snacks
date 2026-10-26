@@ -140,6 +140,10 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
 
+### M19 — Douceurs ✅ (26/10/2026)
+- [x] 22 douceurs, 38 items, 2 fluides (pâte de speculoos, chocolat chaud) : speculoos, cuberdon, pralines et ballotin, croustillons, couque de Dinant, trois tartes, craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud ; gaufre et pistolet au speculoos
+- **Accepté si** : chaque douceur sort d'une ligne automatique. ✅ (recettes et bassins testés ; tartes au sucre et mattentaart, merveilleux et pralines sur de vraies lignes)
+
 ### M18 — Gaufrier et gaufres ✅ (26/10/2026)
 - [x] Bloc `waffle_iron` (lot de 4, chaleur, pause, couvercle animé, vapeur, son), recette `waffle_baking`, JEI, Jade, Goggles, craft au Mechanical Crafter
 - [x] Gaufres de Liège et de Bruxelles, sucre glace et chocolat, lacquemant

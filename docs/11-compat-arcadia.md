@@ -81,6 +81,8 @@ Plats belges (M17, scan du 26/10/2026) : dans nos bassins de plats, seul l'œuf 
 
 Gaufres (M18, scan du 26/10/2026) : les pâtes du pack prennent 1000 mB d'eau ou d'œuf (Create, Create: Food) ou 3 farines et du lait (pâte à tarte de Farmer's Delight) ; caramel et toffee sont chauffés. Nos trois pâtes, froides avec 250 mB de lait, ne se recouvrent avec aucune. Le lacquemant est donc réglé : il a 4 items et ne recoupe plus la pâte au beurre de Create: Food.
 
+Douceurs (M19, scan du 26/10/2026) : Create presse 250 mB de chocolat seul en barre (`create:compacting/chocolate`, une recette de fluides seuls) : nos pralines passent au Spout. Create: Food fait du caramel avec 2 sucres sur brûleur, du toffee avec sucre et beurre, du lait concentré avec 1000 mB de lait : notre cuberdon (chauffé) n'a qu'un sucre et du miel. Delightful Creators cuit le riz seul sur brûleur : l'appareil à tarte au riz reste froid. Create et Create: Food remplissent des bouteilles de miel, de lait, de thé ; Create Confectionery a son propre chocolat chaud (fluide différent) : notre bouteille ne se recoupe avec aucune.
+
 À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
 
 ### Botany Pots (cultures v2)

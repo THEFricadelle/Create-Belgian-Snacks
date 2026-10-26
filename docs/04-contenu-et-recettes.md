@@ -293,6 +293,28 @@ Les plats en bol prennent leur bol dans le bassin et le rendent quand on les man
 | `lacquemant` | Spout 50 mB de sirop de Liège sur la gaufrette |
 | `waffle_iron` (bloc) | Mechanical Crafter : 2 plaques de fer, Precision Mechanism, bassin |
 
+## v2 — Douceurs (M19, 26/10/2026)
+
+Fumage = ventilateur sur feu de camp, ou four. Friture : Friteuse chauffée, 100 ticks, 10 mB par pièce.
+
+| Douceur | Recette |
+|---|---|
+| `speculoos` | Mixer farine + cassonade + beurre + épices → 4 pâtes ; Presse → cru ; fumage |
+| `speculoos_spread` (fluide) | Broyage speculoos → 2 miettes ; Mixer 4 miettes + sucre + 100 mB `#frying_oils` → 250 mB ; Spout 50 mB sur un pistolet ou une gaufre de Bruxelles |
+| `cuberdon` | Mixer chauffé : 1 sucre + 2 `#raspberries` (jumelle : baies sucrées) + 100 mB de miel → 4 |
+| `praline`, `praline_kriek` | Spout 50 mB de chocolat sur `#praline_fillings` (fèves de cacao, `c:nuts`) ; Spout 50 mB de kriek sur une praline |
+| `ballotin` | Établi : 8 `#pralines` autour d'un papier |
+| `croustillons` | Mixer farine + sucre + levure + 250 mB bière blonde → 4 pâtes ; friture ; Deployer sucre glace → `croustillons_sugared` |
+| `couque_de_dinant` | Mixer farine + 250 mB de miel → pâte ; Presse → crue ; fumage. Se mange en 6,4 s |
+| tartes | `tart_shell` (M17) ; sucre : assemblage cassonade → œuf ; mattentaart : maton → œuf (`incomplete_tart` partagé avec la flamiche) ; riz : Mixer froid (600 ticks) riz (`#rice`) + sucre + 250 mB de lait → appareil, Deployer sur le fond ; les trois au fumage |
+| `craquelin`, `cramique` | Mixer pâte à brioche + 2 sucre perlé / + 2 raisins secs → cru ; fumage |
+| `pain_a_la_grecque` | Presse pâte à brioche → brioche aplatie ; Deployer cassonade → cru ; fumage |
+| `merveilleux` | Assemblage sur une meringue : Spout 100 mB crème → meringue → copeaux de chocolat |
+| `bouquette` | Mixer farine de sarrasin + levure + raisins secs + 250 mB de lait → 4 pâtes ; friture ; Deployer cassonade → `bouquette_cassonade` |
+| `dame_blanche` | Spout 50 mB de chocolat sur `#vanilla_ice_creams` |
+| `babelutte` | Mixer chauffé 2 cassonade + beurre → 4 |
+| `hot_chocolate` (fluide) | Mixer chauffé sucre + 250 mB de lait + 100 mB de chocolat → 250 mB ; Spout 250 mB sur une bouteille → `hot_chocolate_bottle` (se boit, rend la bouteille) |
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

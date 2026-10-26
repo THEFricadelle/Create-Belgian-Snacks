@@ -117,4 +117,10 @@ Référence : la fricadelle vaut 6 / 0.6. Un cornet est un repas, des frites seu
 | `liege_waffle`, `brussels_waffle_sugared` | 7 | 0.7 | M18 |
 | `lacquemant` | 6 | 0.7 | M18 |
 | `brussels_waffle` | 6 | 0.6 | M18 |
+| `ballotin` | 12 | 1.0 | M19 |
+| tartes (riz, sucre, mattentaart), `cramique` | 8 | 0.8 | M19 |
+| pistolet et gaufre au speculoos, croustillons au sucre, bouquette à la cassonade, couque (6,4 s à manger), craquelin, pain à la grecque, merveilleux, dame blanche | 6 | 0.6 | M19 |
+| `croustillons`, `bouquette` | 4 | 0.4 | M19 |
+| `hot_chocolate_bottle` (rend la bouteille) | 4 | 0.6 | M19 |
+| `speculoos`, `cuberdon`, pralines, `babelutte` | 2 | 0.3 | M19 |
 | `vanilla_ice_cream` | 4 | 0.4 | M13 |

@@ -96,6 +96,8 @@ Plats belges (M17, dessinés par `tools/draw_textures.py`) : bols du fond de com
 
 Gaufres et Gaufrier (M18, dessinés par `tools/draw_textures.py`) : gaufre de Liège arrondie, quadrillage peu profond et perles de sucre blanches ; gaufre de Bruxelles rectangulaire à cases profondes, saupoudrée ou nappée de chocolat ; lacquemant en gaufrette ronde fourrée de sirop. Bloc : fonte gris foncé, plaque quadrillée (`waffle_iron/plate`), poignée noire.
 
+Douceurs (M19, dessinées par `tools/draw_textures.py`) : biscuits en dalles à motif (speculoos brun, couque presque noire), cuberdons en cônes violets pointe en haut, pralines en trois cubes de chocolat, ballotin blanc au ruban rouge, croustillons en boules dorées, tartes de profil, craquelin et cramique en brioches, merveilleux en dôme blanc piqué de chocolat, dame blanche en coupe, chocolat chaud en bouteille. Fluides : pâte de speculoos `#BC7432`, chocolat chaud `#7A4424`.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.
