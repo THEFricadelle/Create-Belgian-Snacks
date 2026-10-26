@@ -140,6 +140,13 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
 
+### M21 — Finitions de contenu ✅ (26/10/2026)
+- [x] Enseignes (3) et néons (4), recettes à l'établi
+- [x] Ponder : lignes des frites, Gaufrier, huile usagée, friterie vendue par Create (schémas construits par `runPonderSchematics`)
+- [x] Advancements : Cave à chicons, Brasseur, Ballotin, Le Gaufrier, Tour de Belgique (tags `menu/*`)
+- [ ] Schéma KubeJS : non fait (optionnel), `event.custom` suffit
+- **Accepté si** : client smoke et multijoueur smoke verts. ✅
+
 ### M20 — Huile usagée ✅ (26/10/2026)
 - [x] 2e réservoir de la Friteuse, blocage, capability (graisse dedans, huile usagée dehors), huile usagée gardée à la casse, sauvegardes v1
 - [x] Filtre, filtration au Mixer, filtre usagé combustible, biodiesel avec Diesel Generators

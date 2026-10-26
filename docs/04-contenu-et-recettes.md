@@ -325,6 +325,17 @@ Fumage = ventilateur sur feu de camp, ou four. Friture : Friteuse chauffée, 100
 | `used_oil_filter` | Combustible : 200 ticks (`neoforge:furnace_fuels`) |
 | biodiesel (Diesel Generators) | Mixer : 250 mB d'huile usagée + 100 mB d'éthanol (`c:ethanol`) + 1 sel → 250 mB `createdieselgenerators:biodiesel`, seulement avec le mod (`mixing/biodiesel_from_used_oil`) |
 
+## v2 — Décoration et familles du menu (M21, 26/10/2026)
+
+| Bloc | Recette (établi) |
+|---|---|
+| `friterie_sign`, `frituur_sign`, `chip_shop_sign` | 6 planches + 1 colorant noir + 1 colorant blanc ; panneau accroché au mur, face au joueur |
+| `red_friterie_neon`, `yellow_…`, `blue_…`, `green_…` | 4 vitres + 1 colorant de la couleur + 1 poudre de glowstone ; lumière 15, éclairé même dans le noir |
+
+Aucun ne porte d'état : au retrait du mod, ils deviennent de l'air.
+
+Tags `create_belgian_snacks:menu/{fries,friterie,dishes,waffles,sweets}` : les aliments finis de chaque famille (cornets, snacks de friterie, plats, gaufres, douceurs), remplis au datagen et extensibles par KubeJS. L'advancement « Tour de Belgique » demande un aliment de chacune.
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

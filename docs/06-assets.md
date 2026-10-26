@@ -50,6 +50,8 @@ Où en est-on : `python tools/asset_status.py` liste chaque texture (placeholder
 | `textures/block/fryer/{side,top,bottom,inner}.png` | 16×16 | utilisées par le modèle généré ; un modèle fait main peut en utiliser d'autres |
 | `textures/block/supreme_grinder/{top,bottom,blade,mince}.png` | 16×16 | `mince` : le hachis vu de dessus, qui se répète sans couture |
 | `textures/block/waffle_iron/{side,top,bottom,plate}.png` | 16×16 | `plate` : les deux plaques quadrillées (dessus de la base, dessous du couvercle) |
+| `textures/block/decor/<enseigne>.png` | **64×32** | face d'une enseigne (panneau 16×8) : le texte « FRITERIE », « FRITUUR », « CHIP SHOP » ; les bords prennent les planches de chêne noir vanilla |
+| `textures/block/decor/<couleur>_friterie_neon.png` | 32×16 | face d'un néon : un cornet de frites en tubes lumineux sur fond sombre ; bords en béton noir vanilla |
 | `textures/block/supreme_grinder/side_0.png` … `side_4.png` | 16×16 | **la jauge** : la même face, remplie de 0 à 4 quarts. Les 5 fichiers sont obligatoires |
 
 ### Modèles (facultatifs : sans eux, le modèle généré reste)

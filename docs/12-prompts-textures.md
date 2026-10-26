@@ -100,6 +100,8 @@ Douceurs (M19, dessinées par `tools/draw_textures.py`) : biscuits en dalles à 
 
 Huile usagée (M20) : fluide brun sombre `#5B4A1E` ; filtre à huile en disque de papier blanc autour de son charbon, filtre usagé imbibé de brun.
 
+Décoration (M21, dessinée par `tools/draw_textures.py`) : enseignes en lettres capitales blanches (police pixel 5×7) sur panneau noir bordé de bois, bande rouge et blanche de friterie en bas ; néons en cornet de frites lumineux sur fond sombre, avec un halo.
+
 ## 3. Les seaux (items, 16×16, fond magenta)
 
 Génère d'abord le seau de `frying_oil_bucket`, puis demande **le même seau, pixel pour pixel, en ne changeant que la couleur du liquide**.
