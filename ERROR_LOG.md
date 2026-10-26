@@ -160,3 +160,10 @@
 **Root cause:** (1) An upward saw ejects towards the side its rotation sends items (`SawBlockEntity.getItemMovementVec`): with a positive speed and its shaft along x, that is -z, back onto the incoming belt. (2) A Create belt drops what reaches its end, and a depot takes a single stack, so a depot at the end blocks the belt as soon as it holds one item. (3) GameTests of one batch run side by side: the new test shifted the layout and put another test's full grinder within 16 blocks of that test's player.
 **Fix:** Negative motor speed on the saw; the test empties the depot each tick, as a funnel would; the halfway test runs in its own batch `grinder_halfway`.
 **Prevention:** In a GameTest line, set a saw's speed sign from the flow direction and catch a belt's end with a depot emptied by the test; any test that rewards players by proximity runs in its own batch.
+
+## [2026-10-26 05:12] - Used oil refused by its own tank; a long GameTest slowing its neighbours
+**Context:** First GameTest run of the M20 used oil (second fryer tank, closed frying and filtering loop).
+**Error:** (1) No used oil after a batch ("used oil is ... 0 minecraft:empty"), the loop filtered 0 mB, and tests comparing a drained stack with `BSFluids.X.get()` failed although the stack held that fluid. (2) After adding the 2400-tick loop test, `asparagusIsWhiteInTheDarkAndGreenInDaylight` failed once.
+**Root cause:** (1) A Registrate `FluidEntry.get()` is the flowing fluid; the stacks hold the source. `FluidStack.is(Fluid)` compares the exact fluid, so the tank's validator refused every used oil. (2) The loop runs a fryer, a burner and a mixer for 2400 ticks in the main batch, beside tests that wait on light updates.
+**Fix:** The validator and the tests use `getFluid().isSame(...)`; the loop test runs in its own batch `used_oil_loop`.
+**Prevention:** Compare a fluid stack with `isSame` (or `is` on the source), never `is(entry.get())`; any test longer than a few hundred ticks gets its own batch.

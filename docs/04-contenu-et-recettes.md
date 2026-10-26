@@ -315,6 +315,16 @@ Fumage = ventilateur sur feu de camp, ou four. Friture : Friteuse chauffée, 100
 | `babelutte` | Mixer chauffé 2 cassonade + beurre → 4 |
 | `hot_chocolate` (fluide) | Mixer chauffé sucre + 250 mB de lait + 100 mB de chocolat → 250 mB ; Spout 250 mB sur une bouteille → `hot_chocolate_bottle` (se boit, rend la bouteille) |
 
+## v2 — Huile usagée (M20, 26/10/2026)
+
+| Élément | Recette |
+|---|---|
+| `used_frying_oil` (fluide) | Rendue par la Friteuse : la moitié de la graisse payée (`fryer.usedOilRatio`). Pas dans `#frying_oils` |
+| `oil_filter` | Compacting : 2 papiers + 1 charbon de bois |
+| filtration | Mixer : 1000 mB d'huile usagée + 1 filtre → 800 mB d'huile de friture + 1 `used_oil_filter` (`mixing/frying_oil_from_used_oil`) |
+| `used_oil_filter` | Combustible : 200 ticks (`neoforge:furnace_fuels`) |
+| biodiesel (Diesel Generators) | Mixer : 250 mB d'huile usagée + 100 mB d'éthanol (`c:ethanol`) + 1 sel → 250 mB `createdieselgenerators:biodiesel`, seulement avec le mod (`mixing/biodiesel_from_used_oil`) |
+
 ## Dans Arcadia V2
 
 Farmer's Delight est présent : les tags `c:crops/onion` et `c:crops/tomato` sont remplis, donc ce sont les recettes « normales » qui s'activent. Les recettes de secours servent hors du pack. Aucune mayonnaise ni aucun ketchup dans le pack (vérifié au M2) ; les huiles existantes passent par `#bs:frying_oils`. Voir `11-compat-arcadia.md`.

@@ -72,6 +72,8 @@ Tranchées le 25/10/2026 (V-D1 à V-D15) : voir `13-cahier-des-charges-v2.md`, s
 
 | Clé de config serveur | Défaut | Rôle | Jalon |
 |---|---|---|---|
+| `fryer.usedOilRatio` | 0.5 | Part de la graisse payée rendue en huile usagée ; 0 = Friteuse v1 (V-D7) | M20 |
+| `fryer.usedOilCapacity` | 2000 | Réservoir d'huile usagée (mB) ; plein, la Friteuse attend | M20 |
 | `waffleIron.maxBatch` | 4 | Pâtes cuites ensemble | M18 |
 | `waffleIron.speedMultiplier` | 1.0 | Divise les temps de cuisson | M18 |
 | `crops.darkMaxLight` | 4 | Lumière la plus haute comptée comme « noir » : le chicon n'y pousse qu'en dessous, l'asperge y sort blanche | M14 |

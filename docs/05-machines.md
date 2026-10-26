@@ -13,12 +13,13 @@ Plonger des items dans l'huile chaude. Seule machine qui exécute les recettes `
 | Cinétique | **Aucune** (une friteuse ne tourne pas) |
 | Chaleur | Lue sur le bloc en dessous : aucune / chauffée / super-chauffée. Réutiliser l'enum et la lecture de chaleur de Create (cf. Basin). |
 | Graisse | Réservoir interne `fryer.tankCapacity` (4000 mB). Accepte **uniquement** le tag `#frying_oils` (notre huile, le blanc de bœuf fondu, les huiles végétales des autres mods). Remplissable par tuyau, seau, Spout. |
+| Huile usagée (v2, M20) | 2e réservoir `fryer.usedOilCapacity` (2000 mB). À la fin d'un lot, `fryer.usedOilRatio` (0.5) × la graisse payée y entre en `used_frying_oil`, quelle que soit la graisse. Un lot ne démarre que s'il reste la place pour son huile usagée (statut « huile usagée à vider »). Tuyaux et seaux : on verse la graisse, on retire l'huile usagée ; à `usedOilRatio = 0`, pas d'huile usagée et l'on retire la graisse comme en v1. L'huile usagée reste dans l'item quand on casse la Friteuse. Une Friteuse v1 se charge avec un réservoir vide |
 | Items en entrée | 1 slot, pile max `fryer.maxBatch` (16). Par funnel, tapis qui débouche dessus, clic droit. Refuse ce qui n'a pas de recette. |
 | Items en sortie | 2 slots (une recette peut avoir 2 résultats). Extraction par funnel ou trémie ; l'entrée n'est jamais extraite. Clic droit main vide = récupérer la sortie, puis l'entrée s'il n'y a plus de sortie. |
 | Traitement | **Par lot** (décidé) : toute la pile d'entrée cuit ensemble, jusqu'à `maxBatch` (16). Les items du tag `create_belgian_snacks:fryer/one_at_a_time` (THE_FRICADELLE crue) cuisent **un par un**. Durée = `processing_time` ÷ `speedMultiplier`. La graisse de tout le lot (quantité de la recette × nombre d'items) est payée **au démarrage**. |
 | Conditions d'arrêt | Un lot ne démarre que si chaleur, graisse (pour tout le lot) et place en sortie sont réunies. Chaleur perdue en cours de lot → pause, sans perte ni perte de progression. La graisse ne peut pas manquer en cours de lot (déjà payée). |
 | Rendu | Niveau de graisse visible, items qui flottent à la surface, bulles et fumée pendant la cuisson, grésillement toutes les 2 s (`create_belgian_snacks:fryer.sizzle`, sons vanilla en attendant). |
-| Goggles / Jade | Statut (friture + %, ou la raison du blocage : rien à frire, pas assez chaud, pas assez de graisse, sortie pleine), chaleur, réservoir (mB / capacité). |
+| Goggles / Jade | Statut (friture + %, ou la raison du blocage : rien à frire, pas assez chaud, pas assez de graisse, huile usagée à vider, sortie pleine), chaleur, les deux réservoirs (mB / capacité). |
 | Casser le bloc | Les items tombent ; la **graisse reste dans l'item** et revient à la pose. |
 | Comparateur | Signal = remplissage de la sortie. |
 

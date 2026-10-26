@@ -495,6 +495,8 @@ Le lacquemant est avec les gaufres (section 5.6), puisqu'il passe au Gaufrier.
 
 ### 6.2 Huile usagée et filtration
 
+> **Livré au M20 (26/10/2026)** : fiche réelle dans `05-machines.md`. Écarts : à `usedOilRatio = 0`, tuyaux et seaux retirent la graisse comme en v1 (« comportement v1 exact ») ; au-dessus, seulement l'huile usagée. Le biodiesel (Diesel Generators 1.3.15 : `createdieselgenerators:biodiesel`, leur recette est huile végétale + éthanol) se fait au Mixer avec l'huile usagée, l'éthanol et une pincée de sel, pour que la recette ait un item (règle 1 des bassins). La boucle d'une heure est vérifiée sur 2400 ticks en GameTest (sans blocage de plus de 60 ticks) ; l'heure en monde reste à la checklist manuelle.
+
 Une huile de friterie s'use. En v2, la Friteuse rend une part de la graisse consommée sous forme d'**huile usagée**, qu'il faut évacuer et filtrer.
 
 | Aspect | Spéc |
@@ -693,7 +695,7 @@ flowchart LR
 | **M17 — Plats belges** ✅ | Moules (marinières, bière, frites), carbonnade, stoemp-saucisse, chicons au gratin, waterzooi, vol-au-vent, lapin à la gueuze, steak-frites, boudin-compote, choux de Bruxelles au lard, asperges à la flamande, flamiche, jets de houblon, salade liégeoise, hochepot, escavèche, croque-monsieur | Idem |
 | **M18 — Gaufrier et gaufres** ✅ | Bloc, recette `waffle_baking`, rendu, JEI, Jade ; gaufres de Liège et de Bruxelles, garnitures sucre glace et chocolat, lacquemant | Checklist Gaufrier en solo et serveur dédié |
 | **M19 — Douceurs** ✅ | Speculoos et pâte (dont la gaufre et le pistolet au speculoos), cuberdons, pralines et ballotin, croustillons, couque de Dinant, tartes (riz, sucre, mattentaart), craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud | Chacune produite par une ligne automatique |
-| **M20 — Huile usagée** | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |
+| **M20 — Huile usagée** ✅ | 2e réservoir, filtre, filtration, compat Diesel | Ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée tient 1 h sans intervention |
 | **M21 — Finitions de contenu** | Enseignes, néons, Ponder (lignes types et une friterie vendue par Create), catégories JEI, plugins Jade, advancements (« Cave à chicons », « Brasseur », « Ballotin », « Tour de Belgique » : un aliment de chaque famille), schéma KubeJS (si fait) | Client smoke et multijoueur smoke verts |
 | **M22 — Arcadia** | Arcadia smoke étendu, `uninstall_smoke.py` dans le pack, scénario Solonion, export FoodIndex | Tous verts sur le pack à jour, 2 joueurs en LAN |
 | **M23 — Publication** | Textures, sons, rapports spark, README et CHANGELOG bilingues, page CurseForge, procédure de test HTML | Rapports spark revus ; fusion `dev` → `main` ; mise en ligne par THEFricadelle |

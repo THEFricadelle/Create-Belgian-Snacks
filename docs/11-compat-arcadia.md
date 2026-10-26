@@ -83,6 +83,8 @@ Gaufres (M18, scan du 26/10/2026) : les pâtes du pack prennent 1000 mB d'eau ou
 
 Douceurs (M19, scan du 26/10/2026) : Create presse 250 mB de chocolat seul en barre (`create:compacting/chocolate`, une recette de fluides seuls) : nos pralines passent au Spout. Create: Food fait du caramel avec 2 sucres sur brûleur, du toffee avec sucre et beurre, du lait concentré avec 1000 mB de lait : notre cuberdon (chauffé) n'a qu'un sucre et du miel. Delightful Creators cuit le riz seul sur brûleur : l'appareil à tarte au riz reste froid. Create et Create: Food remplissent des bouteilles de miel, de lait, de thé ; Create Confectionery a son propre chocolat chaud (fluide différent) : notre bouteille ne se recoupe avec aucune.
 
+Huile usagée (M20, scan du 26/10/2026) : Create Diesel Generators 1.3.15 a bien `createdieselgenerators:biodiesel` (tag `c:biodiesel`), fait par leur Mixer d'huile végétale et d'éthanol, fluides seuls. Notre recette à l'huile usagée, à l'éthanol et au sel ne se recoupe pas avec elle (elle a un item, et notre fluide).
+
 À noter pour les jalons suivants : le lacquemant (M18, farine + lait + beurre) et le speculoos (M19, farine + cassonade + beurre + épices) recoupent la pâte au beurre de Create: Food ; ils devront avoir plus d'items qu'elle ou partir d'un autre ingrédient.
 
 ### Botany Pots (cultures v2)

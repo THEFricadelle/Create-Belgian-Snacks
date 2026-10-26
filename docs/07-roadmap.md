@@ -140,6 +140,11 @@ Jalons M10 à M23 (carte belge complète, retrait du mod sans casse) : voir `13-
 - [x] Durées au Mixer vérifiées dans les sources et sur un vrai Mixer
 - **Accepté si** : une brasserie automatique sort les 4 bières. ✅ (recettes et Mixer réels testés ; la ligne complète malt → bière sera montrée en Ponder au M21)
 
+### M20 — Huile usagée ✅ (26/10/2026)
+- [x] 2e réservoir de la Friteuse, blocage, capability (graisse dedans, huile usagée dehors), huile usagée gardée à la casse, sauvegardes v1
+- [x] Filtre, filtration au Mixer, filtre usagé combustible, biodiesel avec Diesel Generators
+- **Accepté si** : ratio 0 = comportement v1 exact ; ligne friture + filtration en boucle fermée sans intervention. ✅ (`ratioZeroIsTheV1Fryer`, `UsedOilLoopGameTests` sur 2400 ticks ; l'heure complète est à la checklist manuelle)
+
 ### M19 — Douceurs ✅ (26/10/2026)
 - [x] 22 douceurs, 38 items, 2 fluides (pâte de speculoos, chocolat chaud) : speculoos, cuberdon, pralines et ballotin, croustillons, couque de Dinant, trois tartes, craquelin, cramique, pain à la grecque, merveilleux, bouquettes, dame blanche, babelutte, chocolat chaud ; gaufre et pistolet au speculoos
 - **Accepté si** : chaque douceur sort d'une ligne automatique. ✅ (recettes et bassins testés ; tartes au sucre et mattentaart, merveilleux et pralines sur de vraies lignes)
