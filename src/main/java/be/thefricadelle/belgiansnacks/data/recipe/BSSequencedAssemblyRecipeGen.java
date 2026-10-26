@@ -169,8 +169,37 @@ public class BSSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
             .addStep(PressingRecipe::new, rb -> rb)
             .build(output));
 
+    // v2 sweets (section 5.12): two more tarts on the shared incomplete_tart, and the merveilleux.
+    GeneratedRecipe
+        RAW_TARTE_AU_SUCRE = tart("raw_tarte_au_sucre", be.thefricadelle.belgiansnacks.registry.BSItems.CASSONADE.get(),
+            be.thefricadelle.belgiansnacks.registry.BSSweets.RAW_TARTE_AU_SUCRE.get()),
+        RAW_MATTENTAART = tart("raw_mattentaart", be.thefricadelle.belgiansnacks.registry.BSItems.MATON.get(),
+            be.thefricadelle.belgiansnacks.registry.BSSweets.RAW_MATTENTAART.get()),
+
+        MERVEILLEUX = register(output -> new SequencedAssemblyRecipeBuilder(asResource("merveilleux"))
+            .require(BSItems.MERINGUE.get())
+            .transitionTo(be.thefricadelle.belgiansnacks.registry.BSSweets.INCOMPLETE_MERVEILLEUX.get())
+            .addOutput(be.thefricadelle.belgiansnacks.registry.BSSweets.MERVEILLEUX.get(), 1)
+            .loops(1)
+            .addStep(FillingRecipe::new, rb -> rb.require(BSFluids.CREAM.get(), 100))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSItems.MERINGUE.get()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(BSItems.CHOCOLATE_SHAVINGS.get()))
+            .build(output));
+
     public BSSequencedAssemblyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+    }
+
+    // A tart shell, its filling at a deployer, then an egg to bind it.
+    private GeneratedRecipe tart(String name, Item filling, Item raw) {
+        return register(output -> new SequencedAssemblyRecipeBuilder(asResource(name))
+            .require(BSDishes.TART_SHELL.get())
+            .transitionTo(BSDishes.INCOMPLETE_TART.get())
+            .addOutput(raw, 1)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(filling))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(Tags.Items.EGGS))
+            .build(output));
     }
 
     // Egg, then crumbs, then the press: a filling or a strip becomes a raw breaded snack.

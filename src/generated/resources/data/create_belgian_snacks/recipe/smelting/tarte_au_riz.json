@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "create_belgian_snacks:raw_tarte_au_riz"
+  },
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:tarte_au_riz"
+  }
+}

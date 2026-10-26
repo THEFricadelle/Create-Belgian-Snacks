@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "create_belgian_snacks:pralines"
+    },
+    "X": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "PXP",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "create_belgian_snacks:ballotin"
+  }
+}

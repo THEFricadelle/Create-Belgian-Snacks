@@ -76,6 +76,13 @@ public class BSFryingRecipeGen extends StandardProcessingRecipeGen<FryingRecipe>
 
     public BSFryingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
+        // v2 sweets (section 5.12): fried dough balls and buckwheat pancakes.
+        create("croustillons", b -> b.require(be.thefricadelle.belgiansnacks.registry.BSSweets.CROUSTILLON_DOUGH.get())
+            .require(BSTags.FRYING_OILS, 10).output(be.thefricadelle.belgiansnacks.registry.BSSweets.CROUSTILLONS.get())
+            .duration(100).requiresHeat(HeatCondition.HEATED));
+        create("bouquette", b -> b.require(be.thefricadelle.belgiansnacks.registry.BSSweets.BOUQUETTE_BATTER.get())
+            .require(BSTags.FRYING_OILS, 10).output(be.thefricadelle.belgiansnacks.registry.BSSweets.BOUQUETTE.get())
+            .duration(100).requiresHeat(HeatCondition.HEATED));
         // v2 friterie snacks (section 5.10): one fry each, heated, any frying fat.
         BSSnacks.FRIED.forEach((raw, fried) -> create(fried.getId().getPath(), b -> b
             .require(raw.get())

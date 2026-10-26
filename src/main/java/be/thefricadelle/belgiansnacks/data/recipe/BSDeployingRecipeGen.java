@@ -18,6 +18,7 @@ import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSWaffles;
+import be.thefricadelle.belgiansnacks.registry.BSSweets;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -83,6 +84,19 @@ public class BSDeployingRecipeGen extends DeployingRecipeGen {
     // v2 waffles (section 5.6).
     GeneratedRecipe BRUSSELS_WAFFLE_SUGARED = create("brussels_waffle_sugared", b -> b
         .require(BSWaffles.BRUSSELS_WAFFLE.get()).require(BSTags.POWDERED_SUGARS).output(BSWaffles.BRUSSELS_WAFFLE_SUGARED.get()));
+
+    // v2 sweets (section 5.12).
+    GeneratedRecipe CROUSTILLONS_SUGARED = create("croustillons_sugared", b -> b
+        .require(BSSweets.CROUSTILLONS.get()).require(BSTags.POWDERED_SUGARS).output(BSSweets.CROUSTILLONS_SUGARED.get()));
+
+    GeneratedRecipe BOUQUETTE_CASSONADE = create("bouquette_cassonade", b -> b
+        .require(BSSweets.BOUQUETTE.get()).require(BSItems.CASSONADE.get()).output(BSSweets.BOUQUETTE_CASSONADE.get()));
+
+    GeneratedRecipe RAW_TARTE_AU_RIZ = create("raw_tarte_au_riz", b -> b
+        .require(BSDishes.TART_SHELL.get()).require(BSSweets.RICE_FILLING.get()).output(BSSweets.RAW_TARTE_AU_RIZ.get()));
+
+    GeneratedRecipe RAW_PAIN_A_LA_GRECQUE = create("raw_pain_a_la_grecque", b -> b
+        .require(BSSweets.FLAT_BRIOCHE.get()).require(BSItems.CASSONADE.get()).output(BSSweets.RAW_PAIN_A_LA_GRECQUE.get()));
 
     public BSDeployingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);

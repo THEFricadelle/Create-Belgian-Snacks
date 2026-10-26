@@ -20,6 +20,8 @@
     "create_belgian_snacks:blonde_beer_bucket",
     "create_belgian_snacks:brown_beer_bucket",
     "create_belgian_snacks:gueuze_bucket",
-    "create_belgian_snacks:kriek_bucket"
+    "create_belgian_snacks:kriek_bucket",
+    "create_belgian_snacks:speculoos_spread_bucket",
+    "create_belgian_snacks:hot_chocolate_bucket"
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:buckwheat_flour"
+    },
+    {
+      "item": "create_belgian_snacks:brewers_yeast"
+    },
+    {
+      "item": "create_belgian_snacks:raisins"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 250,
+      "tag": "c:milk"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "id": "create_belgian_snacks:bouquette_batter"
+    }
+  ]
+}

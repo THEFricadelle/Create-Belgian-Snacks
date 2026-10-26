@@ -97,6 +97,25 @@ public final class BSFoods {
     public static final FoodProperties BRUSSELS_WAFFLE_CHOCOLATE = snack(8, 0.8f);
     public static final FoodProperties LACQUEMANT = snack(6, 0.7f);
 
+    // v2 sweets (M19, provisional): a bite, a pastry, a big pastry, a tart, a box of pralines.
+    public static final FoodProperties SMALL_SWEET = snack(2, 0.3f);
+    public static final FoodProperties PASTRY = snack(4, 0.4f);
+    public static final FoodProperties PASTRY_LARGE = snack(6, 0.6f);
+    public static final FoodProperties TART = snack(8, 0.8f);
+    public static final FoodProperties BALLOTIN = snack(12, 1.0f);
+    public static final FoodProperties HOT_CHOCOLATE = snack(4, 0.6f);
+
+    /** The same food, drunk from a glass bottle that comes back. */
+    public static FoodProperties inBottle(FoodProperties food) {
+        return new FoodProperties(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.eatSeconds(),
+            java.util.Optional.of(new net.minecraft.world.item.ItemStack(Items.GLASS_BOTTLE)), food.effects());
+    }
+
+    /** The same food, taking {@code seconds} to eat (1.6 s by default). */
+    public static FoodProperties slow(FoodProperties food, float seconds) {
+        return new FoodProperties(food.nutrition(), food.saturation(), food.canAlwaysEat(), seconds, food.usingConvertsTo(), food.effects());
+    }
+
     /** The same food, eaten from a bowl that comes back. */
     public static FoodProperties inBowl(FoodProperties food) {
         return new FoodProperties(food.nutrition(), food.saturation(), food.canAlwaysEat(), food.eatSeconds(),

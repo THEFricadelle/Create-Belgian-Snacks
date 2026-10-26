@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:cocoa_beans",
+    {
+      "id": "#c:nuts",
+      "required": false
+    }
+  ]
+}

@@ -167,6 +167,22 @@
     {
       "type": "minecraft:single",
       "resource": "create_belgian_snacks:fluid/kriek_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/speculoos_spread_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/speculoos_spread_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/hot_chocolate_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "create_belgian_snacks:fluid/hot_chocolate_flow"
     }
   ]
 }

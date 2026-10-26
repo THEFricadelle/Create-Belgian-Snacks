@@ -28,6 +28,8 @@ public class BSCrushingRecipeGen extends CrushingRecipeGen {
             .output(0.5f, BSItems.BEEF_TALLOW.get(), 1)),
         CHICKEN = create("chicken", b -> b.duration(150).require(Items.CHICKEN).output(BSItems.MINCED_CHICKEN.get(), 2)),
         BREAD = create("bread", b -> b.duration(100).require(Items.BREAD).output(BSItems.BREAD_CRUMBS.get(), 3)),
+        SPECULOOS_CRUMBS = create("speculoos_crumbs", b -> b.duration(100).require(be.thefricadelle.belgiansnacks.registry.BSSweets.SPECULOOS.get())
+            .output(be.thefricadelle.belgiansnacks.registry.BSSweets.SPECULOOS_CRUMBS.get(), 2)),
         CHOCOLATE_SHAVINGS = create("chocolate_shavings", b -> b.duration(100).require(AllItems.BAR_OF_CHOCOLATE.get())
             .output(BSItems.CHOCOLATE_SHAVINGS.get(), 2));
 

@@ -1,0 +1,31 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:speculoos_crumbs"
+    },
+    {
+      "item": "create_belgian_snacks:speculoos_crumbs"
+    },
+    {
+      "item": "create_belgian_snacks:speculoos_crumbs"
+    },
+    {
+      "item": "create_belgian_snacks:speculoos_crumbs"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 100,
+      "tag": "create_belgian_snacks:frying_oils"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_belgian_snacks:speculoos_spread"
+    }
+  ]
+}

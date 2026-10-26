@@ -25,6 +25,7 @@ import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
 import be.thefricadelle.belgiansnacks.registry.BSWaffles;
+import be.thefricadelle.belgiansnacks.registry.BSSweets;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -391,6 +392,59 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             .require(Tags.Fluids.MILK, 250)
             .output(BSWaffles.LACQUEMANT_BATTER.get(), 2)),
 
+        // v2 sweets (section 5.12). No egg (rule 4); one sugar at most on a burner, where Create: Food
+        // turns two sugars into caramel; the rice filling stays cold, where Delightful Creators cooks rice.
+        SPECULOOS_DOUGH = create("speculoos_dough", b -> b
+            .require(AllItems.WHEAT_FLOUR.get()).require(BSItems.CASSONADE.get()).require(BSTags.BUTTERS).require(BSItems.BELGIAN_SPICES.get())
+            .output(BSSweets.SPECULOOS_DOUGH.get(), 4)),
+
+        SPECULOOS_SPREAD = create("speculoos_spread", b -> b
+            .require(BSSweets.SPECULOOS_CRUMBS.get()).require(BSSweets.SPECULOOS_CRUMBS.get()).require(BSSweets.SPECULOOS_CRUMBS.get())
+            .require(BSSweets.SPECULOOS_CRUMBS.get()).require(Items.SUGAR).require(BSTags.FRYING_OILS, 100)
+            .output(BSFluids.SPECULOOS_SPREAD.get().getSource(), 250)),
+
+        CUBERDON = create("cuberdon", b -> cuberdon(b.require(BSTags.RASPBERRIES).require(BSTags.RASPBERRIES))
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.RASPBERRIES)))),
+        CUBERDON_FROM_SWEET_BERRIES = create("cuberdon_from_sweet_berries", b -> cuberdon(b.require(Items.SWEET_BERRIES).require(Items.SWEET_BERRIES))
+            .withCondition(new TagEmptyCondition(BSTags.RASPBERRIES))),
+
+        CROUSTILLON_DOUGH = create("croustillon_dough", b -> b
+            .require(AllItems.WHEAT_FLOUR.get()).require(Items.SUGAR).require(BSItems.BREWERS_YEAST.get()).require(BSFluids.BLONDE_BEER.get(), 250)
+            .output(BSSweets.CROUSTILLON_DOUGH.get(), 4)),
+
+        COUQUE_DOUGH = create("couque_dough", b -> b
+            .require(AllItems.WHEAT_FLOUR.get()).require(Tags.Fluids.HONEY, 250)
+            .output(BSSweets.COUQUE_DOUGH.get())),
+
+        RICE_FILLING = create("rice_filling", b -> b
+            .require(BSTags.RICE).require(Items.SUGAR).require(Tags.Fluids.MILK, 250)
+            .output(BSSweets.RICE_FILLING.get())
+            .duration(600)
+            .withCondition(new NotCondition(new TagEmptyCondition(BSTags.RICE)))),
+
+        RAW_CRAQUELIN = create("raw_craquelin", b -> b
+            .require(BSItems.BRIOCHE_DOUGH.get()).require(BSItems.PEARL_SUGAR.get()).require(BSItems.PEARL_SUGAR.get())
+            .output(BSSweets.RAW_CRAQUELIN.get())),
+
+        RAW_CRAMIQUE = create("raw_cramique", b -> b
+            .require(BSItems.BRIOCHE_DOUGH.get()).require(BSItems.RAISINS.get()).require(BSItems.RAISINS.get())
+            .output(BSSweets.RAW_CRAMIQUE.get())),
+
+        BOUQUETTE_BATTER = create("bouquette_batter", b -> b
+            .require(BSCrops.BUCKWHEAT_FLOUR.get()).require(BSItems.BREWERS_YEAST.get()).require(BSItems.RAISINS.get())
+            .require(Tags.Fluids.MILK, 250)
+            .output(BSSweets.BOUQUETTE_BATTER.get(), 4)),
+
+        BABELUTTE = create("babelutte", b -> b
+            .require(BSItems.CASSONADE.get()).require(BSItems.CASSONADE.get()).require(BSTags.BUTTERS)
+            .output(BSSweets.BABELUTTE.get(), 4)
+            .requiresHeat(HeatCondition.HEATED)),
+
+        HOT_CHOCOLATE = create("hot_chocolate", b -> b
+            .require(Items.SUGAR).require(Tags.Fluids.MILK, 250).require(com.simibubi.create.AllFluids.CHOCOLATE.get(), 100)
+            .output(BSFluids.HOT_CHOCOLATE.get().getSource(), 250)
+            .requiresHeat(HeatCondition.HEATED)),
+
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
             .output(BSItems.APPLE_COMPOTE.get())
@@ -423,6 +477,12 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
     private static StandardProcessingRecipe.Builder<MixingRecipe> lapin(StandardProcessingRecipe.Builder<MixingRecipe> b) {
         return b.require(Items.RABBIT).require(BSTags.ONIONS).require(Items.BOWL).require(BSFluids.GUEUZE.get(), 250)
             .output(BSDishes.LAPIN_A_LA_GUEUZE.get())
+            .requiresHeat(HeatCondition.HEATED);
+    }
+
+    private static StandardProcessingRecipe.Builder<MixingRecipe> cuberdon(StandardProcessingRecipe.Builder<MixingRecipe> b) {
+        return b.require(Items.SUGAR).require(Tags.Fluids.HONEY, 100)
+            .output(BSSweets.CUBERDON.get(), 4)
             .requiresHeat(HeatCondition.HEATED);
     }
 

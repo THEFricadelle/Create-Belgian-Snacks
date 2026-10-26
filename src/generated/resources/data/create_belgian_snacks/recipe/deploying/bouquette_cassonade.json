@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:bouquette"
+    },
+    {
+      "item": "create_belgian_snacks:cassonade"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:bouquette_cassonade"
+    }
+  ]
+}

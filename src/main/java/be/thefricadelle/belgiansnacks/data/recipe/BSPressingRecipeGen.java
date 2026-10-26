@@ -17,6 +17,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSSweets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.ItemLike;
@@ -43,6 +44,9 @@ public class BSPressingRecipeGen extends PressingRecipeGen {
         LOEMPIA_WRAPPER = press("loempia_wrapper", AllItems.DOUGH.get(), BSSnacks.LOEMPIA_WRAPPER.get()),
         HOT_DOG_BUN_DOUGH = press("hot_dog_bun_dough", BSItems.BURGER_BUN_DOUGH.get(), BSSnacks.HOT_DOG_BUN_DOUGH.get()),
         TART_SHELL = press("tart_shell", BSItems.PUFF_PASTRY.get(), BSDishes.TART_SHELL.get()),
+        RAW_SPECULOOS = press("raw_speculoos", BSSweets.SPECULOOS_DOUGH.get(), BSSweets.RAW_SPECULOOS.get()),
+        RAW_COUQUE = press("raw_couque", BSSweets.COUQUE_DOUGH.get(), BSSweets.RAW_COUQUE.get()),
+        FLAT_BRIOCHE = press("flat_brioche", BSItems.BRIOCHE_DOUGH.get(), BSSweets.FLAT_BRIOCHE.get()),
         RAW_PATTY = create("raw_patty", b -> b.require(BSTags.MINCED_BEEF).output(BSSnacks.RAW_PATTY.get()));
 
     public BSPressingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

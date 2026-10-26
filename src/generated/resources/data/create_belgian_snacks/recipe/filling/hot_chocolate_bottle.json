@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:hot_chocolate"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:hot_chocolate_bottle"
+    }
+  ]
+}

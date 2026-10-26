@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:flat_brioche"
+    },
+    {
+      "item": "create_belgian_snacks:cassonade"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_pain_a_la_grecque"
+    }
+  ]
+}

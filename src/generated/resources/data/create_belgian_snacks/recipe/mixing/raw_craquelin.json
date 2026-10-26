@@ -1,0 +1,19 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:brioche_dough"
+    },
+    {
+      "item": "create_belgian_snacks:pearl_sugar"
+    },
+    {
+      "item": "create_belgian_snacks:pearl_sugar"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_craquelin"
+    }
+  ]
+}

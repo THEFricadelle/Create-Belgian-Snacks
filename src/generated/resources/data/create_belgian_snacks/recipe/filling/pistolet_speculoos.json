@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:pistolet"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create_belgian_snacks:speculoos_spread"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:pistolet_speculoos"
+    }
+  ]
+}

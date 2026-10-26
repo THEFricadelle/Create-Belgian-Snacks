@@ -466,6 +466,8 @@ LIQUIDS = {
     'tartare': ['A8A47C', 'CECAA0', 'E8E6C4', 'FAFAE4'],
     'pickles': ['7A6A0E', 'A4961C', 'CCBC30', 'EEE070'],
     'brazil': ['A85E14', 'D07E24', 'EEA040', 'FFCE84'],
+    'speculoos_spread': ['6E3A12', '9A5620', 'BC7432', 'DC9850'],
+    'hot_chocolate': ['3A1E0C', '5A3018', '7A4424', '9A6038'],
 }
 CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin', 'tartare', 'pickles', 'brazil']
 
@@ -1005,6 +1007,118 @@ def waffle_iron_faces():
     return out
 
 
+# v2 sweets (docs/12): biscuits are flat slabs, sweets small cones and cubes, pastries balls and rolls,
+# tarts the M17 tart shape, the hot chocolate a glass bottle.
+SPECULOOS_BROWN = ['6E3A12', '9A5620', 'BC7432', 'DC9850']
+CHOC = ['2E180A', '42240E', '5A3418', '7A4E2C']
+GLASS = ['8AA8B8', 'B8D0DC', 'DCEAF0', 'FFFFFF']
+
+
+def biscuit(palette, pattern=None):
+    cells = {(x, y) for x in range(3, 13) for y in range(5, 12)}
+    px = shape(cells, palette)
+    if pattern:
+        for x in range(4, 12):
+            for y in range(6, 11):
+                if (x + y) % 3 == 0:
+                    px[y][x] = colour(pattern)
+    return px
+
+
+def cones(palette, tip):
+    px = canvas()
+    for cx in (5, 11):
+        cells = {(x, y) for y in range(5, 13) for x in range(16) if abs(x + 0.5 - cx) <= (y - 4.5) * 0.45 + 0.6}
+        shape(cells, palette, px)
+        dots(px, [(cx, 5)], tip)
+    return px
+
+
+def pralines(palette, mark=None):
+    px = canvas()
+    for x0, y0 in [(2, 8), (9, 8), (6, 3)]:
+        cells = {(x, y) for x in range(x0, x0 + 5) for y in range(y0, y0 + 4)}
+        shape(cells, palette, px)
+        if mark:
+            dots(px, [(x0 + 2, y0 + 1)], mark)
+    return px
+
+
+def ballotin():
+    px = shape({(x, y) for x in range(2, 14) for y in range(5, 14)}, ['B8A070', 'DCC898', 'F0E2C0', 'FFFAE8'])
+    for x in range(2, 14):
+        px[8][x] = colour('C8352B')
+    for y in range(5, 14):
+        px[y][8] = colour('C8352B')
+    dots(px, [(7, 4), (9, 4), (8, 3)], 'C8352B')
+    return px
+
+
+def bottle(liquid):
+    px = canvas()
+    shape({(x, y) for x in range(7, 10) for y in range(2, 6)}, GLASS, px)
+    shape(ellipse(8, 10.5, 4.6, 4.6), GLASS, px)
+    for x, y in ellipse(8, 11, 3.4, 3.2):
+        if y >= 9:
+            px[y][x] = colour(liquid[2] if (x + y) % 4 else liquid[3])
+    dots(px, [(6, 8), (6, 9)], 'FFFFFF')
+    return px
+
+
+def sweets():
+    BRIOCHE = ['8A5A1A', 'C08A30', 'E0AC4C', 'FAD278']
+    BRIOCHE_RAW = ['B8A060', 'D8C484', 'ECDCA8', 'FAF0D4']
+    out = {
+        'speculoos_dough': paste(['8A5A28', 'B07A40', 'CC985A', 'E8B87C'], 0),
+        'raw_speculoos': biscuit(['A07848', 'C49A64', 'DCB680', 'F0D0A0'], 'B08856'),
+        'speculoos': biscuit(SPECULOOS_BROWN, '8A4818'),
+        'speculoos_crumbs': heap(SPECULOOS_BROWN),
+        'pistolet_speculoos': roll(CRUST, crease='9A5620'),
+        'brussels_waffle_speculoos': waffle(WAFFLE, deep=True),
+        'cuberdon': cones(['4A1838', '6E2450', '8E346A', 'B85A90'], 'D890B8'),
+        'praline': pralines(CHOC, 'C8A070'),
+        'praline_kriek': pralines(CHOC, 'B0283A'),
+        'ballotin': ballotin(),
+        'babelutte': biscuit(['8A5A18', 'B88030', 'D8A048', 'F4C470']),
+        'croustillon_dough': paste(['B8A468', 'D8C48C', 'ECDCAE', 'FFF6D8'], 0),
+        'croustillons': nuggets(['8A5A18', 'C08830', 'E0AA4C', 'FFD27A']),
+        'croustillons_sugared': nuggets(['A88A58', 'D8C090', 'F0E0C0', 'FFFFFF']),
+        'bouquette_batter': bowl(['5A4030', '7A5A44', '9A7860', 'BC9C80']),
+        'bouquette': disc(['4A3020', '6E4A32', '8E6448', 'B08864'], spots='2A1810'),
+        'bouquette_cassonade': disc(['4A3020', '6E4A32', '8E6448', 'B08864'], spots='C98C4A'),
+        'couque_dough': paste(['8A5A20', 'A8763A', 'C49450', 'DCB270'], 0),
+        'raw_couque': biscuit(['A8864C', 'C8A468', 'E0C088', 'F4DCAC'], 'B8945C'),
+        'couque_de_dinant': biscuit(['5A3010', '7E4618', '9E5E24', 'C0823C'], '4A2408'),
+        'rice_filling': bowl(['C8C0A8', 'E0DAC8', 'F2EEE2', 'FFFFFA']),
+        'raw_tarte_au_riz': tart(['C8C0A8', 'E0DAC8', 'F2EEE2', 'FFFFFA']),
+        'tarte_au_riz': tart(['B8A060', 'D8C484', 'ECDCA8', 'FAF0D4'], 'A87A20'),
+        'raw_tarte_au_sucre': tart(['8A5A20', 'A8763A', 'C49450', 'DCB270']),
+        'tarte_au_sucre': tart(['5E3714', '875323', 'A86A2C', 'C98C4A'], 'E8B06A'),
+        'raw_mattentaart': tart(['C4BEB0', 'E0DCD2', 'F4F0E6', 'FFFFFF']),
+        'mattentaart': tart(['A8864C', 'C8A468', 'E0C088', 'F4DCAC'], '7A5428'),
+        'raw_craquelin': roll(BRIOCHE_RAW, crease='FFFFFF'),
+        'craquelin': roll(BRIOCHE, crease='FFFFFF'),
+        'raw_cramique': roll(BRIOCHE_RAW, crease='3A2030'),
+        'cramique': roll(BRIOCHE, crease='3A2030'),
+        'flat_brioche': biscuit(BRIOCHE_RAW),
+        'raw_pain_a_la_grecque': biscuit(BRIOCHE_RAW, 'A86A2C'),
+        'pain_a_la_grecque': biscuit(BRIOCHE, '875323'),
+        'incomplete_merveilleux': peak(['C8C0A8', 'E0DAC8', 'F2EEE2', 'FFFFFA']),
+        'merveilleux': peak(['C8C0A8', 'E0DAC8', 'F2EEE2', 'FFFFFA']),
+        'dame_blanche': scoop(['D6CCAE', 'ECE4C8', 'FAF2D8', 'FFFFFF']),
+        'hot_chocolate_bottle': bottle(['3A1E0C', '5A3018', '7A4424', '9A6038']),
+    }
+    dots(out['merveilleux'], [(6, 8), (8, 6), (9, 10), (7, 11), (10, 8)], CHOC[1])
+    # Chocolate poured over the ice cream.
+    for x in range(5, 12):
+        out['dame_blanche'][4 + (x % 2)][x] = colour(CHOC[2])
+    # Speculoos spread across the waffle.
+    for x in range(3, 13):
+        out['brussels_waffle_speculoos'][5][x] = colour(SPECULOOS_BROWN[2])
+        out['brussels_waffle_speculoos'][6 + (x % 2)][x] = colour(SPECULOOS_BROWN[1])
+    return {gen.ITEM_DIR / f'{name}.png': px for name, px in out.items()}
+
+
 def artwork():
     out = {}
     for name, palette, topped, thick, unfinished in [
@@ -1053,6 +1167,7 @@ def artwork():
     out.update(friterie())
     out.update(dishes())
     out.update(waffles())
+    out.update(sweets())
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in waffle_iron_faces().items()})

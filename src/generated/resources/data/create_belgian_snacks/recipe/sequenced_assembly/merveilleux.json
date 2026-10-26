@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:meringue"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:merveilleux"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_merveilleux"
+        },
+        {
+          "type": "neoforge:single",
+          "amount": 100,
+          "fluid": "create_belgian_snacks:cream"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_merveilleux"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_merveilleux"
+        },
+        {
+          "item": "create_belgian_snacks:meringue"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_merveilleux"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_merveilleux"
+        },
+        {
+          "item": "create_belgian_snacks:chocolate_shavings"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_merveilleux"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_merveilleux"
+  }
+}

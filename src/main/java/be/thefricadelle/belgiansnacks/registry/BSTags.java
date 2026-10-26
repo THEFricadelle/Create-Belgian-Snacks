@@ -54,6 +54,12 @@ public final class BSTags {
     // v2 dishes (section 5.11): any onion, or our leek, so the tag is never empty and needs no twin.
     public static final TagKey<Item> ONIONS = item("onions");
     public static final TagKey<Item> PRUNES = item("prunes");
+    // v2 sweets (section 5.12).
+    public static final TagKey<Item> RASPBERRIES = item("raspberries");
+    public static final TagKey<Item> PRALINE_FILLINGS = item("praline_fillings");
+    public static final TagKey<Item> PRALINES = item("pralines");
+    // No fallback: without rice there is no rice tart (RecipeFilesTest.NO_FALLBACK).
+    public static final TagKey<Item> RICE = item("rice");
     // Fried one per batch instead of a whole stack (tier 3).
     public static final TagKey<Item> FRYER_ONE_AT_A_TIME = item("fryer/one_at_a_time");
 
@@ -126,6 +132,9 @@ public final class BSTags {
                 .addOptionalTag(common("foods/pineapple").location());
             prov.addTag(ONIONS).add(BSCrops.LEEK.get()).addOptionalTag(C_ONIONS.location());
             prov.addTag(PRUNES).addOptionalTag(common("foods/plum").location()).addOptionalTag(common("crops/plum").location());
+            prov.addTag(RASPBERRIES).addOptionalTag(common("foods/raspberry").location()).addOptionalTag(common("crops/raspberry").location());
+            prov.addTag(PRALINE_FILLINGS).add(Items.COCOA_BEANS).addOptionalTag(common("nuts").location());
+            prov.addTag(RICE).addOptionalTag(C_RICE.location());
             prov.addTag(GRAPES).addOptionalTag(common("foods/grape").location()).addOptionalTag(common("crops/grape").location());
             prov.addTag(Tags.Items.FOODS).addTag(C_FOODS_CHEESE);
             // My Nether's Delight (Arcadia) grows bullet peppers.

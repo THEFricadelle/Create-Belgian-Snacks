@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "tag": "create_belgian_snacks:vanilla_ice_creams"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 50,
+      "fluid": "create:chocolate"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:dame_blanche"
+    }
+  ]
+}

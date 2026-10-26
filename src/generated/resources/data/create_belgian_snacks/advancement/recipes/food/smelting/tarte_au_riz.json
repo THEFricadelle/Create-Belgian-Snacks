@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tarte_au_riz": {
+      "conditions": {
+        "items": [
+          {
+            "items": "create_belgian_snacks:tarte_au_riz"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "create_belgian_snacks:smelting/tarte_au_riz"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tarte_au_riz"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "create_belgian_snacks:smelting/tarte_au_riz"
+    ]
+  }
+}

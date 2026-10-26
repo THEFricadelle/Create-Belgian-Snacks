@@ -1,0 +1,48 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create_belgian_snacks:tart_shell"
+  },
+  "results": [
+    {
+      "id": "create_belgian_snacks:raw_tarte_au_sucre"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_tart"
+        },
+        {
+          "item": "create_belgian_snacks:cassonade"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_tart"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_belgian_snacks:incomplete_tart"
+        },
+        {
+          "tag": "c:eggs"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_belgian_snacks:incomplete_tart"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_belgian_snacks:incomplete_tart"
+  }
+}
