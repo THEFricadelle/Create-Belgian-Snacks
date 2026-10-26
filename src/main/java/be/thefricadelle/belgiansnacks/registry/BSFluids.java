@@ -56,12 +56,14 @@ public final class BSFluids {
         KRIEK = fluid("kriek", "Kriek", MapColor.CRIMSON_STEM),
         // v2 sweets (section 5.12).
         SPECULOOS_SPREAD = fluid("speculoos_spread", "Speculoos Spread", MapColor.TERRACOTTA_ORANGE),
-        HOT_CHOCOLATE = fluid("hot_chocolate", "Hot Chocolate", MapColor.COLOR_BROWN);
+        HOT_CHOCOLATE = fluid("hot_chocolate", "Hot Chocolate", MapColor.COLOR_BROWN),
+        // v2 (section 6.2): what the fryer gives back; not a frying fat, filter it first.
+        USED_FRYING_OIL = fluid("used_frying_oil", "Used Frying Oil", MapColor.TERRACOTTA_BROWN);
 
     /** Every fluid of the mod, in registration order. */
     public static final List<FluidEntry<BaseFlowingFluid.Flowing>> ALL =
         List.of(FRYING_OIL, MELTED_BEEF_TALLOW, MAYONNAISE, CURRY_KETCHUP, ANDALOUSE, SAMOURAI, AMERICAINE, TARTARE, PICKLES, BRAZIL,
-            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN, MUSTARD, WORT, BLONDE_BEER, BROWN_BEER, GUEUZE, KRIEK, SPECULOOS_SPREAD, HOT_CHOCOLATE);
+            CREAM, BECHAMEL, LIEGE_SYRUP, VINEGAR, SAUCE_LAPIN, MUSTARD, WORT, BLONDE_BEER, BROWN_BEER, GUEUZE, KRIEK, SPECULOOS_SPREAD, HOT_CHOCOLATE, USED_FRYING_OIL);
 
     /** The sauces a Spout puts on a cone, by the name their cones carry (BSItems.CONE_SAUCES). */
     public static final Map<String, FluidEntry<BaseFlowingFluid.Flowing>> CONE_SAUCES = orderedSauces();

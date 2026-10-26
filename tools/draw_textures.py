@@ -468,6 +468,7 @@ LIQUIDS = {
     'brazil': ['A85E14', 'D07E24', 'EEA040', 'FFCE84'],
     'speculoos_spread': ['6E3A12', '9A5620', 'BC7432', 'DC9850'],
     'hot_chocolate': ['3A1E0C', '5A3018', '7A4424', '9A6038'],
+    'used_frying_oil': ['2E2410', '45381A', '5B4A1E', '7E6A34'],
 }
 CONE_SAUCES = ['mayonnaise', 'curry_ketchup', 'andalouse', 'samourai', 'americaine', 'sauce_lapin', 'tartare', 'pickles', 'brazil']
 
@@ -1168,6 +1169,12 @@ def artwork():
     out.update(dishes())
     out.update(waffles())
     out.update(sweets())
+    # v2 used oil (docs/12): a round paper filter around its charcoal, clean or soaked brown.
+    for name, paper, centre in [('oil_filter', ['A8A49A', 'D4D0C6', 'ECEAE2', 'FFFFFF'], '2A2A2E'),
+                                ('used_oil_filter', ['5E4A24', '7E6638', '9A8250', 'B4A070'], '1A1610')]:
+        px = disc(paper)
+        dots(px, [(7, 10), (8, 10), (9, 10), (8, 9)], centre)
+        out[gen.ITEM_DIR / f'{name}.png'] = px
     out.update(crop_stages())
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in blocks().items()})
     out.update({gen.BLOCK_DIR / f'{name}.png': px for name, px in waffle_iron_faces().items()})

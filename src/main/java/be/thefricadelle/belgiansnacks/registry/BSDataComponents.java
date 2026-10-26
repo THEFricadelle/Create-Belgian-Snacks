@@ -27,6 +27,10 @@ public final class BSDataComponents {
     public static final Supplier<DataComponentType<SimpleFluidContent>> FRYER_FLUID = REGISTER.registerComponentType("fryer_fluid",
         builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
 
+    // The used oil a broken fryer carries in its item (v2, section 6.2).
+    public static final Supplier<DataComponentType<SimpleFluidContent>> FRYER_USED_OIL = REGISTER.registerComponentType("fryer_used_oil",
+        builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
+
     // A broken supreme grinder's collection, restored when it is placed again (D10).
     public static final Supplier<DataComponentType<GrinderContents>> GRINDER_CONTENTS = REGISTER.registerComponentType("grinder_contents",
         builder -> builder.persistent(GrinderContents.CODEC).networkSynchronized(GrinderContents.STREAM_CODEC));

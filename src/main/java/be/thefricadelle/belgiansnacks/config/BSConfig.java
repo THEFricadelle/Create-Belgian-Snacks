@@ -35,6 +35,8 @@ public final class BSConfig {
     private static final ModConfigSpec.BooleanValue UNINSTALL_PREPARE;
     private static final ModConfigSpec.IntValue CROPS_DARK_MAX_LIGHT;
     private static final ModConfigSpec.IntValue WAFFLE_IRON_MAX_BATCH;
+    private static final ModConfigSpec.DoubleValue FRYER_USED_OIL_RATIO;
+    private static final ModConfigSpec.IntValue FRYER_USED_OIL_CAPACITY;
     private static final ModConfigSpec.DoubleValue WAFFLE_IRON_SPEED_MULTIPLIER;
 
     static {
@@ -49,6 +51,13 @@ public final class BSConfig {
         FRYER_MAX_BATCH = builder
             .comment("Items fried together in one batch. Items tagged create_belgian_snacks:fryer/one_at_a_time always fry alone.")
             .defineInRange("maxBatch", 16, 1, 64);
+        FRYER_USED_OIL_RATIO = builder
+            .comment("Share of the fat used that comes back as used frying oil, to drain and filter (v2). 0 keeps the v1 fryer:",
+                "no used oil, and pipes drain the fat.")
+            .defineInRange("usedOilRatio", 0.5, 0.0, 1.0);
+        FRYER_USED_OIL_CAPACITY = builder
+            .comment("Used oil tank capacity in mB. A full tank stops the fryer. Applies to fryers loaded after a change.")
+            .defineInRange("usedOilCapacity", 2000, 100, 64000);
         builder.pop();
 
         // v2 (section 6.1).
@@ -171,6 +180,14 @@ public final class BSConfig {
 
     public static double grinderStressImpact() {
         return SPEC.isLoaded() ? GRINDER_STRESS_IMPACT.get() : GRINDER_STRESS_IMPACT.getDefault();
+    }
+
+    public static double fryerUsedOilRatio() {
+        return SPEC.isLoaded() ? FRYER_USED_OIL_RATIO.get() : FRYER_USED_OIL_RATIO.getDefault();
+    }
+
+    public static int fryerUsedOilCapacity() {
+        return SPEC.isLoaded() ? FRYER_USED_OIL_CAPACITY.get() : FRYER_USED_OIL_CAPACITY.getDefault();
     }
 
     public static int waffleIronMaxBatch() {

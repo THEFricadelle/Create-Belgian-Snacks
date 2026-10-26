@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_belgian_snacks:oil_filter"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "create_belgian_snacks:used_frying_oil"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_belgian_snacks:used_oil_filter"
+    },
+    {
+      "amount": 800,
+      "id": "create_belgian_snacks:frying_oil"
+    }
+  ]
+}

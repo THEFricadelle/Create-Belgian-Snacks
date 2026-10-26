@@ -145,6 +145,9 @@ public final class BSItems {
         RAISINS = food("raisins", "Raisins", BSFoods.RAISINS).recipe(BSItems::raisins).register(),
         APPLE_COMPOTE = food("apple_compote", "Apple Compote", BSFoods.APPLE_COMPOTE).properties(p -> p.stacksTo(16)).register(),
         CHOCOLATE_SHAVINGS = ingredient("chocolate_shavings", "Chocolate Shavings").register(),
+        // v2 used oil (section 6.2): a press makes the filter, a mixer uses it, a furnace burns it.
+        OIL_FILTER = ingredient("oil_filter", "Oil Filter").register(),
+        USED_OIL_FILTER = ingredient("used_oil_filter", "Used Oil Filter").register(),
         VANILLA_ICE_CREAM = food("vanilla_ice_cream", "Vanilla Ice Cream", BSFoods.VANILLA_ICE_CREAM).tag(BSTags.VANILLA_ICE_CREAMS).register();
 
     /** The sauces a cone can carry, id suffix -> English name; the fluids are BSFluids.CONE_SAUCES. */

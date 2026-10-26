@@ -40,7 +40,8 @@ public final class BSBlocks {
         // The fat stays in the dropped item; the items inside drop on their own.
         .loot((tables, block) -> tables.add(block, tables.createSingleItemTable(block)
             .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
-                .include(BSDataComponents.FRYER_FLUID.get()))))
+                .include(BSDataComponents.FRYER_FLUID.get())
+                .include(BSDataComponents.FRYER_USED_OIL.get()))))
         .item()
         .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/fryer")))
         .build()

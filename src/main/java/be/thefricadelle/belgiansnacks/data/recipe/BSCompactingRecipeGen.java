@@ -53,6 +53,11 @@ public class BSCompactingRecipeGen extends CompactingRecipeGen {
         .require(BSFluids.CREAM.get(), 250).require(Items.SUGAR).require(Items.ICE)
         .output(BSItems.VANILLA_ICE_CREAM.get(), 2));
 
+    // v2 used oil (section 6.2): two sheets of paper around charcoal.
+    GeneratedRecipe OIL_FILTER = create("oil_filter", b -> b
+        .require(net.minecraft.world.item.Items.PAPER).require(net.minecraft.world.item.Items.PAPER).require(net.minecraft.world.item.Items.CHARCOAL)
+        .output(BSItems.OIL_FILTER.get()));
+
     public BSCompactingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BelgianSnacks.MOD_ID);
     }

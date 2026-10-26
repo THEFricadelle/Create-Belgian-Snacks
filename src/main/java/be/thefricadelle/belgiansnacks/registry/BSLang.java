@@ -33,6 +33,8 @@ public final class BSLang {
         add(ID + ".fryer.status.no_heat", "Needs more heat", "Pas assez chaud");
         add(ID + ".fryer.status.no_fat", "Not enough fat", "Pas assez de graisse");
         add(ID + ".fryer.status.output_full", "Output full", "Sortie pleine");
+        add(ID + ".fryer.status.used_oil_full", "Used oil to drain", "Huile usagée à vider");
+        add(ID + ".recipe.frying.used_oil", "Gives back %s mB of used oil", "Rend %s mB d'huile usagée");
         add(ID + ".fryer.heat.none", "Not heated", "Non chauffée");
         add(ID + ".fryer.heat.heated", "Heated", "Chauffée");
         add(ID + ".fryer.heat.superheated", "Superheated", "Surchauffée");

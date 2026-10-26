@@ -264,6 +264,9 @@ ITEMS = {
     "merveilleux": ("heap", (0xBC, 0x74, 0x32), "K"),
     "dame_blanche": ("heap", (0xBC, 0x74, 0x32), "K"),
     "hot_chocolate_bottle": ("heap", (0xBC, 0x74, 0x32), "K"),
+    # v2 used oil filters (docs/13, section 6.2).
+    "oil_filter": ("heap", (0xEC, 0xEA, 0xE2), "K"),
+    "used_oil_filter": ("heap", (0x9A, 0x82, 0x50), "K"),
     # v2 sauced cones (docs/13, section 5.2), in the colour of their sauce.
     **{f"cone_of_fries_{s}": ("heap", c, "K") for s, c in [
         ("mayonnaise", (0xF3, 0xEB, 0xC4)), ("curry_ketchup", (0xA8, 0x32, 0x1E)), ("andalouse", (0xE8, 0x86, 0x2A)),
@@ -300,6 +303,7 @@ FLUIDS = {
     "brazil": (0xee, 0xa0, 0x40),
     "speculoos_spread": (0xbc, 0x74, 0x32),
     "hot_chocolate": (0x7a, 0x44, 0x24),
+    "used_frying_oil": (0x5b, 0x4a, 0x1e),
 }
 
 # Block faces: "block/face" -> colour. Stainless steel for the fryer (docs/06).

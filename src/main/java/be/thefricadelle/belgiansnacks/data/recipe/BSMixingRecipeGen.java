@@ -445,6 +445,12 @@ public class BSMixingRecipeGen extends MixingRecipeGen {
             .output(BSFluids.HOT_CHOCOLATE.get().getSource(), 250)
             .requiresHeat(HeatCondition.HEATED)),
 
+        // v2 used oil (section 6.2): a filter takes the crumbs and the burnt taste out.
+        FRYING_OIL_FROM_USED_OIL = create("frying_oil_from_used_oil", b -> b
+            .require(BSFluids.USED_FRYING_OIL.get(), 1000).require(BSItems.OIL_FILTER.get())
+            .output(BSFluids.FRYING_OIL.get().getSource(), 800)
+            .output(BSItems.USED_OIL_FILTER.get())),
+
         APPLE_COMPOTE = create("apple_compote", b -> b
             .require(Items.APPLE).require(Items.APPLE).require(Items.APPLE).require(Items.SUGAR).require(Items.BOWL)
             .output(BSItems.APPLE_COMPOTE.get())

@@ -196,6 +196,9 @@ public class BSFrenchLangProvider extends LanguageProvider {
         BSSweets.FRENCH.forEach((entry, name) -> add(entry.get(), name));
         fluid(BSFluids.SPECULOOS_SPREAD, "Pâte de speculoos", "Seau de pâte de speculoos");
         fluid(BSFluids.HOT_CHOCOLATE, "Chocolat chaud", "Seau de chocolat chaud");
+        fluid(BSFluids.USED_FRYING_OIL, "Huile de friture usagée", "Seau d'huile de friture usagée");
+        add(BSItems.OIL_FILTER.get(), "Filtre à huile");
+        add(BSItems.USED_OIL_FILTER.get(), "Filtre à huile usagé");
         add(BSItems.tooltipKey("speculoos"), "Servi avec chaque café en Belgique.");
         add(BSItems.tooltipKey("cuberdon"), "Un cône violet. Croquant dehors, coulant dedans.");
         add(BSItems.tooltipKey("couque_de_dinant"), "Ne pas croquer. Laisser fondre.");

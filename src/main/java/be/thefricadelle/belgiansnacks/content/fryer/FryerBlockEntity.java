@@ -28,6 +28,7 @@ import be.thefricadelle.belgiansnacks.BelgianSnacks;
 import be.thefricadelle.belgiansnacks.config.BSConfig;
 import be.thefricadelle.belgiansnacks.registry.BSBlockEntities;
 import be.thefricadelle.belgiansnacks.registry.BSDataComponents;
+import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSRecipeTypes;
 import be.thefricadelle.belgiansnacks.registry.BSSoundEvents;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
@@ -60,6 +61,10 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * Fries whole batches: the input stack (up to maxBatch, one item for FRYER_ONE_AT_A_TIME) and the
  * fat for all of it move into the basket when a batch starts. Without enough heat the batch pauses
  * and keeps its progress; nothing is ever consumed without being fried.
+ * <p>
+ * v2 (section 6.2): a share of the fat paid comes back as used oil in a second tank when the batch
+ * ends; a batch only starts when that tank has room for it. Pipes and buckets pour fat in and take the
+ * used oil out; with fryer.usedOilRatio at 0 the fryer behaves as in v1 and gives its fat back instead.
  */
 public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     private static final int SIZZLE_INTERVAL = 40;
@@ -70,7 +75,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         Set.of(HeatLevel.NONE, HeatLevel.SMOULDERING, HeatLevel.FADING, HeatLevel.KINDLED, HeatLevel.SEETHING);
 
     public enum Status {
-        IDLE, FRYING, NO_RECIPE, NO_HEAT, NO_FAT, OUTPUT_FULL;
+        IDLE, FRYING, NO_RECIPE, NO_HEAT, NO_FAT, USED_OIL_FULL, OUTPUT_FULL;
 
         public String key() {
             return BelgianSnacks.MOD_ID + ".fryer.status." + name().toLowerCase(java.util.Locale.ROOT);
@@ -80,6 +85,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     // Set from addBehaviours, which the SmartBlockEntity constructor calls before field initialisers:
     // no initialiser here, or it would be reset to null.
     private SmartFluidTankBehaviour tank;
+    private SmartFluidTankBehaviour usedOil;
+    // Pipes, buckets, goggles and Jade see both tanks through this one.
+    private final IFluidHandler fluidCapability = new FryerFluidHandler();
 
     private final ItemStackHandler input = new ItemStackHandler(1) {
         @Override
@@ -113,6 +121,8 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     private int duration;
     private boolean paused;
     private int retry;
+    // The fat paid for the batch in the basket; a share of it comes back as used oil.
+    private int fatPaid;
 
     public FryerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -120,7 +130,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BSBlockEntities.FRYER.get(), (be, side) -> be.itemCapability);
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BSBlockEntities.FRYER.get(), (be, side) -> be.tank.getCapability());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BSBlockEntities.FRYER.get(), (be, side) -> be.fluidCapability);
     }
 
     @Override
@@ -129,6 +139,11 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
             .whenFluidUpdates(() -> retry = 0);
         tank.getPrimaryHandler().setValidator(stack -> stack.is(BSTags.FRYING_OILS));
         behaviours.add(tank);
+        // OUTPUT is its own NBT key: fryers saved before v2 load with an empty used oil tank.
+        usedOil = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, BSConfig.fryerUsedOilCapacity(), false)
+            .whenFluidUpdates(() -> retry = 0);
+        usedOil.getPrimaryHandler().setValidator(stack -> stack.getFluid().isSame(BSFluids.USED_FRYING_OIL.get()));
+        behaviours.add(usedOil);
         // A belt ending on the fryer drops its items in, through the same item handler as a funnel.
         behaviours.add(new DirectBeltInputBehaviour(this));
     }
@@ -165,8 +180,9 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         FryingRecipe recipe = holder.value();
         int count = batchSize(in);
         SizedFluidIngredient fat = recipe.getFat();
+        fatPaid = 0;
         if (fat != null) {
-            tank.getPrimaryHandler().drain(fat.amount() * count, IFluidHandler.FluidAction.EXECUTE);
+            fatPaid = tank.getPrimaryHandler().drain(fat.amount() * count, IFluidHandler.FluidAction.EXECUTE).getAmount();
         }
         basket.setStackInSlot(0, input.extractItem(0, count, false));
         recipeId = holder.id();
@@ -181,6 +197,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         FryingRecipe recipe = currentRecipe();
         if (recipe == null) {
             // The recipe vanished in a /reload: hand the basket back untouched rather than lose it.
+            fatPaid = 0;
             finishBatch(List.of(basket.getStackInSlot(0).copy()));
             return;
         }
@@ -207,6 +224,12 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
 
     private void finishBatch(List<ItemStack> results) {
+        int used = usedOilFor(fatPaid);
+        if (used > 0) {
+            // Room was checked when the batch started.
+            usedOil.getPrimaryHandler().fill(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), used), IFluidHandler.FluidAction.EXECUTE);
+        }
+        fatPaid = 0;
         for (ItemStack result : results) {
             ItemStack left = ItemHandlerHelper.insertItemStacked(output, result, false);
             // Space was checked when the batch started; this only guards against external edits.
@@ -263,10 +286,20 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
                 return Status.NO_FAT;
             }
         }
+        int fatNeeded = fat == null ? 0 : fat.amount() * count;
+        var used = usedOil.getPrimaryHandler();
+        if (used.getFluidAmount() + usedOilFor(fatNeeded) > used.getCapacity()) {
+            return Status.USED_OIL_FULL;
+        }
         if (!outputFits(recipe, count)) {
             return Status.OUTPUT_FULL;
         }
         return null;
+    }
+
+    /** The used oil a batch gives back for this much fat paid. */
+    public static int usedOilFor(int fat) {
+        return (int) Math.round(fat * BSConfig.fryerUsedOilRatio());
     }
 
     public Status status() {
@@ -392,6 +425,15 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         return tank;
     }
 
+    public SmartFluidTankBehaviour getUsedOil() {
+        return usedOil;
+    }
+
+    /** What pipes and buckets see: fat in, used oil out (or the fat out, at ratio 0). */
+    public IFluidHandler getFluidCapability() {
+        return fluidCapability;
+    }
+
     public ItemStackHandler getInput() {
         return input;
     }
@@ -447,6 +489,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         tag.putInt("Progress", progress);
         tag.putInt("Duration", duration);
         tag.putBoolean("Paused", paused);
+        tag.putInt("FatPaid", fatPaid);
     }
 
     @Override
@@ -459,6 +502,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         progress = tag.getInt("Progress");
         duration = tag.getInt("Duration");
         paused = tag.getBoolean("Paused");
+        fatPaid = tag.getInt("FatPaid");
     }
 
     // The fat travels with the item when the fryer is broken (loot table copies this component).
@@ -469,6 +513,10 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         if (!fat.isEmpty()) {
             components.set(BSDataComponents.FRYER_FLUID.get(), SimpleFluidContent.copyOf(fat));
         }
+        FluidStack used = usedOil.getPrimaryHandler().getFluid();
+        if (!used.isEmpty()) {
+            components.set(BSDataComponents.FRYER_USED_OIL.get(), SimpleFluidContent.copyOf(used));
+        }
     }
 
     @Override
@@ -477,6 +525,10 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         SimpleFluidContent fat = components.get(BSDataComponents.FRYER_FLUID.get());
         if (fat != null && !fat.isEmpty()) {
             tank.getPrimaryHandler().setFluid(fat.copy());
+        }
+        SimpleFluidContent used = components.get(BSDataComponents.FRYER_USED_OIL.get());
+        if (used != null && !used.isEmpty()) {
+            usedOil.getPrimaryHandler().setFluid(used.copy());
         }
     }
 
@@ -492,7 +544,7 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         tooltip.add(Component.literal("     ").append(statusLine.copy().withStyle(status == Status.FRYING || status == Status.IDLE
             ? ChatFormatting.GRAY : ChatFormatting.GOLD)));
         tooltip.add(Component.literal("     ").append(Component.translatable(heatKey(heatBelow())).withStyle(ChatFormatting.GRAY)));
-        containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability());
+        containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability);
         return true;
     }
 
@@ -501,6 +553,55 @@ public class FryerBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         // would reject with a MatchException. Ordered comparisons, as Create itself does, place them.
         String level = heat.isAtLeast(HeatLevel.SEETHING) ? "superheated" : heat.isAtLeast(HeatLevel.FADING) ? "heated" : "none";
         return BelgianSnacks.MOD_ID + ".fryer.heat." + level;
+    }
+
+    // ------------------------------------------------------------------ fluid handler
+
+    /** Tank 0 is the fat (filled from outside), tank 1 the used oil (drained from outside). */
+    private final class FryerFluidHandler implements IFluidHandler {
+        @Override
+        public int getTanks() {
+            return 2;
+        }
+
+        private IFluidHandler handler(int tank) {
+            return (tank == 0 ? FryerBlockEntity.this.tank : usedOil).getPrimaryHandler();
+        }
+
+        @Override
+        public FluidStack getFluidInTank(int tank) {
+            return handler(tank).getFluidInTank(0);
+        }
+
+        @Override
+        public int getTankCapacity(int tank) {
+            return handler(tank).getTankCapacity(0);
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, FluidStack stack) {
+            return tank == 0 && handler(0).isFluidValid(0, stack);
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            return tank.getPrimaryHandler().fill(resource, action);
+        }
+
+        // The used oil, or the fat as in v1 when no used oil is made.
+        private IFluidHandler drained() {
+            return BSConfig.fryerUsedOilRatio() > 0 ? usedOil.getPrimaryHandler() : tank.getPrimaryHandler();
+        }
+
+        @Override
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            return drained().drain(resource, action);
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            return drained().drain(maxDrain, action);
+        }
     }
 
     // ------------------------------------------------------------------ item handler

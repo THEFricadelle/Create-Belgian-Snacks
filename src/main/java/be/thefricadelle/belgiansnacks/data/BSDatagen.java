@@ -56,6 +56,8 @@ public final class BSDatagen {
         generator.addProvider(event.includeServer(), new BSFillingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSWashingRecipeGen(output, registries));
         generator.addProvider(event.includeServer(), new BSBotanyPotsProvider(output));
+        generator.addProvider(event.includeServer(), new BSCompatRecipeProvider(output));
+        generator.addProvider(event.includeServer(), new BSDataMapProvider(output, registries));
         generator.addProvider(event.includeServer(), BSLootProviders.tables(output, registries));
         generator.addProvider(event.includeServer(), BSLootProviders.modifiers(output, registries));
     }

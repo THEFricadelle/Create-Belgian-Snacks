@@ -49,8 +49,13 @@ public class FryingCategory extends CreateRecipeCategory<FryingRecipe> {
         SizedFluidIngredient fat = recipe.getFat();
         if (fat != null) {
             addFluidSlot(builder, 21, 37, fat)
-                .addRichTooltipCallback((view, tooltip) -> tooltip.add(
-                    Component.translatable(BelgianSnacks.MOD_ID + ".recipe.frying.fat").withStyle(ChatFormatting.GRAY)));
+                .addRichTooltipCallback((view, tooltip) -> {
+                    tooltip.add(Component.translatable(BelgianSnacks.MOD_ID + ".recipe.frying.fat").withStyle(ChatFormatting.GRAY));
+                    int used = be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity.usedOilFor(fat.amount());
+                    if (used > 0) {
+                        tooltip.add(Component.translatable(BelgianSnacks.MOD_ID + ".recipe.frying.used_oil", used).withStyle(ChatFormatting.GRAY));
+                    }
+                });
         }
         List<ProcessingOutput> results = recipe.getRollableResults();
         for (int i = 0; i < results.size(); i++) {

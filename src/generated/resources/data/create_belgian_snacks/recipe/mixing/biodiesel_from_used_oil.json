@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "createdieselgenerators"
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "create_belgian_snacks:used_frying_oil"
+    },
+    {
+      "type": "neoforge:tag",
+      "amount": 100,
+      "tag": "c:ethanol"
+    },
+    {
+      "tag": "create_belgian_snacks:salts"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "createdieselgenerators:biodiesel"
+    }
+  ]
+}
