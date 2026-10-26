@@ -182,7 +182,10 @@ public final class ClientSmokeTest {
         // M17: Belgian dishes known by their own name in both languages.
         "carbonnade", "stoemp", "waterzooi", "hochepot", "flamiche", "boudin", "escaveche",
         // M18: the Liège fair wafer.
-        "lacquemant");
+        "lacquemant",
+        // M19: Belgian sweets known by their own name.
+        "speculoos", "cuberdon", "praline", "ballotin", "babelutte", "croustillons", "bouquette", "couque_de_dinant", "mattentaart",
+        "craquelin", "cramique", "merveilleux");
 
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
