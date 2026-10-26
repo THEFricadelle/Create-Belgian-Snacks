@@ -112,6 +112,10 @@ class ResourceConsistencyTest {
             assertTrue(textures != null && !textures.entrySet().isEmpty(), id + " model has no texture");
             for (Map.Entry<String, JsonElement> layer : textures.entrySet()) {
                 String[] location = layer.getValue().getAsString().split(":", 2);
+                // Vanilla textures (the planks and concrete on the edges of a sign) always exist.
+                if (location[0].equals("minecraft")) {
+                    continue;
+                }
                 Path png = MAIN.resolve("assets/" + location[0] + "/textures/" + location[1] + ".png");
                 assertTrue(Files.isRegularFile(png), id + " references missing texture " + png);
             }

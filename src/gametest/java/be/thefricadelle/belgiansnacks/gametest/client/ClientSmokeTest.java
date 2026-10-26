@@ -388,6 +388,14 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("ponder.line3", 5, () -> openLine(BSItems.ABSOLUTE_PASTE.asStack())));
         STEPS.add(new Step("ponder.line3.shot", 120, () -> screenshot("ponder-ultimate-fricadelle-line")));
         STEPS.add(new Step("ponder.line3.ride", 0, ClientSmokeTest::ponderEnded, () -> checkRide("line3")));
+        // M21 scenes: each opens, plays a while, and is photographed for a person to review.
+        for (var scene : List.of(java.util.Map.entry("fries-line", BSItems.CONE_OF_FRIES.asStack()),
+            java.util.Map.entry("waffle-iron", new ItemStack(BSBlocks.WAFFLE_IRON.get())),
+            java.util.Map.entry("used-oil", BSItems.OIL_FILTER.asStack()),
+            java.util.Map.entry("friterie-shop", new ItemStack(be.thefricadelle.belgiansnacks.registry.BSDecor.FRITERIE_SIGN.get())))) {
+            STEPS.add(new Step("ponder." + scene.getKey(), 5, () -> mc.setScreen(net.createmod.ponder.foundation.ui.PonderUI.of(scene.getValue()))));
+            STEPS.add(new Step("ponder." + scene.getKey() + ".shot", 160, () -> screenshot("ponder-" + scene.getKey())));
+        }
         STEPS.add(new Step("close", 10, () -> mc.setScreen(null)));
     }
 
@@ -915,7 +923,8 @@ public final class ClientSmokeTest {
                     built.add(component.getPath() + ":" + scene.getId().getPath());
                 }
             }
-            require(built.size() == 9, "scenes built: " + built);
+            // v1: 9; M21: fries line (4 items), waffle iron, used oil (fryer and filter), friterie shop (7 signs and neons).
+            require(built.size() == 23, "scenes built: " + built);
             require(net.createmod.ponder.foundation.PonderIndex.getTagAccess().getListedTags().stream()
                 .anyMatch(tag -> tag.getId().equals(BelgianSnacks.asResource("belgian_snacks"))), "no Ponder tag");
             return built.size() + " scenes built for " + components.size() + " components: " + built;

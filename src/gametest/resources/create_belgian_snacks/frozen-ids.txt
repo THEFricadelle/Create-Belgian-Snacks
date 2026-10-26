@@ -2,11 +2,21 @@
 # Never remove a line: worlds, other mods and KubeJS scripts keep these ids.
 # Add the new ids of a change in the same commit. data/* lines are data files (JUnit).
 data/advancement create_belgian_snacks:absolute_paste
+data/advancement create_belgian_snacks:ballotin
 data/advancement create_belgian_snacks:beef_tallow
+data/advancement create_belgian_snacks:brewer
+data/advancement create_belgian_snacks:chicon_cellar
 data/advancement create_belgian_snacks:exceptional_paste
 data/advancement create_belgian_snacks:fricadelle
 data/advancement create_belgian_snacks:fryer
 data/advancement create_belgian_snacks:grinder_half
+data/advancement create_belgian_snacks:recipes/decorations/crafting/blue_friterie_neon
+data/advancement create_belgian_snacks:recipes/decorations/crafting/chip_shop_sign
+data/advancement create_belgian_snacks:recipes/decorations/crafting/friterie_sign
+data/advancement create_belgian_snacks:recipes/decorations/crafting/frituur_sign
+data/advancement create_belgian_snacks:recipes/decorations/crafting/green_friterie_neon
+data/advancement create_belgian_snacks:recipes/decorations/crafting/red_friterie_neon
+data/advancement create_belgian_snacks:recipes/decorations/crafting/yellow_friterie_neon
 data/advancement create_belgian_snacks:recipes/food/crafting/ballotin
 data/advancement create_belgian_snacks:recipes/food/crafting/paper_cone
 data/advancement create_belgian_snacks:recipes/food/smelting/boudin
@@ -52,7 +62,9 @@ data/advancement create_belgian_snacks:recipes/misc/crafting/bouchot
 data/advancement create_belgian_snacks:root
 data/advancement create_belgian_snacks:supreme_grinder
 data/advancement create_belgian_snacks:the_fricadelle
+data/advancement create_belgian_snacks:tour_de_belgique
 data/advancement create_belgian_snacks:ultimate_fricadelle
+data/advancement create_belgian_snacks:waffle_iron
 data/recipe create_belgian_snacks:botanypots/asparagus
 data/recipe create_belgian_snacks:botanypots/brussels_sprouts
 data/recipe create_belgian_snacks:botanypots/buckwheat
@@ -67,8 +79,15 @@ data/recipe create_belgian_snacks:compacting/puff_pastry
 data/recipe create_belgian_snacks:compacting/vanilla_ice_cream
 data/recipe create_belgian_snacks:compacting/young_herve_cheese
 data/recipe create_belgian_snacks:crafting/ballotin
+data/recipe create_belgian_snacks:crafting/blue_friterie_neon
 data/recipe create_belgian_snacks:crafting/bouchot
+data/recipe create_belgian_snacks:crafting/chip_shop_sign
+data/recipe create_belgian_snacks:crafting/friterie_sign
+data/recipe create_belgian_snacks:crafting/frituur_sign
+data/recipe create_belgian_snacks:crafting/green_friterie_neon
 data/recipe create_belgian_snacks:crafting/paper_cone
+data/recipe create_belgian_snacks:crafting/red_friterie_neon
+data/recipe create_belgian_snacks:crafting/yellow_friterie_neon
 data/recipe create_belgian_snacks:crushing/beef
 data/recipe create_belgian_snacks:crushing/bread
 data/recipe create_belgian_snacks:crushing/chicken
@@ -350,16 +369,21 @@ minecraft:block create_belgian_snacks:andalouse
 minecraft:block create_belgian_snacks:asparagus_crop
 minecraft:block create_belgian_snacks:bechamel
 minecraft:block create_belgian_snacks:blonde_beer
+minecraft:block create_belgian_snacks:blue_friterie_neon
 minecraft:block create_belgian_snacks:bouchot
 minecraft:block create_belgian_snacks:brazil
 minecraft:block create_belgian_snacks:brown_beer
 minecraft:block create_belgian_snacks:brussels_sprouts_crop
 minecraft:block create_belgian_snacks:buckwheat_crop
 minecraft:block create_belgian_snacks:chicon_crop
+minecraft:block create_belgian_snacks:chip_shop_sign
 minecraft:block create_belgian_snacks:cream
 minecraft:block create_belgian_snacks:curry_ketchup
+minecraft:block create_belgian_snacks:friterie_sign
+minecraft:block create_belgian_snacks:frituur_sign
 minecraft:block create_belgian_snacks:fryer
 minecraft:block create_belgian_snacks:frying_oil
+minecraft:block create_belgian_snacks:green_friterie_neon
 minecraft:block create_belgian_snacks:gueuze
 minecraft:block create_belgian_snacks:hops_crop
 minecraft:block create_belgian_snacks:hot_chocolate
@@ -371,6 +395,7 @@ minecraft:block create_belgian_snacks:melted_beef_tallow
 minecraft:block create_belgian_snacks:mustard
 minecraft:block create_belgian_snacks:mustard_crop
 minecraft:block create_belgian_snacks:pickles
+minecraft:block create_belgian_snacks:red_friterie_neon
 minecraft:block create_belgian_snacks:samourai
 minecraft:block create_belgian_snacks:sauce_lapin
 minecraft:block create_belgian_snacks:speculoos_spread
@@ -380,6 +405,7 @@ minecraft:block create_belgian_snacks:used_frying_oil
 minecraft:block create_belgian_snacks:vinegar
 minecraft:block create_belgian_snacks:waffle_iron
 minecraft:block create_belgian_snacks:wort
+minecraft:block create_belgian_snacks:yellow_friterie_neon
 minecraft:block_entity_type create_belgian_snacks:fryer
 minecraft:block_entity_type create_belgian_snacks:supreme_grinder
 minecraft:block_entity_type create_belgian_snacks:waffle_iron
@@ -454,6 +480,7 @@ minecraft:item create_belgian_snacks:beef_tallow
 minecraft:item create_belgian_snacks:belgian_spices
 minecraft:item create_belgian_snacks:blanched_fries
 minecraft:item create_belgian_snacks:blonde_beer_bucket
+minecraft:item create_belgian_snacks:blue_friterie_neon
 minecraft:item create_belgian_snacks:bouchot
 minecraft:item create_belgian_snacks:boudin
 minecraft:item create_belgian_snacks:boudin_compote
@@ -500,6 +527,7 @@ minecraft:item create_belgian_snacks:chicken_strips
 minecraft:item create_belgian_snacks:chicon
 minecraft:item create_belgian_snacks:chicons_au_gratin
 minecraft:item create_belgian_snacks:chicory_root
+minecraft:item create_belgian_snacks:chip_shop_sign
 minecraft:item create_belgian_snacks:chocolate_shavings
 minecraft:item create_belgian_snacks:cone_of_fries
 minecraft:item create_belgian_snacks:cone_of_fries_americaine
@@ -548,9 +576,12 @@ minecraft:item create_belgian_snacks:fries
 minecraft:item create_belgian_snacks:fries_beef_tallow
 minecraft:item create_belgian_snacks:friterie_burger
 minecraft:item create_belgian_snacks:friterie_cheeseburger
+minecraft:item create_belgian_snacks:friterie_sign
+minecraft:item create_belgian_snacks:frituur_sign
 minecraft:item create_belgian_snacks:fryer
 minecraft:item create_belgian_snacks:frying_oil_bucket
 minecraft:item create_belgian_snacks:green_asparagus
+minecraft:item create_belgian_snacks:green_friterie_neon
 minecraft:item create_belgian_snacks:gueuze_bucket
 minecraft:item create_belgian_snacks:gyros
 minecraft:item create_belgian_snacks:half_baguette
@@ -678,6 +709,7 @@ minecraft:item create_belgian_snacks:raw_the_fricadelle
 minecraft:item create_belgian_snacks:raw_ultimate_fricadelle
 minecraft:item create_belgian_snacks:raw_viandelle
 minecraft:item create_belgian_snacks:raw_vol_au_vent_shell
+minecraft:item create_belgian_snacks:red_friterie_neon
 minecraft:item create_belgian_snacks:rice_filling
 minecraft:item create_belgian_snacks:salade_liegeoise
 minecraft:item create_belgian_snacks:salt
@@ -714,6 +746,7 @@ minecraft:item create_belgian_snacks:waffle_iron
 minecraft:item create_belgian_snacks:waterzooi
 minecraft:item create_belgian_snacks:white_asparagus
 minecraft:item create_belgian_snacks:wort_bucket
+minecraft:item create_belgian_snacks:yellow_friterie_neon
 minecraft:item create_belgian_snacks:young_herve_cheese
 minecraft:recipe_serializer create_belgian_snacks:frying
 minecraft:recipe_serializer create_belgian_snacks:waffle_baking

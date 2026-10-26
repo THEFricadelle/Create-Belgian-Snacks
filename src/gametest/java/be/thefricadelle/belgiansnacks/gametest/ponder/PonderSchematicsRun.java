@@ -26,6 +26,13 @@ import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 
 import be.thefricadelle.belgiansnacks.BelgianSnacks;
+import net.minecraft.world.item.DyeColor;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlockEntity;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlock;
+import be.thefricadelle.belgiansnacks.content.decor.WallPanelBlock;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
+import be.thefricadelle.belgiansnacks.registry.BSSnacks;
+import be.thefricadelle.belgiansnacks.registry.BSDecor;
 import be.thefricadelle.belgiansnacks.registry.BSBlocks;
 import be.thefricadelle.belgiansnacks.registry.BSFluids;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
@@ -83,7 +90,11 @@ public final class PonderSchematicsRun {
             new Schematic("fryer", new Vec3i(5, 4, 5), PonderSchematicsRun::fryer),
             new Schematic("supreme_grinder", new Vec3i(5, 5, 5), PonderSchematicsRun::grinder),
             new Schematic("the_fricadelle_line", new Vec3i(7, 5, 7), b -> line(b, 5)),
-            new Schematic("ultimate_fricadelle_line", new Vec3i(8, 5, 8), b -> line(b, 6)));
+            new Schematic("ultimate_fricadelle_line", new Vec3i(8, 5, 8), b -> line(b, 6)),
+            new Schematic("fries_line", new Vec3i(9, 5, 5), PonderSchematicsRun::friesLine),
+            new Schematic("waffle_iron", new Vec3i(5, 4, 5), PonderSchematicsRun::waffleIron),
+            new Schematic("used_oil", new Vec3i(6, 5, 5), PonderSchematicsRun::usedOil),
+            new Schematic("friterie_shop", new Vec3i(7, 5, 5), PonderSchematicsRun::friterieShop));
         int x = 0;
         for (Schematic schematic : schematics) {
             BlockPos origin = new BlockPos(x, BUILD_Y, 0);
@@ -162,9 +173,82 @@ public final class PonderSchematicsRun {
         b.set(x, 3, z, AllBlocks.MECHANICAL_PRESS.getDefaultState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH));
     }
 
+    // v2 (M21). Potatoes on an upward saw, a fryer on a lit burner, a fryer on a seething one, then a
+    // depot under a deployer holding paper cones.
+    private static void friesLine(Builder b) {
+        b.set(1, 1, 2, AllBlocks.MECHANICAL_SAW.getDefaultState().setValue(BlockStateProperties.FACING, Direction.UP)
+            .setValue(DirectionalAxisKineticBlock.AXIS_ALONG_FIRST_COORDINATE, true));
+        b.set(3, 1, 2, AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+        b.set(3, 2, 2, BSBlocks.FRYER.getDefaultState());
+        b.fluid(3, 2, 2, BSFluids.FRYING_OIL.get().getSource(), 2000);
+        b.set(5, 1, 2, AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.SEETHING));
+        b.set(5, 2, 2, BSBlocks.FRYER.getDefaultState());
+        b.fluid(5, 2, 2, BSFluids.FRYING_OIL.get().getSource(), 2000);
+        b.set(7, 1, 2, AllBlocks.DEPOT.getDefaultState());
+        b.deployer(7, 3, 2, BSItems.PAPER_CONE.asStack(16));
+    }
+
+    // A waffle iron on a burner, its handle facing the viewer, fed by a belt from the west and emptied by a
+    // funnel into a chest east.
+    private static void waffleIron(Builder b) {
+        b.set(2, 1, 2, AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+        b.set(2, 2, 2, BSBlocks.WAFFLE_IRON.getDefaultState().setValue(be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlock.FACING, Direction.SOUTH));
+        b.set(0, 1, 2, AllBlocks.ANDESITE_CASING.getDefaultState());
+        b.set(1, 1, 2, AllBlocks.ANDESITE_CASING.getDefaultState());
+        b.belt(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2));
+        b.set(0, 2, 3, AllBlocks.SHAFT.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.Z));
+        b.set(3, 2, 2, AllBlocks.ANDESITE_FUNNEL.getDefaultState().setValue(BlockStateProperties.FACING, Direction.EAST)
+            .setValue(FunnelBlock.EXTRACTING, true));
+        b.set(4, 2, 2, Blocks.CHEST.defaultBlockState());
+    }
+
+    // A fryer with used oil, a pump and a pipe east to a basin under a mixer, a filter in the basin.
+    private static void usedOil(Builder b) {
+        b.set(1, 1, 2, AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+        b.set(1, 2, 2, BSBlocks.FRYER.getDefaultState());
+        b.fluid(1, 2, 2, BSFluids.FRYING_OIL.get().getSource(), 2000);
+        var fryer = (be.thefricadelle.belgiansnacks.content.fryer.FryerBlockEntity) b.level.getBlockEntity(b.origin.offset(1, 2, 2));
+        fryer.getUsedOil().getPrimaryHandler().fill(new FluidStack(BSFluids.USED_FRYING_OIL.get().getSource(), 1600), IFluidHandler.FluidAction.EXECUTE);
+        b.set(2, 2, 2, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(BlockStateProperties.FACING, Direction.EAST));
+        b.set(3, 2, 2, AllBlocks.FLUID_PIPE.get().getAxisState(Axis.X));
+        b.set(4, 1, 2, AllBlocks.ANDESITE_CASING.getDefaultState());
+        b.set(4, 2, 2, AllBlocks.BASIN.getDefaultState());
+        b.fluid(4, 2, 2, BSFluids.USED_FRYING_OIL.get().getSource(), 1000);
+        b.level.getCapability(Capabilities.ItemHandler.BLOCK, b.origin.offset(4, 2, 2), null).insertItem(0, BSItems.OIL_FILTER.asStack(2), false);
+        b.set(4, 4, 2, AllBlocks.MECHANICAL_MIXER.getDefaultState());
+        b.set(5, 4, 2, AllBlocks.COGWHEEL.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.Y));
+    }
+
+    // A friterie stall, opening towards the Ponder camera (north): a back wall at z = 4 with its signs and a
+    // neon, a keeper's seat beside a Stock Ticker, and a counter of table cloths at z = 1, each with its price.
+    private static void friterieShop(Builder b) {
+        for (int x = 0; x < 7; x++) {
+            for (int y = 1; y < 5; y++) {
+                b.set(x, y, 4, Blocks.DARK_OAK_PLANKS.defaultBlockState());
+            }
+        }
+        b.set(1, 3, 3, BSDecor.FRITERIE_SIGN.getDefaultState().setValue(WallPanelBlock.FACING, Direction.NORTH));
+        b.set(3, 3, 3, BSDecor.RED_NEON.getDefaultState().setValue(WallPanelBlock.FACING, Direction.NORTH));
+        b.set(5, 3, 3, BSDecor.FRITUUR_SIGN.getDefaultState().setValue(WallPanelBlock.FACING, Direction.NORTH));
+        b.set(2, 1, 3, AllBlocks.SEATS.get(DyeColor.RED).getDefaultState());
+        b.set(3, 1, 3, AllBlocks.STOCK_TICKER.getDefaultState());
+        ItemStack[] goods = {BSItems.SAUCED_CONES.get("mayonnaise").asStack(), BSSnacks.MITRAILLETTE.asStack(), BSWaffles.LIEGE_WAFFLE.asStack()};
+        for (int i = 0; i < goods.length; i++) {
+            int x = 1 + 2 * i;
+            b.set(x, 1, 1, AllBlocks.ANDESITE_CASING.getDefaultState());
+            b.set(x + 1, 1, 1, AllBlocks.ANDESITE_CASING.getDefaultState());
+            b.set(x, 2, 1, AllBlocks.TABLE_CLOTHS.get(DyeColor.RED).getDefaultState().setValue(TableClothBlock.HAS_BE, true));
+            var cloth = (TableClothBlockEntity) b.level.getBlockEntity(b.origin.offset(x, 2, 1));
+            cloth.manuallyAddedItems.add(goods[i]);
+            cloth.priceTag.setFilter(new ItemStack(Items.GOLD_NUGGET));
+            cloth.priceTag.count = 2 + i;
+            cloth.notifyUpdate();
+        }
+    }
+
     private static final class Builder {
-        private final ServerLevel level;
-        private final BlockPos origin;
+        final ServerLevel level;
+        final BlockPos origin;
 
         Builder(ServerLevel level, BlockPos origin) {
             this.level = level;

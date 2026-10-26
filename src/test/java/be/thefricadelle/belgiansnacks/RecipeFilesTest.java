@@ -51,7 +51,8 @@ class RecipeFilesTest {
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
     // c:plates/copper, c:plates/brass and c:plates/iron are filled by Create, a required dependency.
     private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:foods/berry", "c:plates/copper", "c:plates/brass", "c:plates/iron",
-        "c:ingots/gold", "c:storage_blocks/iron", "c:foods/cooked_fish", "c:mushrooms");
+        "c:ingots/gold", "c:storage_blocks/iron", "c:foods/cooked_fish", "c:mushrooms",
+        "c:glass_panes", "c:dyes/black", "c:dyes/white", "c:dyes/red", "c:dyes/yellow", "c:dyes/blue", "c:dyes/green");
 
     @Test
     void recipeIdsAreExactlyTheExpectedOnes() throws IOException {
@@ -332,6 +333,15 @@ class RecipeFilesTest {
             assertEquals(MOD_ID + ":waffle_baking", recipe.get("type").getAsString());
             assertEquals("heated", recipe.get("heat_requirement").getAsString(), id);
             assertTrue(recipe.get("processing_time").getAsInt() > 0, id);
+        }
+    }
+
+    // M21: the five families of the Tour of Belgium each hold foods of ours.
+    @Test
+    void everyMenuFamilyHasFoods() throws IOException {
+        for (String family : List.of("fries", "friterie", "dishes", "waffles", "sweets")) {
+            JsonObject tag = json(GENERATED_DATA.resolve(MOD_ID + "/tags/item/menu/" + family + ".json"));
+            assertTrue(tag.getAsJsonArray("values").size() >= 5, "menu/" + family + " holds " + tag.getAsJsonArray("values"));
         }
     }
 
