@@ -64,6 +64,7 @@ public final class ServerMultiplayerSmoke {
     private static final List<String> REPORT = new ArrayList<>();
     private static BlockPos fryerPos;
     private static BlockPos grinderPos;
+    private static BlockPos waffleIronPos;
     private static int joined;
     private static int ticks;
     private static boolean done;
@@ -97,6 +98,18 @@ public final class ServerMultiplayerSmoke {
         fryer.getItemCapability().insertItem(0, BSItems.RAW_FRICADELLE.asStack(16), false);
         LOGGER.info("[mpsmoke] fryer placed at {}", fryerPos);
         REPORT.add("PASS server.setup - fryer at " + fryerPos.toShortString());
+
+        // A waffle iron baking 4 Brussels batters two blocks south of the fryer.
+        waffleIronPos = fryerPos.south(2);
+        level.setBlockAndUpdate(waffleIronPos.below(), AllBlocks.BLAZE_BURNER.getDefaultState()
+            .setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+        if (level.getBlockEntity(waffleIronPos.below()) instanceof BlazeBurnerBlockEntity burner) {
+            burner.isCreative = true;
+        }
+        level.setBlockAndUpdate(waffleIronPos, BSBlocks.WAFFLE_IRON.getDefaultState());
+        ((be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity) level.getBlockEntity(waffleIronPos)).getItemCapability()
+            .insertItem(0, be.thefricadelle.belgiansnacks.registry.BSWaffles.BRUSSELS_WAFFLE_BATTER.asStack(4), false);
+        REPORT.add("PASS server.waffleIronSetup - waffle iron at " + waffleIronPos.toShortString());
 
         // A running supreme grinder two blocks north of the fryer, within reach of both players.
         grinderPos = fryerPos.north(2);
@@ -149,6 +162,10 @@ public final class ServerMultiplayerSmoke {
             boolean emptied = fryer.getOutput().getStackInSlot(0).isEmpty() && fryer.getOutput().getStackInSlot(1).isEmpty();
             REPORT.add((emptied ? "PASS" : "FAIL") + " server.outputTaken - output " + (emptied ? "taken by a client" : "still holds "
                 + fryer.getOutput().getStackInSlot(0)));
+            var iron = (be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity) server.overworld().getBlockEntity(waffleIronPos);
+            boolean waffles = iron.getOutput().getStackInSlot(0).isEmpty() && iron.getOutput().getStackInSlot(1).isEmpty();
+            REPORT.add((waffles ? "PASS" : "FAIL") + " server.wafflesTaken - waffle iron output " + (waffles ? "taken by a client" : "still holds "
+                + iron.getOutput().getStackInSlot(0)));
             SupremeGrinderBlockEntity grinder = (SupremeGrinderBlockEntity) server.overworld().getBlockEntity(grinderPos);
             Set<ResourceLocation> expected = Set.of(ResourceLocation.parse("minecraft:apple"), ResourceLocation.parse("minecraft:bread"));
             boolean fed = grinder.getConsumed().equals(expected);

@@ -22,6 +22,7 @@ import be.thefricadelle.belgiansnacks.registry.BSFoods;
 import be.thefricadelle.belgiansnacks.registry.BSItems;
 import be.thefricadelle.belgiansnacks.registry.BSSnacks;
 import be.thefricadelle.belgiansnacks.registry.BSDishes;
+import be.thefricadelle.belgiansnacks.registry.BSWaffles;
 import be.thefricadelle.belgiansnacks.registry.BSTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -92,6 +93,12 @@ public final class ItemGameTests {
         return List.of(BSDishes.MOULES_MARINIERES.get(), BSDishes.MOULES_A_LA_BIERE.get(), BSDishes.MOULES_FRITES.get(), BSDishes.CARBONNADE.get(), BSDishes.CARBONNADE_FRITES.get(), BSDishes.STOEMP.get(), BSDishes.STOEMP_SAUCISSE.get(), BSDishes.WATERZOOI.get(), BSDishes.LAPIN_A_LA_GUEUZE.get(), BSDishes.BRUSSELS_SPROUTS_BACON.get(), BSDishes.ASPARAGUS_FLEMISH.get(), BSDishes.HOP_SHOOTS_CREAM.get(), BSDishes.SALADE_LIEGEOISE.get(), BSDishes.HOCHEPOT.get(), BSDishes.ESCAVECHE.get(), BSDishes.STEAK_FRITES.get(), BSDishes.CHICONS_AU_GRATIN.get(), BSDishes.VOL_AU_VENT.get(), BSDishes.BOUDIN.get(), BSDishes.BOUDIN_COMPOTE.get(), BSDishes.FLAMICHE.get(), BSDishes.CROQUE_MONSIEUR.get());
     }
 
+    // M18 waffles, written out.
+    private static List<Item> waffles() {
+        return List.of(BSWaffles.LIEGE_WAFFLE.get(), BSWaffles.BRUSSELS_WAFFLE.get(), BSWaffles.BRUSSELS_WAFFLE_SUGARED.get(),
+            BSWaffles.BRUSSELS_WAFFLE_CHOCOLATE.get(), BSWaffles.LACQUEMANT.get());
+    }
+
     // v2 base ingredients that can be eaten as they are (M13).
     private static List<Item> edibleIngredients() {
         return List.of(BSItems.HERVE_CHEESE.get(), BSItems.PISTOLET.get(), BSItems.ARDENNES_HAM.get(), BSItems.MERINGUE.get(), BSItems.RAISINS.get(), BSItems.APPLE_COMPOTE.get(), BSItems.VANILLA_ICE_CREAM.get());
@@ -101,7 +108,7 @@ public final class ItemGameTests {
     public static void onlyFricadellesAndFinishedSnacksAreFood(GameTestHelper helper) {
         for (Item item : modItems()) {
             boolean food = new ItemStack(item).has(DataComponents.FOOD);
-            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item) || belgianDishes().contains(item)
+            boolean expected = fricadelles().contains(item) || snacks().contains(item) || friterieSnacks().contains(item) || belgianDishes().contains(item) || waffles().contains(item)
                 || edibleIngredients().contains(item);
             helper.assertTrue(food == expected,
                 BuiltInRegistries.ITEM.getKey(item) + (food ? " should not be edible" : " should be edible"));
@@ -129,6 +136,8 @@ public final class ItemGameTests {
         assertFood(helper, BSItems.VANILLA_ICE_CREAM.get(), BSFoods.VANILLA_ICE_CREAM);
         assertFood(helper, BSSnacks.MITRAILLETTE.get(), BSFoods.MITRAILLETTE);
         assertFood(helper, BSDishes.STEAK_FRITES.get(), BSFoods.DISH_WITH_FRIES);
+        assertFood(helper, BSWaffles.LIEGE_WAFFLE.get(), BSFoods.LIEGE_WAFFLE);
+        assertFood(helper, BSWaffles.BRUSSELS_WAFFLE_CHOCOLATE.get(), BSFoods.BRUSSELS_WAFFLE_CHOCOLATE);
         assertFood(helper, BSDishes.FLAMICHE.get(), BSFoods.SIDE_DISH_LARGE);
         for (var bowl : List.of(BSDishes.MOULES_FRITES, BSDishes.CARBONNADE, BSDishes.WATERZOOI, BSDishes.BOUDIN_COMPOTE)) {
             helper.assertTrue(bowl.asStack().get(net.minecraft.core.component.DataComponents.FOOD).usingConvertsTo()
@@ -226,6 +235,9 @@ public final class ItemGameTests {
             helper.assertTrue(stack.is(BSTags.C_FOODS_FRIES), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/fries");
             helper.assertTrue(stack.is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
             helper.assertFalse(stack.is(Tags.Items.FOODS_COOKED_MEAT), BuiltInRegistries.ITEM.getKey(item) + " in c:foods/cooked_meat");
+        }
+        for (Item item : waffles()) {
+            helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");
         }
         for (Item item : belgianDishes()) {
             helper.assertTrue(new ItemStack(item).is(Tags.Items.FOODS), BuiltInRegistries.ITEM.getKey(item) + " in c:foods");

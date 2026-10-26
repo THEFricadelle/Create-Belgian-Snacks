@@ -67,6 +67,8 @@ public final class RecipeGameTests {
         "frying/the_fricadelle", "frying/ultimate_fricadelle",
         "cutting/raw_fries", "frying/blanched_fries", "frying/fries", "frying/fries_beef_tallow",
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
+        // M18 waffles and the waffle iron.
+        "mixing/liege_waffle_dough", "mixing/brussels_waffle_batter", "mixing/lacquemant_batter", "waffle_baking/liege_waffle", "waffle_baking/brussels_waffle", "waffle_baking/lacquemant_wafer", "deploying/brussels_waffle_sugared", "filling/brussels_waffle_chocolate", "filling/lacquemant", "mechanical_crafting/waffle_iron",
         // M17 Belgian dishes; the rabbit follows the plums below.
         "mixing/moules_marinieres", "mixing/moules_a_la_biere", "mixing/carbonnade", "mixing/stoemp", "mixing/waterzooi", "mixing/brussels_sprouts_bacon", "mixing/asparagus_flemish", "mixing/hop_shoots_cream", "mixing/salade_liegeoise", "mixing/hochepot", "mixing/escaveche", "mixing/raw_boudin", "deploying/moules_frites", "deploying/moules_frites_from_beer", "deploying/carbonnade_frites", "deploying/stoemp_saucisse", "deploying/steak_frites", "deploying/boudin_compote", "cutting/raw_vol_au_vent_shell", "pressing/tart_shell", "sequenced_assembly/raw_chicons_au_gratin", "sequenced_assembly/vol_au_vent", "sequenced_assembly/raw_flamiche", "sequenced_assembly/raw_croque_monsieur", "smoking/vol_au_vent_shell", "smelting/vol_au_vent_shell", "smoking/chicons_au_gratin", "smelting/chicons_au_gratin", "smoking/boudin", "smelting/boudin", "smoking/flamiche", "smelting/flamiche", "smoking/croque_monsieur", "smelting/croque_monsieur",
         // M16 friterie snacks; the twins follow pineapples, shrimps, rice, corn, onions and tomatoes below.
@@ -172,6 +174,25 @@ public final class RecipeGameTests {
 
     private static boolean tagEmpty(net.minecraft.tags.TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.size() == 0).orElse(true);
+    }
+
+    // M18 on a real basin: the two batters never hide in each other's basin, the Liège dough starts
+    // from the brioche dough.
+    @GameTest(template = TEMPLATE)
+    public static void wafflesMixOnARealBasin(GameTestHelper helper) {
+        FluidStack milk = new FluidStack(net.neoforged.neoforge.common.NeoForgeMod.MILK.get(), 250);
+        ItemStack flour = new ItemStack(com.simibubi.create.AllItems.WHEAT_FLOUR.get());
+        List<ItemStack> brussels = List.of(flour, new ItemStack(Items.SUGAR), BSItems.BREWERS_YEAST.asStack());
+        List<ItemStack> lacquemant = List.of(flour.copy(), BSItems.BUTTER.asStack(), BSItems.CASSONADE.asStack(), BSItems.BREWERS_YEAST.asStack());
+        BasinBlockEntity b = basin(helper, new BlockPos(0, 1, 0), false, brussels, milk);
+        helper.assertTrue(BasinRecipe.match(b, recipe(helper, "mixing/brussels_waffle_batter")), "brussels batter");
+        helper.assertFalse(BasinRecipe.match(b, recipe(helper, "mixing/lacquemant_batter")), "lacquemant batter in a brussels basin");
+        BasinBlockEntity l = basin(helper, new BlockPos(2, 1, 0), false, lacquemant, milk.copy());
+        helper.assertTrue(BasinRecipe.match(l, recipe(helper, "mixing/lacquemant_batter")), "lacquemant batter");
+        helper.assertFalse(BasinRecipe.match(l, recipe(helper, "mixing/brussels_waffle_batter")), "brussels batter in a lacquemant basin");
+        helper.assertTrue(BasinRecipe.match(basin(helper, new BlockPos(0, 1, 2), false, List.of(BSItems.BRIOCHE_DOUGH.asStack(),
+            BSItems.PEARL_SUGAR.asStack(), BSItems.BUTTER.asStack()), null), recipe(helper, "mixing/liege_waffle_dough")), "liege dough from brioche");
+        helper.succeed();
     }
 
     // M17 on a real basin: the moules follow their liquid, the stews need their burner, the salad and the

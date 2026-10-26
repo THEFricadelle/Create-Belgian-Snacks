@@ -51,6 +51,21 @@ public final class BelgianDishesLineGameTests {
                 Station.deployer(BSItems.HERVE_CHEESE.asStack(STOCK))), 250);
     }
 
+    // M18 waffle toppings: powdered sugar from a deployer, Liège syrup from a spout.
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void wafflesAreToppedOnRealMachines(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(be.thefricadelle.belgiansnacks.registry.BSWaffles.BRUSSELS_WAFFLE.asStack()),
+            List.of(be.thefricadelle.belgiansnacks.registry.BSWaffles.BRUSSELS_WAFFLE_SUGARED.get()),
+            List.of(Station.deployer(BSItems.POWDERED_SUGAR.asStack(STOCK))), 0);
+    }
+
+    @GameTest(template = "empty_large", timeoutTicks = 1200)
+    public static void lacquemantIsFilledOnARealSpout(GameTestHelper helper) {
+        FriterieLineGameTests.run(helper, List.of(be.thefricadelle.belgiansnacks.registry.BSWaffles.LACQUEMANT_WAFER.asStack()),
+            List.of(be.thefricadelle.belgiansnacks.registry.BSWaffles.LACQUEMANT.get()),
+            List.of(Station.spout(BSFluids.LIEGE_SYRUP.get().getSource())), 50);
+    }
+
     @GameTest(template = "empty_large", timeoutTicks = 1200)
     public static void flamicheIsAssembledOnRealMachines(GameTestHelper helper) {
         FriterieLineGameTests.run(helper, List.of(BSDishes.TART_SHELL.asStack()), List.of(BSDishes.RAW_FLAMICHE.get()),

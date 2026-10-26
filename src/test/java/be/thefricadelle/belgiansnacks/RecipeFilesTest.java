@@ -46,11 +46,11 @@ class RecipeFilesTest {
     private static final Set<String> EXPECTED_IDS = FrozenIdsFileTest.ids("data/recipe");
 
     // Recipe types this mod registers; every other folder is a Create type.
-    private static final Set<String> OWN_TYPES = Set.of("frying");
+    private static final Set<String> OWN_TYPES = Set.of("frying", "waffle_baking");
 
     // Convention tags guaranteed non-empty: filled by NeoForge itself, or by us (checked below).
-    // c:plates/copper and c:plates/brass are filled by Create, a required dependency.
-    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:foods/berry", "c:plates/copper", "c:plates/brass",
+    // c:plates/copper, c:plates/brass and c:plates/iron are filled by Create, a required dependency.
+    private static final Set<String> GUARANTEED_C_TAGS = Set.of("c:eggs", "c:seeds", "c:crops/potato", "c:foods/berry", "c:plates/copper", "c:plates/brass", "c:plates/iron",
         "c:ingots/gold", "c:storage_blocks/iron", "c:foods/cooked_fish", "c:mushrooms");
 
     @Test
@@ -308,6 +308,31 @@ class RecipeFilesTest {
         assertEquals("create:precision_mechanism", key.getAsJsonObject("P").get("item").getAsString());
         assertEquals("minecraft:iron_bars", key.getAsJsonObject("I").get("item").getAsString());
         assertEquals("c:plates/copper", key.getAsJsonObject("C").get("tag").getAsString());
+    }
+
+    // V-D9: two iron plates, a precision mechanism and a basin, on a mechanical crafter.
+    @Test
+    void waffleIronIsCraftedOnAMechanicalCrafter() throws IOException {
+        JsonObject recipe = json(RECIPES.resolve("mechanical_crafting/waffle_iron.json"));
+        assertEquals("create:mechanical_crafting", recipe.get("type").getAsString());
+        assertEquals(MOD_ID + ":waffle_iron", recipe.getAsJsonObject("result").get("id").getAsString());
+        JsonObject key = recipe.getAsJsonObject("key");
+        assertEquals("c:plates/iron", key.getAsJsonObject("I").get("tag").getAsString());
+        assertEquals("create:precision_mechanism", key.getAsJsonObject("P").get("item").getAsString());
+        assertEquals("create:basin", key.getAsJsonObject("B").get("item").getAsString());
+        assertEquals(2, String.join("", recipe.getAsJsonArray("pattern").asList().stream().map(e -> e.getAsString()).toList())
+            .chars().filter(c -> c == 'I').count(), "two iron plates");
+    }
+
+    // Every waffle bakes on a lit burner.
+    @Test
+    void wafflesBakeHeated() throws IOException {
+        for (String id : List.of("liege_waffle", "brussels_waffle", "lacquemant_wafer")) {
+            JsonObject recipe = json(RECIPES.resolve("waffle_baking/" + id + ".json"));
+            assertEquals(MOD_ID + ":waffle_baking", recipe.get("type").getAsString());
+            assertEquals("heated", recipe.get("heat_requirement").getAsString(), id);
+            assertTrue(recipe.get("processing_time").getAsInt() > 0, id);
+        }
     }
 
     @Test

@@ -127,6 +127,7 @@ public final class ClientSmokeTest {
         "crafting/paper_cone", "deploying/cone_of_fries", "deploying/cone_of_fries_beef_tallow",
         "mixing/andalouse_from_beetroot", "mixing/samourai_from_blaze_powder", "mixing/americaine_from_beetroot",
         "milling/buckwheat_flour", "milling/mustard_powder", "mixing/mustard", "crafting/bouchot",
+        "mixing/liege_waffle_dough", "mixing/brussels_waffle_batter", "mixing/lacquemant_batter", "waffle_baking/liege_waffle", "waffle_baking/brussels_waffle", "waffle_baking/lacquemant_wafer", "deploying/brussels_waffle_sugared", "filling/brussels_waffle_chocolate", "filling/lacquemant", "mechanical_crafting/waffle_iron",
         "mixing/moules_marinieres", "mixing/moules_a_la_biere", "mixing/carbonnade", "mixing/stoemp", "mixing/waterzooi", "mixing/brussels_sprouts_bacon", "mixing/asparagus_flemish", "mixing/hop_shoots_cream", "mixing/salade_liegeoise", "mixing/hochepot", "mixing/escaveche", "mixing/raw_boudin", "deploying/moules_frites", "deploying/moules_frites_from_beer", "deploying/carbonnade_frites", "deploying/stoemp_saucisse", "deploying/steak_frites", "deploying/boudin_compote", "cutting/raw_vol_au_vent_shell", "pressing/tart_shell", "sequenced_assembly/raw_chicons_au_gratin", "sequenced_assembly/vol_au_vent", "sequenced_assembly/raw_flamiche", "sequenced_assembly/raw_croque_monsieur", "smoking/vol_au_vent_shell", "smelting/vol_au_vent_shell", "smoking/chicons_au_gratin", "smelting/chicons_au_gratin", "smoking/boudin", "smelting/boudin", "smoking/flamiche", "smelting/flamiche", "smoking/croque_monsieur", "smelting/croque_monsieur", "mixing/lapin_a_la_gueuze_from_sweet_berries",
         "mixing/tartare", "mixing/pickles", "mixing/boulet_paste", "mixing/boulets_liegeois", "mixing/cheese_croquette_mix", "mixing/chicken_croquette_mix", "mixing/lucifer_mix", "mixing/potato_croquette_mix", "mixing/cervelas_mix", "mixing/mexicano_mix", "mixing/viandelle_mix", "mixing/filet_americain", "mixing/gyros", "mixing/bami_mix", "mixing/raw_chicken_nuggets", "mixing/raw_chicken_crunch", "mixing/battered_onion_rings", "pressing/raw_boulet", "pressing/raw_cervelas", "pressing/raw_mexicano", "pressing/raw_viandelle", "pressing/raw_bami_disc", "pressing/raw_nasi_disc", "pressing/loempia_wrapper", "pressing/hot_dog_bun_dough", "pressing/raw_patty", "cutting/half_baguette", "cutting/chicken_strips", "cutting/fish_strips", "cutting/cheese_strips", "deploying/pistolet_americain", "deploying/americain_frites", "deploying/friterie_cheeseburger", "deploying/raw_chicken_wings", "filling/spicy_chicken_wings", "filling/cone_of_fries_tartare", "filling/cone_of_fries_pickles", "filling/cone_of_fries_brazil", "filling/cone_of_fries_beef_tallow_tartare", "filling/cone_of_fries_beef_tallow_pickles", "filling/cone_of_fries_beef_tallow_brazil", "frying/boulet", "frying/shrimp_croquette", "frying/cheese_croquette", "frying/chicken_croquette", "frying/lucifer", "frying/potato_croquette", "frying/chicken_fingers", "frying/fish_sticks", "frying/cheese_sticks", "frying/cervelas", "frying/mexicano", "frying/viandelle", "frying/loempia", "frying/patty", "frying/brochette", "frying/bami_disc", "frying/nasi_disc", "frying/chicken_nuggets", "frying/chicken_crunch", "frying/fried_chicken_wings", "frying/onion_rings", "smoking/hot_dog_bun", "smelting/hot_dog_bun", "sequenced_assembly/mitraillette", "sequenced_assembly/raw_shrimp_croquette", "sequenced_assembly/raw_cheese_croquette", "sequenced_assembly/raw_chicken_croquette", "sequenced_assembly/raw_lucifer", "sequenced_assembly/raw_potato_croquette", "sequenced_assembly/raw_chicken_fingers", "sequenced_assembly/raw_fish_sticks", "sequenced_assembly/raw_cheese_sticks", "sequenced_assembly/raw_loempia", "sequenced_assembly/friterie_burger", "sequenced_assembly/hot_dog", "sequenced_assembly/raw_brochette", "mixing/brazil_from_melon", "mixing/shrimp_croquette_mix_from_cod", "mixing/nasi_mix_from_wheat", "cutting/raw_onion_rings_from_beetroot", "sequenced_assembly/pita_from_beetroot", "mixing/raw_chicken_crunch_from_bread_crumbs",
         "mixing/wort", "mixing/blonde_beer", "mixing/brown_beer", "mixing/gueuze", "mixing/vinegar_from_beer", "mixing/kriek_from_sweet_berries",
@@ -178,7 +179,9 @@ public final class ClientSmokeTest {
         // M16: friterie names, spelt the same in Belgian French and English.
         "mitraillette", "boulet", "lucifer", "cervelas", "mexicano", "viandelle", "loempia", "gyros", "pita", "brochette", "bami_disc", "nasi_disc",
         // M17: Belgian dishes known by their own name in both languages.
-        "carbonnade", "stoemp", "waterzooi", "hochepot", "flamiche", "boudin", "escaveche");
+        "carbonnade", "stoemp", "waterzooi", "hochepot", "flamiche", "boudin", "escaveche",
+        // M18: the Liège fair wafer.
+        "lacquemant");
 
     private static final List<String> REPORT = new ArrayList<>();
     private static final Deque<Step> STEPS = new ArrayDeque<>();
@@ -259,6 +262,12 @@ public final class ClientSmokeTest {
         STEPS.add(new Step("fryer.place", 10, ClientSmokeTest::placeFryer));
         STEPS.add(new Step("fryer.check", 60, ClientSmokeTest::checkFryer));
         STEPS.add(new Step("fryer.shot", 10, () -> screenshot("fryer-in-world")));
+        STEPS.add(new Step("waffle.place", 10, ClientSmokeTest::placeWaffleIron));
+        // The lid closes over the batch on this client.
+        STEPS.add(new Step("waffle.check", 40, ClientSmokeTest::checkWaffleIron));
+        STEPS.add(new Step("waffle.shot", 10, () -> screenshot("waffle-iron-baking")));
+        STEPS.add(new Step("waffle.done", 0, () -> wafflesBaked() == 4, () -> check("waffle.baked", () -> "4 waffles synced to the client")));
+        STEPS.add(new Step("waffle.open.shot", 10, () -> screenshot("waffle-iron-open")));
         STEPS.add(new Step("grinder.place", 10, ClientSmokeTest::placeGrinder));
         // Two foods collected on the server, then synced: the client figures follow.
         STEPS.add(new Step("grinder.check", 40, () -> grinderOnClient() != null && grinderOnClient().getCount() == 2,
@@ -556,6 +565,70 @@ public final class ClientSmokeTest {
             require(!text.contains(BelgianSnacks.MOD_ID + "."), "untranslated goggles key: " + text);
             return text;
         });
+    }
+
+    private static BlockPos smokeWaffleIron;
+
+    // A waffle iron facing the player on a creative burner, two blocks east of the fryer, with 4 batters.
+    private static void placeWaffleIron() {
+        Minecraft mc = Minecraft.getInstance();
+        var server = mc.getSingleplayerServer();
+        BlockPos pos = smokeFryer.east(2);
+        server.execute(() -> {
+            var level = server.overworld();
+            level.setBlockAndUpdate(pos.below(), AllBlocks.BLAZE_BURNER.getDefaultState()
+                .setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.KINDLED));
+            if (level.getBlockEntity(pos.below()) instanceof BlazeBurnerBlockEntity burner) {
+                burner.isCreative = true;
+            }
+            level.setBlockAndUpdate(pos, BSBlocks.WAFFLE_IRON.getDefaultState()
+                .setValue(be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlock.FACING, net.minecraft.core.Direction.NORTH));
+            if (level.getBlockEntity(pos) instanceof be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity iron) {
+                iron.getItemCapability().insertItem(0, be.thefricadelle.belgiansnacks.registry.BSWaffles.BRUSSELS_WAFFLE_BATTER.asStack(4), false);
+            }
+        });
+        smokeWaffleIron = pos;
+        mc.player.setPos(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() - 1.5);
+        mc.player.setYRot(0f);
+        mc.player.setXRot(45f);
+    }
+
+    private static void checkWaffleIron() {
+        Minecraft mc = Minecraft.getInstance();
+        check("waffle.model", () -> {
+            var state = BSBlocks.WAFFLE_IRON.getDefaultState();
+            BakedModel model = mc.getBlockRenderer().getBlockModel(state);
+            require(model != mc.getModelManager().getMissingModel(), "waffle iron block model missing");
+            require(!isMissing(model.getParticleIcon().contents().name()), "waffle iron texture missing");
+            BakedModel lid = be.thefricadelle.belgiansnacks.client.BSPartialModels.WAFFLE_IRON_LID.get();
+            require(lid != null && lid != mc.getModelManager().getMissingModel(), "lid partial model missing");
+            return "base and lid models with textures";
+        });
+        check("waffle.baking", () -> {
+            require(mc.level.getBlockEntity(smokeWaffleIron) instanceof be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity,
+                "no waffle iron block entity on the client");
+            var iron = (be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity) mc.level.getBlockEntity(smokeWaffleIron);
+            require(iron.status() == be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity.Status.BAKING,
+                "client status is " + iron.status());
+            require(iron.lidOpen(1f) < 0.5f, "the lid is still open: " + iron.lidOpen(1f));
+            List<net.minecraft.network.chat.Component> lines = new ArrayList<>();
+            iron.addToGoggleTooltip(lines, false);
+            String text = String.join(" | ", lines.stream().map(net.minecraft.network.chat.Component::getString).toList());
+            require(!text.contains(BelgianSnacks.MOD_ID + "."), "untranslated goggles key: " + text);
+            return "baking with the lid shut; " + text;
+        });
+    }
+
+    private static int wafflesBaked() {
+        var be = Minecraft.getInstance().level.getBlockEntity(smokeWaffleIron);
+        if (!(be instanceof be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity iron)) {
+            return -1;
+        }
+        int total = 0;
+        for (int slot = 0; slot < iron.getOutput().getSlots(); slot++) {
+            total += iron.getOutput().getStackInSlot(slot).getCount();
+        }
+        return total;
     }
 
     // A running grinder three blocks west of the fryer, with two foods already collected.

@@ -71,6 +71,7 @@ public final class ClientMultiplayerSmoke {
     private static int failures;
     private static BlockPos fryerPos;
     private static BlockPos grinderPos;
+    private static BlockPos waffleIronPos;
 
     private ClientMultiplayerSmoke() {
     }
@@ -152,6 +153,8 @@ public final class ClientMultiplayerSmoke {
             pass("mp.batchSynced", "16 fricadelles and 1840 mB seen after the server fried the batch");
         });
         step("shot", 10, () -> true, () -> screenshot("mp-" + ROLE.toLowerCase() + "-fryer"));
+        step("waffle.found", 0, () -> findWaffleIron() != null, () -> waffleIronPos = findWaffleIron());
+        step("waffle.synced", 0, () -> waffles() == 4, () -> pass("mp.waffleIronSynced", "4 Brussels waffles seen in the waffle iron"));
         // Each player feeds the same grinder the food the server gave them (A an apple, B a bread).
         step("grinder.found", 0, () -> findGrinder() != null, () -> grinderPos = findGrinder());
         step("grinder.feed", 5, () -> true, () -> {
@@ -208,6 +211,18 @@ public final class ClientMultiplayerSmoke {
             });
             step("take.received", 0, () -> mc.player.getInventory().countItem(BSItems.FRICADELLE.get()) >= 16,
                 () -> pass("mp.takeByHand", "right click over the network moved 16 fricadelles into the inventory"));
+            // An empty slot, then the waffles by hand.
+            step("waffle.face", 0, () -> true, () -> {
+                select(4);
+                lookAt(waffleIronPos);
+            });
+            step("waffle.take", TAKE_DELAY_TICKS, () -> true, () -> {
+                require(mc.player.getMainHandItem().isEmpty(), "client A holds " + mc.player.getMainHandItem());
+                mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND,
+                    new BlockHitResult(Vec3.atCenterOf(waffleIronPos), Direction.UP, waffleIronPos, false));
+            });
+            step("waffle.received", 0, () -> mc.player.getInventory().countItem(be.thefricadelle.belgiansnacks.registry.BSWaffles.BRUSSELS_WAFFLE.get()) >= 4,
+                () -> pass("mp.waffleTaken", "4 waffles taken by hand over the network"));
         } else {
             // Tells A it may take the output: B has seen the batch and client A.
             step("signal", 0, () -> true, () -> mc.options.keyShift.setDown(true));
@@ -215,6 +230,7 @@ public final class ClientMultiplayerSmoke {
                 () -> pass("mp.takeSeenByOther", "the output emptied by the other player is empty here too"));
         }
         step("seen.empty", 0, () -> fried() == 0, () -> pass("mp.outputSynced", "output empty on this client"));
+        step("waffle.seen.empty", 0, () -> waffles() == 0, () -> pass("mp.waffleOutputSynced", "waffle iron output empty on this client"));
     }
 
     private static void step(String name, int delay, BooleanSupplier ready, Runnable action) {
@@ -262,6 +278,29 @@ public final class ClientMultiplayerSmoke {
 
     private static SupremeGrinderBlockEntity grinder() {
         return Minecraft.getInstance().level.getBlockEntity(grinderPos) instanceof SupremeGrinderBlockEntity grinder ? grinder : null;
+    }
+
+    private static BlockPos findWaffleIron() {
+        Minecraft mc = Minecraft.getInstance();
+        BlockPos origin = mc.player.blockPosition();
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-6, -3, -6), origin.offset(6, 3, 6))) {
+            if (mc.level.getBlockEntity(pos) instanceof be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity) {
+                return pos.immutable();
+            }
+        }
+        return null;
+    }
+
+    private static int waffles() {
+        if (waffleIronPos == null
+            || !(Minecraft.getInstance().level.getBlockEntity(waffleIronPos) instanceof be.thefricadelle.belgiansnacks.content.waffle.WaffleIronBlockEntity iron)) {
+            return -1;
+        }
+        int total = 0;
+        for (int slot = 0; slot < iron.getOutput().getSlots(); slot++) {
+            total += iron.getOutput().getStackInSlot(slot).getCount();
+        }
+        return total;
     }
 
     private static BlockPos findFryer() {
